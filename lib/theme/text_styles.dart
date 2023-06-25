@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 
@@ -27,6 +25,12 @@ const TextStyle presentScreenTextStyle = TextStyle(
     fontFamily: 'Roboto'
 );
 
+const TextStyle wishListScreenTextStyle = TextStyle(
+    color: AppTheme.mainWhiteColor,
+    fontSize: 16,
+    fontFamily: 'Roboto'
+);
+
 const TextStyle presentScreenCounterUpTextStyle = TextStyle(
     color: AppTheme.presentScreenCounterTextColor,
     fontSize: 30,
@@ -34,7 +38,43 @@ const TextStyle presentScreenCounterUpTextStyle = TextStyle(
 );
 
 const TextStyle presentScreenCounterBottomTextStyle = TextStyle(
-    color: AppTheme.presentScreenCounterTextColor,
-    fontSize: 14,
-    fontFamily: 'Roboto'
+  color: AppTheme.presentScreenCounterTextColor,
+  fontSize: 14,
+  fontFamily: 'Roboto',
 );
+
+const TextStyle wishListScaleTextStyle = TextStyle(
+    color: AppTheme.mainWhiteColor,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500
+);
+
+const TextStyle customGradientButtonTextStyle = TextStyle(
+    color: AppTheme.mainWhiteColor,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500
+);
+
+const TextStyle customRadioButtonActiveTextStyle = TextStyle(
+    color: AppTheme.mainWhiteColor,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500
+);
+
+const TextStyle customRadioButtonEnableTextStyle = TextStyle(
+    color: AppTheme.mainBlueColor,
+    fontSize: 14,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w500
+);
+
+const TextStyle customRadioButtonDisableTextStyle = TextStyle(
+  color: AppTheme.inactiveButtonBorderColor,
+  fontSize: 14,
+  fontFamily: 'Roboto',
+);
+
+

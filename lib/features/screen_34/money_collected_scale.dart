@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:mvp_taplan/theme/colors.dart';
-import 'package:mvp_taplan/theme/text_styles.dart';
-
+part of 'present_screen.dart';
 
 /// Виджет шкалы собранных средств для Экрана "Подарок".
 

@@ -26,6 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Text(
             name,
             style: appBarNameTextStyle,
+            textAlign: TextAlign.center ,
           ),
           GradientAnimatedIconButton(
             icon: 'assets/svg/charm_sun.svg',

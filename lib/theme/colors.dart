@@ -1,7 +1,27 @@
 import 'package:flutter/material.dart';
 
-class AppTheme{
+class AppTheme {
   final bool isDark;
+
+  static const LinearGradient mainGreenGradient = LinearGradient(
+    colors: [
+      Color(0xFF62C6AA),
+      Color(0xFF44A88C),
+    ],
+  );
+  static const LinearGradient mainPurpleGradient = LinearGradient(
+    colors: [
+      Color(0xFFB1A8E0),
+      Color(0xFFA196D1),
+    ],
+  );
+
+  static const LinearGradient mainPinkGradient = LinearGradient(
+      colors: [
+        Color.fromRGBO(180, 69, 135, 1),
+        Color.fromRGBO(180, 69, 135, 0.6),
+      ],
+  );
 
   static const Color appBarManeColor = Color.fromRGBO(40, 42, 49, 1);
   static const Color appBarButtonIconColor = Color(0xFFA6ADB5);
@@ -14,6 +34,11 @@ class AppTheme{
   static const Color mainGreenColor = Color(0xFF52B69A);
   static const Color mainPinkColor = Color(0xFFCE3B82);
   static const Color mainWhiteColor = Color(0xFFFFFFFF);
+  static const Color borderColor = Color(0xFF3B3D45);
+  static const Color pickUpTextColor = Color(0xFF697177);
+  static const Color pickUpContainerColor = Color(0xFF373941);
+  static const Color pickUpButtonColor = Color(0xFF3E4048);
+  static const Color pickUpBorderColor = Color(0xFF45474F);
 
   static const Color moneyCollectedScaleWidgetColor1 = Color(0xFF4D8C7E);
   static const Color moneyCollectedScaleWidgetColor2 = Color(0xFF44A88C);
@@ -23,7 +48,6 @@ class AppTheme{
   static const Color presentScreenTextColor = Color(0xFFC8D2DB);
   static const Color presentScreenCounterColor = Color(0xFF282A31);
   static const Color presentScreenCounterTextColor = Color(0xFFC1B8ED);
-
 
   static const buttonIconColor = Color(0xFFA6ADB5);
 
@@ -48,7 +72,4 @@ class AppTheme{
   AppTheme.dark({
     this.isDark = true,
   });
-
-
-
 }

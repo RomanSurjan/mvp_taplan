@@ -3,15 +3,16 @@ import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-import 'money_collected_scale.dart';
 
+
+part 'money_collected_scale.dart';
 
 
 class PresentScreen extends StatefulWidget {
 
   // Данные, которые ожидаю от сервера.
   final String presentName = "Подарок мечты";
-  final String pathToImage = 'images/present_1.png';
+  final String pathToImage = 'assets/images/present_1.png';
   final int collected = 22000;
   final int total = 42000; // ToDo нужно проверять, что total больше collected.
   final int weeks = 08;

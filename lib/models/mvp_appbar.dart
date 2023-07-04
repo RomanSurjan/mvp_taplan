@@ -126,16 +126,14 @@ class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton>
             )
         ),
         onPointerDown: (_) {
-          setState(() {
-            index = 1;
-            isPressed = true;
-          });
+          index = 1;
+          isPressed = true;
+          setState(() {});
         },
         onPointerUp: (_) {
-          setState(() {
-            index = 0;
-            isPressed = false;
-          });
+          index = 0;
+          isPressed = false;
+          setState(() {});
           widget.onPressed();
         }
     );

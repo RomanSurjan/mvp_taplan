@@ -30,26 +30,18 @@ class CustomRadioButton extends StatelessWidget {
     if (isActive) {
       // Превый режим.
       if (index == groupIndex) {
-        return Container(
-          width: 72,
-          height: 24,
+        return _ButtonContainer(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             color: AppTheme.mainBlueColor
           ),
-          child: Center(
-            child: Text(
-              caption,
-              style: customRadioButtonActiveTextStyle,
-            )
-          ),
+          caption: caption,
+          textStyle: customRadioButtonActiveTextStyle,
         );
       }
       // Второй режим.
       return Listener(
-        child: Container(
-          height: 24,
-          width: 72,
+        child: _ButtonContainer(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
@@ -57,12 +49,8 @@ class CustomRadioButton extends StatelessWidget {
               width: 1,
             ),
           ),
-          child: Center(
-            child: Text(
-              caption,
-              style: customRadioButtonEnableTextStyle,
-            )
-          ),
+          caption: caption,
+          textStyle: customRadioButtonEnableTextStyle,
         ),
         onPointerDown: (_) {
           onChanged(index);
@@ -70,9 +58,7 @@ class CustomRadioButton extends StatelessWidget {
       );
     }
     // Третий режим.
-    return Container(
-      width: 72,
-      height: 24,
+    return _ButtonContainer(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
         border: Border.all(
@@ -81,13 +67,36 @@ class CustomRadioButton extends StatelessWidget {
         ),
         color: AppTheme.backgroundColor
       ),
+      caption: caption,
+      textStyle: customRadioButtonDisableTextStyle,
+    );
+  }
+}
+
+class _ButtonContainer extends StatelessWidget {
+
+  final BoxDecoration decoration;
+  final String caption;
+  final TextStyle textStyle;
+
+  const _ButtonContainer({
+    required this.decoration,
+    required this.caption,
+    required this.textStyle,
+    Key? key
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 72,
+      height: 24,
+      decoration: decoration,
       child: Center(
-        child: Center(
-          child: Text(
+        child: Text(
           caption,
-            style: customRadioButtonDisableTextStyle,
-          )
-        ),
+          style: textStyle,
+        )
       ),
     );
   }

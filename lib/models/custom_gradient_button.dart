@@ -10,15 +10,13 @@ class CustomGradientButton extends StatelessWidget {
   final Function onTap;
   final String caption;
   final String? secondCaption;
-  final Color leftColor;
-  final Color rightColor;
+  final LinearGradient gradient;
 
   const CustomGradientButton({
     required this.onTap,
     required this.caption,
     this.secondCaption,
-    required this.leftColor,
-    required this.rightColor,
+    required this.gradient,
     Key? key
   }) : super(key: key);
 
@@ -29,11 +27,7 @@ class CustomGradientButton extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [leftColor, rightColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: gradient,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Column(

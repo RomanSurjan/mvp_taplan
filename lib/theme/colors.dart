@@ -23,6 +23,42 @@ class AppTheme {
       ],
   );
 
+  static const LinearGradient moneyCollectedScaleWidgetGradientColor1 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFF4D8C7E),
+      Color(0xFF44A88C)
+    ],
+  );
+
+  static const LinearGradient moneyCollectedScaleWidgetGradientColor2 = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFFB34587),
+      Color(0xFF7E3D68)
+    ],
+  );
+
+  static const LinearGradient greenButtonGradientColor = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF62C6AA),
+      Color(0xFF44A88C)
+    ],
+  );
+
+  static const LinearGradient purpleButtonGradientColor = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFFB1A8E0),
+      Color(0xFFA196D1)
+    ],
+  );
+
   static const Color appBarMainColor = Color(0xFF282A31);
   static const Color appBarButtonIconColor = Color(0xFFA6ADB5);
   static const Color appBarButtonBorderColor1 = Color(0xFF1C1F26);
@@ -40,24 +76,12 @@ class AppTheme {
   static const Color mainPinkColor = Color(0xFFCE3B82);
   static const Color mainWhiteColor = Color(0xFFFFFFFF);
 
-  static const Color moneyCollectedScaleWidgetColor1 = Color(0xFF4D8C7E);
-  static const Color moneyCollectedScaleWidgetColor2 = Color(0xFF44A88C);
-  static const Color moneyCollectedScaleWidgetColor3 = Color(0xFFB34587);
-  static const Color moneyCollectedScaleWidgetColor4 = Color(0xFF7E3D68);
-
   static const Color presentScreenTextColor = Color(0xFFC8D2DB);
   static const Color presentScreenCounterColor = Color(0xFF282A31);
   static const Color presentScreenCounterTextColor = Color(0xFFC1B8ED);
 
-  static const Color greenButtonLeftColor = Color(0xFF62C6AA);
-  static const Color greenButtonRightColor = Color(0xFF44A88C);
-  static const Color purpleButtonLeftColor = Color(0xFFB1A8E0);
-  static const Color purpleButtonRightColor = Color(0xFFA196D1);
-
   static const Color wishListScaleLeftColor = Color(0xFF44A88C);
   static const Color wishListScaleRightColor = Color(0xFFB44587);
-
-
 
   static const Color appBarManeColor = Color.fromRGBO(40, 42, 49, 1);
   static const Color appBarButtonFirstBorderColor = Color(0xFF1C1F26);

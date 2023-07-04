@@ -47,14 +47,7 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
                     topLeft: Radius.circular(1.5),
                     bottomLeft: Radius.circular(1.5)
                   ),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppTheme.moneyCollectedScaleWidgetColor1,
-                      AppTheme.moneyCollectedScaleWidgetColor2
-                    ]
-                  )
+                  gradient: AppTheme.moneyCollectedScaleWidgetGradientColor1
                 )
               )
             ),
@@ -75,14 +68,7 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
                     topRight: Radius.circular(1.5),
                     bottomRight: Radius.circular(1.5)
                   ),
-                  gradient: LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [
-                      AppTheme.moneyCollectedScaleWidgetColor3,
-                      AppTheme.moneyCollectedScaleWidgetColor4
-                    ]
-                  )
+                  gradient: AppTheme.moneyCollectedScaleWidgetGradientColor2
                 ),
               )
             )

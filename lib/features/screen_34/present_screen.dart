@@ -3,10 +3,7 @@ import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-
-
 part 'money_collected_scale.dart';
-
 
 class PresentScreen extends StatefulWidget {
 
@@ -279,8 +276,7 @@ class _PresentScreenState extends State<PresentScreen> {
                               onTap: (){},
                               caption: "Написать пожелания",
                               secondCaption: "для Telegram-чата",
-                              leftColor: AppTheme.purpleButtonLeftColor,
-                              rightColor: AppTheme.purpleButtonRightColor,
+                              gradient: AppTheme.purpleButtonGradientColor,
                             )
                         ),
                         const SizedBox(width: 8),
@@ -289,8 +285,7 @@ class _PresentScreenState extends State<PresentScreen> {
                             child: CustomGradientButton(
                               onTap: (){},
                               caption: "Внести деньги",
-                              leftColor: AppTheme.greenButtonLeftColor,
-                              rightColor: AppTheme.greenButtonRightColor,
+                              gradient: AppTheme.greenButtonGradientColor,
                             )
                         )
                       ]

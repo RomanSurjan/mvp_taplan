@@ -112,8 +112,7 @@ class _WishListScreenState extends State<WishListScreen> {
                   child: CustomGradientButton(
                     onTap: (){goToPresentScreen(BuyingOption.buyTogether);},
                     caption: "Купить в складчину",
-                    leftColor: AppTheme.purpleButtonLeftColor,
-                    rightColor: AppTheme.purpleButtonRightColor,
+                    gradient: AppTheme.purpleButtonGradientColor,
                   )
                 ),
                 const SizedBox(width: 8),
@@ -123,8 +122,7 @@ class _WishListScreenState extends State<WishListScreen> {
                     onTap: (){goToPresentScreen(BuyingOption.buyAlone);},
                     caption: "Выкупить",
                     secondCaption: "и подарить",
-                    leftColor: AppTheme.greenButtonLeftColor,
-                    rightColor: AppTheme.greenButtonRightColor,
+                    gradient: AppTheme.greenButtonGradientColor,
                   )
                 )
               ]

@@ -9,47 +9,45 @@ part of 'models.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function callBack;
   final String name;
-  final String? secondName;
 
   /// Constructor.
   const CustomAppBar({
     required this.callBack,
     required this.name,
-    this.secondName,
     Key? key
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: AppTheme.appBarMainColor,
-        height: 49,
-        child: Row(
-            children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.only(left: 14),
-                  child: GradientAnimatedIconButton(
-                    icon: Icons.arrow_back_ios_new_outlined,
-                    onPressed: callBack,
-                  )
-              ),
-              Expanded(
-                  child: Center(
-                      child: Text(
-                        name,
-                        style: appBarNameTextStyle,
-                      )
-                  )
-              ),
-              Container(
-                  margin: const EdgeInsets.only(right: 14),
-                  child: GradientAnimatedIconButton(
-                    icon: Icons.wb_sunny_outlined,
-                    onPressed: callBack,
-                  )
+      color: AppTheme.appBarMainColor,
+      height: 49,
+      child: Row(
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(left: 14),
+            child: GradientAnimatedIconButton(
+              icon: Icons.arrow_back_ios_new_outlined,
+              onPressed: callBack,
+            )
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                name,
+                style: appBarNameTextStyle,
               )
-            ]
-        )
+            )
+          ),
+          Container(
+            margin: const EdgeInsets.only(right: 14),
+            child: GradientAnimatedIconButton(
+              icon: Icons.wb_sunny_outlined,
+              onPressed: callBack,
+            )
+          )
+        ]
+      )
     );
   }
 

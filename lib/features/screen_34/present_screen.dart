@@ -274,8 +274,7 @@ class _PresentScreenState extends State<PresentScreen> {
                             flex: 1,
                             child: CustomGradientButton(
                               onTap: (){},
-                              caption: "Написать пожелания",
-                              secondCaption: "для Telegram-чата",
+                              caption: "Написать пожелания\nдля Telegram-чата",
                               gradient: AppTheme.purpleButtonGradientColor,
                             )
                         ),

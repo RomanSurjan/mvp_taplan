@@ -9,8 +9,7 @@ import 'package:mvp_taplan/theme/text_styles.dart';
 
 class WishListScreen extends StatefulWidget {
 
-  final String firstScreenName = "Мой список желанных";
-  final String secondScreenName = "подарков";
+  final String firstScreenName = "Мой список желанных\nподарков";
 
   // ToDo Данные, которые ожидаю от сервера.
   // ToDo Потом надо будет вынести в отдельный класс.
@@ -75,7 +74,6 @@ class _WishListScreenState extends State<WishListScreen> {
       appBar: CustomAppBar(
         callBack: (){},
         name: widget.firstScreenName,
-        secondName: widget.secondScreenName
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -120,8 +118,7 @@ class _WishListScreenState extends State<WishListScreen> {
                   flex: 1,
                   child: CustomGradientButton(
                     onTap: (){goToPresentScreen(BuyingOption.buyAlone);},
-                    caption: "Выкупить",
-                    secondCaption: "и подарить",
+                    caption: "Выкупить\nи подарить",
                     gradient: AppTheme.greenButtonGradientColor,
                   )
                 )

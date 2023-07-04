@@ -9,13 +9,11 @@ class CustomGradientButton extends StatelessWidget {
 
   final Function onTap;
   final String caption;
-  final String? secondCaption;
   final LinearGradient gradient;
 
   const CustomGradientButton({
     required this.onTap,
     required this.caption,
-    this.secondCaption,
     required this.gradient,
     Key? key
   }) : super(key: key);
@@ -36,12 +34,7 @@ class CustomGradientButton extends StatelessWidget {
             Text(
               caption,
               style: customGradientButtonTextStyle,
-            ),
-            if(secondCaption != null)
-              Text(
-                secondCaption!,
-                style: customGradientButtonTextStyle,
-              )
+            )
           ]
         )
       ),

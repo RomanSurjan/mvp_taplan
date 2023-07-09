@@ -15,6 +15,7 @@ class PickUpDate extends StatelessWidget {
         height: getHeight(context, 48),
         child: DecoratedBox(
           decoration: BoxDecoration(
+            color: const Color.fromRGBO(55, 57, 65, 1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: AppTheme.borderColor,
@@ -36,17 +37,7 @@ class PickUpDate extends StatelessWidget {
                     color: AppTheme.pickUpTextColor,
                   ),
                 ),
-                SizedBox(
-                  height: getHeight(context, 24),
-                  width: getWidth(context, 24),
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppTheme.pickUpButtonColor,
-                    ),
-                    child: SvgPicture.asset('assets/svg/mvp_arrow_down.svg'),
-                  ),
-                )
+                const MoreButton(),
               ],
             ),
           ),

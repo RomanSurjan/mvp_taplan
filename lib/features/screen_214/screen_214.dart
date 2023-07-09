@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/models/models.dart';
-import 'package:mvp_taplan/models/size_model.dart';
 import 'package:mvp_taplan/theme/colors.dart';
+import 'package:mvp_taplan/theme/text_styles.dart';
 
 part 'pickup_date.dart';
 
@@ -41,7 +40,6 @@ class _Screen214State extends State<Screen214> {
               width: getWidth(context, 343),
               child: Image.asset(
                 'assets/images/image_116.png',
-                fit: BoxFit.fill,
               ),
             ),
             Padding(
@@ -49,12 +47,11 @@ class _Screen214State extends State<Screen214> {
                 top: getHeight(context, 16),
               ),
             ),
-            const Text(
+            Text(
               "Дата и время вручения подарка",
-              style: TextStyle(
-                fontFamily: 'Roboto',
+              style: TextLocalStyles.roboto400.copyWith(
+                color: const Color.fromRGBO(240, 247, 254, 1),
                 fontSize: 14,
-                color: Colors.white,
               ),
             ),
             Padding(

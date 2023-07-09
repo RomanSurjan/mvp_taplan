@@ -1,6 +1,4 @@
-
-
-import 'package:flutter/material.dart';
+part of 'models.dart';
 
 double getHeight(BuildContext context, double height){
   return height / 812 * MediaQuery.of(context).size.height;

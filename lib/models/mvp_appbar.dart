@@ -19,17 +19,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.appBarMainColor,
-      height: 49,
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(left: 14),
-            child: GradientAnimatedIconButton(
-              icon: Icons.arrow_back_ios_new_outlined,
-              onPressed: callBack,
-            )
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: AppTheme.appBarManeColor,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GradientAnimatedIconButton(
+            icon: 'assets/svg/arrow_back.svg',
+            onPressed: onBack ?? () {
+              Navigator.pop(context);
+            },
+          ),
+          Text(
+            name,
+            style: TextLocalStyles.roboto400.copyWith(fontSize: 18, color: Colors.white),
+            textAlign: TextAlign.center,
           ),
           Expanded(
             child: Center(

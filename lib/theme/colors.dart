@@ -17,10 +17,17 @@ class AppTheme {
   );
 
   static const LinearGradient mainPinkGradient = LinearGradient(
-      colors: [
-        Color.fromRGBO(180, 69, 135, 1),
-        Color.fromRGBO(180, 69, 135, 0.6),
-      ],
+    colors: [
+      Color.fromRGBO(180, 69, 135, 1),
+      Color.fromRGBO(180, 69, 135, 0.6),
+    ],
+  );
+
+  static const LinearGradient mainGreyGradient = LinearGradient(
+    colors: [
+      Color.fromRGBO(194, 196, 204, 1),
+      Color.fromRGBO(160, 165, 181, 1),
+    ],
   );
 
   static const Color appBarManeColor = Color.fromRGBO(40, 42, 49, 1);

@@ -4,17 +4,19 @@ class MvpGradientButton extends StatelessWidget {
   final String label;
   final LinearGradient gradient;
   final double width;
+  final double? height;
+  final TextStyle? style;
 
   const MvpGradientButton({
     super.key,
     required this.label,
-    required this.gradient, required this.width,
+    required this.gradient, required this.width, this.height, this.style,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: getHeight(context, 44),
+      height: height ?? getHeight(context, 44),
       width: width,
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -24,10 +26,7 @@ class MvpGradientButton extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-            ),
+            style: style ?? TextLocalStyles.roboto600.copyWith(color: Colors.white, fontSize: 13),
             textAlign: TextAlign.center,
           ),
         ),

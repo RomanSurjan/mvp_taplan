@@ -15,18 +15,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: AppTheme.appBarManeColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GradientAnimatedIconButton(
             icon: 'assets/svg/arrow_back.svg',
-            onPressed: onBack ?? () {},
+            onPressed: onBack ?? () {
+              Navigator.pop(context);
+            },
           ),
           Text(
             name,
-            style: appBarNameTextStyle,
-            textAlign: TextAlign.center ,
+            style: TextLocalStyles.roboto400.copyWith(fontSize: 18, color: Colors.white),
+            textAlign: TextAlign.center,
           ),
           GradientAnimatedIconButton(
             icon: 'assets/svg/charm_sun.svg',

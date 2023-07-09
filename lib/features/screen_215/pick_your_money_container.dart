@@ -8,13 +8,14 @@ class PickYourMoneyContainer extends StatelessWidget {
   const PickYourMoneyContainer({
     super.key,
     required this.price,
-    required this.isPicked, this.onTap,
+    required this.isPicked,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         onTap?.call();
       },
       child: SizedBox(
@@ -33,11 +34,9 @@ class PickYourMoneyContainer extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               price,
-              style: TextStyle(
-                fontSize: 12,
-                color: isPicked ? Colors.white : const Color.fromRGBO(127, 164, 234, 1),
-                fontFamily: 'Roboto',
-              ),
+              style: TextLocalStyles.roboto500.copyWith(
+                  color: isPicked ? Colors.white : const Color.fromRGBO(127, 164, 234, 1),
+                  fontSize: 14),
             ),
           ),
         ),

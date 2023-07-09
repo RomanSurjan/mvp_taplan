@@ -56,23 +56,17 @@ class PickUpPriceContainer extends StatelessWidget {
                     left: getWidth(context, 10),
                   ),
                 ),
-                if(child == null)...[
+                if (child == null) ...[
                   Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Roboto',
-                      color: isPicked ? AppTheme.mainGreenColor : Colors.white,
-                    ),
+                    style: TextLocalStyles.roboto400.copyWith(
+                        color: isPicked ? AppTheme.mainGreenColor : Colors.white, fontSize: 16),
                   ),
                   const Expanded(child: SizedBox()),
                   Text(
                     price,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Roboto',
-                      color: isPicked ? AppTheme.mainGreenColor : Colors.white,
-                    ),
+                    style: TextLocalStyles.roboto400.copyWith(
+                        color: isPicked ? AppTheme.mainGreenColor : Colors.white, fontSize: 16),
                   ),
                 ] else ...[
                   child!,

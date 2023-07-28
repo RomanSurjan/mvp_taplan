@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
@@ -18,10 +20,12 @@ class _Screen211State extends State<Screen211> {
   var nowTime = DateTime.now();
   late Timer? timer;
 
+  String pickedTime = '';
+
   @override
   void initState() {
     super.initState();
-
+    pickedTime = '${nowTime.hour} : ${nowTime.minute < 10 ? '0${nowTime.minute}' :'${nowTime.minute}'}';
     timer = Timer.periodic(
       const Duration(seconds: 5),
       (timer) {
@@ -37,7 +41,7 @@ class _Screen211State extends State<Screen211> {
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
-      appBarLabel: 'Время',
+      appBarLabel: 'Выбор времени',
       child: Column(
         children: [
           Padding(
@@ -53,7 +57,7 @@ class _Screen211State extends State<Screen211> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'MSK - ${nowTime.hour} : ${nowTime.minute}',
+                  'MSK - ${nowTime.hour} : ${nowTime.minute < 10 ? '0${nowTime.minute}' :'${nowTime.minute}' }',
                   style: TextLocalStyles.roboto500.copyWith(
                     color: Colors.white,
                     fontSize: 17,
@@ -86,7 +90,10 @@ class _Screen211State extends State<Screen211> {
                   ),
                 ),
                 child: CupertinoDatePicker(
-                  onDateTimeChanged: (DateTime value) {},
+                  onDateTimeChanged: (DateTime value) {
+                    pickedTime = '${value.hour} : ${value.minute < 10 ? '0${value.minute}' : '${value.minute}'}';
+                    setState(() {});
+                  },
                   mode: CupertinoDatePickerMode.time,
                   use24hFormat: true,
                 ),
@@ -113,7 +120,7 @@ class _Screen211State extends State<Screen211> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       '(UTC+03:00) Волгоград, Москва, Санкт-Петербург',
@@ -122,27 +129,27 @@ class _Screen211State extends State<Screen211> {
                         fontSize: 12,
                       ),
                     ),
-                    SizedBox(
-                      height: getHeight(context, 20),
-                      width: getWidth(context, 20),
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color.fromRGBO(69, 78, 84, 1),
-                        ),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/svg/arrow_down.svg',
-                            height: getHeight(context, 16),
-                            width: getWidth(context, 16),
-                            colorFilter: const ColorFilter.mode(
-                              Color.fromRGBO(143, 153, 163, 1),
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: getHeight(context, 20),
+                    //   width: getWidth(context, 20),
+                    //   child: DecoratedBox(
+                    //     decoration: const BoxDecoration(
+                    //       shape: BoxShape.circle,
+                    //       color: Color.fromRGBO(69, 78, 84, 1),
+                    //     ),
+                    //     child: Center(
+                    //       child: SvgPicture.asset(
+                    //         'assets/svg/arrow_down.svg',
+                    //         height: getHeight(context, 16),
+                    //         width: getWidth(context, 16),
+                    //         colorFilter: const ColorFilter.mode(
+                    //           Color.fromRGBO(143, 153, 163, 1),
+                    //           BlendMode.srcIn,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -158,15 +165,15 @@ class _Screen211State extends State<Screen211> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const Expanded(child: SizedBox()),
                 MvpGradientButton(
-                  label: 'Назад',
-                  gradient: AppTheme.mainGreyGradient,
-                  width: getWidth(context, 164),
-                ),
-                MvpGradientButton(
-                  label: 'Подтвердить',
+                  label: 'Подтвердить время\n$pickedTime',
                   gradient: AppTheme.mainGreenGradient,
                   width: getWidth(context, 164),
+                  onTap: (){
+                    context.read<DateTimeBloc>().add(ChangeTimeEvent(time: pickedTime));
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),

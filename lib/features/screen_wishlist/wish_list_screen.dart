@@ -1,199 +1,199 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:mvp_taplan/features/screen_34/present_screen.dart';
+import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_widget.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
 class WishListScreen extends StatefulWidget {
-
-  final String firstScreenName = "Мой список желанных\nподарков";
-
-  // ToDo Данные, которые ожидаю от сервера.
-  // ToDo Потом надо будет вынести в отдельный класс.
-  // Подарок 1
-  final String pathToImage1 = 'images/present_1.png';
-  final int collectedAmount1 = 22000;
-  final int totalAmount1 = 42000; // ToDo нужно проверять, что total больше collected.
-  final String presentName = "Новая розовая Audi A5";
-
-  // Подарок 2
-  final String pathToImage2 = 'images/present_2.png';
-  final int collectedAmount2 = 1920;
-  final int totalAmount2 = 3920; // ToDo нужно проверять, что total больше collected.
-
-  // Подарок 3
-  final String pathToImage3 = 'images/present_3.png';
-  final int collectedAmount3 = 50200;
-  final int totalAmount3 = 82200; // ToDo нужно проверять, что total больше collected.
-
-  // Подарок 4
-  final String pathToImage4 = 'images/present_2.png';
-  final int collectedAmount4 = 1920;
-  final int totalAmount4 = 3920; // ToDo нужно проверять, что total больше collected.
-
-  // Подарок 5
-  final String pathToImage5 = 'images/present_3.png';
-  final int collectedAmount5 = 50200;
-  final int totalAmount5 = 82200; // ToDo нужно проверять, что total больше collected.
-
-  const WishListScreen({Key? key}) : super(key: key);
+  const WishListScreen({super.key});
 
   @override
-  _WishListScreenState createState() => _WishListScreenState();
+  WishListScreenState createState() => WishListScreenState();
 }
 
-class _WishListScreenState extends State<WishListScreen> {
-
-  /// Переход на [PresentScreen].
+class WishListScreenState extends State<WishListScreen> {
   void goToPresentScreen(BuyingOption buyingOption) {
-    setState(() {
-      Navigator.push(
-        context, MaterialPageRoute(
-          builder: (context) {
-            return PresentScreen(buyingOption: buyingOption);
-          }
-        )
-      );
-    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return PresentScreen(
+            buyingOption: buyingOption,
+            imagePath: presentModels[0].bigImage,
+          );
+        },
+      ),
+    );
   }
 
-  _WishListScreenState();
+  List<MvpPresentModel> presentModels = [
+    MvpPresentModel(
+      bigImage: 'assets/images/audi_big.png',
+      smallImage: 'assets/images/audi_small.png',
+      label: 'Новая розовая Audi A5 Sportback 40 TFSI',
+      fullPrice: 7630000,
+      alreadyGet: 1936525,
+    ),
+    MvpPresentModel(
+      bigImage: 'assets/images/coffee_big.png',
+      smallImage: 'assets/images/coffee_small.png',
+      label: 'Coffee-week',
+      fullPrice: 3500,
+      alreadyGet: 1580,
+    ),
+    MvpPresentModel(
+      bigImage: 'assets/images/bouquete_big.png',
+      smallImage: 'assets/images/bouquete_small.png',
+      label: 'Авторский букет цветов',
+      fullPrice: 12500,
+      alreadyGet: 8750,
+    ),
+    MvpPresentModel(
+      bigImage: 'assets/images/dress_big.png',
+      smallImage: 'assets/images/dress_small.png',
+      label: 'Платье',
+      fullPrice: 10000,
+      alreadyGet: 6920,
+    ),
+    MvpPresentModel(
+      bigImage: 'assets/images/jewerly_big.png',
+      smallImage: 'assets/images/jewerly_small.png',
+      label: 'Золотые серьги-гвоздики с бриллиантами',
+      fullPrice: 29500,
+      alreadyGet: 19365,
+    ),
+  ];
+
+  final String firstScreenName = "Мой список\nжеланных подарков";
+
+  late MvpPresentModel additionalModel;
 
   @override
   void initState() {
     super.initState();
+
+    additionalModel = presentModels[0];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: CustomAppBar(
-        callBack: (){},
-        name: widget.firstScreenName,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+    return MvpScaffoldModel(
+      appBarLabel: firstScreenName,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: getWidth(context, 24)),
         child: Column(
-          children: <Widget>[
-            // Отступ для поддержки разных соотношений сторон экрана.
-            const Expanded(
-              flex: 1,
-              child: SizedBox(width: 1)
-            ),
+          children: [
             PresentWidget(
-              pathToImage: widget.pathToImage1,
-              callback: (){},
-              collected: widget.collectedAmount1,
-              total: widget.totalAmount1,
+              pathToImage: presentModels[0].bigImage,
+              callback: () {},
+              collected: presentModels[0].alreadyGet,
+              total: presentModels[0].fullPrice,
               isTop: true,
+              height: getHeight(context, 226),
+              width: getWidth(context, 329),
             ),
-            // Название подарка.
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.presentName,
-                  style: wishListScreenTextStyle,
-                )
-              )
+            SizedBox(height: getHeight(context, 8)),
+            Text(
+              presentModels[0].label,
+              style: TextLocalStyles.roboto600.copyWith(
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
-            // Кнопки под подарком.
+            SizedBox(height: getHeight(context, 8)),
             Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: CustomGradientButton(
-                    onTap: (){goToPresentScreen(BuyingOption.buyTogether);},
-                    caption: "Купить в складчину",
-                    gradient: AppTheme.purpleButtonGradientColor,
-                  )
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MvpGradientButton(
+                  onTap: () {
+                    goToPresentScreen(BuyingOption.buyTogether);
+                  },
+                  label: "Купить подарок\nза компанию",
+                  gradient: AppTheme.purpleButtonGradientColor,
+                  width: getWidth(context, 160),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 1,
-                  child: CustomGradientButton(
-                    onTap: (){goToPresentScreen(BuyingOption.buyAlone);},
-                    caption: "Выкупить\nи подарить",
-                    gradient: AppTheme.greenButtonGradientColor,
-                  )
-                )
-              ]
+                MvpGradientButton(
+                  onTap: () {
+                    goToPresentScreen(BuyingOption.buyAlone);
+                  },
+                  label: "Купить подарок\nсамостоятельно",
+                  gradient: AppTheme.greenButtonGradientColor,
+                  width: getWidth(context, 160),
+                ),
+              ],
             ),
-            // Отступ для поддержки разных соотношений сторон экрана.
-            const Expanded(
-              flex: 1,
-              child: SizedBox(width: 1)
-            ),
-            // Первая строка сетки из четырёх подарков.
+            SizedBox(height: getHeight(context, 18)),
             Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: PresentWidget(
-                    pathToImage: widget.pathToImage2,
-                    callback: (){},
-                    collected: widget.collectedAmount2,
-                    total: widget.totalAmount2,
-                    isTop: false,
-                  ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PresentWidget(
+                  pathToImage: presentModels[1].smallImage,
+                  callback: () {
+                    swapModels(1);
+                    setState(() {});
+                  },
+                  collected: presentModels[1].alreadyGet,
+                  total: presentModels[1].fullPrice,
+                  isTop: false,
+                  height: getHeight(context, 160),
+                  width: getWidth(context, 160),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 1,
-                  child: PresentWidget(
-                    pathToImage: widget.pathToImage3,
-                    callback: (){},
-                    collected: widget.collectedAmount3,
-                    total: widget.totalAmount3,
-                    isTop: false,
-                  ),
+                PresentWidget(
+                  pathToImage: presentModels[2].smallImage,
+                  callback: () {
+                    swapModels(2);
+                    setState(() {});
+                  },
+                  collected: presentModels[2].alreadyGet,
+                  total: presentModels[2].fullPrice,
+                  isTop: false,
+                  height: getHeight(context, 160),
+                  width: getWidth(context, 160),
                 ),
-              ]
+              ],
             ),
-            // Отступ для поддержки разных соотношений сторон экрана.
-            const Expanded(
-              flex: 1,
-              child: SizedBox(width: 1)
-            ),
-            // Вторая строка сетки из четырёх подарков.
+            SizedBox(height: getHeight(context, 8)),
             Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: PresentWidget(
-                    pathToImage: widget.pathToImage4,
-                    callback: (){},
-                    collected: widget.collectedAmount4,
-                    total: widget.totalAmount4,
-                    isTop: false,
-                  ),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PresentWidget(
+                  pathToImage: presentModels[3].smallImage,
+                  callback: () {
+                    swapModels(3);
+                    setState(() {});
+                  },
+                  collected: presentModels[3].alreadyGet,
+                  total: presentModels[3].fullPrice,
+                  isTop: false,
+                  height: getHeight(context, 160),
+                  width: getWidth(context, 160),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 1,
-                  child: PresentWidget(
-                    pathToImage: widget.pathToImage5,
-                    callback: (){},
-                    collected: widget.collectedAmount5,
-                    total: widget.totalAmount5,
-                    isTop: false,
-                  ),
+                PresentWidget(
+                  pathToImage: presentModels[4].smallImage,
+                  callback: () {
+                    swapModels(4);
+                    setState(() {});
+                  },
+                  collected: presentModels[4].alreadyGet,
+                  total: presentModels[4].fullPrice,
+                  isTop: false,
+                  height: getHeight(context, 160),
+                  width: getWidth(context, 160),
                 ),
-              ]
+              ],
             ),
-            // Отступ для поддержки разных соотношений сторон экрана.
-            const Expanded(
-              flex: 1,
-              child: SizedBox(width: 1)
-            ),
-          ]
-        )
-      )
+          ],
+        ),
+      ),
     );
+  }
+
+  void swapModels(int i){
+    additionalModel = presentModels[0];
+    presentModels[0] = presentModels[i];
+    presentModels[i] = additionalModel;
   }
 }

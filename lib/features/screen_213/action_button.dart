@@ -22,27 +22,30 @@ class ActionButton extends StatelessWidget {
               color: const Color.fromRGBO(110, 210, 182, 1),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: Text.rich(
-              TextSpan(
-                text: label,
-                style: TextLocalStyles.roboto500.copyWith(
-                  fontSize: 12,
-                  color: Colors.white,
-                  height: 0,
-                ),
-                children: [
-                  if (hasStar) ...[
-                    TextSpan(
-                      text: '*',
-                      style: TextLocalStyles.roboto500.copyWith(
-                        color: const Color.fromRGBO(218, 80, 80, 1),
-                        fontSize: 12,
+            child: Center(
+              child: Text.rich(
+                TextSpan(
+                  text: label,
+                  style: TextLocalStyles.roboto500.copyWith(
+                    fontSize: 12,
+                    color: Colors.white,
+                    height: 11.18 / 12,
+                  ),
+                  children: [
+                    if (hasStar) ...[
+                      TextSpan(
+                        text: '*',
+                        style: TextLocalStyles.roboto500.copyWith(
+                          color: const Color.fromRGBO(218, 80, 80, 1),
+                          fontSize: 12,
+                          height: 11.18 / 12,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
-                ],
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
         ),

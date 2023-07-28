@@ -33,7 +33,6 @@ class CustomRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isActive) {
-      // Превый режим. Если вся строка активна и в строке выбрана эта кнопка.
       if (index == groupIndex) {
         return _ButtonContainer(
           decoration: BoxDecoration(
@@ -41,7 +40,10 @@ class CustomRadioButton extends StatelessWidget {
             color: AppTheme.mainBlueColor
           ),
           caption: caption,
-          textStyle: customRadioButtonActiveTextStyle,
+          textStyle: TextLocalStyles.roboto600.copyWith(
+            color: Colors.white,
+            fontSize: 14,
+          ),
         );
       }
       // Второй режим.
@@ -55,14 +57,16 @@ class CustomRadioButton extends StatelessWidget {
             ),
           ),
           caption: caption,
-          textStyle: customRadioButtonEnableTextStyle,
+          textStyle: TextLocalStyles.roboto500.copyWith(
+            color: const Color.fromRGBO(127, 164, 234, 1),
+            fontSize: 14,
+          ),
         ),
         onPointerDown: (_) {
           onChanged(index);
         },
       );
     }
-    // Третий режим.
     return _ButtonContainer(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
@@ -73,7 +77,10 @@ class CustomRadioButton extends StatelessWidget {
         color: AppTheme.backgroundColor
       ),
       caption: caption,
-      textStyle: customRadioButtonDisableTextStyle,
+      textStyle: TextLocalStyles.roboto500.copyWith(
+        color: AppTheme.inactiveButtonBorderColor,
+        fontSize: 14,
+      ),
     );
   }
 }
@@ -94,14 +101,13 @@ class _ButtonContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 72,
-      height: 24,
+      width: getWidth(context, 60),
+      height: getHeight(context, 24),
+      alignment: Alignment.center,
       decoration: decoration,
-      child: Center(
-        child: Text(
-          caption,
-          style: textStyle,
-        )
+      child: Text(
+        caption,
+        style: textStyle,
       ),
     );
   }

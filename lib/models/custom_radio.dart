@@ -3,7 +3,6 @@ part of 'models.dart';
 /// Виджет RadioButton для Экрана "Подарок".
 
 class CustomRadio<T> extends StatelessWidget {
-
   final ValueChanged<T?> onChanged;
   final T value;
   final T groupValue;
@@ -12,32 +11,33 @@ class CustomRadio<T> extends StatelessWidget {
     required this.onChanged,
     required this.value,
     required this.groupValue,
-    Key? key
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (value == groupValue){
+    if (value == groupValue) {
       return Container(
         width: 24,
         height: 24,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          shape: BoxShape.circle,
           border: Border.all(
             color: AppTheme.mainGreenColor,
             width: 2,
           ),
-          color: AppTheme.backgroundColor
+          color: AppTheme.backgroundColor,
         ),
         child: Center(
           child: Container(
             width: 16,
             height: 16,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+            decoration: const BoxDecoration(
               color: AppTheme.mainGreenColor,
-            )
-          )
+              shape: BoxShape.circle,
+            ),
+          ),
         ),
       );
     }
@@ -46,21 +46,22 @@ class CustomRadio<T> extends StatelessWidget {
         height: 24,
         width: 24,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          shape: BoxShape.circle,
           border: Border.all(
             color: AppTheme.inactiveButtonBorderColor,
             width: 2,
           ),
-          color: AppTheme.inactiveButtonFillColor
+          color: AppTheme.inactiveButtonFillColor,
         ),
         child: Container(
-          margin: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
           ),
-        )
+        ),
       ),
-      onPointerDown: (_) {onChanged(value);},
+      onPointerDown: (_) {
+        onChanged(value);
+      },
     );
   }
 }

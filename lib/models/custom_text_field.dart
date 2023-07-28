@@ -9,7 +9,9 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.height,
-    required this.width, this.maxLines, this.hintText,
+    required this.width,
+    this.maxLines,
+    this.hintText,
   });
 
   static const OutlineInputBorder outlinedBorder = OutlineInputBorder(
@@ -28,7 +30,7 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         style: TextLocalStyles.roboto400.copyWith(
           color: Colors.white,
-          fontSize: 12,
+          fontSize: getHeight(context, 12),
         ),
         cursorColor: const Color.fromRGBO(166, 173, 181, 1),
         maxLines: maxLines,
@@ -39,7 +41,7 @@ class CustomTextField extends StatelessWidget {
           hintText: hintText,
           hintStyle: TextLocalStyles.roboto400.copyWith(
             color: const Color.fromRGBO(166, 173, 181, 1),
-            fontSize: 12,
+            fontSize: getHeight(context, 16),
           ),
           filled: true,
           fillColor: const Color.fromRGBO(52, 54, 62, 1),

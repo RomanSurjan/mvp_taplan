@@ -8,18 +8,16 @@ class MoreButton extends StatelessWidget {
     return SizedBox(
       height: getHeight(context, 24),
       width: getWidth(context, 24),
-      child: const DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color.fromRGBO(87, 99, 107, 1),
+      child: DecoratedBox(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Color.fromRGBO(87, 99, 107, 1),
+        ),
+        child: Center(
+          child: SvgPicture.asset(
+            'assets/svg/more_button.svg',
           ),
-          child: Center(
-            child: Icon(
-              Icons.more_vert,
-              size: 20,
-              color: Color.fromRGBO(166, 173, 181, 1),
-            ),
-          )
+        ),
       ),
     );
   }

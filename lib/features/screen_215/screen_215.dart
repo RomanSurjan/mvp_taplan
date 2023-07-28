@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mvp_taplan/features/screen_15/screen_15.dart';
+import 'package:mvp_taplan/features/screen_213/screen_213.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -18,9 +20,9 @@ class Screen215 extends StatefulWidget {
 }
 
 class _Screen215State extends State<Screen215> {
-  final double totalPrice = 12600;
+  final double totalPrice = 0;
 
-  List<String> prices = ['₽ 9 900', '₽ 7 500', '₽ 7 500', ''];
+  List<String> prices = ['₽ 9 900', '₽ 7 500', '₽ 5 000', ''];
   List<String> labels = ['до Делюкс', 'до Премиума', 'до Стандарта', ''];
   List<bool> isPickedMoney = [
     false,
@@ -45,11 +47,14 @@ class _Screen215State extends State<Screen215> {
                 top: getHeight(context, 12),
               ),
             ),
-            SizedBox(
-              height: getHeight(context, 343),
-              width: getWidth(context, 343),
-              child: Image.asset(
-                'assets/images/image_116.png',
+            Expanded(
+              child: SizedBox(
+                height: getHeight(context, 343),
+                width: getWidth(context, 343),
+                child: Image.asset(
+                  'assets/images/image_116.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Padding(
@@ -59,8 +64,11 @@ class _Screen215State extends State<Screen215> {
             ),
             Text(
               'Собрано ₽ $totalPrice',
-              style:
-                  TextLocalStyles.roboto600.copyWith(fontSize: 16, color: AppTheme.mainGreenColor),
+              style: TextLocalStyles.roboto600.copyWith(
+                fontSize: 18,
+                color: AppTheme.mainGreenColor,
+                height: 18.75 / 16,
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -68,9 +76,9 @@ class _Screen215State extends State<Screen215> {
               ),
             ),
             MoneyScale(
-              firstGrade: 15000,
-              secondGrade: 25500,
-              thirdGrade: 100000,
+              firstGrade: 5000,
+              secondGrade: 7500,
+              thirdGrade: 9900,
               totalMoney: totalPrice,
             ),
             Padding(
@@ -90,7 +98,11 @@ class _Screen215State extends State<Screen215> {
                       price: prices[index],
                       label: labels[index],
                       isPicked: isPickedMoney[index],
-                      child: isPickedMoney.length - 1 == index ? const PickYourMoney() : null,
+                      child: isPickedMoney.length - 1 == index
+                          ? PickYourMoney(
+                              isPicked: isPickedMoney[index],
+                            )
+                          : null,
                       onTap: () {
                         for (int i = 0; i < isPickedMoney.length; i++) {
                           if (i == index) {
@@ -104,7 +116,7 @@ class _Screen215State extends State<Screen215> {
                     );
                   }),
             ),
-            const Expanded(child: SizedBox()),
+            SizedBox(height: getHeight(context, 20)),
             Padding(
               padding: EdgeInsets.only(
                 bottom: getHeight(context, 16),
@@ -116,16 +128,25 @@ class _Screen215State extends State<Screen215> {
                     label: 'Выбрать\nоткрытку',
                     gradient: AppTheme.mainPurpleGradient,
                     width: getWidth(context, 109),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen213()));
+                    },
                   ),
                   MvpGradientButton(
                     label: 'Внести\nденьги',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 109),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const Screen15()));
+                    },
                   ),
                   MvpGradientButton(
-                    label: 'Купить\nсовместно',
+                    label: 'Купить\nтолько от себя',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 109),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen214()));
+                    },
                   ),
                 ],
               ),

@@ -1,43 +1,47 @@
-
 part of 'screen_215.dart';
 
-
 class PickYourMoney extends StatefulWidget {
-  const PickYourMoney({super.key});
+  final bool isPicked;
+
+  const PickYourMoney({
+    super.key,
+    required this.isPicked,
+  });
 
   @override
   State<PickYourMoney> createState() => _PickYourMoneyState();
 }
 
 class _PickYourMoneyState extends State<PickYourMoney> {
-
-  List<String> prices =[
+  List<String> prices = [
+    '100 ₽',
+    '250 ₽',
     '500 ₽',
-    '1000 ₽',
-    '5000 ₽',
+    '1 000 ₽',
   ];
-  List<bool> isPicked =[
+  List<bool> isPicked = [
     false,
     false,
     true,
+    false,
   ];
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: getHeight(context, 20),
-      width: getWidth(context, 218),
-      child: ListView.separated(
+    return Expanded(
+      child: SizedBox(
+        height: getHeight(context, 20),
+        child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index){
+          itemBuilder: (context, index) {
             return PickYourMoneyContainer(
               price: prices[index],
-              isPicked: isPicked[index],
-              onTap: (){
-                for(int i = 0; i < prices.length; i++){
-                  if(i == index){
+              isPicked: isPicked[index] && widget.isPicked,
+              onTap: () {
+                for (int i = 0; i < prices.length; i++) {
+                  if (i == index) {
                     isPicked[i] = true;
-                  }else{
+                  } else {
                     isPicked[i] = false;
                   }
                 }
@@ -45,8 +49,9 @@ class _PickYourMoneyState extends State<PickYourMoney> {
               },
             );
           },
-          separatorBuilder:(_, __) => Padding(padding: EdgeInsets.only(left: getWidth(context, 10))),
+          separatorBuilder: (_, __) => Padding(padding: EdgeInsets.only(left: getWidth(context, 10))),
           itemCount: prices.length,
+        ),
       ),
     );
   }

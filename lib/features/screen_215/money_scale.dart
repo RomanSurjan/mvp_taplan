@@ -24,7 +24,17 @@ class MoneyScale extends StatelessWidget {
           width: getWidth(context, 113),
           child: Stack(
             children: [
-              if (totalMoney > firstGrade) ...[
+              if(totalMoney == 0)...[
+                SizedBox(
+                  height: getHeight(context, 46),
+                  width: getWidth(context, 113),
+                  child: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.mainPinkGradient,
+                    ),
+                  ),
+                ),
+              ] else if (totalMoney > firstGrade) ...[
                 SizedBox(
                   height: getHeight(context, 46),
                   width: getWidth(context, 113),
@@ -63,6 +73,7 @@ class MoneyScale extends StatelessWidget {
                     style: TextLocalStyles.roboto600.copyWith(
                       fontSize: 14,
                       color: Colors.white,
+                      height: 16.41 / 14,
                     ),
                     textAlign: TextAlign.end,
                   ),
@@ -86,44 +97,47 @@ class MoneyScale extends StatelessWidget {
                     ),
                   ),
                 )
-              ] else if (totalMoney < secondGrade)
-                ...[
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: getHeight(context, 46),
-                        width: getWidth(context, totalMoney / secondGrade * 113),
-                        child: const ColoredBox(
-                          color: AppTheme.mainGreenColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: getHeight(context, 46),
-                        width: getWidth(context, (1 - totalMoney / secondGrade) * 113),
-                        child: const ColoredBox(
-                          color: AppTheme.mainPinkColor,
-                        ),
-                      ),
-                    ],
-                  )
-                ] else ...[
-                  SizedBox(
-                    height: getHeight(context, 46),
-                    width: getWidth(context, 113),
-                    child: const DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.mainGreenGradient,
+              ] else if (totalMoney < secondGrade) ...[
+                Row(
+                  children: [
+                    SizedBox(
+                      height: getHeight(context, 46),
+                      width: getWidth(context, totalMoney / secondGrade * 113),
+                      child: const ColoredBox(
+                        color: AppTheme.mainGreenColor,
                       ),
                     ),
+                    SizedBox(
+                      height: getHeight(context, 46),
+                      width: getWidth(context, (1 - totalMoney / secondGrade) * 113),
+                      child: const ColoredBox(
+                        color: AppTheme.mainPinkColor,
+                      ),
+                    ),
+                  ],
+                )
+              ] else ...[
+                SizedBox(
+                  height: getHeight(context, 46),
+                  width: getWidth(context, 113),
+                  child: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.mainGreenGradient,
+                    ),
                   ),
-                ],
+                ),
+              ],
               Padding(
                 padding: EdgeInsets.only(right: getWidth(context, 3)),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '$secondGrade ₽\nМасс-маркет',
-                    style: TextLocalStyles.roboto600.copyWith(fontSize: 14, color: Colors.white),
+                    '$secondGrade ₽\nПремиум',
+                    style: TextLocalStyles.roboto600.copyWith(
+                      fontSize: 14,
+                      color: Colors.white,
+                      height: 16.41 / 14,
+                    ),
                     textAlign: TextAlign.end,
                   ),
                 ),
@@ -146,46 +160,46 @@ class MoneyScale extends StatelessWidget {
                     ),
                   ),
                 )
-              ] else if (totalMoney < thirdGrade)
-                ...[
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: getHeight(context, 46),
-                        width: getWidth(context, totalMoney / thirdGrade * 113),
-                        child: const ColoredBox(
-                          color: AppTheme.mainGreenColor,
-                        ),
-                      ),
-                      SizedBox(
-                        height: getHeight(context, 46),
-                        width: getWidth(context, (1 - totalMoney / thirdGrade) * 113),
-                        child: const ColoredBox(
-                          color: AppTheme.mainPinkColor,
-                        ),
-                      ),
-                    ],
-                  )
-                ] else ...[
-                  SizedBox(
-                    height: getHeight(context, 46),
-                    width: getWidth(context, 113),
-                    child: const DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.mainGreenGradient,
+              ] else if (totalMoney < thirdGrade) ...[
+                Row(
+                  children: [
+                    SizedBox(
+                      height: getHeight(context, 46),
+                      width: getWidth(context, totalMoney / thirdGrade * 113),
+                      child: const ColoredBox(
+                        color: AppTheme.mainGreenColor,
                       ),
                     ),
+                    SizedBox(
+                      height: getHeight(context, 46),
+                      width: getWidth(context, (1 - totalMoney / thirdGrade) * 113),
+                      child: const ColoredBox(
+                        color: AppTheme.mainPinkColor,
+                      ),
+                    ),
+                  ],
+                )
+              ] else ...[
+                SizedBox(
+                  height: getHeight(context, 46),
+                  width: getWidth(context, 113),
+                  child: const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: AppTheme.mainGreenGradient,
+                    ),
                   ),
-                ],
+                ),
+              ],
               Padding(
                 padding: EdgeInsets.only(right: getWidth(context, 3)),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '$thirdGrade ₽\nПремиум',
+                    '$thirdGrade ₽\nДелюкс',
                     style: TextLocalStyles.roboto600.copyWith(
-                      color: Colors.white,
                       fontSize: 14,
+                      color: Colors.white,
+                      height: 16.41 / 14,
                     ),
                     textAlign: TextAlign.end,
                   ),

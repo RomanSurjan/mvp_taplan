@@ -59,8 +59,17 @@ class PickUpPriceContainer extends StatelessWidget {
                 if (child == null) ...[
                   Text(
                     label,
-                    style: TextLocalStyles.roboto400.copyWith(
-                        color: isPicked ? AppTheme.mainGreenColor : Colors.white, fontSize: 16),
+                    style: isPicked
+                        ? TextLocalStyles.roboto600.copyWith(
+                            color: AppTheme.mainGreenColor,
+                            fontSize: 16,
+                            height: 18.75 / 16,
+                          )
+                        : TextLocalStyles.roboto400.copyWith(
+                            fontSize: 16,
+                            height: 18.75 / 16,
+                            color: Colors.white,
+                          ),
                   ),
                   const Expanded(child: SizedBox()),
                   Text(

@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
@@ -29,14 +32,29 @@ class _Screen28State extends State<Screen28> {
   late Timer timer;
   List<int> listOfDates = [];
   int currentMonth = 0;
+  int currentYear = 0;
+  int currentDay = 0;
+  int currentDayIndex = 0;
+
+  String buttonLabel = '';
+
+  int pickedDate = -1;
 
   @override
   void initState() {
     super.initState();
+
     currentMonth = dateTime.month;
-    listOfDates = buildListOfDates(currentMonth);
+    currentYear = dateTime.year;
+    currentDay = dateTime.day;
+
+    listOfDates = buildListOfDates(currentMonth, currentYear, currentDay);
     currentTime = calculateCurrentTime();
     currentDate = calculateCurrentDate();
+
+    buttonLabel =
+        '${listOfDates[currentDayIndex]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -44,6 +62,13 @@ class _Screen28State extends State<Screen28> {
         setState(() {});
       },
     );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+
+    super.dispose();
   }
 
   @override
@@ -67,14 +92,14 @@ class _Screen28State extends State<Screen28> {
                       currentTime,
                       style: TextLocalStyles.roboto400.copyWith(
                         color: Colors.white70,
-                        fontSize: 24,
+                        fontSize: 22,
                       ),
                     ),
                     Text(
                       currentDate,
                       style: TextLocalStyles.roboto500.copyWith(
                         color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 22,
                       ),
                     ),
                   ],
@@ -88,7 +113,7 @@ class _Screen28State extends State<Screen28> {
             child: Row(
               children: [
                 Text(
-                  '${switchMonthToString(currentMonth, isNative: true)} ${dateTime.year}',
+                  '${switchMonthToString(currentMonth, isNative: true)} $currentYear',
                   style: TextLocalStyles.roboto500.copyWith(
                     color: Colors.white,
                     fontSize: 17,
@@ -98,9 +123,14 @@ class _Screen28State extends State<Screen28> {
                 GradientAnimatedIconButton(
                   icon: 'assets/svg/arrow_up.svg',
                   onPressed: () {
-                    currentMonth--;
-                    listOfDates = buildListOfDates(currentMonth);
-                    setState(() {});
+                    if (currentMonth - 1 > 1) {
+                      currentMonth--;
+                      listOfDates = currentMonth == dateTime.month
+                          ? buildListOfDates(currentMonth, currentYear, currentDay)
+                          : buildListOfDates(currentMonth, currentYear, -1);
+                      pickedDate = -1;
+                      setState(() {});
+                    }
                   },
                 ),
                 SizedBox(
@@ -109,8 +139,19 @@ class _Screen28State extends State<Screen28> {
                 GradientAnimatedIconButton(
                   icon: 'assets/svg/arrow_down_big.svg',
                   onPressed: () {
-                    currentMonth++;
-                    listOfDates = buildListOfDates(currentMonth);
+                    if (currentMonth + 1 < 12) {
+                      currentMonth++;
+                      listOfDates = currentMonth == dateTime.month
+                          ? buildListOfDates(currentMonth, currentYear, currentDay)
+                          : buildListOfDates(currentMonth, currentYear, -1);
+                    } else {
+                      currentMonth = 1;
+                      currentYear++;
+                      listOfDates = currentMonth == dateTime.month
+                          ? buildListOfDates(currentMonth, currentYear, currentDay)
+                          : buildListOfDates(currentMonth, currentYear, -1);
+                    }
+                    pickedDate = -1;
                     setState(() {});
                   },
                 ),
@@ -137,42 +178,61 @@ class _Screen28State extends State<Screen28> {
                       ),
                       Padding(padding: EdgeInsets.only(top: getHeight(context, 6))),
                       for (int j = 0; j < daysOfWeek.length - 1; j++) ...[
-                        Padding(padding: EdgeInsets.only(top: getHeight(context, 14))),
-                        SizedBox(
-                          height: getHeight(context, 39),
-                          width: getWidth(context, 39),
-                          child: DecoratedBox(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [
-                                  Color.fromRGBO(70, 72, 81, 1),
-                                  Color.fromRGBO(40, 43, 51, 1),
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                        Padding(padding: EdgeInsets.only(top: getHeight(context, 20))),
+                        InkWell(
+                          onTap: () {
+                            pickedDate = i + j * daysOfWeek.length;
+                            buttonLabel =
+                                '${listOfDates[pickedDate]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+
+                            setState(() {});
+                          },
+                          child: SizedBox(
+                            height: getHeight(context, 39),
+                            width: getWidth(context, 39),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  colors: i + j * daysOfWeek.length == currentDayIndex && currentMonth == dateTime.month
+                                      ? [
+                                          const Color.fromRGBO(211, 102, 137, 1),
+                                          const Color.fromRGBO(241, 171, 193, 1),
+                                        ]
+                                      : i + j * daysOfWeek.length == pickedDate
+                                          ? [
+                                              const Color(0xFF62C6AA),
+                                              const Color(0xFF44A88C),
+                                            ]
+                                          : [
+                                              const Color.fromRGBO(70, 72, 81, 1),
+                                              const Color.fromRGBO(40, 43, 51, 1),
+                                            ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                listOfDates[i + j * daysOfWeek.length].toString(),
-                                style: TextLocalStyles.roboto400.copyWith(
-                                  color: (i + j * daysOfWeek.length) < listOfDates.indexOf(1)
-                                      ? const Color.fromRGBO(143, 153, 163, 1)
-                                      : (i + j * daysOfWeek.length) >
-                                              (switchMonthInDays(currentMonth) +
-                                                  listOfDates.indexOf(1) -
-                                                  1)
-                                          ? AppTheme.mainGreenColor
-                                          : Colors.white,
-                                  fontSize: 16,
-                                  decoration: (i + j * daysOfWeek.length) >
-                                          (switchMonthInDays(currentMonth) +
-                                              listOfDates.indexOf(1) -
-                                              1)
-                                      ? TextDecoration.underline
-                                      : null,
-                                  decorationColor: AppTheme.mainGreenColor,
+                              child: Center(
+                                child: Text(
+                                  listOfDates[i + j * daysOfWeek.length].toString(),
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    color: (i + j * daysOfWeek.length) < listOfDates.indexOf(1)
+                                        ? const Color.fromRGBO(143, 153, 163, 1)
+                                        : (i + j * daysOfWeek.length) >
+                                                (switchMonthInDays(currentMonth) +
+                                                    listOfDates.indexOf(1) -
+                                                    1)
+                                            ? AppTheme.mainGreenColor
+                                            : Colors.white,
+                                    fontSize: 16,
+                                    decoration: (i + j * daysOfWeek.length) >
+                                            (switchMonthInDays(currentMonth) +
+                                                listOfDates.indexOf(1) -
+                                                1)
+                                        ? TextDecoration.underline
+                                        : null,
+                                    decorationColor: AppTheme.mainGreenColor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -194,9 +254,13 @@ class _Screen28State extends State<Screen28> {
               right: getWidth(context, 16),
             ),
             child: MvpGradientButton(
-              label: 'ОК',
+              label: 'Подтвердить дату\n$buttonLabel',
               gradient: AppTheme.mainGreenGradient,
               width: getWidth(context, 164),
+              onTap: () {
+                context.read<DateTimeBloc>().add(ChangeDateEvent(date: buttonLabel));
+                Navigator.pop(context);
+              },
             ),
           ),
         ],
@@ -286,12 +350,10 @@ class _Screen28State extends State<Screen28> {
     }
   }
 
-  List<int> buildListOfDates(int currentMonth) {
+  List<int> buildListOfDates(int currentMonth, int currentYear, int currentDay) {
     final List<int> listOfDates = [];
 
-    DateTime nowDateTime = DateTime.now();
-
-    var firstDateOfMonth = DateTime(nowDateTime.year, currentMonth, 1);
+    var firstDateOfMonth = DateTime(currentYear, currentMonth, 1);
 
     var previousMonthInDays = switchMonthInDays(currentMonth - 1);
     var currentMonthInDays = switchMonthInDays(currentMonth);
@@ -300,8 +362,13 @@ class _Screen28State extends State<Screen28> {
       listOfDates.add(previousMonthInDays - i + 1);
     }
 
+    var lengthList = listOfDates.length;
+
     for (int i = 0; i < currentMonthInDays; i++) {
       listOfDates.add(i + 1);
+      if (i == currentDay) {
+        currentDayIndex = i + lengthList - 1;
+      }
     }
     int lenOfList = listOfDates.length;
     for (int i = 0; i < 42 - lenOfList; i++) {

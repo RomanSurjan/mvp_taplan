@@ -68,8 +68,8 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
                     ),
                     gradient: LinearGradient(
                       colors: [
-                        Color.fromRGBO(119, 187, 102, 1),
-                        Color.fromRGBO(119, 187, 102, 0.9),
+                        Color.fromRGBO(127, 164, 234, 1),
+                        Color.fromRGBO(127, 164, 234, 0.9),
                       ],
                     ),
                   ),

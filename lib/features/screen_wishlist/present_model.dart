@@ -4,6 +4,8 @@ class MvpPresentModel {
   String label;
   int fullPrice;
   int alreadyGet;
+  int position;
+  int id;
 
   MvpPresentModel({
     required this.bigImage,
@@ -11,5 +13,7 @@ class MvpPresentModel {
     required this.label,
     required this.fullPrice,
     required this.alreadyGet,
+    required this.position,
+    required this.id,
   });
 }

@@ -36,7 +36,7 @@ class PresentWidget extends StatelessWidget {
       },
       child: Column(
         children: [
-          Image.asset(
+          Image.network(
             pathToImage,
             fit: BoxFit.cover,
             width: width,

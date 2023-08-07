@@ -36,17 +36,20 @@ class _PickYourMoneyState extends State<PickYourMoney> {
           itemBuilder: (context, index) {
             return PickYourMoneyContainer(
               price: prices[index],
-              isPicked: isPicked[index] && widget.isPicked,
+              isPicked: isPicked[index],
               onTap: () {
-                for (int i = 0; i < prices.length; i++) {
-                  if (i == index) {
-                    isPicked[i] = true;
-                  } else {
-                    isPicked[i] = false;
+                if (widget.isPicked) {
+                  for (int i = 0; i < prices.length; i++) {
+                    if (i == index) {
+                      isPicked[i] = true;
+                    } else {
+                      isPicked[i] = false;
+                    }
                   }
+                  setState(() {});
                 }
-                setState(() {});
-              },
+              }
+
             );
           },
           separatorBuilder: (_, __) => Padding(padding: EdgeInsets.only(left: getWidth(context, 10))),

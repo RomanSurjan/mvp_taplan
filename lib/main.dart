@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 
 void main() {
@@ -12,11 +15,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DateTimeBloc>(
-      create: (context) => DateTimeBloc(
-        date: '',
-        time: '21 : 30',
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DateTimeBloc>(
+          create: (context) => DateTimeBloc(
+            date: '',
+            time: '21 : 30',
+          ),
+        ),
+        BlocProvider<PostcardBloc>(
+          create: (context) => PostcardBloc(),
+        ),
+        BlocProvider<BuyTogetherBloc>(
+          create: (context) => BuyTogetherBloc(),
+        ),
+        BlocProvider<WishListBloc>(
+            create: (context) => WishListBloc(),
+        ),
+      ],
       child: const MaterialApp(
         title: 'MVP',
         home: MyHomePage(),

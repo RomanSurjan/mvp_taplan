@@ -24,7 +24,8 @@ class PresentScreen extends StatefulWidget {
 
   const PresentScreen({
     required this.buyingOption,
-    super.key, this.imagePath,
+    super.key,
+    this.imagePath,
   });
 
   @override
@@ -39,12 +40,59 @@ class PresentScreenState extends State<PresentScreen> {
 
   int additionalSum = 0;
 
+  TextEditingController sumController = TextEditingController(text: "");
+
   int amountIndex = 3;
 
   @override
   void initState() {
     super.initState();
+
+
+    sumController.addListener(() {
+      String text = sumController.text;
+
+      String str = text;
+      String additional = '';
+      str = str.replaceAll(RegExp(r"\D+"), '');
+      int sum = int.tryParse(str) ?? 0;
+      if(sum >= 1000)
+      {
+        if (sum%1000 < 10)
+        {
+          additional = '00${sum%1000}';
+        }
+        else if (sum%1000 < 100)
+        {
+          additional = '0${sum%1000}';
+        }
+        else{
+          additional = (sum%1000).toString();
+        }
+        str = '${(sum/1000).truncate()} $additional';
+      }
+
+      text = "₽  $str";
+
+      if (!text.startsWith("₽  ") && buyingOption == BuyingOption.buyAlone) {
+        text = "₽  ";
+      }
+      else if(text == "₽  " && buyingOption != BuyingOption.buyAlone)
+      {
+        text = "";
+      }
+
+      sumController.value = sumController.value.copyWith(
+        text: text,
+        selection:
+        TextSelection(baseOffset: text.length, extentOffset: text.length),
+        composing: TextRange.empty,
+      );
+    });
+
+
     additionalSum = widget.thirdAmount;
+
     update = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
@@ -79,12 +127,10 @@ class PresentScreenState extends State<PresentScreen> {
           child: Column(
             children: <Widget>[
               Image.asset(
-                widget.imagePath ?? 'assets/images/car.png',
+                widget.imagePath ?? 'assets/images/audi_big.png',
                 fit: BoxFit.cover,
                 width: getWidth(context, 343),
                 height: getHeight(context, 226),
-                alignment: Alignment.topCenter,
-                //width: MediaQuery.of(context).size.width,
               ),
               Padding(
                 padding: EdgeInsets.only(
@@ -134,7 +180,9 @@ class PresentScreenState extends State<PresentScreen> {
                             groupValue: buyingOption,
                             onChanged: (value) {
                               buyingOption = value!;
-                              additionalSum = 0;
+                              String str = sumController.text;
+                              str = str.replaceAll(RegExp(r"\D+"), "");
+                              additionalSum = int.tryParse(str) ?? 0;
                               setState(() {});
                             },
                           ),
@@ -143,23 +191,26 @@ class PresentScreenState extends State<PresentScreen> {
                           ),
                           Expanded(
                             child: SizedBox(
-                              height: 24,
+                              height: getHeight(context, 28),
                               child: TextField(
+                                controller: sumController,
                                 textAlign: TextAlign.center,
                                 enabled: buyingOption == BuyingOption.buyAlone,
                                 textAlignVertical: TextAlignVertical.bottom,
                                 keyboardType: TextInputType.number,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: Color.fromRGBO(127, 164, 234, 1),
                                   fontFamily: 'Roboto',
                                   fontWeight: FontWeight.w200,
                                   fontSize: 14,
                                 ),
+                                cursorColor: Colors.white,
                                 onChanged: (value) {
-                                  additionalSum = int.tryParse(value) ?? 0;
+                                  String str = value;
+                                  str = str.replaceAll(RegExp(r"\D+"), "");
+                                  additionalSum = int.tryParse(str) ?? 0;
                                   setState(() {});
                                 },
-                                cursorColor: Colors.white,
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: const Color.fromRGBO(52, 54, 62, 1),
@@ -206,11 +257,30 @@ class PresentScreenState extends State<PresentScreen> {
                             groupValue: buyingOption,
                             onChanged: (value) {
                               buyingOption = value!;
+
+                              (sumController.text == "₽  ")
+                                  ? sumController.value = sumController.value.copyWith(
+                                      text: "",
+                                    )
+                                  : null;
+                              switch (amountIndex) {
+                                case 1:
+                                  additionalSum = widget.firstAmount;
+
+                                case 2:
+                                  additionalSum = widget.secondAmount;
+
+                                case 3:
+                                  additionalSum = widget.thirdAmount;
+
+                                case 4:
+                                  additionalSum = widget.fourthAmount;
+                              }
                               setState(() {});
                             },
                           ),
                           CustomRadioButton(
-                            caption: "${widget.firstAmount} ₽",
+                            caption: "₽ ${widget.firstAmount}",
                             index: 1,
                             groupIndex: amountIndex,
                             isActive: buyingOption == BuyingOption.buyTogether,
@@ -222,13 +292,13 @@ class PresentScreenState extends State<PresentScreen> {
                             },
                           ),
                           CustomRadioButton(
-                            caption: "${widget.secondAmount} ₽",
+                            caption: "₽ ${widget.secondAmount}",
                             index: 2,
                             groupIndex: amountIndex,
                             isActive: buyingOption == BuyingOption.buyTogether,
                             onChanged: (index) {
                               setState(
-                                    () {
+                                () {
                                   amountIndex = index;
                                   additionalSum = widget.secondAmount;
                                 },
@@ -236,7 +306,7 @@ class PresentScreenState extends State<PresentScreen> {
                             },
                           ),
                           CustomRadioButton(
-                            caption: "${widget.thirdAmount} ₽",
+                            caption: "₽ ${widget.thirdAmount}",
                             index: 3,
                             groupIndex: amountIndex,
                             isActive: buyingOption == BuyingOption.buyTogether,
@@ -248,7 +318,7 @@ class PresentScreenState extends State<PresentScreen> {
                             },
                           ),
                           CustomRadioButton(
-                            caption: "${widget.fourthAmount} ₽",
+                            caption: "₽ ${widget.fourthAmount}",
                             index: 4,
                             groupIndex: amountIndex,
                             isActive: buyingOption == BuyingOption.buyTogether,
@@ -317,8 +387,7 @@ class PresentScreenState extends State<PresentScreen> {
                 children: <Widget>[
                   MvpGradientButton(
                     onTap: () {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => const Screen213()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen213()));
                     },
                     label: "Написать\nпожелания",
                     gradient: AppTheme.purpleButtonGradientColor,
@@ -326,7 +395,7 @@ class PresentScreenState extends State<PresentScreen> {
                   ),
                   MvpGradientButton(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const Screen15()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen15()));
                     },
                     label: "Внести деньги\nна подарок",
                     gradient: AppTheme.greenButtonGradientColor,

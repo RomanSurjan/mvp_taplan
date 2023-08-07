@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
+import 'package:mvp_taplan/features/screen_213/action_button.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
-
-part 'action_button.dart';
 
 part 'postcard_view.dart';
 
@@ -18,21 +20,7 @@ class Screen213 extends StatefulWidget {
 }
 
 class _Screen213State extends State<Screen213> {
-  static const postcards = [
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-    "assets/images/postcard.png",
-  ];
+
 
   List<String> holidays = [
     'Еженедельный стрим',
@@ -43,7 +31,7 @@ class _Screen213State extends State<Screen213> {
 
   Map<String, List<String>> holidaysDateAndTime ={
     'Еженедельный стрим': [
-      '28.07',
+      '28.07.2023',
       '21.00',
     ],
     'День рождения': [
@@ -77,15 +65,16 @@ class _Screen213State extends State<Screen213> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ActionButton(
-                    label: 'Чат-телеграмм\nличный',
+                  PostcardButton(
+                    text: 'Чат-телеграмм\nличный',
                   ),
-                  ActionButton(
-                    label: 'Чат-телеграмм\nгрупповой',
+                  PostcardButton(
+                    text: 'Чат-телеграмм\nгрупповой',
                   ),
-                  ActionButton(
-                    label: 'Приложить\nк подарку ',
+                  PostcardButton(
+                    text: 'Приложить\nк подарку ',
                     hasStar: true,
+                    isPressed: true,
                   ),
                 ],
               ),
@@ -95,7 +84,6 @@ class _Screen213State extends State<Screen213> {
                 ),
               ),
               PostCardViewWidget(
-                postcards: postcards,
                 currentIndex: i,
                 onPageChanged: (index) {
                   i = index;
@@ -111,7 +99,7 @@ class _Screen213State extends State<Screen213> {
                 '* Бесплатная печатная открытка при подарке от ₽1000',
                 style: TextLocalStyles.roboto500.copyWith(
                   color: AppTheme.mainGreenColor,
-                  fontSize: getHeight(context, 12),
+                  fontSize: getHeight(context, 17),
                   height: 16.41 / 14,
                 ),
               ),
@@ -197,7 +185,7 @@ class _Screen213State extends State<Screen213> {
                 ),
               ),
               CustomTextField(
-                height: getHeight(context, 120),
+                height: getHeight(context, 180),
                 width: getWidth(context, 343),
                 hintText: 'Текст открытки',
                 maxLines: 10,

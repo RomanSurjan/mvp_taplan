@@ -42,7 +42,7 @@ class CustomRadioButton extends StatelessWidget {
           caption: caption,
           textStyle: TextLocalStyles.roboto600.copyWith(
             color: Colors.white,
-            fontSize: 14,
+            fontSize: 16,
           ),
         );
       }
@@ -59,7 +59,7 @@ class CustomRadioButton extends StatelessWidget {
           caption: caption,
           textStyle: TextLocalStyles.roboto500.copyWith(
             color: const Color.fromRGBO(127, 164, 234, 1),
-            fontSize: 14,
+            fontSize: 16,
           ),
         ),
         onPointerDown: (_) {
@@ -79,7 +79,7 @@ class CustomRadioButton extends StatelessWidget {
       caption: caption,
       textStyle: TextLocalStyles.roboto500.copyWith(
         color: AppTheme.inactiveButtonBorderColor,
-        fontSize: 14,
+        fontSize: 16,
       ),
     );
   }
@@ -102,7 +102,7 @@ class _ButtonContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: getWidth(context, 60),
-      height: getHeight(context, 24),
+      height: getHeight(context, 28),
       alignment: Alignment.center,
       decoration: decoration,
       child: Text(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
@@ -20,9 +24,16 @@ class Screen215 extends StatefulWidget {
 }
 
 class _Screen215State extends State<Screen215> {
-  final double totalPrice = 0;
+  final double totalPrice = 6750;
+
 
   List<String> prices = ['₽ 9 900', '₽ 7 500', '₽ 5 000', ''];
+  List<double> intPrices = [
+    9900,
+    7500,
+    5000,
+    100000000,
+  ];
   List<String> labels = ['до Делюкс', 'до Премиума', 'до Стандарта', ''];
   List<bool> isPickedMoney = [
     false,
@@ -31,10 +42,25 @@ class _Screen215State extends State<Screen215> {
     false,
   ];
 
+  void setAdditionalSum(){
+    for(int i = 0; i < isPickedMoney.length; i++){
+      if(isPickedMoney[i]){
+        context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: intPrices[i] - totalPrice));
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setAdditionalSum();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
-      appBarLabel: 'Скинуться\nна подарок',
+      appBarLabel: 'Внести часть денег\nна поддарок вскладчину ',
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: getWidth(context, 16),
@@ -76,9 +102,9 @@ class _Screen215State extends State<Screen215> {
               ),
             ),
             MoneyScale(
-              firstGrade: 5000,
-              secondGrade: 7500,
-              thirdGrade: 9900,
+              firstGrade: intPrices[2],
+              secondGrade: intPrices[1],
+              thirdGrade: intPrices[0],
               totalMoney: totalPrice,
             ),
             Padding(
@@ -104,14 +130,22 @@ class _Screen215State extends State<Screen215> {
                             )
                           : null,
                       onTap: () {
-                        for (int i = 0; i < isPickedMoney.length; i++) {
-                          if (i == index) {
-                            isPickedMoney[i] = true;
-                          } else {
-                            isPickedMoney[i] = false;
+                        if (totalPrice < intPrices[index]) {
+                          for (int i = 0; i < isPickedMoney.length; i++) {
+                            if (i == index) {
+                              isPickedMoney[i] = true;
+                            } else {
+                              isPickedMoney[i] = false;
+                            }
                           }
+                          if(index + 1 == isPickedMoney.length){
+                            context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: 500));
+                          }else{
+                            context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: intPrices[index] - totalPrice));
+                          }
+
+                          setState(() {});
                         }
-                        setState(() {});
                       },
                     );
                   }),
@@ -125,7 +159,7 @@ class _Screen215State extends State<Screen215> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   MvpGradientButton(
-                    label: 'Выбрать\nоткрытку',
+                    label: 'Написать\nсообщение',
                     gradient: AppTheme.mainPurpleGradient,
                     width: getWidth(context, 109),
                     onTap: () {
@@ -133,15 +167,15 @@ class _Screen215State extends State<Screen215> {
                     },
                   ),
                   MvpGradientButton(
-                    label: 'Внести\nденьги',
+                    label: 'Внести деньги\nна подарок',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 109),
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_)=> const Screen15()));
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen15()));
                     },
                   ),
                   MvpGradientButton(
-                    label: 'Купить\nтолько от себя',
+                    label: 'Купить подарок\nсамостоятельно',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 109),
                     onTap: () {

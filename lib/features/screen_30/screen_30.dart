@@ -1,6 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
 import 'package:mvp_taplan/features/screen_34/present_screen.dart';
 import 'package:mvp_taplan/features/screen_wishlist/wish_list_screen.dart';
@@ -19,6 +24,9 @@ class Screen30State extends State<Screen30> {
   var flagForTip = false;
   DateTime dateOfBorn = DateTime(2024, 5, 17, 0);
 
+
+
+
   var isFirst = false;
   bool isTaped = false;
   bool isTapedHome = false;
@@ -28,6 +36,9 @@ class Screen30State extends State<Screen30> {
   @override
   void initState() {
     super.initState();
+
+    context.read<PostcardBloc>().add(GetPostcardsEvent());
+    context.read<WishListBloc>().add(GetWishListEvent());
 
     update = Timer.periodic(
       const Duration(seconds: 1),
@@ -119,11 +130,11 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
         'Групповой\nподарок к\nЕженедельному\n стриму ',
         style: TextLocalStyles.mono400.copyWith(
           fontSize: 14,
-          height: 1,
+          height: 12.21 / 14,
         ),
         textAlign: TextAlign.right,
       ),
-      SizedBox(height: getHeight(context, 2)),
+      const SizedBox(height: 3),
       Row(
         children: [
           containerTimer(context, range.day, 'дни'),
@@ -169,11 +180,11 @@ Widget myDream(BuildContext context, DateTime range) {
           'Подарок ко \n Дню рождения?',
           style: TextLocalStyles.mono400.copyWith(
             fontSize: getHeight(context, 16),
-            height: 13.95 / 16,
+            height: 13.95 / 14,
           ),
           textAlign: TextAlign.right,
         ),
-        SizedBox(height: getHeight(context, 2)),
+        const SizedBox(height: 3),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

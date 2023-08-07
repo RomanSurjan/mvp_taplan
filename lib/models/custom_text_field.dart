@@ -30,7 +30,7 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         style: TextLocalStyles.roboto400.copyWith(
           color: Colors.white,
-          fontSize: getHeight(context, 12),
+          fontSize: getHeight(context, 16),
         ),
         cursorColor: const Color.fromRGBO(166, 173, 181, 1),
         maxLines: maxLines,

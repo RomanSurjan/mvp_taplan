@@ -16,6 +16,7 @@ class PostCardViewWidget extends StatelessWidget {
 
     return BlocBuilder<PostcardBloc, PostcardState>(
       builder: (context, state) {
+
         return Column(
           children: [
             SizedBox(
@@ -38,19 +39,12 @@ class PostCardViewWidget extends StatelessWidget {
                       onPageChanged: onPageChanged,
                       controller: controller,
                       itemCount: state.postcards.length,
-                      //itemCount: postcards.length,
                       itemBuilder: (context, index) {
-                        return Container(
+                        return Image.network(
+                          state.postcards[index],
                           width: getWidth(context, 375),
                           height: getHeight(context, 239),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                state.postcards[index],
-                              ),
-                              fit: BoxFit.fitHeight,
-                            ),
-                          ),
+                          fit: BoxFit.fill,
                         );
                       },
                     ),
@@ -103,27 +97,30 @@ class PostCardViewWidget extends StatelessWidget {
                 top: getHeight(context, 8),
               ),
             ),
-            SizedBox(
-              height: getHeight(context, 6),
-              child: ListView.separated(
-                separatorBuilder: (_, __) =>
-                    Padding(padding: EdgeInsets.only(left: getWidth(context, 8))),
-                scrollDirection: Axis.horizontal,
-                itemCount: state.postcards.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: getHeight(context, 6),
-                    width: getWidth(context, 6),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: index == currentIndex
-                            ? AppTheme.mainGreenColor
-                            : const Color.fromRGBO(66, 68, 77, 1),
+            Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                height: getHeight(context, 6),
+                child: ListView.separated(
+                  separatorBuilder: (_, __) =>
+                      Padding(padding: EdgeInsets.only(left: getWidth(context, 8))),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.postcards.length,
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      height: getHeight(context, 6),
+                      width: getWidth(context, 6),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: index == currentIndex
+                              ? AppTheme.mainGreenColor
+                              : const Color.fromRGBO(66, 68, 77, 1),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],

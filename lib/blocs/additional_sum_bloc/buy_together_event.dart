@@ -4,7 +4,7 @@ abstract class BuyTogetherEvent{
 }
 
 class SetAdditionalSumEvent extends BuyTogetherEvent {
-  final double additionalSum;
+  final int additionalSum;
 
   SetAdditionalSumEvent({required this.additionalSum});
 }

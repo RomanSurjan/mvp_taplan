@@ -1,10 +1,10 @@
 class BuyTogetherState {
-  final double additionalSum;
+  final int additionalSum;
 
   BuyTogetherState({required this.additionalSum});
 
   BuyTogetherState copyWith({
-    double? additionalSum,
+    int? additionalSum,
   }) {
     return BuyTogetherState(
       additionalSum: additionalSum ?? this.additionalSum,

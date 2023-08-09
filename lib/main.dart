@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<DateTimeBloc>(
           create: (context) => DateTimeBloc(
             date: '',
-            time: '21 : 30',
+            time: '',
           ),
         ),
         BlocProvider<PostcardBloc>(

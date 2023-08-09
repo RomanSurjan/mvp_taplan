@@ -1,11 +1,15 @@
 part of 'screen_215.dart';
 
 class PickYourMoney extends StatefulWidget {
-  final bool isPicked;
+  final bool isPickedWidget;
+  final List<int> intPrices;
+  final List<bool> isPicked;
 
   const PickYourMoney({
     super.key,
+    required this.isPickedWidget,
     required this.isPicked,
+    required this.intPrices,
   });
 
   @override
@@ -19,12 +23,7 @@ class _PickYourMoneyState extends State<PickYourMoney> {
     '500 ₽',
     '1 000 ₽',
   ];
-  List<bool> isPicked = [
-    false,
-    false,
-    true,
-    false,
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +34,26 @@ class _PickYourMoneyState extends State<PickYourMoney> {
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return PickYourMoneyContainer(
-              price: prices[index],
-              isPicked: isPicked[index],
-              onTap: () {
-                if (widget.isPicked) {
-                  for (int i = 0; i < prices.length; i++) {
-                    if (i == index) {
-                      isPicked[i] = true;
-                    } else {
-                      isPicked[i] = false;
+                price: prices[index],
+                isPicked: widget.isPicked[index],
+                onTap: () {
+                  if (widget.isPickedWidget) {
+                    for (int i = 0; i < prices.length; i++) {
+                      if (i == index) {
+                        widget.isPicked[i] = true;
+                        context.read<BuyTogetherBloc>().add(
+                            SetAdditionalSumEvent(additionalSum: widget.intPrices[i]));
+                        //print(context.read<BuyTogetherBloc>().state.additionalSum);
+                      } else {
+                        widget.isPicked[i] = false;
+                      }
                     }
+                    setState(() {});
                   }
-                  setState(() {});
-                }
-              }
-
-            );
+                });
           },
-          separatorBuilder: (_, __) => Padding(padding: EdgeInsets.only(left: getWidth(context, 10))),
+          separatorBuilder: (_, __) =>
+              Padding(padding: EdgeInsets.only(left: getWidth(context, 10))),
           itemCount: prices.length,
         ),
       ),

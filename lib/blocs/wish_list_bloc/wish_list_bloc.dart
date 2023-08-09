@@ -33,7 +33,6 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
             position: el['position'],
             id: el['id'],
           ),
-
         );
       }
 
@@ -63,24 +62,36 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
 
   _onGetDataOfCurrentModel(GetDataOfCurrentModel event, Emitter<WishListState> emitter) async {
     try {
+
       var response = await Dio().post(
         'https://qviz.fun/api/v1/presentinfo/',
         data: {
-          'present_id': event.currentModel.id,
+          'present_id': event.currentModel.id.toString(),
         },
       );
 
-      state.copyWith(
-        currentInfo: MvpPresentDataModel(
-          firstGrade: response.data['small_grades']['grade_name_1'],
-          secondGrade: response.data['small_grades']['grade_name_2'],
-          thirdGrade: response.data['small_grades']['grade_name_3'],
-          firstValue: response.data['small_grades']['grade_value_1'],
-          secondValue: response.data['small_grades']['grade_value_2'],
-          thirdValue: response.data['small_grades']['grade_value_3'],
+
+
+
+      final currentPresentDataModel = MvpPresentDataModel(
+        firstGrade: response.data['small_grades']['grade_name_1'],
+        secondGrade: response.data['small_grades']['grade_name_2'],
+        thirdGrade: response.data['small_grades']['grade_name_3'],
+        firstValue: response.data['small_grades']['grade_value_1'],
+        secondValue: response.data['small_grades']['grade_value_2'],
+        thirdValue: response.data['small_grades']['grade_value_3'],
+        firstPhoto: response.data['small_grades']['grade_photo_1'],
+        secondPhoto: response.data['small_grades']['grade_photo_2'],
+        thirdPhoto: response.data['small_grades']['grade_photo_3'],
+      );
+
+      emitter(
+        state.copyWith(
+          currentInfo: currentPresentDataModel,
         ),
       );
-    }catch(e){
+
+    } catch (e) {
       rethrow;
     }
   }

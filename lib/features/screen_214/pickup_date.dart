@@ -39,10 +39,10 @@ class PickUpDate extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontFamily: 'Roboto',
-                      color: !dateIsPicked ? Colors.white : AppTheme.pickUpTextColor,
+                      color: Colors.white,
                     ),
                   ),
                   const MoreButton(),

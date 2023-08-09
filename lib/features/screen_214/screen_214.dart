@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -59,9 +60,16 @@ class _Screen214State extends State<Screen214> {
               final flowerModel =
                   wishListState.wishList.where((element) => element.id == 6).toList()[0];
 
-              context
-                  .read<WishListBloc>()
-                  .add(GetDataOfCurrentModel(currentModel: widget.currentModel ?? flowerModel));
+              final currentModel = widget.currentModel ?? flowerModel;
+
+              final postcardBloc = context.read<PostcardBloc>();
+
+              context.read<WishListBloc>().add(
+                    GetDataOfCurrentModel(
+                      currentModel: currentModel,
+                    ),
+                  );
+
               if (wishListState.currentInfo == null) {
                 return Padding(
                   padding: EdgeInsets.symmetric(
@@ -73,6 +81,7 @@ class _Screen214State extends State<Screen214> {
                   ),
                 );
               }
+
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: getWidth(context, 16),
@@ -90,7 +99,12 @@ class _Screen214State extends State<Screen214> {
                         height: getHeight(context, 343),
                         width: getWidth(context, 343),
                         child: Image.network(
-                          widget.currentModel?.bigImage ?? flowerModel.bigImage,
+                          (isFirstPicked
+                                  ? wishListState.currentInfo!.firstPhoto
+                                  : isSecondPicked
+                                      ? wishListState.currentInfo!.secondPhoto
+                                      : wishListState.currentInfo!.thirdPhoto) ??
+                              wishListState.currentModel!.smallImage,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -116,11 +130,17 @@ class _Screen214State extends State<Screen214> {
                     Row(
                       children: [
                         PickUpDate(
-                          label: state.date.isEmpty ? 'Дата вручения' : state.date,
+                          label: currentModel.id == 4
+                              ? postcardBloc.state.mapOfEvents['День рождения']![0]
+                              : state.date.isEmpty
+                                  ? 'Дата вручения'
+                                  : state.date,
                           dateIsPicked: state.date.isEmpty,
                           onTap: () {
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (_) => const Screen28()));
+                            if (currentModel.id != 4) {
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (_) => const Screen28()));
+                            }
                           },
                         ),
                         Padding(
@@ -129,11 +149,17 @@ class _Screen214State extends State<Screen214> {
                           ),
                         ),
                         PickUpDate(
-                          label: state.time.isEmpty ? 'Время вручения' : state.time,
+                          label: currentModel.id == 4
+                              ? postcardBloc.state.mapOfEvents['День рождения']![1]
+                              : state.time.isEmpty
+                                  ? 'Время вручения'
+                                  : state.time,
                           dateIsPicked: state.time.isEmpty,
                           onTap: () {
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (_) => const Screen211()));
+                            if (currentModel.id != 4) {
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (_) => const Screen211()));
+                            }
                           },
                         ),
                       ],
@@ -222,7 +248,14 @@ class _Screen214State extends State<Screen214> {
                             width: getWidth(context, 109),
                             onTap: () {
                               Navigator.push(
-                                  context, MaterialPageRoute(builder: (_) => const Screen215()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Screen215(
+                                    currentModel: widget.currentModel ?? flowerModel,
+                                    currentInfo: wishListState.currentInfo!,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ],

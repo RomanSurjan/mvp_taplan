@@ -19,8 +19,8 @@ class WishListState {
   }) {
     return WishListState(
       wishList: wishList ?? this.wishList,
-      currentModel: currentModel,
-      currentInfo: currentInfo,
+      currentModel: currentModel ?? this.currentModel,
+      currentInfo: currentInfo ?? this.currentInfo,
     );
   }
 }

@@ -116,6 +116,18 @@ class AppTheme {
 
   static const celebrateIconDefaultColor = Color(0xFF9388CC);
 
+  static const LinearGradient moneyScaleStickColor = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [
+      Color.fromRGBO(75, 175, 147, 1),
+      Color.fromRGBO(119, 217, 190, 1),
+      Color.fromRGBO(68, 168, 140, 1),
+    ],
+  );
+  static const Color moneyScaleGreenColor = Color.fromRGBO(119, 187, 102, 0.81);
+
+
   AppTheme.light({
     this.isDark = false,
   });

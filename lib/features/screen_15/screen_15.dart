@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Screen15 extends StatefulWidget {
   const Screen15({Key? key}) : super(key: key);
@@ -22,15 +23,37 @@ class _Screen15State extends State<Screen15> {
     final response = await dio.get('https://qviz.fun/api/v1/agreement/');
 
     dock = response.data['agreement'];
+
+
+
     setState(() {});
+  }
+
+  void getChecker() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final checker = prefs.getBool('checker');
+
+    if(checker != null) {
+      isPicked = checker;
+    }
+    setState(() {});
+  }
+
+  void setChecker(bool checker) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool('checker', checker);
   }
 
 
   @override
   void initState() {
     super.initState();
-    getDock();
+    getDock();getChecker();
   }
+
+
 
   bool isPicked = false;
 
@@ -100,11 +123,11 @@ class _Screen15State extends State<Screen15> {
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              //mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: (){
                     isPicked = !isPicked;
+                    setChecker(isPicked);
                     setState(() {});
                   },
                   child: SizedBox(

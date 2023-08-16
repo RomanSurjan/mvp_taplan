@@ -22,14 +22,14 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
       children: [
         Row(children: [
           Text(
-            "Собрано $collected ₽",
+            "Собрано ${sumToString(collected)} ₽",
             style: TextLocalStyles.roboto600.copyWith(
               fontSize: 16,
             ),
           ),
           const Expanded(flex: 1, child: SizedBox(height: 1)),
           Text(
-            "Осталось $leftToCollect ₽",
+            "Осталось ${sumToString(leftToCollect)} ₽",
             style: TextLocalStyles.roboto600.copyWith(
               fontSize: 16,
               color: AppTheme.mainPinkColor,

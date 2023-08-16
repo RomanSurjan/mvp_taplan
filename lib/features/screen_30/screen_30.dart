@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
+import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
-import 'package:mvp_taplan/features/screen_214/screen_214.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
+import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_34/present_screen.dart';
 import 'package:mvp_taplan/features/screen_wishlist/wish_list_screen.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -24,9 +28,6 @@ class Screen30State extends State<Screen30> {
   var flagForTip = false;
   DateTime dateOfBorn = DateTime(2024, 5, 17, 0);
 
-
-
-
   var isFirst = false;
   bool isTaped = false;
   bool isTapedHome = false;
@@ -39,6 +40,7 @@ class Screen30State extends State<Screen30> {
 
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
+    context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
 
     update = Timer.periodic(
       const Duration(seconds: 1),
@@ -52,6 +54,7 @@ class Screen30State extends State<Screen30> {
           dateOfBorn.minute - nowDate.minute,
           dateOfBorn.second - nowDate.second,
         );
+
         setState(() {});
       },
     );
@@ -68,98 +71,135 @@ class Screen30State extends State<Screen30> {
     if (mounted) setState(f);
   }
 
-  bool timerWork = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bgImage.png'),
-            fit: BoxFit.cover,
-            alignment: Alignment(0.5, -0.66),
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: getWidth(context, 375),
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
+      body: BlocBuilder<DateTimeBloc, DateTimeState>(
+        builder: (context, state) {
+          if (state.rangeToStream == null) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppTheme.mainGreenColor,
+              ),
+            );
+          }
+
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/bgImage.png'),
+                fit: BoxFit.cover,
+                alignment: Alignment(0.5, -0.66),
               ),
             ),
-            Positioned(
-              top: getHeight(context, 154),
-              right: getWidth(context, 7),
-              child: myWishes(context, range),
+            child: Stack(
+              children: [
+                Positioned(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: getWidth(context, 375),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: getHeight(context, 154),
+                  right: getWidth(context, 7),
+                  child: myWishes(
+                    context,
+                    rangeToBirthday: range,
+                    rangeToStream: state.rangeToStream!,
+                  ),
+                ),
+                Positioned(
+                  top: getHeight(context, 138),
+                  left: getWidth(context, 5),
+                  child: wishList(context),
+                ),
+              ],
             ),
-            Positioned(
-              top: getHeight(context, 138),
-              left: getWidth(context, 5),
-              child: wishList(context),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
 Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Text(
-        'Букет\nнедели',
-        style: TextLocalStyles.mono400.copyWith(
-          fontSize: getHeight(context, 24),
-          height: 20.93 / 24,
+  return BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          'Букет\nнедели',
+          style: TextLocalStyles.mono400.copyWith(
+            fontSize: getHeight(context, 24),
+            height: 20.93 / 24,
+          ),
+          textAlign: TextAlign.right,
         ),
-        textAlign: TextAlign.right,
-      ),
-      Text(
-        'Групповой\nподарок к\nЕженедельному\n стриму ',
-        style: TextLocalStyles.mono400.copyWith(
-          fontSize: 14,
-          height: 12.21 / 14,
+        const SizedBox(height: 1),
+        Text(
+          'Групповой\nподарок к',
+          style: TextLocalStyles.mono400.copyWith(
+            fontSize: 14,
+            height: 12.21 / 14,
+          ),
+          textAlign: TextAlign.right,
         ),
-        textAlign: TextAlign.right,
-      ),
-      const SizedBox(height: 3),
-      Row(
-        children: [
-          containerTimer(context, range.day, 'дни'),
-          Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-          containerTimer(context, range.hour, 'час'),
-          Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-          containerTimer(context, range.minute, 'мин'),
-          Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-          containerTimer(context, range.second, 'сек'),
-        ],
-      ),
-      Padding(
-        padding: EdgeInsets.only(top: getHeight(context, 4)),
-      ),
-      RotatedBox(
-        quarterTurns: 2,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen214()));
-          },
-          child: backSpaceButton(context, false),
+        Text(
+          'Еженедельному\nстриму ',
+          style: TextLocalStyles.mono400.copyWith(
+            fontSize: 16,
+            height: 13.95 / 16,
+          ),
+          textAlign: TextAlign.right,
         ),
-      ),
-    ],
-  );
+        const SizedBox(height: 3),
+        Row(
+          children: [
+            containerTimer(context, range.day, 'дни'),
+            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+            containerTimer(context, range.hour, 'час'),
+            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+            containerTimer(context, range.minute, 'мин'),
+            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+            containerTimer(context, range.second, 'сек'),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: getHeight(context, 4)),
+        ),
+        RotatedBox(
+          quarterTurns: 2,
+          child: InkWell(
+            onTap: () async {
+              final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
+
+              final flowerInfo = await state.getModelInfo(flowerModel.id);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => Screen215(
+                    currentModel: flowerModel,
+                    currentInfo: flowerInfo,
+                  ),
+                ),
+              );
+            },
+            child: backSpaceButton(context, false),
+          ),
+        ),
+      ],
+    );
+  });
 }
 
 Widget myDream(BuildContext context, DateTime range) {
@@ -192,7 +232,7 @@ Widget myDream(BuildContext context, DateTime range) {
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
             containerTimer(context, range.day ~/ 7, 'нед'),
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-            containerTimer(context, range.day % 7, 'дни'),
+            containerTimer(context, range.day % 7 - 1, 'дни'),
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
             containerTimer(context, range.hour, 'час'),
           ],
@@ -304,7 +344,11 @@ Widget wishList(BuildContext context) {
   );
 }
 
-Widget myWishes(BuildContext context, DateTime range) {
+Widget myWishes(
+  BuildContext context, {
+  required DateTime rangeToStream,
+  required DateTime rangeToBirthday,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
@@ -325,10 +369,10 @@ Widget myWishes(BuildContext context, DateTime range) {
       ),
       myDream(
         context,
-        range,
+        rangeToBirthday,
       ),
       Padding(padding: EdgeInsets.only(top: getHeight(context, 26))),
-      bouquetOfTheWeek(context, range)
+      bouquetOfTheWeek(context, rangeToStream)
     ],
   );
 }

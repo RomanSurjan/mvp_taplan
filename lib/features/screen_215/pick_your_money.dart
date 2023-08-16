@@ -35,7 +35,7 @@ class _PickYourMoneyState extends State<PickYourMoney> {
           itemBuilder: (context, index) {
             return PickYourMoneyContainer(
                 price: prices[index],
-                isPicked: widget.isPicked[index],
+                isPicked: widget.isPicked[index] && widget.isPickedWidget,
                 onTap: () {
                   if (widget.isPickedWidget) {
                     for (int i = 0; i < prices.length; i++) {
@@ -43,7 +43,6 @@ class _PickYourMoneyState extends State<PickYourMoney> {
                         widget.isPicked[i] = true;
                         context.read<BuyTogetherBloc>().add(
                             SetAdditionalSumEvent(additionalSum: widget.intPrices[i]));
-                        //print(context.read<BuyTogetherBloc>().state.additionalSum);
                       } else {
                         widget.isPicked[i] = false;
                       }

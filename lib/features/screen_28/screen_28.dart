@@ -181,11 +181,15 @@ class _Screen28State extends State<Screen28> {
                         Padding(padding: EdgeInsets.only(top: getHeight(context, 20))),
                         InkWell(
                           onTap: () {
-                            pickedDate = i + j * daysOfWeek.length;
-                            buttonLabel =
-                                '${listOfDates[pickedDate]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                            if ((i + j * daysOfWeek.length != currentDayIndex + 1 &&
+                                    i + j * daysOfWeek.length != currentDayIndex + 2) &&
+                                (i + j * daysOfWeek.length >= currentDayIndex)) {
+                              pickedDate = i + j * daysOfWeek.length;
+                              buttonLabel =
+                                  '${listOfDates[pickedDate]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
 
-                            setState(() {});
+                              setState(() {});
+                            }
                           },
                           child: SizedBox(
                             height: getHeight(context, 39),
@@ -194,7 +198,8 @@ class _Screen28State extends State<Screen28> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: LinearGradient(
-                                  colors: i + j * daysOfWeek.length == currentDayIndex && currentMonth == dateTime.month
+                                  colors: i + j * daysOfWeek.length == currentDayIndex &&
+                                          currentMonth == dateTime.month
                                       ? [
                                           const Color.fromRGBO(211, 102, 137, 1),
                                           const Color.fromRGBO(241, 171, 193, 1),
@@ -211,19 +216,28 @@ class _Screen28State extends State<Screen28> {
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                 ),
+                                border: (i + j * daysOfWeek.length == currentDayIndex + 1 ||
+                                        i + j * daysOfWeek.length == currentDayIndex + 2)
+                                    ? Border.all(
+                                        width: 1.5,
+                                        color: Colors.red,
+                                      )
+                                    : null,
                               ),
                               child: Center(
                                 child: Text(
                                   listOfDates[i + j * daysOfWeek.length].toString(),
                                   style: TextLocalStyles.roboto400.copyWith(
-                                    color: (i + j * daysOfWeek.length) < listOfDates.indexOf(1)
-                                        ? const Color.fromRGBO(143, 153, 163, 1)
-                                        : (i + j * daysOfWeek.length) >
-                                                (switchMonthInDays(currentMonth) +
-                                                    listOfDates.indexOf(1) -
-                                                    1)
-                                            ? AppTheme.mainGreenColor
-                                            : Colors.white,
+                                    color: i + j * daysOfWeek.length == pickedDate
+                                        ? Colors.white
+                                        : (i + j * daysOfWeek.length) < listOfDates.indexOf(1)
+                                            ? const Color.fromRGBO(143, 153, 163, 1)
+                                            : (i + j * daysOfWeek.length) >
+                                                    (switchMonthInDays(currentMonth) +
+                                                        listOfDates.indexOf(1) -
+                                                        1)
+                                                ? AppTheme.mainGreenColor
+                                                : Colors.white,
                                     fontSize: 16,
                                     decoration: (i + j * daysOfWeek.length) >
                                             (switchMonthInDays(currentMonth) +

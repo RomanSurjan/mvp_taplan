@@ -15,3 +15,13 @@ class ChangeTimeEvent extends DateTimeEvent {
   ChangeTimeEvent({required this.time});
 
 }
+
+class SetTimeToStreamEvent extends DateTimeEvent{
+  SetTimeToStreamEvent();
+}
+
+class CalculateRangeToStreamEvent extends DateTimeEvent{
+  final DateTime range;
+
+  CalculateRangeToStreamEvent(this.range);
+}

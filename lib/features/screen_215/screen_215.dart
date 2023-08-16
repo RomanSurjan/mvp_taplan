@@ -9,6 +9,7 @@ import 'package:mvp_taplan/features/screen_214/mvp_present_data_model.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
+import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -33,8 +34,6 @@ class Screen215 extends StatefulWidget {
 }
 
 class _Screen215State extends State<Screen215> {
-
-
   List<int>? prices;
 
   List<bool> isPickedRow = [
@@ -44,7 +43,7 @@ class _Screen215State extends State<Screen215> {
     false,
   ];
 
-  List<int> intPricesRow =[
+  List<int> intPricesRow = [
     100,
     250,
     500,
@@ -54,9 +53,9 @@ class _Screen215State extends State<Screen215> {
   List<String>? labels;
   List<bool> isPickedMoney = [
     false,
+    false,
+    false,
     true,
-    false,
-    false,
   ];
 
   void setLabelsAndPrices() {
@@ -72,6 +71,8 @@ class _Screen215State extends State<Screen215> {
       widget.currentInfo.firstValue,
       -100,
     ];
+
+    context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: 500));
     setState(() {});
   }
 
@@ -86,70 +87,84 @@ class _Screen215State extends State<Screen215> {
   Widget build(BuildContext context) {
     if (labels == null || prices == null) return const SizedBox.shrink();
     return MvpScaffoldModel(
-      appBarLabel: 'Внести часть денег\nна поддарок вскладчину ',
-      child: BlocBuilder<BuyTogetherBloc, BuyTogetherState>(builder: (context, state) {
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: getWidth(context, 16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: getHeight(context, 12),
-                ),
-              ),
-              Expanded(
-                child: SizedBox(
-                  height: getHeight(context, 343),
-                  width: getWidth(context, 343),
-                  child: Image.network(
-                    widget.currentModel.smallImage,
-                    fit: BoxFit.cover,
+      appBarLabel: 'Внести часть денег\nна подарок вскладчину ',
+      child: BlocBuilder<BuyTogetherBloc, BuyTogetherState>(
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: getWidth(context, 16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: getHeight(context, 12),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: getHeight(context, 10),
+                Expanded(
+                  child: SizedBox(
+                    height: getHeight(context, 343),
+                    width: getWidth(context, 343),
+                    child: Image.network(
+                      widget.currentModel.smallImage,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-              Text(
-                'Собрано ₽ ${widget.currentModel.alreadyGet}',
-                style: TextLocalStyles.roboto600.copyWith(
-                  fontSize: 18,
-                  color: AppTheme.mainGreenColor,
-                  height: 18.75 / 16,
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: getHeight(context, 10),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: getHeight(context, 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Собрано ₽ ${sumToString(widget.currentModel.alreadyGet)}',
+                      style: TextLocalStyles.roboto600.copyWith(
+                        fontSize: 18,
+                        color: AppTheme.mainGreenColor,
+                        height: 18.75 / 16,
+                      ),
+                    ),
+                    Text(
+                      'Внести ₽ ${sumToString(state.additionalSum)}',
+                      style: TextLocalStyles.roboto600.copyWith(
+                        fontSize: 18,
+                        color: const Color.fromRGBO(127, 164, 234, 0.81),
+                        height: 18.75 / 16,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              MoneyScale(
-                firstGrade: widget.currentInfo.firstValue,
-                secondGrade: widget.currentInfo.secondValue,
-                thirdGrade: widget.currentInfo.thirdValue,
-                totalMoney: widget.currentModel.alreadyGet,
-                additionalMoney: state.additionalSum,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: getHeight(context, 20),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: getHeight(context, 4),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: getHeight(context, 166),
-                child: ListView.separated(
+                MoneyScale(
+                  firstGrade: widget.currentInfo.firstValue,
+                  secondGrade: widget.currentInfo.secondValue,
+                  thirdGrade: widget.currentInfo.thirdValue,
+                  totalMoney: widget.currentModel.alreadyGet,
+                  additionalMoney: state.additionalSum,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: getHeight(context, 20),
+                  ),
+                ),
+                SizedBox(
+                  height: getHeight(context, 166),
+                  child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (_, __) =>
                         Padding(padding: EdgeInsets.only(top: getHeight(context, 2))),
                     itemCount: isPickedMoney.length,
                     itemBuilder: (context, index) {
                       return PickUpPriceContainer(
-                        price: '₽ ${prices![index]}',
+                        price: '₽ ${sumToString(prices![index])}',
                         label: labels![index],
                         isPicked: isPickedMoney[index],
                         child: isPickedMoney.length - 1 == index
@@ -165,6 +180,12 @@ class _Screen215State extends State<Screen215> {
                             for (int i = 0; i < isPickedMoney.length; i++) {
                               if (i == index) {
                                 isPickedMoney[i] = true;
+                                context.read<BuyTogetherBloc>().add(
+                                      SetAdditionalSumEvent(
+                                        additionalSum:
+                                            prices![index] - widget.currentModel.alreadyGet,
+                                      ),
+                                    );
                               } else {
                                 isPickedMoney[i] = false;
                               }
@@ -180,56 +201,65 @@ class _Screen215State extends State<Screen215> {
                                     .add(SetAdditionalSumEvent(additionalSum: intPricesRow[i]));
                               }
                             }
-                          } else {
-                            context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(
-                                additionalSum: prices![index] - widget.currentModel.alreadyGet));
                           }
                         },
                       );
-                    }),
-              ),
-              SizedBox(height: getHeight(context, 20)),
-              Padding(
-                padding: EdgeInsets.only(
-                  bottom: getHeight(context, 16),
+                    },
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MvpGradientButton(
-                      label: 'Написать\nсообщение',
-                      gradient: AppTheme.mainPurpleGradient,
-                      width: getWidth(context, 109),
-                      onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const Screen213()));
-                      },
-                    ),
-                    MvpGradientButton(
-                      label: 'Внести деньги\nна подарок',
-                      gradient: AppTheme.mainGreenGradient,
-                      width: getWidth(context, 109),
-                      onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const Screen15()));
-                      },
-                    ),
-                    MvpGradientButton(
-                      label: 'Купить подарок\nсамостоятельно',
-                      gradient: AppTheme.mainGreenGradient,
-                      width: getWidth(context, 109),
-                      onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const Screen214()));
-                      },
-                    ),
-                  ],
+                SizedBox(height: getHeight(context, 20)),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: getHeight(context, 16),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MvpGradientButton(
+                        label: 'Написать\nсообщение',
+                        gradient: AppTheme.mainPurpleGradient,
+                        width: getWidth(context, 109),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => Screen213(
+                                        additionalSum:
+                                            context.read<BuyTogetherBloc>().state.additionalSum,
+                                      )));
+                        },
+                      ),
+                      MvpGradientButton(
+                        label: 'Внести деньги\nна подарок',
+                        gradient: AppTheme.mainGreenGradient,
+                        width: getWidth(context, 109),
+                        onTap: () {
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (_) => const Screen15()));
+                        },
+                      ),
+                      MvpGradientButton(
+                        label: 'Купить подарок\nсамостоятельно',
+                        gradient: AppTheme.mainGreenGradient,
+                        width: getWidth(context, 109),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => Screen214(
+                                        currentInfo: widget.currentInfo,
+                                        currentModel: widget.currentModel,
+                                      )));
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

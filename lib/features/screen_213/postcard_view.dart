@@ -12,11 +12,10 @@ class PostCardViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController controller = PageController(initialPage: 6);
+    PageController controller = PageController(initialPage: 4);
 
     return BlocBuilder<PostcardBloc, PostcardState>(
       builder: (context, state) {
-
         return Column(
           children: [
             SizedBox(
@@ -65,7 +64,9 @@ class PostCardViewWidget extends StatelessWidget {
                               child: SvgPicture.asset(
                                 'assets/svg/arrow_left.svg',
                                 colorFilter: const ColorFilter.mode(
-                                    Color.fromRGBO(166, 173, 181, 1), BlendMode.srcIn),
+                                  AppTheme.mainGreenColor,
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                             InkWell(
@@ -79,7 +80,7 @@ class PostCardViewWidget extends StatelessWidget {
                               child: SvgPicture.asset(
                                 'assets/svg/arrow_right.svg',
                                 colorFilter: const ColorFilter.mode(
-                                  Color.fromRGBO(166, 173, 181, 1),
+                                  AppTheme.mainGreenColor,
                                   BlendMode.srcIn,
                                 ),
                               ),
@@ -107,15 +108,18 @@ class PostCardViewWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: state.postcards.length,
                   itemBuilder: (context, index) {
+
                     return SizedBox(
                       height: getHeight(context, 6),
                       width: getWidth(context, 6),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: index == currentIndex
+                          color: index % 25 == currentIndex % 25
                               ? AppTheme.mainGreenColor
-                              : const Color.fromRGBO(66, 68, 77, 1),
+                              : index == 4
+                                  ? AppTheme.mainPinkColor
+                                  : const Color.fromRGBO(66, 68, 77, 1),
                         ),
                       ),
                     );

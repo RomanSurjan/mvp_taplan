@@ -29,6 +29,8 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
 
       mapOfEvents.addAll(Map.from(response.data['events']));
 
+
+
       emitter(
         state.copyWith(
           postcards: postcards,

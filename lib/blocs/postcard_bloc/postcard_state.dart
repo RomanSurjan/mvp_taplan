@@ -2,7 +2,10 @@ class PostcardState {
   final List<String> postcards;
   final Map<String, List> mapOfEvents;
 
-  PostcardState( {required this.postcards, required this.mapOfEvents,});
+  PostcardState({
+    required this.postcards,
+    required this.mapOfEvents,
+  });
 
   PostcardState copyWith({
     List<String>? postcards,

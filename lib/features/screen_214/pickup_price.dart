@@ -62,11 +62,11 @@ class PickUpPriceContainer extends StatelessWidget {
                     style: isPicked
                         ? TextLocalStyles.roboto600.copyWith(
                             color: AppTheme.mainGreenColor,
-                            fontSize: 16,
+                            fontSize: getHeight(context, 16),
                             height: 18.75 / 16,
                           )
                         : TextLocalStyles.roboto400.copyWith(
-                            fontSize: 16,
+                            fontSize: getHeight(context, 16),
                             height: 18.75 / 16,
                             color: Colors.white,
                           ),
@@ -75,7 +75,7 @@ class PickUpPriceContainer extends StatelessWidget {
                   Text(
                     price,
                     style: TextLocalStyles.roboto400.copyWith(
-                        color: isPicked ? const Color.fromRGBO(127, 164, 234, 1) : Colors.white, fontSize: 16),
+                        color: isPicked ? const Color.fromRGBO(127, 164, 234, 1) : Colors.white, fontSize: getHeight(context, 16)),
                   ),
                 ] else ...[
                   child!,

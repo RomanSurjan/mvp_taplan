@@ -7,6 +7,7 @@ import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
 import 'package:mvp_taplan/models/models.dart';
+import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -128,7 +129,19 @@ class PresentScreenState extends State<PresentScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: getHeight(context, 22),
+                    top: getHeight(context, 10),
+                  ),
+                ),
+                Text(
+                  carModel.label,
+                  style: TextLocalStyles.roboto500.copyWith(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: getHeight(context, 10),
                   ),
                 ),
                 MoneyCollectedScaleWidget(
@@ -185,7 +198,7 @@ class PresentScreenState extends State<PresentScreen> {
                             ),
                             Expanded(
                               child: SizedBox(
-                                height: getHeight(context, 28),
+                                height: getHeight(context, 30),
                                 child: TextField(
                                   controller: sumController,
                                   textAlign: TextAlign.center,
@@ -360,8 +373,8 @@ class PresentScreenState extends State<PresentScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            CounterSegmentWidget(range.day ~/ 7, "недель"),
-                            CounterSegmentWidget(range.day % 7, "дней"),
+                            CounterSegmentWidget(range.day + range.month, "недель"),
+                            CounterSegmentWidget(range.day % 7 - 1, "дней"),
                             CounterSegmentWidget(range.hour, "часов"),
                             CounterSegmentWidget(range.minute, "минут"),
                             CounterSegmentWidget(range.second, "секунд"),
@@ -382,7 +395,11 @@ class PresentScreenState extends State<PresentScreen> {
                     MvpGradientButton(
                       onTap: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const Screen213()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Screen213(additionalSum: additionalSum,),
+                          ),
+                        );
                       },
                       label: "Написать\nпожелания",
                       gradient: AppTheme.purpleButtonGradientColor,

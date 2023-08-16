@@ -125,7 +125,7 @@ class AppTheme {
       Color.fromRGBO(68, 168, 140, 1),
     ],
   );
-  static const Color moneyScaleGreenColor = Color.fromRGBO(119, 187, 102, 0.81);
+  static const Color moneyScaleGreenColor = Color.fromRGBO(127, 164, 234, 0.81);
 
 
   AppTheme.light({

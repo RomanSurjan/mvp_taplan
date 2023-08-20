@@ -19,7 +19,7 @@ class PickYourMoneyContainer extends StatelessWidget {
         onTap?.call();
       },
       child: SizedBox(
-        height: getHeight(context, 18),
+        height: getHeight(context, 28),
         width: getWidth(context, 64),
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -36,7 +36,7 @@ class PickYourMoneyContainer extends StatelessWidget {
               price,
               style: TextLocalStyles.roboto500.copyWith(
                 color: isPicked ? Colors.white : const Color.fromRGBO(127, 164, 234, 1),
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
           ),

@@ -34,22 +34,25 @@ class PostCardViewWidget extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    PageView.builder(
-                      onPageChanged: onPageChanged,
-                      controller: controller,
-                      itemCount: state.postcards.length,
-                      itemBuilder: (context, index) {
-                        return Image.network(
-                          state.postcards[index],
-                          width: getWidth(context, 375),
-                          height: getHeight(context, 239),
-                          fit: BoxFit.fill,
-                        );
-                      },
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: getWidth(context, 11)),
+                      child: PageView.builder(
+                        onPageChanged: onPageChanged,
+                        controller: controller,
+                        itemCount: state.postcards.length,
+                        itemBuilder: (context, index) {
+                          return Image.network(
+                            state.postcards[index],
+                            width: getWidth(context, 375),
+                            height: getHeight(context, 239),
+                            fit: BoxFit.fill,
+                          );
+                        },
+                      ),
                     ),
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: getWidth(context, 15)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: getWidth(context, 5)),
+                      child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -61,11 +64,20 @@ class PostCardViewWidget extends StatelessWidget {
                                   curve: Curves.linear,
                                 );
                               },
-                              child: SvgPicture.asset(
-                                'assets/svg/arrow_left.svg',
-                                colorFilter: const ColorFilter.mode(
-                                  AppTheme.mainGreenColor,
-                                  BlendMode.srcIn,
+                              child: SizedBox(
+                                height: getHeight(context, 45),
+                                width: getWidth(context, 22),
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromRGBO(98, 198, 170, 1),
+                                        Color.fromRGBO(68, 168, 140, 1),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Image.asset('assets/images/image 300.png'),
                                 ),
                               ),
                             ),
@@ -77,11 +89,20 @@ class PostCardViewWidget extends StatelessWidget {
                                   curve: Curves.linear,
                                 );
                               },
-                              child: SvgPicture.asset(
-                                'assets/svg/arrow_right.svg',
-                                colorFilter: const ColorFilter.mode(
-                                  AppTheme.mainGreenColor,
-                                  BlendMode.srcIn,
+                              child: SizedBox(
+                                height: getHeight(context, 45),
+                                width: getWidth(context, 22),
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(2),
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromRGBO(98, 198, 170, 1),
+                                        Color.fromRGBO(68, 168, 140, 1),
+                                      ],
+                                    ),
+                                  ),
+                                  child: Image.asset('assets/images/image 301.png'),
                                 ),
                               ),
                             ),
@@ -108,7 +129,6 @@ class PostCardViewWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: state.postcards.length,
                   itemBuilder: (context, index) {
-
                     return SizedBox(
                       height: getHeight(context, 6),
                       width: getWidth(context, 6),

@@ -6,7 +6,6 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_211/screen_211.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
-import 'package:mvp_taplan/features/screen_214/mvp_present_data_model.dart';
 import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_28/screen_28.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
@@ -21,12 +20,10 @@ part 'pickup_price.dart';
 
 class Screen214 extends StatefulWidget {
   final MvpPresentModel currentModel;
-  final MvpPresentDataModel currentInfo;
 
   const Screen214({
     super.key,
     required this.currentModel,
-    required this.currentInfo,
   });
 
   @override
@@ -64,10 +61,10 @@ class _Screen214State extends State<Screen214> {
                     width: getWidth(context, 343),
                     child: Image.network(
                       (isFirstPicked
-                              ? widget.currentInfo.firstPhoto
+                              ? widget.currentModel.gradePhotoFirst
                               : isSecondPicked
-                                  ? widget.currentInfo.secondPhoto
-                                  : widget.currentInfo.thirdPhoto) ??
+                                  ? widget.currentModel.gradePhotoSecond
+                                  : widget.currentModel.gradePhotoThird) ??
                           widget.currentModel.smallImage,
                       fit: BoxFit.cover,
                     ),
@@ -95,7 +92,7 @@ class _Screen214State extends State<Screen214> {
                   children: [
                     PickUpDate(
                       label: widget.currentModel.id == 4
-                          ? postcardBloc.state.mapOfEvents['День рождения']![0]
+                          ? dateToString(postcardBloc.state.mapOfEvents['День рождения']![0])
                           : state.date.isEmpty
                               ? 'Дата вручения'
                               : state.date,
@@ -114,7 +111,7 @@ class _Screen214State extends State<Screen214> {
                     ),
                     PickUpDate(
                       label: widget.currentModel.id == 4
-                          ? postcardBloc.state.mapOfEvents['День рождения']![1]
+                          ? timeToString(postcardBloc.state.mapOfEvents['День рождения']![1])
                           : state.time.isEmpty
                               ? 'Время вручения'
                               : state.time,
@@ -136,8 +133,8 @@ class _Screen214State extends State<Screen214> {
                 Column(
                   children: [
                     PickUpPriceContainer(
-                      price: '₽ ${sumToString(widget.currentInfo.thirdValue)}',
-                      label: widget.currentInfo.thirdGrade,
+                      price: '₽ ${sumToString(widget.currentModel.gradeValueThird)}',
+                      label: widget.currentModel.gradeNameThird,
                       onTap: () {
                         isFirstPicked = true;
                         isSecondPicked = false;
@@ -152,8 +149,8 @@ class _Screen214State extends State<Screen214> {
                       ),
                     ),
                     PickUpPriceContainer(
-                      price: '₽ ${sumToString(widget.currentInfo.secondValue)}',
-                      label: widget.currentInfo.secondGrade,
+                      price: '₽ ${sumToString(widget.currentModel.gradeValueSecond)}',
+                      label: widget.currentModel.gradeNameSecond,
                       onTap: () {
                         isFirstPicked = false;
                         isSecondPicked = true;
@@ -168,8 +165,8 @@ class _Screen214State extends State<Screen214> {
                       ),
                     ),
                     PickUpPriceContainer(
-                      price: '₽ ${sumToString(widget.currentInfo.firstValue)}',
-                      label: widget.currentInfo.firstGrade,
+                      price: '₽ ${sumToString(widget.currentModel.gradeValueFirst)}',
+                      label: widget.currentModel.gradeNameFirst,
                       onTap: () {
                         isFirstPicked = false;
                         isSecondPicked = false;
@@ -193,15 +190,16 @@ class _Screen214State extends State<Screen214> {
                         gradient: AppTheme.mainPurpleGradient,
                         width: getWidth(context, 109),
                         onTap: () {
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => Screen213(
                                 additionalSum: isFirstPicked
-                                    ? widget.currentInfo.firstValue
+                                    ? widget.currentModel.gradeValueFirst
                                     : isSecondPicked
-                                        ? widget.currentInfo.secondValue
-                                        : widget.currentInfo.thirdValue,
+                                        ? widget.currentModel.gradeValueSecond
+                                        : widget.currentModel.gradeValueThird,
                               ),
                             ),
                           );
@@ -226,7 +224,6 @@ class _Screen214State extends State<Screen214> {
                             MaterialPageRoute(
                               builder: (_) => Screen215(
                                 currentModel: widget.currentModel,
-                                currentInfo: widget.currentInfo,
                               ),
                             ),
                           );

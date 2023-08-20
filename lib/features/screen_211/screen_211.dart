@@ -96,6 +96,8 @@ class _Screen211State extends State<Screen211> {
                   },
                   mode: CupertinoDatePickerMode.time,
                   use24hFormat: true,
+                  minimumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 9),
+                  maximumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 22),
                 ),
               ),
             ),
@@ -129,27 +131,6 @@ class _Screen211State extends State<Screen211> {
                         fontSize: 12,
                       ),
                     ),
-                    // SizedBox(
-                    //   height: getHeight(context, 20),
-                    //   width: getWidth(context, 20),
-                    //   child: DecoratedBox(
-                    //     decoration: const BoxDecoration(
-                    //       shape: BoxShape.circle,
-                    //       color: Color.fromRGBO(69, 78, 84, 1),
-                    //     ),
-                    //     child: Center(
-                    //       child: SvgPicture.asset(
-                    //         'assets/svg/arrow_down.svg',
-                    //         height: getHeight(context, 16),
-                    //         width: getWidth(context, 16),
-                    //         colorFilter: const ColorFilter.mode(
-                    //           Color.fromRGBO(143, 153, 163, 1),
-                    //           BlendMode.srcIn,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -181,5 +162,12 @@ class _Screen211State extends State<Screen211> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+    timer = null;
   }
 }

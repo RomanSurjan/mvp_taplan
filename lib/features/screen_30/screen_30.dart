@@ -7,6 +7,7 @@ import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -179,17 +180,14 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
         RotatedBox(
           quarterTurns: 2,
           child: InkWell(
-            onTap: () async {
+            onTap: ()  {
               final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
-
-              final flowerInfo = await state.getModelInfo(flowerModel.id);
-
+              context.read<PostcardBloc>().add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => Screen215(
                     currentModel: flowerModel,
-                    currentInfo: flowerInfo,
                   ),
                 ),
               );
@@ -232,7 +230,7 @@ Widget myDream(BuildContext context, DateTime range) {
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
             containerTimer(context, range.day ~/ 7, 'нед'),
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-            containerTimer(context, range.day % 7 - 1, 'дни'),
+            containerTimer(context, range.day % 7, 'дни'),
             Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
             containerTimer(context, range.hour, 'час'),
           ],
@@ -242,6 +240,8 @@ Widget myDream(BuildContext context, DateTime range) {
           quarterTurns: 2,
           child: InkWell(
             onTap: () {
+
+              context.read<PostcardBloc>().add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -15,7 +15,6 @@ class SwapModelsEvent extends WishListEvent {
 class GetDataOfCurrentModel extends WishListEvent {
   final MvpPresentModel currentModel;
 
-  GetDataOfCurrentModel({
-    required this.currentModel,
-  });
+  GetDataOfCurrentModel({required this.currentModel});
 }
+

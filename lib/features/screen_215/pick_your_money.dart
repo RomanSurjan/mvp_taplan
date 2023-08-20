@@ -29,7 +29,7 @@ class _PickYourMoneyState extends State<PickYourMoney> {
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox(
-        height: getHeight(context, 20),
+        height: getHeight(context, 28),
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {

@@ -6,6 +6,17 @@ class MvpPresentModel {
   int alreadyGet;
   int position;
   int id;
+  int type;
+  String gradeNameFirst;
+  String gradeNameSecond;
+  String gradeNameThird;
+  int gradeValueFirst;
+  int gradeValueSecond;
+  int gradeValueThird;
+  String? gradePhotoFirst;
+  String? gradePhotoSecond;
+  String? gradePhotoThird;
+
 
   MvpPresentModel({
     required this.bigImage,
@@ -15,5 +26,15 @@ class MvpPresentModel {
     required this.alreadyGet,
     required this.position,
     required this.id,
+    required this.type,
+    required this.gradeNameFirst,
+    required this.gradeNameSecond,
+    required this.gradeNameThird,
+    required this.gradeValueFirst,
+    required this.gradeValueSecond,
+    required this.gradeValueThird,
+    this.gradePhotoFirst,
+    this.gradePhotoSecond,
+    this.gradePhotoThird,
   });
 }

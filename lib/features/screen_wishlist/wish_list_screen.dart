@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -35,13 +38,11 @@ class WishListScreenState extends State<WishListScreen> {
             return Column(
               children: [
                 PresentWidget(
-                  pathToImage: state.currentModel!.bigImage,
                   callback: () {},
-                  collected: state.currentModel!.alreadyGet,
-                  total: state.currentModel!.fullPrice,
                   isTop: true,
                   height: getHeight(context, 226),
                   width: getWidth(context, 329),
+                  currentModel: state.currentModel!,
                 ),
                 SizedBox(height: getHeight(context, 8)),
                 Text(
@@ -71,7 +72,6 @@ class WishListScreenState extends State<WishListScreen> {
                             MaterialPageRoute(
                               builder: (_) => Screen215(
                                 currentModel: state.currentModel!,
-                                currentInfo: state.currentInfo!,
                               ),
                             ),
                           );
@@ -83,13 +83,22 @@ class WishListScreenState extends State<WishListScreen> {
                     ),
                     MvpGradientButton(
                       onTap: () {
+                        if (state.currentModel!.id == 4) {
+                          context.read<PostcardBloc>().add(
+                              ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+                        } else {
+                          context
+                              .read<PostcardBloc>()
+                              .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+                        }
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => Screen214(
-                                      currentModel: state.currentModel!,
-                                      currentInfo: state.currentInfo!,
-                                    )));
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => Screen214(
+                              currentModel: state.currentModel!,
+                            ),
+                          ),
+                        );
                       },
                       label: "Купить подарок\nсамостоятельно",
                       gradient: AppTheme.greenButtonGradientColor,
@@ -102,26 +111,22 @@ class WishListScreenState extends State<WishListScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PresentWidget(
-                      pathToImage: state.wishList[1].smallImage,
                       callback: () {
                         context.read<WishListBloc>().add(SwapModelsEvent(index: 1));
                       },
-                      collected: state.wishList[1].alreadyGet,
-                      total: state.wishList[1].fullPrice,
                       isTop: false,
                       height: getHeight(context, 160),
                       width: getWidth(context, 160),
+                      currentModel: state.wishList[1],
                     ),
                     PresentWidget(
-                      pathToImage: state.wishList[2].smallImage,
                       callback: () {
                         context.read<WishListBloc>().add(SwapModelsEvent(index: 2));
                       },
-                      collected: state.wishList[2].alreadyGet,
-                      total: state.wishList[2].fullPrice,
                       isTop: false,
                       height: getHeight(context, 160),
                       width: getWidth(context, 160),
+                      currentModel: state.wishList[2],
                     ),
                   ],
                 ),
@@ -130,26 +135,22 @@ class WishListScreenState extends State<WishListScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     PresentWidget(
-                      pathToImage: state.wishList[3].smallImage,
                       callback: () {
                         context.read<WishListBloc>().add(SwapModelsEvent(index: 3));
                       },
-                      collected: state.wishList[3].alreadyGet,
-                      total: state.wishList[3].fullPrice,
                       isTop: false,
                       height: getHeight(context, 160),
                       width: getWidth(context, 160),
+                      currentModel: state.wishList[3],
                     ),
                     PresentWidget(
-                      pathToImage: state.wishList[4].smallImage,
                       callback: () {
                         context.read<WishListBloc>().add(SwapModelsEvent(index: 4));
                       },
-                      collected: state.wishList[4].alreadyGet,
-                      total: state.wishList[4].fullPrice,
                       isTop: false,
                       height: getHeight(context, 160),
                       width: getWidth(context, 160),
+                      currentModel: state.wishList[4],
                     ),
                   ],
                 ),

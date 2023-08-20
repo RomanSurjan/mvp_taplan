@@ -7,7 +7,6 @@ part 'mvp_appbar.dart';
 
 part 'mvp_scaffold_model.dart';
 
-
 part 'custom_radio.dart';
 
 part 'custom_radio_button.dart';
@@ -20,3 +19,4 @@ part 'custom_text_field.dart';
 
 part 'size_model.dart';
 
+part 'date_and_time_to_string.dart';

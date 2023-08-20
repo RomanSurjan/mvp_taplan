@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ class Screen15 extends StatefulWidget {
 }
 
 class _Screen15State extends State<Screen15> {
-
   String dock = '';
 
   void getDock() async {
@@ -23,8 +23,6 @@ class _Screen15State extends State<Screen15> {
     final response = await dio.get('https://qviz.fun/api/v1/agreement/');
 
     dock = response.data['agreement'];
-
-
 
     setState(() {});
   }
@@ -34,28 +32,28 @@ class _Screen15State extends State<Screen15> {
 
     final checker = prefs.getBool('checker');
 
-    if(checker != null) {
+    if (checker != null) {
       isPicked = checker;
     }
     setState(() {});
   }
 
-  void setChecker(bool checker) async{
+  void setChecker(bool checker) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setBool('checker', checker);
   }
 
-
   @override
   void initState() {
     super.initState();
-    getDock();getChecker();
+    getDock();
+    getChecker();
   }
 
-
-
   bool isPicked = false;
+
+  Color textColor = AppTheme.mainGreenColor;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +123,7 @@ class _Screen15State extends State<Screen15> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     isPicked = !isPicked;
                     setChecker(isPicked);
                     setState(() {});
@@ -154,7 +152,7 @@ class _Screen15State extends State<Screen15> {
                   style: TextLocalStyles.roboto400.copyWith(
                     fontSize: 14,
                     height: 14.06 / 12,
-                    color: AppTheme.mainGreenColor,
+                    color: textColor,
                   ),
                 ),
               ],
@@ -176,6 +174,19 @@ class _Screen15State extends State<Screen15> {
                   label: 'Перейти\nк оплате',
                   gradient: AppTheme.mainGreenGradient,
                   width: getWidth(context, 164),
+                  onTap: () {
+                    if (!isPicked) {
+                      textColor = Colors.red;
+                      setState(() {});
+                      Timer(
+                        const Duration(seconds: 2),
+                        () {
+                          textColor = AppTheme.mainGreenColor;
+                          setState(() {});
+                        },
+                      );
+                    }
+                  },
                 ),
               ],
             ),

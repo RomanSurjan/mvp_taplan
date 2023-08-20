@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
+import 'package:mvp_taplan/models/sum_to_string.dart';
 
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
@@ -7,26 +9,23 @@ import 'package:mvp_taplan/theme/text_styles.dart';
 /// Виджет подарков для экрана "Мой список желанных подарков".
 
 class PresentWidget extends StatelessWidget {
-  final String pathToImage;
+
   final VoidCallback? callback;
-  final int collected;
-  final int total;
   final bool isTop;
   final double height;
   final double width;
+  final MvpPresentModel currentModel;
 
-  PresentWidget({
+  const PresentWidget({
     super.key,
-    required this.pathToImage,
     required this.callback,
-    required this.collected,
-    required this.total,
     required this.isTop,
     required this.height,
     required this.width,
+    required this.currentModel,
   });
 
-  late final int leftToCollect = total - collected;
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class PresentWidget extends StatelessWidget {
       child: Column(
         children: [
           Image.network(
-            pathToImage,
+            isTop ? currentModel.bigImage : currentModel.smallImage,
             fit: BoxFit.cover,
             width: width,
             height: height,
@@ -50,7 +49,7 @@ class PresentWidget extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      flex: collected,
+                      flex: currentModel.alreadyGet,
                       child: Container(
                         alignment: Alignment.centerLeft,
                         height: getHeight(context, 24),
@@ -67,7 +66,7 @@ class PresentWidget extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      flex: leftToCollect,
+                      flex: currentModel.fullPrice - currentModel.alreadyGet,
                       child: Container(
                         alignment: Alignment.centerRight,
                         height: getHeight(context, 24),
@@ -85,18 +84,48 @@ class PresentWidget extends StatelessWidget {
                     ),
                   ],
                 ),
+                Positioned(
+                  left: currentModel.gradeValueFirst / currentModel.fullPrice * width,
+                  child: SizedBox(
+                    height: getHeight(context, 24),
+                    width: getWidth(context, 1.5),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(75, 175, 147, 0.5),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: currentModel.gradeValueSecond / currentModel.fullPrice * width,
+                  child: SizedBox(
+                    height: getHeight(context, 24),
+                    width: getWidth(context, 1.5),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(75, 175, 147, 0.5),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      isTop ? "  Собрано ${sumToString(collected)} ₽" : "  ${sumToString(collected)} ₽",
+                      isTop
+                          ? "  Собрано ${sumToString(currentModel.alreadyGet)} ₽"
+                          : "  ${sumToString(currentModel.alreadyGet)} ₽",
                       style: TextLocalStyles.roboto600.copyWith(
                         color: Colors.white,
                         fontSize: getHeight(context, 14),
                       ),
                     ),
                     Text(
-                      isTop ? "Осталось  ${sumToString(leftToCollect)} ₽  " : "${sumToString(leftToCollect)} ₽  ",
+                      isTop
+                          ? "Осталось  ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)} ₽  "
+                          : "${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)} ₽  ",
                       style: TextLocalStyles.roboto600.copyWith(
                         color: Colors.white,
                         fontSize: getHeight(context, 14),
@@ -110,17 +139,5 @@ class PresentWidget extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String sumToString(int value){
-    String stringValue = value.toString();
-    if(value ~/ 1000 != 0){
-      stringValue = '${stringValue.substring(0,stringValue.length-3)} ${stringValue.substring(stringValue.length-3)}';
-    }
-    if(value ~/ 1000000 != 0){
-      stringValue = '${stringValue.substring(0,stringValue.length-7)} ${stringValue.substring(stringValue.length-7)}';
-
-    }
-    return stringValue;
   }
 }

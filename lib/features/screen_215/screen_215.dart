@@ -5,7 +5,6 @@ import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
-import 'package:mvp_taplan/features/screen_214/mvp_present_data_model.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -21,12 +20,10 @@ part 'pick_your_money_container.dart';
 
 class Screen215 extends StatefulWidget {
   final MvpPresentModel currentModel;
-  final MvpPresentDataModel currentInfo;
 
   const Screen215({
     super.key,
     required this.currentModel,
-    required this.currentInfo,
   });
 
   @override
@@ -60,15 +57,15 @@ class _Screen215State extends State<Screen215> {
 
   void setLabelsAndPrices() {
     labels = [
-      'до ${widget.currentInfo.thirdGrade}',
-      'до ${widget.currentInfo.secondGrade}',
-      'до ${widget.currentInfo.firstGrade}',
+      'до ${widget.currentModel.gradeNameThird}',
+      'до ${widget.currentModel.gradeNameSecond}',
+      'до ${widget.currentModel.gradeNameFirst}',
       ''
     ];
     prices = [
-      widget.currentInfo.thirdValue,
-      widget.currentInfo.secondValue,
-      widget.currentInfo.firstValue,
+      widget.currentModel.gradeValueThird,
+      widget.currentModel.gradeValueSecond,
+      widget.currentModel.gradeValueFirst,
       -100,
     ];
 
@@ -144,9 +141,9 @@ class _Screen215State extends State<Screen215> {
                   ),
                 ),
                 MoneyScale(
-                  firstGrade: widget.currentInfo.firstValue,
-                  secondGrade: widget.currentInfo.secondValue,
-                  thirdGrade: widget.currentInfo.thirdValue,
+                  firstGrade: widget.currentModel.gradeValueFirst,
+                  secondGrade: widget.currentModel.gradeValueSecond,
+                  thirdGrade: widget.currentModel.gradeValueThird,
                   totalMoney: widget.currentModel.alreadyGet,
                   additionalMoney: state.additionalSum,
                 ),
@@ -247,7 +244,6 @@ class _Screen215State extends State<Screen215> {
                               context,
                               MaterialPageRoute(
                                   builder: (_) => Screen214(
-                                        currentInfo: widget.currentInfo,
                                         currentModel: widget.currentModel,
                                       )));
                         },

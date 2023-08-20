@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
@@ -146,7 +149,7 @@ class PresentScreenState extends State<PresentScreen> {
                 ),
                 MoneyCollectedScaleWidget(
                   collected: carModel.alreadyGet,
-                  total: carModel.fullPrice,
+                  total: carModel.gradeValueFirst,
                   additionalSum: additionalSum,
                 ),
                 Padding(
@@ -198,7 +201,7 @@ class PresentScreenState extends State<PresentScreen> {
                             ),
                             Expanded(
                               child: SizedBox(
-                                height: getHeight(context, 30),
+                                height: getHeight(context, 32),
                                 child: TextField(
                                   controller: sumController,
                                   textAlign: TextAlign.center,
@@ -283,6 +286,7 @@ class PresentScreenState extends State<PresentScreen> {
                                   case 4:
                                     additionalSum = widget.fourthAmount;
                                 }
+                                sumController.clear();
                                 setState(() {});
                               },
                             ),
@@ -374,7 +378,7 @@ class PresentScreenState extends State<PresentScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             CounterSegmentWidget(range.day + range.month, "недель"),
-                            CounterSegmentWidget(range.day % 7 - 1, "дней"),
+                            CounterSegmentWidget(range.day % 7, "дней"),
                             CounterSegmentWidget(range.hour, "часов"),
                             CounterSegmentWidget(range.minute, "минут"),
                             CounterSegmentWidget(range.second, "секунд"),
@@ -394,10 +398,16 @@ class PresentScreenState extends State<PresentScreen> {
                   children: <Widget>[
                     MvpGradientButton(
                       onTap: () {
+                        context
+                            .read<PostcardBloc>()
+                            .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => Screen213(additionalSum: additionalSum,),
+                            builder: (_) => Screen213(
+                              additionalSum: additionalSum,
+                            ),
                           ),
                         );
                       },
@@ -448,7 +458,6 @@ class CounterSegmentWidget extends StatelessWidget {
             style: TextLocalStyles.gputeks500.copyWith(
               fontSize: getHeight(context, 35),
               color: const Color.fromRGBO(193, 184, 237, 1),
-              // height: 49.6 / 30,
             ),
           ),
           Text(

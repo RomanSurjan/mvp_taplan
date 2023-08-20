@@ -8,7 +8,6 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
   WishListBloc() : super(WishListState(wishList: [])) {
     on<GetWishListEvent>(_onGetWishList);
     on<SwapModelsEvent>(_onSwapModel);
-    on<GetDataOfCurrentModel>(_onGetDataOfCurrentModel);
   }
 
   _onGetWishList(GetWishListEvent event, Emitter<WishListState> emitter) async {
@@ -31,19 +30,27 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
             alreadyGet: el['invested'],
             position: el['position'],
             id: el['id'],
+            type: el['type'],
+            gradeNameFirst: el['grades']['grade_name_1'],
+            gradeNameSecond: el['grades']['grade_name_2'],
+            gradeNameThird: el['grades']['grade_name_3'],
+            gradeValueFirst: el['grades']['grade_value_1'],
+            gradeValueSecond: el['grades']['grade_value_2'],
+            gradeValueThird: el['grades']['grade_value_3'],
+            gradePhotoFirst: el['grades']['grade_photo_1'],
+            gradePhotoSecond: el['grades']['grade_photo_2'],
+            gradePhotoThird: el['grades']['grade_photo_3'] ,
           ),
         );
       }
 
       wishList.sort((a, b) => a.position.compareTo(b.position));
-
       emitter(
         state.copyWith(
           wishList: wishList,
           currentModel: wishList[0],
         ),
       );
-
     } catch (e) {
       rethrow;
     }
@@ -54,25 +61,10 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     final additionalModel = listOfModels[0];
     listOfModels[0] = listOfModels[event.index];
     listOfModels[event.index] = additionalModel;
-    add(GetDataOfCurrentModel(currentModel: listOfModels[0]));
     emitter(state.copyWith(
       wishList: listOfModels,
       currentModel: listOfModels[0],
     ));
   }
 
-  _onGetDataOfCurrentModel(GetDataOfCurrentModel event, Emitter<WishListState> emitter) async {
-    try {
-
-      final currentPresentDataModel = await state.getModelInfo(event.currentModel.id);
-
-        emitter(
-          state.copyWith(
-            currentInfo: currentPresentDataModel,
-          ),
-        );
-    } catch (e) {
-      rethrow;
-    }
-  }
 }

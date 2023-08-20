@@ -10,6 +10,7 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
           mapOfEvents: {},
         )) {
     on<GetPostcardsEvent>(_onGetPostCards);
+    on<ChangeHolidayTypeEvent>(_onChangeHoliday);
   }
 
   _onGetPostCards(GetPostcardsEvent event, Emitter<PostcardState> emitter) async {
@@ -40,5 +41,13 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  _onChangeHoliday(ChangeHolidayTypeEvent event, Emitter<PostcardState> emitter){
+    emitter(
+        state.copyWith(
+          currentHolidayType: event.currentHolidayType,
+        ),
+    );
   }
 }

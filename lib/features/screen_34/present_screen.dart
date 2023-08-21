@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
@@ -57,21 +59,21 @@ class PresentScreenState extends State<PresentScreen> {
       String text = sumController.text;
 
       String str = text;
-      String additional = '';
       str = str.replaceAll(RegExp(r"\D+"), '');
       int sum = int.tryParse(str) ?? 0;
-      if (sum >= 1000) {
-        if (sum % 1000 < 10) {
-          additional = '00${sum % 1000}';
-        } else if (sum % 1000 < 100) {
-          additional = '0${sum % 1000}';
-        } else {
-          additional = (sum % 1000).toString();
-        }
-        str = '${(sum / 1000).truncate()} $additional';
-      }
+      text = '';
 
-      text = "₽  $str";
+      for(int i = 0; i < str.length; i++)
+      {
+        text = (sum%10).toString() + text;
+        sum ~/= 10;
+        if( (i+1) % 3 == 0)
+        {
+          text = ' $text';
+        }
+
+      }
+      text = "₽  $text";
 
       if (!text.startsWith("₽  ") && buyingOption == BuyingOption.buyAlone) {
         text = "₽  ";
@@ -103,6 +105,7 @@ class PresentScreenState extends State<PresentScreen> {
         setState(() {});
       },
     );
+    context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: additionalSum));
   }
 
   @override
@@ -219,6 +222,7 @@ class PresentScreenState extends State<PresentScreen> {
                                     String str = value;
                                     str = str.replaceAll(RegExp(r"\D+"), "");
                                     additionalSum = int.tryParse(str) ?? 0;
+                                    context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: additionalSum));
                                     setState(() {});
                                   },
                                   decoration: InputDecoration(
@@ -418,7 +422,7 @@ class PresentScreenState extends State<PresentScreen> {
                     MvpGradientButton(
                       onTap: () {
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => const Screen15()));
+                            context, MaterialPageRoute(builder: (_) => Screen15(currentModel: carModel,)));
                       },
                       label: "Внести деньги\nна подарок",
                       gradient: AppTheme.greenButtonGradientColor,

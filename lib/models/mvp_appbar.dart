@@ -11,44 +11,53 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBack,
     this.onTheme,
     required this.name,
-    this.hasLightTheme = false,
+    this.hasLightTheme = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: AppTheme.appBarManeColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GradientAnimatedIconButton(
-            icon: 'assets/svg/arrow_back.svg',
-            onPressed: onBack ??
-                () {
-                  Navigator.pop(context);
-                },
+
+
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: state.appBarColor,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: [
+              GradientAnimatedIconButton(
+                icon: 'assets/svg/arrow_back.svg',
+                onPressed: onBack ??
+                    () {
+                      Navigator.pop(context);
+                    },
+              ),
+              Text(
+                name,
+                style: TextLocalStyles.roboto400.copyWith(
+                  fontSize: 18,
+                  color: state.appBarTextColor,
+                  height: 21.09 / 18,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              hasLightTheme
+                  ? GradientAnimatedIconButton(
+                      icon: state.isDark? 'assets/svg/charm_sun.svg' : 'assets/svg/moon.svg',
+                      onPressed: onTheme ?? () {
+                        context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
+                      },
+                    )
+                  : SizedBox(
+                      height: getHeight(context, 40),
+                      width: getHeight(context, 40),
+                    )
+            ],
           ),
-          Text(
-            name,
-            style: TextLocalStyles.roboto400.copyWith(
-              fontSize: 18,
-              color: Colors.white,
-              height: 21.09 / 18,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          hasLightTheme
-              ? GradientAnimatedIconButton(
-                  icon: 'assets/svg/charm_sun.svg',
-                  onPressed: onTheme ?? () {},
-                )
-              : SizedBox(
-                  height: getHeight(context, 40),
-                  width: getHeight(context, 40),
-                )
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -68,17 +77,18 @@ class GradientAnimatedIconButton extends StatefulWidget {
 }
 
 class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton> {
-  static const gradientColors = [
-    [AppTheme.appBarButtonFirstBorderColor, AppTheme.appBarButtonSecondBorderColor],
-    [AppTheme.mainGreenColor, AppTheme.mainGreenColor],
-    [AppTheme.appBarButtonFillColor2, AppTheme.appBarButtonFillColor1],
-  ];
+
 
   int index = 0;
   bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
+    final gradientColors = [
+      context.read<ThemeBloc>().state.appBarButtonBorder,
+      [AppTheme.mainGreenColor, AppTheme.mainGreenColor],
+      context.read<ThemeBloc>().state.appBarButtonGradient,
+    ];
     return Listener(
         child: Container(
           height: 40,
@@ -88,7 +98,7 @@ class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton>
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: isPressed ? AppTheme.mainGreenColor : AppTheme.appBarButtonFirstBorderColor,
+                color: isPressed ? AppTheme.mainGreenColor : gradientColors[0][0],
                 blurRadius: 10,
                 spreadRadius: 0,
                 offset: const Offset(4, 4),
@@ -129,10 +139,11 @@ class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton>
           setState(() {});
         },
         onPointerUp: (_) {
+          widget.onPressed.call();
           index = 0;
           isPressed = false;
 
-          widget.onPressed.call();
+
           setState(() {});
         });
   }

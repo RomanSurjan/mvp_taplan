@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
+import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
@@ -36,6 +38,13 @@ class _Screen214State extends State<Screen214> {
   bool isThirdPicked = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: widget.currentModel.gradeValueSecond));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
       appBarLabel: 'Покупка подарка\nсамостоятельно',
@@ -61,10 +70,10 @@ class _Screen214State extends State<Screen214> {
                     width: getWidth(context, 343),
                     child: Image.network(
                       (isFirstPicked
-                              ? widget.currentModel.gradePhotoFirst
+                              ? widget.currentModel.gradePhotoThird
                               : isSecondPicked
                                   ? widget.currentModel.gradePhotoSecond
-                                  : widget.currentModel.gradePhotoThird) ??
+                                  : widget.currentModel.gradePhotoFirst) ??
                           widget.currentModel.smallImage,
                       fit: BoxFit.cover,
                     ),
@@ -139,6 +148,7 @@ class _Screen214State extends State<Screen214> {
                         isFirstPicked = true;
                         isSecondPicked = false;
                         isThirdPicked = false;
+                        context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: widget.currentModel.gradeValueThird));
                         setState(() {});
                       },
                       isPicked: isFirstPicked,
@@ -155,6 +165,7 @@ class _Screen214State extends State<Screen214> {
                         isFirstPicked = false;
                         isSecondPicked = true;
                         isThirdPicked = false;
+                        context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: widget.currentModel.gradeValueSecond));
                         setState(() {});
                       },
                       isPicked: isSecondPicked,
@@ -171,6 +182,7 @@ class _Screen214State extends State<Screen214> {
                         isFirstPicked = false;
                         isSecondPicked = false;
                         isThirdPicked = true;
+                        context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: widget.currentModel.gradeValueFirst));
                         setState(() {});
                       },
                       isPicked: isThirdPicked,
@@ -211,7 +223,7 @@ class _Screen214State extends State<Screen214> {
                         width: getWidth(context, 109),
                         onTap: () {
                           Navigator.push(
-                              context, MaterialPageRoute(builder: (_) => const Screen15()));
+                              context, MaterialPageRoute(builder: (_) => Screen15(currentModel: widget.currentModel,)));
                         },
                       ),
                       MvpGradientButton(

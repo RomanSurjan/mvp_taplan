@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mvp_taplan/features/screen_228/screen_228.dart';
+import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Screen15 extends StatefulWidget {
-  const Screen15({Key? key}) : super(key: key);
+  final MvpPresentModel currentModel;
+
+  const Screen15({super.key, required this.currentModel,});
 
   @override
   State<Screen15> createState() => _Screen15State();
@@ -180,11 +184,14 @@ class _Screen15State extends State<Screen15> {
                       setState(() {});
                       Timer(
                         const Duration(seconds: 2),
-                        () {
+                            () {
                           textColor = AppTheme.mainGreenColor;
                           setState(() {});
                         },
                       );
+                    } else {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) =>
+                          Screen228(currentModel:widget.currentModel,)));
                     }
                   },
                 ),

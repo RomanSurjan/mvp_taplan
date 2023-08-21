@@ -232,7 +232,11 @@ class _Screen215State extends State<Screen215> {
                         width: getWidth(context, 109),
                         onTap: () {
                           Navigator.push(
-                              context, MaterialPageRoute(builder: (_) => const Screen15()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => Screen15(
+                                        currentModel: widget.currentModel,
+                                      )));
                         },
                       ),
                       MvpGradientButton(

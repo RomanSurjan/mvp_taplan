@@ -217,7 +217,8 @@ class _Screen28State extends State<Screen28> {
                                   end: Alignment.bottomRight,
                                 ),
                                 border: (i + j * daysOfWeek.length == currentDayIndex + 1 ||
-                                        i + j * daysOfWeek.length == currentDayIndex + 2)
+                                            i + j * daysOfWeek.length == currentDayIndex + 2) &&
+                                        currentMonth == dateTime.month
                                     ? Border.all(
                                         width: 1.5,
                                         color: Colors.red,

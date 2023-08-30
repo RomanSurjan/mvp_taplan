@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_228/screen_228.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -67,50 +70,55 @@ class _Screen15State extends State<Screen15> {
         padding: EdgeInsets.symmetric(
           horizontal: getWidth(context, 16),
         ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: getHeight(context, 30),
-            ),
-            Image.asset(
-              'assets/images/logo_dock.png',
-            ),
-            SizedBox(
-              height: getHeight(context, 31),
-            ),
-            Expanded(
-              child: SizedBox(
-                width: getWidth(context, 343),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(52, 54, 62, 1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: const Color.fromRGBO(67, 72, 78, 1),
-                      width: 1,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: getHeight(context, 10)),
-                    child: RawScrollbar(
-                      thumbVisibility: true,
-                      trackVisibility: true,
-                      radius: const Radius.circular(2),
-                      thumbColor: const Color.fromRGBO(129, 140, 147, 1),
-                      trackColor: const Color.fromRGBO(73, 88, 99, 1),
-                      child: SingleChildScrollView(
-                        primary: true,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: getHeight(context, 10),
-                            horizontal: getWidth(context, 16),
-                          ),
-                          child: Text(
-                            dock,
-                            style: TextLocalStyles.roboto400.copyWith(
-                              fontSize: 12,
-                              color: Colors.white,
-                              height: 14.06 / 12,
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return Column(
+              children: [
+                SizedBox(
+                  height: getHeight(context, 30),
+                ),
+
+                Image.asset(
+                  state.logoPath,
+                ),
+                SizedBox(
+                  height: getHeight(context, 31),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: getWidth(context, 343),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: state.dockColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: state.dockBorderColor,
+                          width: 1,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: getHeight(context, 10)),
+                        child: RawScrollbar(
+                          thumbVisibility: true,
+                          trackVisibility: true,
+                          radius: const Radius.circular(2),
+                          thumbColor: state.dockThumbColor,
+                          trackColor: state.dockTrackColor,
+                          child: SingleChildScrollView(
+                            primary: true,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: getHeight(context, 10),
+                                horizontal: getWidth(context, 16),
+                              ),
+                              child: Text(
+                                dock,
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  fontSize: 12,
+                                  color: state.appBarTextColor,
+                                  height: 14.06 / 12,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -118,89 +126,89 @@ class _Screen15State extends State<Screen15> {
                     ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(
-              height: getHeight(context, 24),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: () {
-                    isPicked = !isPicked;
-                    setChecker(isPicked);
-                    setState(() {});
-                  },
-                  child: SizedBox(
-                    height: getHeight(context, 24),
-                    width: getHeight(context, 24),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(52, 54, 62, 1),
-                        borderRadius: BorderRadius.circular(2),
-                        border: Border.all(
-                          color: const Color.fromRGBO(66, 68, 77, 1),
-                          width: 1.5,
+                SizedBox(
+                  height: getHeight(context, 24),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        isPicked = !isPicked;
+                        setChecker(isPicked);
+                        setState(() {});
+                      },
+                      child: SizedBox(
+                        height: getHeight(context, 24),
+                        width: getHeight(context, 24),
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: state.dockColor,
+                            borderRadius: BorderRadius.circular(2),
+                            border: Border.all(
+                              color: state.dockBorderColor,
+                              width: 1.5,
+                            ),
+                          ),
+                          child: isPicked ? SvgPicture.asset('assets/svg/check.svg') : null,
                         ),
                       ),
-                      child: isPicked ? SvgPicture.asset('assets/svg/check.svg') : null,
                     ),
-                  ),
+                    SizedBox(
+                      width: getWidth(context, 10),
+                    ),
+                    Text(
+                      'Подтверждаю, что мною полностью прочитны,\nпоняты и приняты условия Договора оферты\nи Политика конфиденциальности',
+                      style: TextLocalStyles.roboto400.copyWith(
+                        fontSize: 14,
+                        height: 14.06 / 12,
+                        color: textColor,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  width: getWidth(context, 10),
+                  height: getHeight(context, 25),
                 ),
-                Text(
-                  'Подтверждаю, что мною полностью прочитны,\nпоняты и приняты условия Договора оферты\nи Политика конфиденциальности',
-                  style: TextLocalStyles.roboto400.copyWith(
-                    fontSize: 14,
-                    height: 14.06 / 12,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: getHeight(context, 25),
-            ),
-            Row(
-              children: [
-                MvpGradientButton(
-                  label: 'Скачать\nв Pdf формате',
-                  gradient: AppTheme.mainGreyGradient,
-                  width: getWidth(context, 164),
-                ),
-                SizedBox(
-                  width: getWidth(context, 15),
-                ),
-                MvpGradientButton(
-                  label: 'Перейти\nк оплате',
-                  gradient: AppTheme.mainGreenGradient,
-                  width: getWidth(context, 164),
-                  onTap: () {
-                    if (!isPicked) {
-                      textColor = Colors.red;
-                      setState(() {});
-                      Timer(
-                        const Duration(seconds: 2),
-                            () {
-                          textColor = AppTheme.mainGreenColor;
+                Row(
+                  children: [
+                    MvpGradientButton(
+                      label: 'Скачать\nв Pdf формате',
+                      gradient: AppTheme.mainGreyGradient,
+                      width: getWidth(context, 164),
+                    ),
+                    SizedBox(
+                      width: getWidth(context, 15),
+                    ),
+                    MvpGradientButton(
+                      label: 'Перейти\nк оплате',
+                      gradient: AppTheme.mainGreenGradient,
+                      width: getWidth(context, 164),
+                      onTap: () {
+                        if (!isPicked) {
+                          textColor = Colors.red;
                           setState(() {});
-                        },
-                      );
-                    } else {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) =>
-                          Screen228(currentModel:widget.currentModel,)));
-                    }
-                  },
+                          Timer(
+                            const Duration(seconds: 2),
+                                () {
+                              textColor = AppTheme.mainGreenColor;
+                              setState(() {});
+                            },
+                          );
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) =>
+                              Screen228(currentModel:widget.currentModel,)));
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: getHeight(context, 95),
                 ),
               ],
-            ),
-            SizedBox(
-              height: getHeight(context, 95),
-            ),
-          ],
+            );
+          }
         ),
       ),
     );

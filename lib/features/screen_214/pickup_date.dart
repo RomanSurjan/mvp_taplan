@@ -23,10 +23,10 @@ class PickUpDate extends StatelessWidget {
           height: getHeight(context, 48),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(55, 57, 65, 1),
+              color: context.read<ThemeBloc>().state.soloBuyDateContainerColor,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppTheme.borderColor,
+                color: context.read<ThemeBloc>().state.soloBuyDateBorderColor,
                 width: getWidth(context, 2),
               ),
             ),
@@ -39,10 +39,10 @@ class PickUpDate extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontFamily: 'Roboto',
-                      color: Colors.white,
+                      color: context.read<ThemeBloc>().state.postcardContainerTextColor,
                     ),
                   ),
                   const MoreButton(),

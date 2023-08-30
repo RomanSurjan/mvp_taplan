@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -35,126 +37,135 @@ class WishListScreenState extends State<WishListScreen> {
           builder: (context, state) {
             if (state.currentModel == null) return const SizedBox.shrink();
 
-            return Column(
-              children: [
-                PresentWidget(
-                  callback: () {},
-                  isTop: true,
-                  height: getHeight(context, 226),
-                  width: getWidth(context, 329),
-                  currentModel: state.currentModel!,
-                ),
-                SizedBox(height: getHeight(context, 8)),
-                Text(
-                  state.currentModel!.label,
-                  style: TextLocalStyles.roboto600.copyWith(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: getHeight(context, 8)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            return BlocBuilder<ThemeBloc, ThemeState>(
+              builder: (context, themeState) {
+                return Column(
                   children: [
-                    MvpGradientButton(
-                      onTap: () {
-                        if (state.currentModel!.id == 4) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const PresentScreen(buyingOption: BuyingOption.buyTogether),
-                            ),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => Screen215(
-                                currentModel: state.currentModel!,
+                    PresentWidget(
+                      callback: () {},
+                      isTop: true,
+                      height: getHeight(context, 226),
+                      width: getWidth(context, 329),
+                      currentModel: state.currentModel!,
+                    ),
+                    SizedBox(height: getHeight(context, 8)),
+                    Text(
+                      state.currentModel!.label,
+                      style: TextLocalStyles.roboto600.copyWith(
+                        color: themeState.appBarTextColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: getHeight(context, 8)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MvpGradientButton(
+                          onTap: () {
+                            if (state.currentModel!.id == 4) {
+                              context.read<PostcardBloc>().add(
+                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const PresentScreen(buyingOption: BuyingOption.buyTogether),
+                                ),
+                              );
+                            } else {
+                              context
+                                  .read<PostcardBloc>()
+                                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Screen215(
+                                    currentModel: state.currentModel!,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          label: "Купить подарок\nза компанию",
+                          gradient: AppTheme.purpleButtonGradientColor,
+                          width: getWidth(context, 160),
+                        ),
+                        MvpGradientButton(
+                          onTap: () {
+                            if (state.currentModel!.id == 4) {
+                              context.read<PostcardBloc>().add(
+                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+                            } else {
+                              context
+                                  .read<PostcardBloc>()
+                                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Screen214(
+                                  currentModel: state.currentModel!,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      label: "Купить подарок\nза компанию",
-                      gradient: AppTheme.purpleButtonGradientColor,
-                      width: getWidth(context, 160),
+                            );
+                          },
+                          label: "Купить подарок\nсамостоятельно",
+                          gradient: AppTheme.greenButtonGradientColor,
+                          width: getWidth(context, 160),
+                        ),
+                      ],
                     ),
-                    MvpGradientButton(
-                      onTap: () {
-                        if (state.currentModel!.id == 4) {
-                          context.read<PostcardBloc>().add(
-                              ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
-                        } else {
-                          context
-                              .read<PostcardBloc>()
-                              .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => Screen214(
-                              currentModel: state.currentModel!,
-                            ),
-                          ),
-                        );
-                      },
-                      label: "Купить подарок\nсамостоятельно",
-                      gradient: AppTheme.greenButtonGradientColor,
-                      width: getWidth(context, 160),
+                    SizedBox(height: getHeight(context, 18)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PresentWidget(
+                          callback: () {
+                            context.read<WishListBloc>().add(SwapModelsEvent(index: 1));
+                          },
+                          isTop: false,
+                          height: getHeight(context, 160),
+                          width: getWidth(context, 160),
+                          currentModel: state.wishList[1],
+                        ),
+                        PresentWidget(
+                          callback: () {
+                            context.read<WishListBloc>().add(SwapModelsEvent(index: 2));
+                          },
+                          isTop: false,
+                          height: getHeight(context, 160),
+                          width: getWidth(context, 160),
+                          currentModel: state.wishList[2],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                SizedBox(height: getHeight(context, 18)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    PresentWidget(
-                      callback: () {
-                        context.read<WishListBloc>().add(SwapModelsEvent(index: 1));
-                      },
-                      isTop: false,
-                      height: getHeight(context, 160),
-                      width: getWidth(context, 160),
-                      currentModel: state.wishList[1],
-                    ),
-                    PresentWidget(
-                      callback: () {
-                        context.read<WishListBloc>().add(SwapModelsEvent(index: 2));
-                      },
-                      isTop: false,
-                      height: getHeight(context, 160),
-                      width: getWidth(context, 160),
-                      currentModel: state.wishList[2],
-                    ),
-                  ],
-                ),
-                SizedBox(height: getHeight(context, 8)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    PresentWidget(
-                      callback: () {
-                        context.read<WishListBloc>().add(SwapModelsEvent(index: 3));
-                      },
-                      isTop: false,
-                      height: getHeight(context, 160),
-                      width: getWidth(context, 160),
-                      currentModel: state.wishList[3],
-                    ),
-                    PresentWidget(
-                      callback: () {
-                        context.read<WishListBloc>().add(SwapModelsEvent(index: 4));
-                      },
-                      isTop: false,
-                      height: getHeight(context, 160),
-                      width: getWidth(context, 160),
-                      currentModel: state.wishList[4],
+                    SizedBox(height: getHeight(context, 8)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PresentWidget(
+                          callback: () {
+                            context.read<WishListBloc>().add(SwapModelsEvent(index: 3));
+                          },
+                          isTop: false,
+                          height: getHeight(context, 160),
+                          width: getWidth(context, 160),
+                          currentModel: state.wishList[3],
+                        ),
+                        PresentWidget(
+                          callback: () {
+                            context.read<WishListBloc>().add(SwapModelsEvent(index: 4));
+                          },
+                          isTop: false,
+                          height: getHeight(context, 160),
+                          width: getWidth(context, 160),
+                          currentModel: state.wishList[4],
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
+                );
+              }
             );
           },
         ),

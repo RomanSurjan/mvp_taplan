@@ -74,7 +74,7 @@ class CustomRadioButton extends StatelessWidget {
           color: AppTheme.inactiveButtonBorderColor,
           width: 1,
         ),
-        color: AppTheme.backgroundColor
+        color: Colors.transparent,
       ),
       caption: caption,
       textStyle: TextLocalStyles.roboto500.copyWith(

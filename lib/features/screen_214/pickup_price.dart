@@ -26,7 +26,9 @@ class PickUpPriceContainer extends StatelessWidget {
         height: getHeight(context, 40),
         width: getWidth(context, 343),
         child: ColoredBox(
-          color: isPicked ? Colors.white.withOpacity(0.08) : Colors.white.withOpacity(0.04),
+          color: isPicked
+              ? context.read<ThemeBloc>().state.activePickColor
+              : context.read<ThemeBloc>().state.unActivePickColor,
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: getWidth(context, 10),
@@ -40,7 +42,9 @@ class PickUpPriceContainer extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isPicked ? AppTheme.mainGreenColor : AppTheme.pickUpButtonColor,
+                      color: isPicked
+                          ? AppTheme.mainGreenColor
+                          : context.read<ThemeBloc>().state.pickUpBorerColor,
                       width: getWidth(context, 2),
                     ),
                   ),
@@ -68,14 +72,18 @@ class PickUpPriceContainer extends StatelessWidget {
                         : TextLocalStyles.roboto400.copyWith(
                             fontSize: getHeight(context, 16),
                             height: 18.75 / 16,
-                            color: Colors.white,
+                            color: context.read<ThemeBloc>().state.activeTextColor,
                           ),
                   ),
                   const Expanded(child: SizedBox()),
                   Text(
                     price,
                     style: TextLocalStyles.roboto400.copyWith(
-                        color: isPicked ? const Color.fromRGBO(127, 164, 234, 1) : Colors.white, fontSize: getHeight(context, 16)),
+                      color: isPicked
+                          ? const Color.fromRGBO(127, 164, 234, 1)
+                          : context.read<ThemeBloc>().state.activeTextColor,
+                      fontSize: getHeight(context, 16),
+                    ),
                   ),
                 ] else ...[
                   child!,

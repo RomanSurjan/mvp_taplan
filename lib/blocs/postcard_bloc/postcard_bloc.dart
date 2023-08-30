@@ -8,6 +8,7 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
       : super(PostcardState(
           postcards: [],
           mapOfEvents: {},
+          nameOfEvents: [],
         )) {
     on<GetPostcardsEvent>(_onGetPostCards);
     on<ChangeHolidayTypeEvent>(_onChangeHoliday);
@@ -15,6 +16,7 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
 
   _onGetPostCards(GetPostcardsEvent event, Emitter<PostcardState> emitter) async {
     List<String> postcards = [];
+    List<String> nameOfEvents = [];
     Map<String, List> mapOfEvents = {};
     try {
       var response = await Dio().post(
@@ -25,17 +27,17 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
       );
 
       for (int i = 0; i < response.data['postcards'].length; i++) {
-        postcards.add(response.data["postcards"][i]);
+        postcards.add(response.data["postcards"][i][0]);
+        nameOfEvents.add(response.data["postcards"][i][1]);
       }
 
       mapOfEvents.addAll(Map.from(response.data['events']));
-
-
 
       emitter(
         state.copyWith(
           postcards: postcards,
           mapOfEvents: mapOfEvents,
+          nameOfEvents: nameOfEvents,
         ),
       );
     } catch (e) {
@@ -43,11 +45,11 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
     }
   }
 
-  _onChangeHoliday(ChangeHolidayTypeEvent event, Emitter<PostcardState> emitter){
+  _onChangeHoliday(ChangeHolidayTypeEvent event, Emitter<PostcardState> emitter) {
     emitter(
-        state.copyWith(
-          currentHolidayType: event.currentHolidayType,
-        ),
+      state.copyWith(
+        currentHolidayType: event.currentHolidayType,
+      ),
     );
   }
 }

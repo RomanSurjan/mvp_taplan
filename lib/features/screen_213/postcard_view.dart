@@ -22,12 +22,12 @@ class PostCardViewWidget extends StatelessWidget {
               width: getWidth(context, 375),
               height: getHeight(context, 239),
               child: DecoratedBox(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Color(0x3F000000),
+                      color: context.read<ThemeBloc>().state.postcardShadowColor,
                       blurRadius: 6,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                       spreadRadius: 0,
                     )
                   ],
@@ -119,32 +119,30 @@ class PostCardViewWidget extends StatelessWidget {
                 top: getHeight(context, 8),
               ),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: getHeight(context, 6),
-                child: ListView.separated(
-                  separatorBuilder: (_, __) =>
-                      Padding(padding: EdgeInsets.only(left: getWidth(context, 8))),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.postcards.length,
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                      height: getHeight(context, 6),
-                      width: getWidth(context, 6),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: index % 25 == currentIndex % 25
-                              ? AppTheme.mainGreenColor
-                              : index == 4
-                                  ? AppTheme.mainPinkColor
-                                  : const Color.fromRGBO(66, 68, 77, 1),
-                        ),
+            SizedBox(
+              height: getHeight(context, 6),
+              child: ListView.separated(
+                separatorBuilder: (_, __) =>
+                    Padding(padding: EdgeInsets.only(left: getWidth(context, 8))),
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.only(left: getWidth(context, 3)),
+                itemCount: state.postcards.length,
+                itemBuilder: (context, index) {
+                  return SizedBox(
+                    height: getHeight(context, 6),
+                    width: getWidth(context, 6),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: index % 25 == currentIndex % 25
+                            ? AppTheme.mainGreenColor
+                            : index == 4
+                                ? AppTheme.mainPinkColor
+                                : context.read<ThemeBloc>().state.postcardContainerColor,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

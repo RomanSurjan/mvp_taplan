@@ -14,16 +14,17 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
   });
 
-  static const OutlineInputBorder outlinedBorder = OutlineInputBorder(
-    borderSide: BorderSide(
-      color: Color.fromRGBO(66, 68, 77, 1),
-      width: 1.2,
-    ),
-    //borderRadius: BorderRadius.circular(8),
-  );
+
 
   @override
   Widget build(BuildContext context) {
+    final OutlineInputBorder outlinedBorder = OutlineInputBorder(
+      borderSide: BorderSide(
+        color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
+        width: 1.2,
+      ),
+      //borderRadius: BorderRadius.circular(8),
+    );
     return SizedBox(
       height: height,
       width: width,
@@ -44,7 +45,7 @@ class CustomTextField extends StatelessWidget {
             fontSize: getHeight(context, 16),
           ),
           filled: true,
-          fillColor: const Color.fromRGBO(52, 54, 62, 1),
+          fillColor: context.read<ThemeBloc>().state.dockColor,
         ),
       ),
     );

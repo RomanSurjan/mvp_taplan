@@ -4,6 +4,8 @@ import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_211/screen_211.dart';
 import 'package:mvp_taplan/features/screen_213/action_button.dart';
 import 'package:mvp_taplan/features/screen_28/screen_28.dart';
@@ -55,134 +57,145 @@ class _Screen213State extends State<Screen213> {
       appBarLabel: 'Подписать открытку\nили сообщение для чата',
       child: BlocBuilder<PostcardBloc, PostcardState>(
         builder: (context, state) {
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 20),
+          final mapOfEvents = state.mapOfEvents;
+
+          mapOfEvents.addAll({
+            state.nameOfEvents[i]: [],
+          });
+
+          return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 20),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PostcardButton(
-                        text: 'Чат-телеграмм\nличный',
-                        isPressed: isPressedFirst,
-                        onTap: () {
-                          isPressedFirst = !isPressedFirst;
-                          setState(() {});
-                        },
-                      ),
-                      PostcardButton(
-                        isPressed: isPressedSecond,
-                        text: 'Чат-телеграмм\nгрупповой',
-                        onTap: () {
-                          isPressedSecond = !isPressedSecond;
-                          setState(() {});
-                        },
-                      ),
-                      PostcardButton(
-                        text: 'Приложить\nк подарку',
-                        hasStar: true,
-                        isPressed: isPressedThird,
-                        onTap: () {
-                          if (widget.additionalSum >= 1000) {
-                            isPressedThird = !isPressedThird;
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PostcardButton(
+                          text: 'Чат-телеграмм\nличный',
+                          isPressed: isPressedFirst,
+                          onTap: () {
+                            isPressedFirst = !isPressedFirst;
                             setState(() {});
-                          }
-                        },
-                      ),
-                    ],
+                          },
+                        ),
+                        PostcardButton(
+                          isPressed: isPressedSecond,
+                          text: 'Чат-телеграмм\nгрупповой',
+                          onTap: () {
+                            isPressedSecond = !isPressedSecond;
+                            setState(() {});
+                          },
+                        ),
+                        PostcardButton(
+                          text: 'Приложить\nк подарку',
+                          hasStar: true,
+                          isPressed: isPressedThird,
+                          onTap: () {
+                            if (widget.additionalSum >= 1000) {
+                              isPressedThird = !isPressedThird;
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 16),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 16),
+                    ),
                   ),
-                ),
-                PostCardViewWidget(
-                  currentIndex: i,
-                  onPageChanged: (index) {
-                    i = index;
-                    setState(() {});
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 16),
+                  PostCardViewWidget(
+                    currentIndex: i,
+                    onPageChanged: (index) {
+                      i = index;
+                      mapOfEvents.remove(state.nameOfEvents[i - 1]);
+                      mapOfEvents.addAll({state.nameOfEvents[i]: []});
+                      setState(() {});
+                    },
                   ),
-                ),
-                Text(
-                  '* Бесплатная печатная открытка при подарке от ₽1000',
-                  style: TextLocalStyles.roboto500.copyWith(
-                    color: AppTheme.mainGreenColor,
-                    fontSize: getHeight(context, 16),
-                    height: 16.41 / 14,
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 16),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 16),
+                  Text(
+                    '* Бесплатная печатная открытка при подарке от ₽1000',
+                    style: TextLocalStyles.roboto500.copyWith(
+                      color: AppTheme.mainGreenColor,
+                      fontSize: getHeight(context, 16),
+                      height: 16.41 / 14,
+                    ),
                   ),
-                ),
-                currentHolidayType(state.currentHolidayType),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 14),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 16),
+                    ),
                   ),
-                ),
-                CustomTextField(
-                  height: getHeight(context, 180),
-                  width: getWidth(context, 343),
-                  hintText: 'Текст открытки',
-                  maxLines: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 16),
+                  currentHolidayType(state.currentHolidayType, i, mapOfEvents),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 14),
+                    ),
                   ),
-                ),
-                MvpGradientButton(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  label: 'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
-                  gradient: AppTheme.mainGreenGradient,
-                  width: getWidth(context, 345),
-                  height: getHeight(context, 46),
-                  style: TextLocalStyles.roboto500.copyWith(
-                    color: Colors.white,
-                    fontSize: 14,
+                  CustomTextField(
+                    height: getHeight(context, 180),
+                    width: getWidth(context, 343),
+                    hintText: 'Текст открытки',
+                    maxLines: 10,
                   ),
-                ),
-              ],
-            ),
-          );
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 16),
+                    ),
+                  ),
+                  MvpGradientButton(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    label: 'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
+                    gradient: AppTheme.mainGreenGradient,
+                    width: getWidth(context, 345),
+                    height: getHeight(context, 46),
+                    style: TextLocalStyles.roboto500.copyWith(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
         },
       ),
     );
   }
 
-  Widget currentHolidayType(HolidayType currentHolidayType) {
-    return BlocBuilder<PostcardBloc, PostcardState>(
-      builder: (context, state) {
+  Widget currentHolidayType(HolidayType currentHolidayType, int i, Map<String, List> mapOfEvents) {
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
         return BlocBuilder<DateTimeBloc, DateTimeState>(
           builder: (context, dateTimeState) {
-            final currentDate = state.mapOfEvents[currentHoliday]![0].isEmpty
+            final currentDate = mapOfEvents[currentHoliday]![0].isEmpty
                 ? dateTimeState.date.isEmpty
                     ? "Выберите дату"
                     : dateTimeState.date
-                : dateToString(state.mapOfEvents[currentHoliday]![0]);
+                : dateToString(mapOfEvents[currentHoliday]![0]);
 
-            final currentTime = state.mapOfEvents[currentHoliday]![1].isEmpty
+            final currentTime = mapOfEvents[currentHoliday]![1].isEmpty
                 ? dateTimeState.time.isEmpty
                     ? "Выберите время"
                     : dateTimeState.time
-                : timeToString(state.mapOfEvents[currentHoliday]![1]);
+                : timeToString(mapOfEvents[currentHoliday]![1]);
+
             return switch (currentHolidayType) {
               (HolidayType.just) => Column(
                   children: [
@@ -191,11 +204,11 @@ class _Screen213State extends State<Screen213> {
                       width: getWidth(context, 343),
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(52, 54, 62, 1),
+                          color: themeState.dockColor,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             width: 1.2,
-                            color: const Color.fromRGBO(66, 68, 77, 1),
+                            color: themeState.postcardContainerBorderColor,
                           ),
                         ),
                         child: Padding(
@@ -206,8 +219,8 @@ class _Screen213State extends State<Screen213> {
                               icon: const MoreButton(),
                               isDense: true,
                               isExpanded: true,
-                              dropdownColor: const Color.fromRGBO(52, 54, 62, 1),
-                              items: state.mapOfEvents.keys.map(
+                              dropdownColor: themeState.dockColor,
+                              items: mapOfEvents.keys.map(
                                 (value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -215,7 +228,7 @@ class _Screen213State extends State<Screen213> {
                                       value,
                                       style: TextLocalStyles.roboto400.copyWith(
                                         color: value == currentHoliday
-                                            ? Colors.white
+                                            ? themeState.postcardContainerTextColor
                                             : AppTheme.moneyScaleGreenColor,
                                         fontSize: 12,
                                         decoration: value == currentHoliday
@@ -292,13 +305,13 @@ class _Screen213State extends State<Screen213> {
                           PickContainer(
                             height: getHeight(context, 34),
                             width: getWidth(context, 169),
-                            label: dateToString(state.mapOfEvents['День рождения']![0]),
+                            label: dateToString(mapOfEvents['День рождения']![0]),
                             onTap: () {},
                           ),
                           PickContainer(
                             height: getHeight(context, 34),
                             width: getWidth(context, 169),
-                            label: timeToString(state.mapOfEvents['День рождения']![1]),
+                            label: timeToString(mapOfEvents['День рождения']![1]),
                             onTap: () {},
                           ),
                         ],
@@ -326,13 +339,13 @@ class _Screen213State extends State<Screen213> {
                           PickContainer(
                             height: getHeight(context, 34),
                             width: getWidth(context, 169),
-                            label: dateToString(state.mapOfEvents['Еженедельный стрим']![0]),
+                            label: dateToString(mapOfEvents['Еженедельный стрим']![0]),
                             onTap: () {},
                           ),
                           PickContainer(
                             height: getHeight(context, 34),
                             width: getWidth(context, 169),
-                            label: timeToString(state.mapOfEvents['Еженедельный стрим']![1]),
+                            label: timeToString(mapOfEvents['Еженедельный стрим']![1]),
                             onTap: () {},
                           ),
                         ],

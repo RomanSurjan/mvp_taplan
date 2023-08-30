@@ -27,7 +27,6 @@ class CustomRadio<T> extends StatelessWidget {
             color: AppTheme.mainGreenColor,
             width: 2,
           ),
-          color: AppTheme.backgroundColor,
         ),
         child: Center(
           child: Container(
@@ -48,10 +47,14 @@ class CustomRadio<T> extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: AppTheme.inactiveButtonBorderColor,
+            color: context.read<ThemeBloc>().state.isDark
+                ? AppTheme.inactiveButtonBorderColor
+                : const Color.fromRGBO(200, 210, 219, 1),
             width: 2,
           ),
-          color: AppTheme.inactiveButtonFillColor,
+          color: context.read<ThemeBloc>().state.isDark
+              ? AppTheme.inactiveButtonFillColor
+              : const Color.fromRGBO(229, 232, 247, 1),
         ),
         child: Container(
           decoration: const BoxDecoration(

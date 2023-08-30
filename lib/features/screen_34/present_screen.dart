@@ -7,6 +7,8 @@ import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
@@ -55,38 +57,37 @@ class PresentScreenState extends State<PresentScreen> {
   void initState() {
     super.initState();
 
-    sumController.addListener(() {
-      String text = sumController.text;
+    sumController.addListener(
+      () {
+        String text = sumController.text;
 
-      String str = text;
-      str = str.replaceAll(RegExp(r"\D+"), '');
-      int sum = int.tryParse(str) ?? 0;
-      text = '';
+        String str = text;
+        str = str.replaceAll(RegExp(r"\D+"), '');
+        int sum = int.tryParse(str) ?? 0;
+        text = '';
 
-      for(int i = 0; i < str.length; i++)
-      {
-        text = (sum%10).toString() + text;
-        sum ~/= 10;
-        if( (i+1) % 3 == 0)
-        {
-          text = ' $text';
+        for (int i = 0; i < str.length; i++) {
+          text = (sum % 10).toString() + text;
+          sum ~/= 10;
+          if ((i + 1) % 3 == 0) {
+            text = ' $text';
+          }
+        }
+        text = "₽  $text";
+
+        if (!text.startsWith("₽  ") && buyingOption == BuyingOption.buyAlone) {
+          text = "₽  ";
+        } else if (text == "₽  " && buyingOption != BuyingOption.buyAlone) {
+          text = "";
         }
 
-      }
-      text = "₽  $text";
-
-      if (!text.startsWith("₽  ") && buyingOption == BuyingOption.buyAlone) {
-        text = "₽  ";
-      } else if (text == "₽  " && buyingOption != BuyingOption.buyAlone) {
-        text = "";
-      }
-
-      sumController.value = sumController.value.copyWith(
-        text: text,
-        selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
-        composing: TextRange.empty,
-      );
-    });
+        sumController.value = sumController.value.copyWith(
+          text: text,
+          selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
+          composing: TextRange.empty,
+        );
+      },
+    );
 
     additionalSum = widget.thirdAmount;
 
@@ -119,322 +120,338 @@ class PresentScreenState extends State<PresentScreen> {
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
       appBarLabel: "Покупка подарка",
-      child: BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
-        final carModel = state.wishList.where((element) => element.id == 4).toList()[0];
+      child: BlocBuilder<WishListBloc, WishListState>(
+        builder: (context, state) {
+          final carModel = state.wishList.where((element) => element.id == 4).toList()[0];
 
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Image.network(
-                  carModel.bigImage,
-                  fit: BoxFit.cover,
-                  width: getWidth(context, 343),
-                  height: getHeight(context, 226),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 10),
-                  ),
-                ),
-                Text(
-                  carModel.label,
-                  style: TextLocalStyles.roboto500.copyWith(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 10),
-                  ),
-                ),
-                MoneyCollectedScaleWidget(
-                  collected: carModel.alreadyGet,
-                  total: carModel.gradeValueFirst,
-                  additionalSum: additionalSum,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 5),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: AppTheme.mainGreenColor,
-                      width: 1,
+          return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Image.network(
+                      carModel.bigImage,
+                      fit: BoxFit.cover,
+                      width: getWidth(context, 343),
+                      height: getHeight(context, 226),
                     ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: getHeight(context, 16),
-                          ),
-                          child: Text(
-                            "Внести сумму:",
-                            style: TextLocalStyles.roboto600.copyWith(
-                              color: const Color.fromRGBO(200, 210, 219, 1),
-                              fontSize: 16,
-                            ),
-                          ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 10),
+                      ),
+                    ),
+                    Text(
+                      carModel.label,
+                      style: TextLocalStyles.roboto500.copyWith(
+                        color: themeState.presentScreenLabelColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 10),
+                      ),
+                    ),
+                    MoneyCollectedScaleWidget(
+                      collected: carModel.alreadyGet,
+                      total: carModel.gradeValueFirst,
+                      additionalSum: additionalSum,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 5),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: AppTheme.mainGreenColor,
+                          width: 1,
                         ),
-                        SizedBox(height: getHeight(context, 16)),
-                        Row(
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomRadio<BuyingOption>(
-                              value: BuyingOption.buyAlone,
-                              groupValue: buyingOption,
-                              onChanged: (value) {
-                                buyingOption = value!;
-                                String str = sumController.text;
-                                str = str.replaceAll(RegExp(r"\D+"), "");
-                                additionalSum = int.tryParse(str) ?? 0;
-                                setState(() {});
-                              },
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                height: getHeight(context, 32),
-                                child: TextField(
-                                  controller: sumController,
-                                  textAlign: TextAlign.center,
-                                  enabled: buyingOption == BuyingOption.buyAlone,
-                                  textAlignVertical: TextAlignVertical.bottom,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                    color: Color.fromRGBO(127, 164, 234, 1),
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 14,
-                                  ),
-                                  cursorColor: Colors.white,
-                                  onChanged: (value) {
-                                    String str = value;
-                                    str = str.replaceAll(RegExp(r"\D+"), "");
-                                    additionalSum = int.tryParse(str) ?? 0;
-                                    context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(additionalSum: additionalSum));
-                                    setState(() {});
-                                  },
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color.fromRGBO(52, 54, 62, 1),
-                                    focusColor: const Color.fromRGBO(52, 54, 62, 1),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                          color: Color.fromRGBO(66, 68, 77, 1), width: 1.5),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                          color: Color.fromRGBO(66, 68, 77, 1), width: 1.5),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                          color: Color.fromRGBO(66, 68, 77, 1), width: 1.5),
-                                    ),
-                                    disabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(
-                                          color: Color.fromRGBO(66, 68, 77, 1), width: 1.5),
-                                    ),
-                                    hintText: 'Внесите сумму вручную (₽)',
-                                    hintStyle: const TextStyle(
-                                      color: Color.fromRGBO(105, 113, 119, 1),
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w200,
-                                      fontSize: 14,
-                                    ),
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: getHeight(context, 16),
+                              ),
+                              child: Text(
+                                "Внести сумму:",
+                                style: TextLocalStyles.roboto600.copyWith(
+                                  color: themeState.presentScreenLabelColor,
+                                  fontSize: 16,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: getHeight(context, 16)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            CustomRadio<BuyingOption>(
-                              value: BuyingOption.buyTogether,
-                              groupValue: buyingOption,
-                              onChanged: (value) {
-                                buyingOption = value!;
-
-                                (sumController.text == "₽  ")
-                                    ? sumController.value = sumController.value.copyWith(
-                                        text: "",
-                                      )
-                                    : null;
-                                switch (amountIndex) {
-                                  case 1:
-                                    additionalSum = widget.firstAmount;
-
-                                  case 2:
-                                    additionalSum = widget.secondAmount;
-
-                                  case 3:
-                                    additionalSum = widget.thirdAmount;
-
-                                  case 4:
-                                    additionalSum = widget.fourthAmount;
-                                }
-                                sumController.clear();
-                                setState(() {});
-                              },
-                            ),
-                            CustomRadioButton(
-                              caption: "₽ ${widget.firstAmount}",
-                              index: 1,
-                              groupIndex: amountIndex,
-                              isActive: buyingOption == BuyingOption.buyTogether,
-                              onChanged: (index) {
-                                setState(() {
-                                  amountIndex = index;
-                                  additionalSum = widget.firstAmount;
-                                });
-                              },
-                            ),
-                            CustomRadioButton(
-                              caption: "₽ ${widget.secondAmount}",
-                              index: 2,
-                              groupIndex: amountIndex,
-                              isActive: buyingOption == BuyingOption.buyTogether,
-                              onChanged: (index) {
-                                setState(
-                                  () {
-                                    amountIndex = index;
-                                    additionalSum = widget.secondAmount;
+                            SizedBox(height: getHeight(context, 16)),
+                            Row(
+                              children: [
+                                CustomRadio<BuyingOption>(
+                                  value: BuyingOption.buyAlone,
+                                  groupValue: buyingOption,
+                                  onChanged: (value) {
+                                    buyingOption = value!;
+                                    String str = sumController.text;
+                                    str = str.replaceAll(RegExp(r"\D+"), "");
+                                    additionalSum = int.tryParse(str) ?? 0;
+                                    setState(() {});
                                   },
-                                );
-                              },
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: getHeight(context, 32),
+                                    child: TextField(
+                                      controller: sumController,
+                                      textAlign: TextAlign.center,
+                                      enabled: buyingOption == BuyingOption.buyAlone,
+                                      textAlignVertical: TextAlignVertical.bottom,
+                                      keyboardType: TextInputType.number,
+                                      style: const TextStyle(
+                                        color: Color.fromRGBO(127, 164, 234, 1),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w200,
+                                        fontSize: 14,
+                                      ),
+                                      cursorColor: const Color.fromRGBO(127, 164, 234, 1),
+                                      onChanged: (value) {
+                                        String str = value;
+                                        str = str.replaceAll(RegExp(r"\D+"), "");
+                                        additionalSum = int.tryParse(str) ?? 0;
+                                        context.read<BuyTogetherBloc>().add(
+                                            SetAdditionalSumEvent(additionalSum: additionalSum));
+                                        setState(() {});
+                                      },
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: themeState.presentScreenTextFieldColor,
+                                        focusColor: themeState.presentScreenTextFieldColor,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          borderSide:  BorderSide(
+                                            color: themeState.presentScreenTextFieldBorderColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          borderSide:  BorderSide(
+                                            color:themeState.presentScreenTextFieldBorderColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          borderSide:  BorderSide(
+                                            color:themeState.presentScreenTextFieldBorderColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                          borderSide: BorderSide(
+                                            color: themeState.presentScreenTextFieldBorderColor,
+                                            width: 1.5,
+                                          ),
+                                        ),
+                                        hintText: 'Внесите сумму вручную (₽)',
+                                        hintStyle: const TextStyle(
+                                          color: Color.fromRGBO(105, 113, 119, 1),
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.w200,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            CustomRadioButton(
-                              caption: "₽ ${widget.thirdAmount}",
-                              index: 3,
-                              groupIndex: amountIndex,
-                              isActive: buyingOption == BuyingOption.buyTogether,
-                              onChanged: (index) {
-                                setState(() {
-                                  amountIndex = index;
-                                  additionalSum = widget.thirdAmount;
-                                });
-                              },
-                            ),
-                            CustomRadioButton(
-                              caption: "₽ ${widget.fourthAmount}",
-                              index: 4,
-                              groupIndex: amountIndex,
-                              isActive: buyingOption == BuyingOption.buyTogether,
-                              onChanged: (index) {
-                                setState(() {
-                                  amountIndex = index;
-                                  additionalSum = widget.fourthAmount;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: getHeight(context, 20)),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 46),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "До мероприятия осталось:",
-                      style: TextLocalStyles.roboto600.copyWith(
-                        fontSize: 16,
-                        color: const Color.fromRGBO(200, 210, 219, 1),
-                      ),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 8),
-                    ),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppTheme.presentScreenCounterColor,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: getWidth(context, 7),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            CounterSegmentWidget(range.day + range.month, "недель"),
-                            CounterSegmentWidget(range.day % 7, "дней"),
-                            CounterSegmentWidget(range.hour, "часов"),
-                            CounterSegmentWidget(range.minute, "минут"),
-                            CounterSegmentWidget(range.second, "секунд"),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 27),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    MvpGradientButton(
-                      onTap: () {
-                        context
-                            .read<PostcardBloc>()
-                            .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+                            SizedBox(height: getHeight(context, 16)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                CustomRadio<BuyingOption>(
+                                  value: BuyingOption.buyTogether,
+                                  groupValue: buyingOption,
+                                  onChanged: (value) {
+                                    buyingOption = value!;
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => Screen213(
-                              additionalSum: additionalSum,
+                                    (sumController.text == "₽  ")
+                                        ? sumController.value = sumController.value.copyWith(
+                                            text: "",
+                                          )
+                                        : null;
+                                    switch (amountIndex) {
+                                      case 1:
+                                        additionalSum = widget.firstAmount;
+
+                                      case 2:
+                                        additionalSum = widget.secondAmount;
+
+                                      case 3:
+                                        additionalSum = widget.thirdAmount;
+
+                                      case 4:
+                                        additionalSum = widget.fourthAmount;
+                                    }
+                                    sumController.clear();
+                                    setState(() {});
+                                  },
+                                ),
+                                CustomRadioButton(
+                                  caption: "₽ ${widget.firstAmount}",
+                                  index: 1,
+                                  groupIndex: amountIndex,
+                                  isActive: buyingOption == BuyingOption.buyTogether,
+                                  onChanged: (index) {
+                                    setState(() {
+                                      amountIndex = index;
+                                      additionalSum = widget.firstAmount;
+                                    });
+                                  },
+                                ),
+                                CustomRadioButton(
+                                  caption: "₽ ${widget.secondAmount}",
+                                  index: 2,
+                                  groupIndex: amountIndex,
+                                  isActive: buyingOption == BuyingOption.buyTogether,
+                                  onChanged: (index) {
+                                    setState(
+                                      () {
+                                        amountIndex = index;
+                                        additionalSum = widget.secondAmount;
+                                      },
+                                    );
+                                  },
+                                ),
+                                CustomRadioButton(
+                                  caption: "₽ ${widget.thirdAmount}",
+                                  index: 3,
+                                  groupIndex: amountIndex,
+                                  isActive: buyingOption == BuyingOption.buyTogether,
+                                  onChanged: (index) {
+                                    setState(() {
+                                      amountIndex = index;
+                                      additionalSum = widget.thirdAmount;
+                                    });
+                                  },
+                                ),
+                                CustomRadioButton(
+                                  caption: "₽ ${widget.fourthAmount}",
+                                  index: 4,
+                                  groupIndex: amountIndex,
+                                  isActive: buyingOption == BuyingOption.buyTogether,
+                                  onChanged: (index) {
+                                    setState(() {
+                                      amountIndex = index;
+                                      additionalSum = widget.fourthAmount;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: getHeight(context, 20)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 46),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "До мероприятия осталось:",
+                          style: TextLocalStyles.roboto600.copyWith(
+                            fontSize: 16,
+                            color: const Color.fromRGBO(200, 210, 219, 1),
+                          ),
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 8),
+                        ),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: themeState.presentScreenCounterColor,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: getWidth(context, 7),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                CounterSegmentWidget(range.day + range.month, "недель"),
+                                CounterSegmentWidget(range.day % 7, "дней"),
+                                CounterSegmentWidget(range.hour, "часов"),
+                                CounterSegmentWidget(range.minute, "минут"),
+                                CounterSegmentWidget(range.second, "секунд"),
+                              ],
                             ),
                           ),
-                        );
-                      },
-                      label: "Написать\nпожелания",
-                      gradient: AppTheme.purpleButtonGradientColor,
-                      width: getWidth(context, 160),
+                        ),
+                      ],
                     ),
-                    MvpGradientButton(
-                      onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => Screen15(currentModel: carModel,)));
-                      },
-                      label: "Внести деньги\nна подарок",
-                      gradient: AppTheme.greenButtonGradientColor,
-                      width: getWidth(context, 160),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 27),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        MvpGradientButton(
+                          onTap: () {
+                            context.read<PostcardBloc>().add(
+                                ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => Screen213(
+                                  additionalSum: additionalSum,
+                                ),
+                              ),
+                            );
+                          },
+                          label: "Написать\nпожелания",
+                          gradient: AppTheme.purpleButtonGradientColor,
+                          width: getWidth(context, 160),
+                        ),
+                        MvpGradientButton(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => Screen15(
+                                          currentModel: carModel,
+                                        )));
+                          },
+                          label: "Внести деньги\nна подарок",
+                          gradient: AppTheme.greenButtonGradientColor,
+                          width: getWidth(context, 160),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        );
-      }),
+              ),
+            );
+          });
+        },
+      ),
     );
   }
 }

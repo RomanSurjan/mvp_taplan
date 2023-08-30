@@ -25,11 +25,11 @@ class PickContainer extends StatelessWidget {
         width: width,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: const Color.fromRGBO(52, 54, 62, 1),
+            color: context.read<ThemeBloc>().state.dockColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               width: 1.2,
-              color: const Color.fromRGBO(66, 68, 77, 1),
+              color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
             ),
           ),
           child: Padding(
@@ -40,7 +40,7 @@ class PickContainer extends StatelessWidget {
                 Text(
                   label,
                   style: TextLocalStyles.roboto400.copyWith(
-                    color: Colors.white,
+                    color: context.read<ThemeBloc>().state.postcardContainerTextColor,
                     fontSize: 12,
                   ),
                 ),

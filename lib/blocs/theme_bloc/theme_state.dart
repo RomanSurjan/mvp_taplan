@@ -92,6 +92,12 @@ class ThemeState {
 
   Color get activeTextColor => isDark ? Colors.white : const Color.fromRGBO(98, 118, 132, 1);
 
+  Color get birthdayLabelShowcase =>
+      isDark ? const Color.fromRGBO(188, 192, 200, 1) : const Color.fromRGBO(65, 78, 88, 1);
+
+  Color get secondaryTextColorShowcase =>
+      isDark ? const Color.fromRGBO(143, 153, 163, 1) : const Color.fromRGBO(98, 118, 132, 1);
+
   List<Color> get calendarGradient => isDark
       ? [
           const Color.fromRGBO(70, 72, 81, 1),

@@ -8,6 +8,8 @@ import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
+import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
+import 'package:mvp_taplan/blocs/showcase_bloc/showcase_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -42,6 +44,7 @@ class Screen30State extends State<Screen30> {
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
     context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
+    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(1));
 
     update = Timer.periodic(
       const Duration(seconds: 1),

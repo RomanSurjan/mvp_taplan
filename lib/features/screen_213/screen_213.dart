@@ -19,12 +19,10 @@ part 'pick_container.dart';
 
 class Screen213 extends StatefulWidget {
   final int additionalSum;
-  final List? additionalHoliday;
 
   const Screen213({
     super.key,
     required this.additionalSum,
-    this.additionalHoliday,
   });
 
   @override
@@ -60,13 +58,12 @@ class _Screen213State extends State<Screen213> {
           final mapOfEvents = state.mapOfEvents;
 
           mapOfEvents.addAll({
-            state.nameOfEvents[i]: [],
+            state.nameOfEvents[i]: ['', ''],
           });
 
-          return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
+          return BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, themeState) {
+              return Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
@@ -116,9 +113,22 @@ class _Screen213State extends State<Screen213> {
                   PostCardViewWidget(
                     currentIndex: i,
                     onPageChanged: (index) {
-                      i = index;
-                      mapOfEvents.remove(state.nameOfEvents[i - 1]);
-                      mapOfEvents.addAll({state.nameOfEvents[i]: []});
+                      if (index > i) {
+                        i = index;
+                        currentHoliday = state.nameOfEvents[i];
+                        mapOfEvents.remove(state.nameOfEvents[i - 1]);
+                        mapOfEvents.addAll({
+                          state.nameOfEvents[i]: ['', '']
+                        });
+                      } else {
+                        i = index;
+                        currentHoliday = state.nameOfEvents[i];
+                        mapOfEvents.remove(state.nameOfEvents[i + 1]);
+                        mapOfEvents.addAll({
+                          state.nameOfEvents[i]: ['', '']
+                        });
+                      }
+
                       setState(() {});
                     },
                   ),
@@ -137,12 +147,6 @@ class _Screen213State extends State<Screen213> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: getHeight(context, 16),
-                    ),
-                  ),
-                  currentHolidayType(state.currentHolidayType, i, mapOfEvents),
-                  Padding(
-                    padding: EdgeInsets.only(
                       top: getHeight(context, 14),
                     ),
                   ),
@@ -157,6 +161,12 @@ class _Screen213State extends State<Screen213> {
                       top: getHeight(context, 16),
                     ),
                   ),
+                  currentHolidayType(state.currentHolidayType, i, mapOfEvents),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 16),
+                    ),
+                  ),
                   MvpGradientButton(
                     onTap: () {
                       Navigator.pop(context);
@@ -165,15 +175,11 @@ class _Screen213State extends State<Screen213> {
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 345),
                     height: getHeight(context, 46),
-                    style: TextLocalStyles.roboto500.copyWith(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
                   ),
                 ],
-              ),
-            );
-          });
+              );
+            },
+          );
         },
       ),
     );
@@ -199,6 +205,41 @@ class _Screen213State extends State<Screen213> {
             return switch (currentHolidayType) {
               (HolidayType.just) => Column(
                   children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          PickContainer(
+                            height: getHeight(context, 34),
+                            width: getWidth(context, 169),
+                            label: currentDate,
+                            onTap: () {
+                              if (currentHoliday == 'Просто так') {
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (_) => const Screen28()));
+                              }
+                            },
+                          ),
+                          PickContainer(
+                            height: getHeight(context, 34),
+                            width: getWidth(context, 169),
+                            label: currentTime,
+                            onTap: () {
+                              if (currentHoliday == 'Просто так') {
+                                Navigator.push(
+                                    context, MaterialPageRoute(builder: (_) => const Screen211()));
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 11),
+                      ),
+                    ),
                     SizedBox(
                       height: getHeight(context, 34),
                       width: getWidth(context, 343),
@@ -230,7 +271,7 @@ class _Screen213State extends State<Screen213> {
                                         color: value == currentHoliday
                                             ? themeState.postcardContainerTextColor
                                             : AppTheme.moneyScaleGreenColor,
-                                        fontSize: 12,
+                                        fontSize: getHeight(context, 16),
                                         decoration: value == currentHoliday
                                             ? TextDecoration.none
                                             : TextDecoration.underline,
@@ -248,55 +289,10 @@ class _Screen213State extends State<Screen213> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: getHeight(context, 11),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PickContainer(
-                            height: getHeight(context, 34),
-                            width: getWidth(context, 169),
-                            label: currentDate,
-                            onTap: () {
-                              if (currentHoliday == 'Просто так') {
-                                Navigator.push(
-                                    context, MaterialPageRoute(builder: (_) => const Screen28()));
-                              }
-                            },
-                          ),
-                          PickContainer(
-                            height: getHeight(context, 34),
-                            width: getWidth(context, 169),
-                            label: currentTime,
-                            onTap: () {
-                              if (currentHoliday == 'Просто так') {
-                                Navigator.push(
-                                    context, MaterialPageRoute(builder: (_) => const Screen211()));
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               (HolidayType.birthday) => Column(
                   children: [
-                    PickContainer(
-                      height: getHeight(context, 34),
-                      width: getWidth(context, 343),
-                      label: 'День рождения',
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: getHeight(context, 11),
-                      ),
-                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                       child: Row(
@@ -317,20 +313,20 @@ class _Screen213State extends State<Screen213> {
                         ],
                       ),
                     ),
-                  ],
-                ),
-              (HolidayType.stream) => Column(
-                  children: [
-                    PickContainer(
-                      height: getHeight(context, 34),
-                      width: getWidth(context, 343),
-                      label: 'Еженедельный стрим',
-                    ),
                     Padding(
                       padding: EdgeInsets.only(
                         top: getHeight(context, 11),
                       ),
                     ),
+                    PickContainer(
+                      height: getHeight(context, 34),
+                      width: getWidth(context, 343),
+                      label: 'День рождения',
+                    ),
+                  ],
+                ),
+              (HolidayType.stream) => Column(
+                  children: [
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                       child: Row(
@@ -350,6 +346,16 @@ class _Screen213State extends State<Screen213> {
                           ),
                         ],
                       ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 11),
+                      ),
+                    ),
+                    PickContainer(
+                      height: getHeight(context, 34),
+                      width: getWidth(context, 343),
+                      label: 'Еженедельный стрим',
                     ),
                   ],
                 ),

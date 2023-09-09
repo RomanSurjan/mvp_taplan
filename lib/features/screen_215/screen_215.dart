@@ -86,7 +86,7 @@ class _Screen215State extends State<Screen215> {
   Widget build(BuildContext context) {
     if (labels == null || prices == null) return const SizedBox.shrink();
     return MvpScaffoldModel(
-      appBarLabel: 'Внести часть денег\nна подарок вскладчину ',
+      appBarLabel: 'Внести часть денег\nна подарок за компанию',
       child: BlocBuilder<BuyTogetherBloc, BuyTogetherState>(
         builder: (context, state) {
           return BlocBuilder<ThemeBloc, ThemeState>(

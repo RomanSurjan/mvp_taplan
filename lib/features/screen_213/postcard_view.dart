@@ -137,7 +137,9 @@ class PostCardViewWidget extends StatelessWidget {
                         color: index % 25 == currentIndex % 25
                             ? AppTheme.mainGreenColor
                             : index == 4
-                                ? AppTheme.mainPinkColor
+                                ? context.watch<ThemeBloc>().state.isDark
+                                    ? AppTheme.mainPinkColor
+                                    : const Color.fromRGBO(241, 171, 193, 1)
                                 : context.read<ThemeBloc>().state.postcardContainerColor,
                       ),
                     ),

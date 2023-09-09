@@ -38,7 +38,7 @@ class _Screen28State extends State<Screen28> {
   int currentDay = 0;
   int currentDayIndex = 0;
 
-  String buttonLabel = '';
+  String buttonLabel = 'Подтверждение даты';
 
   int pickedDate = -1;
 
@@ -53,9 +53,6 @@ class _Screen28State extends State<Screen28> {
     listOfDates = buildListOfDates(currentMonth, currentYear, currentDay);
     currentTime = calculateCurrentTime();
     currentDate = calculateCurrentDate();
-
-    buttonLabel =
-        '${listOfDates[currentDayIndex]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
 
     timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -127,14 +124,25 @@ class _Screen28State extends State<Screen28> {
                     GradientAnimatedIconButton(
                       icon: 'assets/svg/arrow_up.svg',
                       onPressed: () {
-                        if (currentMonth - 1 > 1) {
+                        if (currentMonth - 1 > 0) {
                           currentMonth--;
+                          if (dateTime.year + 1 != currentYear && dateTime.month > currentMonth) {
+                            currentYear++;
+                          }
                           listOfDates = currentMonth == dateTime.month
                               ? buildListOfDates(currentMonth, currentYear, currentDay)
                               : buildListOfDates(currentMonth, currentYear, -1);
-                          pickedDate = -1;
-                          setState(() {});
+
+                        } else {
+                          currentMonth = 12;
+                          currentYear--;
+                          listOfDates = currentMonth == dateTime.month
+                              ? buildListOfDates(currentMonth, currentYear, currentDay)
+                              : buildListOfDates(currentMonth, currentYear, -1);
                         }
+                        buttonLabel = 'Подтверждение даты';
+                        pickedDate = -1;
+                        setState(() {});
                       },
                     ),
                     SizedBox(
@@ -143,19 +151,18 @@ class _Screen28State extends State<Screen28> {
                     GradientAnimatedIconButton(
                       icon: 'assets/svg/arrow_down_big.svg',
                       onPressed: () {
-                        if (currentMonth + 1 < 12) {
+                        if (currentMonth + 1 <= 12) {
                           currentMonth++;
-                          listOfDates = currentMonth == dateTime.month
-                              ? buildListOfDates(currentMonth, currentYear, currentDay)
-                              : buildListOfDates(currentMonth, currentYear, -1);
-                        } else {
-                          currentMonth = 1;
-                          currentYear++;
+                          if (currentMonth >= dateTime.month && currentYear == dateTime.year + 1) {
+                            currentYear--;
+                          }
                           listOfDates = currentMonth == dateTime.month
                               ? buildListOfDates(currentMonth, currentYear, currentDay)
                               : buildListOfDates(currentMonth, currentYear, -1);
                         }
+
                         pickedDate = -1;
+                        buttonLabel = 'Подтверждение даты';
                         setState(() {});
                       },
                     ),
@@ -182,15 +189,97 @@ class _Screen28State extends State<Screen28> {
                           ),
                           Padding(padding: EdgeInsets.only(top: getHeight(context, 6))),
                           for (int j = 0; j < daysOfWeek.length - 1; j++) ...[
-                            Padding(padding: EdgeInsets.only(top: getHeight(context, 20))),
-                            InkWell(
+                            Padding(padding: EdgeInsets.only(top: getHeight(context, 30))),
+                            GestureDetector(
                               onTap: () {
                                 if ((i + j * daysOfWeek.length != currentDayIndex + 1 &&
-                                        i + j * daysOfWeek.length != currentDayIndex + 2) &&
-                                    (i + j * daysOfWeek.length >= currentDayIndex)) {
+                                    i + j * daysOfWeek.length != currentDayIndex + 2)) {
+
+
                                   pickedDate = i + j * daysOfWeek.length;
-                                  buttonLabel =
-                                      '${listOfDates[pickedDate]}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                  if ((i + j * daysOfWeek.length) <currentDayIndex &&
+                                      currentMonth == dateTime.month) {
+
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.${currentYear + 1}';
+                                  }
+                                  if ((i + j * daysOfWeek.length) >= currentDayIndex &&
+                                      currentMonth == dateTime.month) {
+
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                  }
+
+                                  int secondIndexOfOne = -1;
+                                  for (int i = 0; i < listOfDates.length; i++) {
+                                    if (i > listOfDates.indexOf(1) && listOfDates[i] == 1) {
+                                      secondIndexOfOne = i;
+                                    }
+                                  }
+                                  if ((i + j * daysOfWeek.length) >= secondIndexOfOne &&
+                                      currentMonth == dateTime.month) {
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
+                                  }
+
+                                  if (currentMonth > dateTime.month &&
+                                      (i + j * daysOfWeek.length) < listOfDates.indexOf(1)) {
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth - 1 < 10 ? '0${currentMonth - 1}' : '${currentMonth - 1}'}.$currentYear';
+                                  }
+
+                                  if (currentMonth > dateTime.month &&
+                                      (i + j * daysOfWeek.length) >= listOfDates.indexOf(1)) {
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                  }
+
+                                  for (int i = 0; i < listOfDates.length; i++) {
+                                    if (i > listOfDates.indexOf(1) && listOfDates[i] == 1) {
+                                      secondIndexOfOne = i;
+                                    }
+                                  }
+
+                                  if (currentMonth > dateTime.month &&
+                                      (i + j * daysOfWeek.length) >= secondIndexOfOne) {
+                                    if (currentMonth != 12) {
+                                      buttonLabel =
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
+                                    } else {
+                                      buttonLabel =
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.01.${currentYear + 1}';
+                                    }
+                                  }
+
+                                  if (currentMonth < dateTime.month &&
+                                      (i + j * daysOfWeek.length) < listOfDates.indexOf(1)) {
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth - 1 < 10 ? '0${currentMonth - 1}' : '${currentMonth - 1}'}.$currentYear';
+                                  }
+
+                                  if (currentMonth < dateTime.month &&
+                                      (i + j * daysOfWeek.length) >= listOfDates.indexOf(1)) {
+                                    buttonLabel =
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                  }
+
+                                  for (int i = 0; i < listOfDates.length; i++) {
+                                    if (i > listOfDates.indexOf(1) && listOfDates[i] == 1) {
+                                      secondIndexOfOne = i;
+                                    }
+                                  }
+
+                                  if (currentMonth < dateTime.month &&
+                                      (i + j * daysOfWeek.length) >= secondIndexOfOne) {
+                                    if (currentMonth + 1 == dateTime.month) {
+                                      buttonLabel =
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.${currentYear - 1}';
+                                    } else{
+                                      buttonLabel =
+                                      '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
+
+                                    }
+                                  }
 
                                   setState(() {});
                                 }
@@ -272,12 +361,20 @@ class _Screen28State extends State<Screen28> {
                   right: getWidth(context, 16),
                 ),
                 child: MvpGradientButton(
-                  label: 'Подтвердить дату\n$buttonLabel',
-                  gradient: AppTheme.mainGreenGradient,
+                  secondLabel: '${dateTime.year + 1}',
+                  label: buttonLabel == 'Подтверждение даты'
+                      ? 'Подтверждение даты'
+                      : buttonLabel.contains((dateTime.year + 1).toString()) ?'Подтвердить дату\n${buttonLabel.substring(0, 6)}' :'Подтвердить дату\n$buttonLabel',
+                  gradient: buttonLabel == 'Подтверждение даты'
+                      ? AppTheme.mainGreyGradient
+                      : AppTheme.mainGreenGradient,
+                  hasRichText: buttonLabel.contains((dateTime.year + 1).toString()),
                   width: getWidth(context, 164),
                   onTap: () {
-                    context.read<DateTimeBloc>().add(ChangeDateEvent(date: buttonLabel));
-                    Navigator.pop(context);
+                    if (buttonLabel != 'Подтверждение даты') {
+                      context.read<DateTimeBloc>().add(ChangeDateEvent(date: buttonLabel));
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               ),

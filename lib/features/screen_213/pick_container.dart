@@ -41,7 +41,7 @@ class PickContainer extends StatelessWidget {
                   label,
                   style: TextLocalStyles.roboto400.copyWith(
                     color: context.read<ThemeBloc>().state.postcardContainerTextColor,
-                    fontSize: 12,
+                    fontSize: getHeight(context, 16),
                   ),
                 ),
                 const MoreButton(),

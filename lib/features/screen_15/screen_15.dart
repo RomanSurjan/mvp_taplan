@@ -9,12 +9,12 @@ import 'package:mvp_taplan/blocs/paymennt_bloc/payment_bloc.dart';
 import 'package:mvp_taplan/blocs/paymennt_bloc/payment_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
-import 'package:mvp_taplan/features/screen_228/screen_228.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Screen15 extends StatefulWidget {
   final MvpPresentModel currentModel;
@@ -82,8 +82,17 @@ class _Screen15State extends State<Screen15> {
               SizedBox(
                 height: getHeight(context, 30),
               ),
-              Image.asset(
-                state.logoPath,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    state.logoPath,
+                  ),
+
+                  Image.asset(
+                    state.isDark? 'assets/images/sk_logo_dark.png': 'assets/images/sk_logo_light.png',
+                  ),
+                ],
               ),
               SizedBox(
                 height: getHeight(context, 31),
@@ -139,7 +148,7 @@ class _Screen15State extends State<Screen15> {
                   InkWell(
                     onTap: () {
                       isPicked = !isPicked;
-                      setChecker(isPicked);
+                      //setChecker(isPicked);
                       setState(() {});
                     },
                     child: SizedBox(
@@ -180,6 +189,13 @@ class _Screen15State extends State<Screen15> {
                     label: 'Скачать\nв Pdf формате',
                     gradient: AppTheme.mainGreyGradient,
                     width: getWidth(context, 164),
+                    onTap: () async{
+                      final Uri url = Uri.parse('https://qviz.fun/media/agreement_v3/agreement.pdf/');
+                      if (!await launchUrl(url)) {
+                      throw Exception('Could not launch $url');
+                      }
+
+                    },
                   ),
                   SizedBox(
                     width: getWidth(context, 15),
@@ -201,12 +217,6 @@ class _Screen15State extends State<Screen15> {
                         );
                       } else {
                         context.read<PaymentBloc>().add(InitPaymentEvent(context.read<BuyTogetherBloc>().state.additionalSum));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => Screen228(
-                                      currentModel: widget.currentModel,
-                                    )));
                       }
                     },
                   ),

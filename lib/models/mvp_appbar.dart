@@ -16,16 +16,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: state.appBarColor,
+          backgroundColor: Colors.transparent,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
             children: [
               GradientAnimatedIconButton(
                 icon: 'assets/svg/arrow_back.svg',

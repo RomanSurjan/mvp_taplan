@@ -235,22 +235,22 @@ class PresentScreenState extends State<PresentScreen> {
                                         focusColor: themeState.presentScreenTextFieldColor,
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8),
-                                          borderSide:  BorderSide(
+                                          borderSide: BorderSide(
                                             color: themeState.presentScreenTextFieldBorderColor,
                                             width: 1.5,
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8),
-                                          borderSide:  BorderSide(
-                                            color:themeState.presentScreenTextFieldBorderColor,
+                                          borderSide: BorderSide(
+                                            color: themeState.presentScreenTextFieldBorderColor,
                                             width: 1.5,
                                           ),
                                         ),
                                         focusedBorder: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(8),
-                                          borderSide:  BorderSide(
-                                            color:themeState.presentScreenTextFieldBorderColor,
+                                          borderSide: BorderSide(
+                                            color: themeState.presentScreenTextFieldBorderColor,
                                             width: 1.5,
                                           ),
                                         ),
@@ -393,7 +393,7 @@ class PresentScreenState extends State<PresentScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                CounterSegmentWidget(range.day + range.month, "недель"),
+                                CounterSegmentWidget(range.month * 31 ~/ 7, "недель"),
                                 CounterSegmentWidget(range.day % 7, "дней"),
                                 CounterSegmentWidget(range.hour, "часов"),
                                 CounterSegmentWidget(range.minute, "минут"),

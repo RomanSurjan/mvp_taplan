@@ -56,14 +56,7 @@ class MoneyScale extends StatelessWidget {
                         Stack(
                           alignment: AlignmentDirectional.centerEnd,
                           children: [
-                            Container(
-                              height: getHeight(context, 45),
-                              width: getWidth(context, 3),
-                              decoration: BoxDecoration(
-                                gradient: AppTheme.moneyScaleStickColor,
-                                borderRadius: BorderRadius.circular(13),
-                              ),
-                            ),
+
                             SizedBox(
                               height: getHeight(context, 41),
                               width: getWidth(
@@ -72,6 +65,15 @@ class MoneyScale extends StatelessWidget {
                                 color: AppTheme.moneyScaleGreenColor,
                               ),
                             ),
+                            Container(
+                              height: getHeight(context, 45),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+
                           ],
                         ),
                         Expanded(
@@ -103,14 +105,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -119,12 +114,6 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
-                        ],
-                      ),
-                      additionalMoney != 0
-                          ? Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
                           Container(
                             height: getHeight(context, 45),
                             width: getWidth(context, 3),
@@ -133,12 +122,28 @@ class MoneyScale extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
+                        ],
+                      ),
+                      additionalMoney != 0
+                          ? Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(context,
                                 additionalMoney / firstGrade * 113),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
+                            ),
+                          ),
+
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                         ],
@@ -149,7 +154,9 @@ class MoneyScale extends StatelessWidget {
                           height: getHeight(context, 41),
                           width: getWidth(
                               context,
-                              (1 - (totalMoney + additionalMoney) / firstGrade) *
+                              (1 -
+                                  (totalMoney + additionalMoney) /
+                                      firstGrade) *
                                   113),
                           child: const ColoredBox(
                             color: AppTheme.mainPinkColor,
@@ -158,12 +165,21 @@ class MoneyScale extends StatelessWidget {
                       ),
                     ],
                   ),
-                ] else ...[
+                ] else if ((totalMoney + additionalMoney) == firstGrade) ...[
                   Row(
                     children: [
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
+
+                          SizedBox(
+                            height: getHeight(context, 41),
+                            width: getWidth(
+                                context, totalMoney / firstGrade * 113),
+                            child: const ColoredBox(
+                              color: AppTheme.mainGreenColor,
+                            ),
+                          ),
                           Container(
                             height: getHeight(context, 45),
                             width: getWidth(context, 3),
@@ -172,12 +188,54 @@ class MoneyScale extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
+                        ],
+                      ),
+                      Expanded(child: Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
+                          SizedBox(
+                            height: getHeight(context, 41),
+                            width: getWidth(
+                                context, (1 - totalMoney / firstGrade) * 113),
+                            child: const ColoredBox(
+                              color: AppTheme.moneyScaleGreenColor,
+                            ),
+                          ),
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                          ),
+                        ],
+                      ),)
+
+                    ],
+                  ),
+                ] else ...[
+                  Row(
+                    children: [
+                      Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
                                 context, totalMoney / firstGrade * 113),
                             child: const ColoredBox(
                               color: AppTheme.mainGreenColor,
+                            ),
+                          ),
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                         ],
@@ -237,14 +295,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -256,12 +307,6 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
-                        ],
-                      ),
-                      additionalMoney != 0
-                          ? Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
                           Container(
                             height: getHeight(context, 45),
                             width: getWidth(context, 3),
@@ -270,6 +315,13 @@ class MoneyScale extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
+                        ],
+                      ),
+                      additionalMoney != 0
+                          ? Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -279,6 +331,15 @@ class MoneyScale extends StatelessWidget {
                                     113),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
+                            ),
+                          ),
+
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                         ],
@@ -308,14 +369,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -327,22 +381,32 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                          ),
                         ],
                       ),
-                      Expanded(child: SizedBox(
-                        height: getHeight(context, 41),
-                        width: getWidth(
-                            context,
-                            ((1 -
-                                ((totalMoney +
-                                    additionalMoney -
-                                    firstGrade) /
-                                    (secondGrade - firstGrade))) *
-                                113)),
-                        child: const ColoredBox(
-                          color: AppTheme.mainPinkColor,
+                      Expanded(
+                        child: SizedBox(
+                          height: getHeight(context, 41),
+                          width: getWidth(
+                              context,
+                              ((1 -
+                                  ((totalMoney +
+                                      additionalMoney -
+                                      firstGrade) /
+                                      (secondGrade - firstGrade))) *
+                                  113)),
+                          child: const ColoredBox(
+                            color: AppTheme.mainPinkColor,
+                          ),
                         ),
-                      ),),
+                      ),
                     ],
                   )
                 ]
@@ -364,14 +428,7 @@ class MoneyScale extends StatelessWidget {
                         Stack(
                           alignment: AlignmentDirectional.centerEnd,
                           children: [
-                            Container(
-                              height: getHeight(context, 45),
-                              width: getWidth(context, 3),
-                              decoration: BoxDecoration(
-                                gradient: AppTheme.moneyScaleStickColor,
-                                borderRadius: BorderRadius.circular(13),
-                              ),
-                            ),
+
                             SizedBox(
                               height: getHeight(context, 41),
                               width: getWidth(
@@ -381,6 +438,14 @@ class MoneyScale extends StatelessWidget {
                                       113),
                               child: const ColoredBox(
                                 color: AppTheme.mainGreenColor,
+                              ),
+                            ),
+                            Container(
+                              height: getHeight(context, 45),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
                               ),
                             ),
                           ],
@@ -453,14 +518,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -472,12 +530,7 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
-                        ],
-                      ),
-                      additionalMoney != 0
-                          ? Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
+
                           Container(
                             height: getHeight(context, 45),
                             width: getWidth(context, 3),
@@ -486,6 +539,13 @@ class MoneyScale extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
+                        ],
+                      ),
+                      additionalMoney != 0
+                          ? Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -495,6 +555,14 @@ class MoneyScale extends StatelessWidget {
                                     113),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
+                            ),
+                          ),
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                         ],
@@ -524,14 +592,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -543,22 +604,33 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
+
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                          ),
                         ],
                       ),
-                      Expanded(child: SizedBox(
-                        height: getHeight(context, 41),
-                        width: getWidth(
-                            context,
-                            ((1 -
-                                ((totalMoney +
-                                    additionalMoney -
-                                    secondGrade) /
-                                    (thirdGrade - secondGrade))) *
-                                113)),
-                        child: const ColoredBox(
-                          color: AppTheme.mainPinkColor,
+                      Expanded(
+                        child: SizedBox(
+                          height: getHeight(context, 41),
+                          width: getWidth(
+                              context,
+                              ((1 -
+                                  ((totalMoney +
+                                      additionalMoney -
+                                      secondGrade) /
+                                      (thirdGrade - secondGrade))) *
+                                  113)),
+                          child: const ColoredBox(
+                            color: AppTheme.mainPinkColor,
+                          ),
                         ),
-                      ),),
+                      ),
                     ],
                   )
                 ]
@@ -567,14 +639,7 @@ class MoneyScale extends StatelessWidget {
                   Stack(
                     alignment: AlignmentDirectional.centerEnd,
                     children: [
-                      Container(
-                        height: getHeight(context, 45),
-                        width: getWidth(context, 3),
-                        decoration: BoxDecoration(
-                          gradient: AppTheme.moneyScaleStickColor,
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                      ),
+
                       SizedBox(
                         height: getHeight(context, 41),
                         width: getWidth(context, 113),
@@ -582,6 +647,15 @@ class MoneyScale extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: AppTheme.mainGreenGradient,
                           ),
+                        ),
+                      ),
+
+                      Container(
+                        height: getHeight(context, 45),
+                        width: getWidth(context, 3),
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.moneyScaleStickColor,
+                          borderRadius: BorderRadius.circular(13),
                         ),
                       ),
                     ],
@@ -592,14 +666,7 @@ class MoneyScale extends StatelessWidget {
                       Stack(
                         alignment: AlignmentDirectional.centerEnd,
                         children: [
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
@@ -608,11 +675,7 @@ class MoneyScale extends StatelessWidget {
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
-                        ],
-                      ),
-                      Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
+
                           Container(
                             height: getHeight(context, 45),
                             width: getWidth(context, 3),
@@ -621,12 +684,26 @@ class MoneyScale extends StatelessWidget {
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
+                        ],
+                      ),
+                      Stack(
+                        alignment: AlignmentDirectional.centerEnd,
+                        children: [
+
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
                                 context, (1 - totalMoney / thirdGrade) * 113),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
+                            ),
+                          ),
+                          Container(
+                            height: getHeight(context, 45),
+                            width: getWidth(context, 3),
+                            decoration: BoxDecoration(
+                              gradient: AppTheme.moneyScaleStickColor,
+                              borderRadius: BorderRadius.circular(13),
                             ),
                           ),
                         ],

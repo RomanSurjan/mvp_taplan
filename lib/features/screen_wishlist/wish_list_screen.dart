@@ -109,7 +109,7 @@ class WishListScreenState extends State<WishListScreen> {
                             ),
                           );
                         },
-                        label: "Выкупиь\nи подарить ",
+                        label: "Выкупить\nи подарить ",
                         gradient: AppTheme.greenButtonGradientColor,
                         width: getWidth(context, 105),
                       ),

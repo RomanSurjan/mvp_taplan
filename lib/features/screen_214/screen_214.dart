@@ -92,7 +92,7 @@ class _Screen214State extends State<Screen214> {
                       "Дата и время вручения подарка",
                       style: TextLocalStyles.roboto400.copyWith(
                         color: themeState.soloBuyTextColor,
-                        fontSize: getHeight(context, 16),
+                        fontSize: getHeight(context, 18),
                         height: 16.41 / 14,
                       ),
                     ),
@@ -231,7 +231,7 @@ class _Screen214State extends State<Screen214> {
                             },
                           ),
                           MvpGradientButton(
-                            label: 'Купить подарок\nсовместно',
+                            label: 'Купить подарок\nза компанию',
                             gradient: AppTheme.mainGreenGradient,
                             width: getWidth(context, 109),
                             onTap: () {

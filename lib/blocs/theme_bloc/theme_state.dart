@@ -39,10 +39,10 @@ class ThemeState {
       isDark ? const Color.fromRGBO(67, 72, 78, 1) : const Color.fromRGBO(230, 241, 254, 1);
 
   Color get dockTrackColor =>
-      isDark ? const Color.fromRGBO(73, 88, 99, 1) : const Color.fromRGBO(235, 239, 245, 1);
+      isDark ? const Color.fromRGBO(73, 88, 99, 1) : const Color.fromRGBO(235, 239, 248, 1);
 
   Color get dockThumbColor =>
-      isDark ? const Color.fromRGBO(129, 140, 147, 1) : const Color.fromRGBO(221, 232, 245, 1);
+      isDark ? const Color.fromRGBO(129, 140, 147, 1) : const Color.fromRGBO(221, 232, 248, 1);
 
   Color get presentScreenLabelColor => isDark ? Colors.white : const Color.fromRGBO(65, 78, 88, 1);
 

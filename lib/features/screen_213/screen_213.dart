@@ -42,6 +42,8 @@ class _Screen213State extends State<Screen213> {
   bool isPressedSecond = true;
   bool isPressedThird = false;
 
+  bool isVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,134 +55,173 @@ class _Screen213State extends State<Screen213> {
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
       appBarLabel: 'Подписать открытку\nили сообщение для чата',
-      child: BlocBuilder<PostcardBloc, PostcardState>(
-        builder: (context, state) {
-          final mapOfEvents = state.mapOfEvents;
+      child: Stack(
+        children: [
+          BlocBuilder<PostcardBloc, PostcardState>(
+            builder: (context, state) {
+              final mapOfEvents = state.mapOfEvents;
 
-          mapOfEvents.addAll({
-            state.nameOfEvents[i]: ['', ''],
-          });
+              mapOfEvents.addAll({
+                state.nameOfEvents[i]: ['', ''],
+              });
 
-          return BlocBuilder<ThemeBloc, ThemeState>(
-            builder: (context, themeState) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PostcardButton(
-                          text: 'Чат-телеграмм\nличный',
-                          isPressed: isPressedFirst,
-                          onTap: () {
-                            isPressedFirst = !isPressedFirst;
+              return BlocBuilder<ThemeBloc, ThemeState>(
+                builder: (context, themeState) {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 20),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PostcardButton(
+                              text: 'Чат-телеграмм\nличный',
+                              isPressed: isPressedFirst,
+                              onTap: () {
+                                isPressedFirst = !isPressedFirst;
+                                setState(() {});
+                              },
+                            ),
+                            PostcardButton(
+                              isPressed: isPressedSecond,
+                              text: 'Чат-телеграмм\nгрупповой',
+                              onTap: () {
+                                isPressedSecond = !isPressedSecond;
+                                setState(() {});
+                              },
+                            ),
+                            PostcardButton(
+                              text: 'Приложить\nк подарку',
+                              hasStar: true,
+                              isPressed: isPressedThird,
+                              onTap: () {
+                                if (widget.additionalSum >= 1000) {
+                                  isPressedThird = !isPressedThird;
+                                  setState(() {});
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 5),
+                        ),
+                      ),
+                      PostCardViewWidget(
+                        currentIndex: i,
+                        onPageChanged: (index) {
+                          if (index > i) {
+                            i = index;
+                            currentHoliday = state.nameOfEvents[i];
+                            mapOfEvents.remove(state.nameOfEvents[i - 1]);
+                            mapOfEvents.addAll({
+                              state.nameOfEvents[i]: ['', '']
+                            });
+                          } else {
+                            i = index;
+                            currentHoliday = state.nameOfEvents[i];
+                            mapOfEvents.remove(state.nameOfEvents[i + 1]);
+                            mapOfEvents.addAll({
+                              state.nameOfEvents[i]: ['', '']
+                            });
+                          }
+
+                          setState(() {});
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 2),
+                        ),
+                      ),
+                      Text(
+                        '* Бесплатная печатная открытка при подарке от ₽1000',
+                        style: TextLocalStyles.roboto500.copyWith(
+                          color: AppTheme.mainGreenColor,
+                          fontSize: getHeight(context, 16),
+                          height: 16.41 / 14,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 11),
+                        ),
+                      ),
+                      CustomTextField(
+                        height: getHeight(context, 180),
+                        width: getWidth(context, 343),
+                        hintText: 'Текст открытки',
+                        maxLines: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 16),
+                        ),
+                      ),
+                      currentHolidayType(state.currentHolidayType, i, mapOfEvents),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 16),
+                        ),
+                      ),
+                      MvpGradientButton(
+                        onTap: () {
+                          isVisible = true;
+                          Future.delayed(const Duration(milliseconds: 700),(){
+                            isVisible = false;
                             setState(() {});
-                          },
-                        ),
-                        PostcardButton(
-                          isPressed: isPressedSecond,
-                          text: 'Чат-телеграмм\nгрупповой',
-                          onTap: () {
-                            isPressedSecond = !isPressedSecond;
-                            setState(() {});
-                          },
-                        ),
-                        PostcardButton(
-                          text: 'Приложить\nк подарку',
-                          hasStar: true,
-                          isPressed: isPressedThird,
-                          onTap: () {
-                            if (widget.additionalSum >= 1000) {
-                              isPressedThird = !isPressedThird;
-                              setState(() {});
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 16),
-                    ),
-                  ),
-                  PostCardViewWidget(
-                    currentIndex: i,
-                    onPageChanged: (index) {
-                      if (index > i) {
-                        i = index;
-                        currentHoliday = state.nameOfEvents[i];
-                        mapOfEvents.remove(state.nameOfEvents[i - 1]);
-                        mapOfEvents.addAll({
-                          state.nameOfEvents[i]: ['', '']
-                        });
-                      } else {
-                        i = index;
-                        currentHoliday = state.nameOfEvents[i];
-                        mapOfEvents.remove(state.nameOfEvents[i + 1]);
-                        mapOfEvents.addAll({
-                          state.nameOfEvents[i]: ['', '']
-                        });
-                      }
-
-                      setState(() {});
-                    },
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 16),
-                    ),
-                  ),
-                  Text(
-                    '* Бесплатная печатная открытка при подарке от ₽1000',
-                    style: TextLocalStyles.roboto500.copyWith(
-                      color: AppTheme.mainGreenColor,
-                      fontSize: getHeight(context, 16),
-                      height: 16.41 / 14,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 14),
-                    ),
-                  ),
-                  CustomTextField(
-                    height: getHeight(context, 180),
-                    width: getWidth(context, 343),
-                    hintText: 'Текст открытки',
-                    maxLines: 10,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 16),
-                    ),
-                  ),
-                  currentHolidayType(state.currentHolidayType, i, mapOfEvents),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 16),
-                    ),
-                  ),
-                  MvpGradientButton(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    label: 'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
-                    gradient: AppTheme.mainGreenGradient,
-                    width: getWidth(context, 345),
-                    height: getHeight(context, 46),
-                  ),
-                ],
+                          });
+                          setState(() {});
+                          //Navigator.pop(context);
+                        },
+                        label:
+                            'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
+                        gradient: AppTheme.mainGreenGradient,
+                        width: getWidth(context, 348),
+                        height: getHeight(context, 46),
+                      ),
+                    ],
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+          Visibility(
+            visible: isVisible,
+            child: Positioned(
+              top: getHeight(context, 590),
+              left: getWidth(context, 114),
+              right: getWidth(context, 114),
+              child: SizedBox(
+                height: getHeight(context, 32),
+                width: getWidth(context, 176),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(255, 255, 255, 0.61),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Сообщение сохранено',
+                      style: TextLocalStyles.roboto500.copyWith(
+                        fontSize: 14,
+                        height: 16.41 / 14,
+                        color: const Color.fromRGBO(57, 57, 57, 1),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -246,7 +287,7 @@ class _Screen213State extends State<Screen213> {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: themeState.dockColor,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(4),
                           border: Border.all(
                             width: 1.2,
                             color: themeState.postcardContainerBorderColor,

@@ -113,7 +113,7 @@ class _Screen35State extends State<Screen35> {
                             //setState(() {});
                           },
                           child: SizedBox(
-                            width: getWidth(context, 113),
+                            width: getWidth(context, 114),
                             height: getHeight(context, 46),
                             child: DecoratedBox(
                               decoration: BoxDecoration(
@@ -155,7 +155,7 @@ class _Screen35State extends State<Screen35> {
                             children: [
                               for (int j = 0; j < 3; j++) ...[
                                 SizedBox(
-                                  width: getWidth(context, 113),
+                                  width: getWidth(context, 114),
                                   height: getHeight(context, 128),
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(

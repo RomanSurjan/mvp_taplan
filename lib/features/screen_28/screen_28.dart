@@ -89,19 +89,49 @@ class _Screen28State extends State<Screen28> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          currentTime,
-                          style: TextLocalStyles.roboto400.copyWith(
-                            color: Colors.white70,
-                            fontSize: 22,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'текущее время',
+                              style: TextLocalStyles.roboto400.copyWith(
+                                color: Colors.white,
+                                fontSize: 16,
+                                height: 18.75 / 16,
+                              ),
+                            ),
+                            Text(
+                              currentTime,
+                              style: TextLocalStyles.roboto400.copyWith(
+                                color: Colors.white70,
+                                fontSize: 20,
+                                height: 23.44 / 20,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          currentDate,
-                          style: TextLocalStyles.roboto500.copyWith(
-                            color: Colors.white,
-                            fontSize: 22,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'текущая дата',
+                              style: TextLocalStyles.roboto400.copyWith(
+                                color: Colors.white,
+                                fontSize: 16,
+                                height: 18.75 / 16,
+                              ),
+                            ),
+                            Text(
+                              currentDate,
+                              style: TextLocalStyles.roboto500.copyWith(
+                                color: Colors.white70,
+                                fontSize: 20,
+                                height: 23.44 / 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -132,7 +162,6 @@ class _Screen28State extends State<Screen28> {
                           listOfDates = currentMonth == dateTime.month
                               ? buildListOfDates(currentMonth, currentYear, currentDay)
                               : buildListOfDates(currentMonth, currentYear, -1);
-
                         } else {
                           currentMonth = 12;
                           currentYear--;
@@ -188,26 +217,22 @@ class _Screen28State extends State<Screen28> {
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: getHeight(context, 6))),
-                          for (int j = 0; j < daysOfWeek.length - 1; j++) ...[
-                            Padding(padding: EdgeInsets.only(top: getHeight(context, 30))),
+                          for (int j = 0; j < daysOfWeek.length; j++) ...[
+                            Padding(padding: EdgeInsets.only(top: getHeight(context, 20))),
                             GestureDetector(
                               onTap: () {
                                 if ((i + j * daysOfWeek.length != currentDayIndex + 1 &&
                                     i + j * daysOfWeek.length != currentDayIndex + 2)) {
-
-
                                   pickedDate = i + j * daysOfWeek.length;
-                                  if ((i + j * daysOfWeek.length) <currentDayIndex &&
+                                  if ((i + j * daysOfWeek.length) < currentDayIndex &&
                                       currentMonth == dateTime.month) {
-
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.${currentYear + 1}';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth)} ${currentYear + 1}';
                                   }
                                   if ((i + j * daysOfWeek.length) >= currentDayIndex &&
                                       currentMonth == dateTime.month) {
-
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth)} $currentYear';
                                   }
 
                                   int secondIndexOfOne = -1;
@@ -219,19 +244,19 @@ class _Screen28State extends State<Screen28> {
                                   if ((i + j * daysOfWeek.length) >= secondIndexOfOne &&
                                       currentMonth == dateTime.month) {
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth + 1)} $currentYear';
                                   }
 
                                   if (currentMonth > dateTime.month &&
                                       (i + j * daysOfWeek.length) < listOfDates.indexOf(1)) {
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth - 1 < 10 ? '0${currentMonth - 1}' : '${currentMonth - 1}'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth - 1)} $currentYear';
                                   }
 
                                   if (currentMonth > dateTime.month &&
                                       (i + j * daysOfWeek.length) >= listOfDates.indexOf(1)) {
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth)} $currentYear';
                                   }
 
                                   for (int i = 0; i < listOfDates.length; i++) {
@@ -244,23 +269,23 @@ class _Screen28State extends State<Screen28> {
                                       (i + j * daysOfWeek.length) >= secondIndexOfOne) {
                                     if (currentMonth != 12) {
                                       buttonLabel =
-                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth + 1)} $currentYear';
                                     } else {
                                       buttonLabel =
-                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.01.${currentYear + 1}';
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(1)} ${currentYear + 1}';
                                     }
                                   }
 
                                   if (currentMonth < dateTime.month &&
                                       (i + j * daysOfWeek.length) < listOfDates.indexOf(1)) {
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth - 1 < 10 ? '0${currentMonth - 1}' : '${currentMonth - 1}'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth - 1)} $currentYear';
                                   }
 
                                   if (currentMonth < dateTime.month &&
                                       (i + j * daysOfWeek.length) >= listOfDates.indexOf(1)) {
                                     buttonLabel =
-                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth < 10 ? '0$currentMonth' : '$currentMonth'}.$currentYear';
+                                        '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth)} $currentYear';
                                   }
 
                                   for (int i = 0; i < listOfDates.length; i++) {
@@ -273,11 +298,10 @@ class _Screen28State extends State<Screen28> {
                                       (i + j * daysOfWeek.length) >= secondIndexOfOne) {
                                     if (currentMonth + 1 == dateTime.month) {
                                       buttonLabel =
-                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.${currentYear - 1}';
-                                    } else{
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth + 1)} ${currentYear - 1}';
+                                    } else {
                                       buttonLabel =
-                                      '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'}.${currentMonth + 1 < 10 ? '0${currentMonth + 1}' : '${currentMonth + 1}'}.$currentYear';
-
+                                          '${listOfDates[pickedDate] < 10 ? '0${listOfDates[pickedDate]}' : '${listOfDates[pickedDate]}'} ${switchMonthToString(currentMonth + 1)} $currentYear';
                                     }
                                   }
 
@@ -285,8 +309,8 @@ class _Screen28State extends State<Screen28> {
                                 }
                               },
                               child: SizedBox(
-                                height: getHeight(context, 39),
-                                width: getWidth(context, 39),
+                                height: getHeight(context, 48),
+                                width: getHeight(context, 48),
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -332,13 +356,6 @@ class _Screen28State extends State<Screen28> {
                                                     ? AppTheme.mainGreenColor
                                                     : state.appBarTextColor,
                                         fontSize: 16,
-                                        decoration: (i + j * daysOfWeek.length) >
-                                                (switchMonthInDays(currentMonth) +
-                                                    listOfDates.indexOf(1) -
-                                                    1)
-                                            ? TextDecoration.underline
-                                            : null,
-                                        decorationColor: AppTheme.mainGreenColor,
                                       ),
                                     ),
                                   ),
@@ -361,10 +378,13 @@ class _Screen28State extends State<Screen28> {
                   right: getWidth(context, 16),
                 ),
                 child: MvpGradientButton(
+                  opacity: 0.3,
                   secondLabel: '${dateTime.year + 1}',
                   label: buttonLabel == 'Подтверждение даты'
                       ? 'Подтверждение даты'
-                      : buttonLabel.contains((dateTime.year + 1).toString()) ?'Подтвердить дату\n${buttonLabel.substring(0, 6)}' :'Подтвердить дату\n$buttonLabel',
+                      : buttonLabel.contains((dateTime.year + 1).toString())
+                          ? 'Подтвердить дату\n${buttonLabel.substring(0, buttonLabel.indexOf((dateTime.year+1).toString()))}'
+                          : 'Подтвердить дату\n$buttonLabel',
                   gradient: buttonLabel == 'Подтверждение даты'
                       ? AppTheme.mainGreyGradient
                       : AppTheme.mainGreenGradient,
@@ -488,10 +508,11 @@ class _Screen28State extends State<Screen28> {
       }
     }
     int lenOfList = listOfDates.length;
-    for (int i = 0; i < 42 - lenOfList; i++) {
+    for (int i = 0; i < 49 - lenOfList; i++) {
       listOfDates.add(i + 1);
     }
     setState(() {});
+
     return listOfDates;
   }
 }

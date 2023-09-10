@@ -202,7 +202,7 @@ class _Screen214State extends State<Screen214> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           MvpGradientButton(
-                            label: 'Написать\nпожелание',
+                            label: 'Подписать\nпожелание',
                             gradient: AppTheme.mainPurpleGradient,
                             width: getWidth(context, 109),
                             onTap: () {
@@ -222,6 +222,7 @@ class _Screen214State extends State<Screen214> {
                             },
                           ),
                           MvpGradientButton(
+                            opacity: 0.35,
                             label: 'Внести деньги\nна подарок',
                             gradient: AppTheme.mainGreenGradient,
                             width: getWidth(context, 109),

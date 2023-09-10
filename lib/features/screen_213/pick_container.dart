@@ -26,7 +26,7 @@ class PickContainer extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: context.read<ThemeBloc>().state.dockColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(4),
             border: Border.all(
               width: 1.2,
               color: context.read<ThemeBloc>().state.postcardContainerBorderColor,

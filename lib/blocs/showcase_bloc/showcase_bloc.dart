@@ -19,14 +19,15 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
       },
     );
 
+
     for (int i = 0; i < response.data.length; i++) {
       listOfCards.add(
         ShowcaseCard(
-          id: response.data[i]['id'],
-          photo: response.data[i]["photo"],
-          boughtEarly: response.data[i]["bought_early"] != 0,
-          groupPurchase: response.data[i]["group_purchase"],
-          deliver: response.data[i]["deliver"] != 0,
+          id: response.data["presents"][i]['id'],
+          photo: response.data["presents"][i]["photo"],
+          boughtEarly: response.data["presents"][i]["bought_early"] != 0,
+          groupPurchase: response.data["presents"][i]["group_purchase"],
+          deliver: response.data["presents"][i]["deliver"] != 0,
         ),
       );
     }

@@ -43,7 +43,7 @@ class AppTheme {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
-      Color(0xFFB34587),
+      Color(0xFFB34887),
       Color(0xFF7E3D68)
     ],
   );
@@ -76,7 +76,7 @@ class AppTheme {
   static const Color backgroundColor = Color(0xFF2F313A);
 
   static const Color inactiveButtonFillColor = Color(0xFF393B43);
-  static const Color inactiveButtonBorderColor = Color(0xFF45474F);
+  static const Color inactiveButtonBorderColor = Color(0xFF48474F);
 
   static const Color mainBlueColor = Color(0xFF7FA4EA);
   static const Color mainGreenColor = Color(0xFF52B69A);
@@ -88,17 +88,17 @@ class AppTheme {
   static const Color presentScreenCounterTextColor = Color(0xFFC1B8ED);
 
   static const Color wishListScaleLeftColor = Color(0xFF44A88C);
-  static const Color wishListScaleRightColor = Color(0xFFB44587);
+  static const Color wishListScaleRightColor = Color(0xFFB44887);
 
   static const Color appBarManeColor = Color.fromRGBO(40, 42, 49, 1);
   static const Color appBarButtonFirstBorderColor = Color(0xFF1C1F26);
   static const Color appBarButtonSecondBorderColor = Color(0xFF4B4F5F);
 
-  static const Color borderColor = Color(0xFF3B3D45);
+  static const Color borderColor = Color(0xFF3B3D48);
   static const Color pickUpTextColor = Color(0xFF697177);
   static const Color pickUpContainerColor = Color(0xFF373941);
   static const Color pickUpButtonColor = Color(0xFF3E4048);
-  static const Color pickUpBorderColor = Color(0xFF45474F);
+  static const Color pickUpBorderColor = Color(0xFF48474F);
 
   static const buttonIconColor = Color(0xFFA6ADB5);
 

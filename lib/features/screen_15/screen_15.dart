@@ -40,16 +40,6 @@ class _Screen15State extends State<Screen15> {
     setState(() {});
   }
 
-  void getChecker() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final checker = prefs.getBool('checker');
-
-    if (checker != null) {
-      isPicked = checker;
-    }
-    setState(() {});
-  }
 
   void setChecker(bool checker) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,7 +51,6 @@ class _Screen15State extends State<Screen15> {
   void initState() {
     super.initState();
     getDock();
-    getChecker();
   }
 
   bool isPicked = false;
@@ -71,6 +60,7 @@ class _Screen15State extends State<Screen15> {
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
+      fontSize: 17,
       appBarLabel: 'Пользовательское соглашение\n(публичная оферта)',
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -80,19 +70,19 @@ class _Screen15State extends State<Screen15> {
           return Column(
             children: [
               SizedBox(
-                height: getHeight(context, 30),
+                height: getHeight(context, 5),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    state.logoPath,
-                  ),
-
-                  Image.asset(
-                    state.isDark? 'assets/images/sk_logo_dark.png': 'assets/images/sk_logo_light.png',
-                  ),
-                ],
+              Align(
+                alignment: Alignment.centerRight,
+                child: Image.asset(
+                  'assets/images/sk_logo_main.png',
+                ),
+              ),
+              SizedBox(
+                height: getHeight(context, 4),
+              ),
+              Image.asset(
+                state.logoPath,
               ),
               SizedBox(
                 height: getHeight(context, 31),
@@ -186,7 +176,8 @@ class _Screen15State extends State<Screen15> {
               Row(
                 children: [
                   MvpGradientButton(
-                    label: 'Скачать\nв Pdf формате',
+                    opacity: 0.3,
+                    label: 'Скачать\nв pdf формате',
                     gradient: AppTheme.mainGreyGradient,
                     width: getWidth(context, 164),
                     onTap: () async{

@@ -8,6 +8,7 @@ class MvpGradientButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool hasRichText;
   final String? secondLabel;
+  final double? opacity;
 
   const MvpGradientButton({
     super.key,
@@ -15,10 +16,10 @@ class MvpGradientButton extends StatelessWidget {
     required this.gradient,
     required this.width,
     this.height,
-
     this.onTap,
     this.hasRichText = false,
     this.secondLabel,
+    this.opacity,
   });
 
   @override
@@ -34,27 +35,26 @@ class MvpGradientButton extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color.fromRGBO(98, 198, 170, context.watch<ThemeBloc>().state.isDark ? 0.3 : 0.1),
-                Color.fromRGBO(68, 168, 140, context.watch<ThemeBloc>().state.isDark ? 0.3 : 0.1),
+                Color.fromRGBO(98, 198, 170, opacity ?? 0.25),
+                Color.fromRGBO(68, 168, 140, opacity ?? 0.25),
               ],
             ),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: const Color.fromRGBO(98, 198, 170, 1),
+              color: const Color.fromRGBO(82, 182, 154, 1),
               width: 1,
             ),
           ),
           child: Center(
             child: hasRichText
                 ? Text.rich(
-                    style:
-                        TextLocalStyles.roboto600.copyWith(
-                          color: context.watch<ThemeBloc>().state.isDark
-                              ? const Color.fromRGBO(110, 210, 182, 1)
-                              : const Color.fromRGBO(82, 182, 154, 1),
-                          fontSize: 13,
-                          height: 15.23 / 13,
-                        ),
+                    style: TextLocalStyles.roboto600.copyWith(
+                      color: context.watch<ThemeBloc>().state.isDark
+                          ? const Color.fromRGBO(110, 210, 182, 1)
+                          : const Color.fromRGBO(82, 182, 154, 1),
+                      fontSize: 13,
+                      height: 15.23 / 13,
+                    ),
                     TextSpan(
                       text: label,
                       children: [
@@ -72,14 +72,13 @@ class MvpGradientButton extends StatelessWidget {
                   )
                 : Text(
                     label,
-                    style:
-                        TextLocalStyles.roboto600.copyWith(
-                          color: context.watch<ThemeBloc>().state.isDark
-                              ? const Color.fromRGBO(110, 210, 182, 1)
-                              : const Color.fromRGBO(82, 182, 154, 1),
-                          fontSize: 13,
-                          height: 15.23 / 13,
-                        ),
+                    style: TextLocalStyles.roboto600.copyWith(
+                      color: context.watch<ThemeBloc>().state.isDark
+                          ? const Color.fromRGBO(110, 210, 182, 1)
+                          : const Color.fromRGBO(82, 182, 154, 1),
+                      fontSize: 13,
+                      height: 15.23 / 13,
+                    ),
                     textAlign: TextAlign.center,
                   ),
           ),

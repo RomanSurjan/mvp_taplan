@@ -86,7 +86,7 @@ class _Screen215State extends State<Screen215> {
   Widget build(BuildContext context) {
     if (labels == null || prices == null) return const SizedBox.shrink();
     return MvpScaffoldModel(
-      appBarLabel: 'Внести часть денег\nна подарок за компанию',
+      appBarLabel: 'Внести часть средств\nна подарок за компанию',
       child: BlocBuilder<BuyTogetherBloc, BuyTogetherState>(
         builder: (context, state) {
           return BlocBuilder<ThemeBloc, ThemeState>(
@@ -108,7 +108,12 @@ class _Screen215State extends State<Screen215> {
                         height: getHeight(context, 343),
                         width: getWidth(context, 343),
                         child: Image.network(
-                          widget.currentModel.smallImage,
+                          (isPickedMoney[0]
+                                  ? widget.currentModel.gradePhotoThird
+                                  : isPickedMoney[1]
+                                      ? widget.currentModel.gradePhotoSecond
+                                      : widget.currentModel.gradePhotoFirst) ??
+                              widget.currentModel.smallImage,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -217,43 +222,52 @@ class _Screen215State extends State<Screen215> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           MvpGradientButton(
+                            opacity: themeState.isDark ? 0.25 : 0.15,
                             label: 'Написать\nсообщение',
                             gradient: AppTheme.mainPurpleGradient,
                             width: getWidth(context, 109),
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => Screen213(
-                                            additionalSum:
-                                                context.read<BuyTogetherBloc>().state.additionalSum,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Screen213(
+                                    additionalSum:
+                                        context.read<BuyTogetherBloc>().state.additionalSum,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                           MvpGradientButton(
+                            opacity: themeState.isDark ? 0.35 : 0.25,
                             label: 'Внести деньги\nна подарок',
                             gradient: AppTheme.mainGreenGradient,
                             width: getWidth(context, 109),
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => Screen15(
-                                            currentModel: widget.currentModel,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Screen15(
+                                    currentModel: widget.currentModel,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                           MvpGradientButton(
+                            opacity: themeState.isDark ? 0.25 : 0.15,
                             label: 'Купить подарок\nсамостоятельно',
                             gradient: AppTheme.mainGreenGradient,
                             width: getWidth(context, 109),
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => Screen214(
-                                            currentModel: widget.currentModel,
-                                          )));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => Screen214(
+                                    currentModel: widget.currentModel,
+                                  ),
+                                ),
+                              );
                             },
                           ),
                         ],

@@ -22,33 +22,221 @@ class MoneyScale extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          height: getHeight(context, 45),
-          width: getWidth(context, 113),
-          child: Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              if (totalMoney == 0) ...[
-                if (additionalMoney == 0) ...[
+          height: getHeight(context, 48),
+          width: getWidth(context, 114),
+          child: DecoratedBox(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(3),
+                bottomLeft: Radius.circular(3),
+              )
+            ),
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                if (totalMoney == 0) ...[
+                  if (additionalMoney == 0) ...[
+                    SizedBox(
+                      height: getHeight(context, 41),
+                      width: getWidth(context, 114),
+                      child: const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: AppTheme.mainPinkGradient,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(3),
+                              bottomLeft: Radius.circular(3),
+                            )
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    if (additionalMoney > firstGrade) ...[
+                      SizedBox(
+                        height: getHeight(context, 41),
+                        width: getWidth(context, 114),
+                        child: const DecoratedBox(
+                          decoration: BoxDecoration(
+                            //gradient: AppTheme.mainGreenGradient,
+                            color: AppTheme.moneyScaleGreenColor,
+
+                          ),
+                        ),
+                      ),
+                    ] else ...[
+                      Row(
+                        children: [
+                          Stack(
+                            alignment: AlignmentDirectional.centerEnd,
+                            children: [
+                              SizedBox(
+                                height: getHeight(context, 41),
+                                width: getWidth(
+                                    context, additionalMoney / firstGrade * 114),
+                                child: const ColoredBox(
+                                  color: AppTheme.moneyScaleGreenColor,
+                                ),
+                              ),
+                              Container(
+                                height: getHeight(context, 48),
+                                width: getWidth(context, 3),
+                                decoration: BoxDecoration(
+                                  gradient: AppTheme.moneyScaleStickColor,
+                                  borderRadius: BorderRadius.circular(13),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                          Expanded(
+                            child: SizedBox(
+                              height: getHeight(context, 41),
+                              child: const ColoredBox(
+                                color: AppTheme.mainPinkColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ]
+                ] else if (totalMoney > firstGrade) ...[
                   SizedBox(
                     height: getHeight(context, 41),
-                    width: getWidth(context, 113),
+                    width: getWidth(context, 114),
                     child: const DecoratedBox(
                       decoration: BoxDecoration(
-                        gradient: AppTheme.mainPinkGradient,
+                        gradient: AppTheme.mainGreenGradient,
                       ),
                     ),
                   ),
                 ] else ...[
-                  if (additionalMoney > firstGrade) ...[
-                    SizedBox(
-                      height: getHeight(context, 41),
-                      width: getWidth(context, 113),
-                      child: const DecoratedBox(
-                        decoration: BoxDecoration(
-                          //gradient: AppTheme.mainGreenGradient,
-                          color: AppTheme.moneyScaleGreenColor,
+                  if ((totalMoney + additionalMoney) < firstGrade) ...[
+                    Row(
+                      children: [
+                        Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+
+                            SizedBox(
+                              height: getHeight(context, 41),
+                              width: getWidth(
+                                  context, totalMoney / firstGrade * 114),
+                              child: const DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: AppTheme.mainGreenColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3),
+                                    bottomLeft: Radius.circular(3),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: getHeight(context, 48),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        additionalMoney != 0
+                            ? Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+
+                            SizedBox(
+                              height: getHeight(context, 41),
+                              width: getWidth(context,
+                                  additionalMoney / firstGrade * 114),
+                              child: const ColoredBox(
+                                color: AppTheme.moneyScaleGreenColor,
+                              ),
+                            ),
+
+                            Container(
+                              height: getHeight(context, 48),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                          ],
+                        )
+                            : const SizedBox.shrink(),
+                        Expanded(
+                          child: SizedBox(
+                            height: getHeight(context, 41),
+                            width: getWidth(
+                                context,
+                                (1 -
+                                    (totalMoney + additionalMoney) /
+                                        firstGrade) *
+                                    114),
+                            child: const ColoredBox(
+                              color: AppTheme.mainPinkColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else if ((totalMoney + additionalMoney) == firstGrade) ...[
+                    Row(
+                      children: [
+                        Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+
+                            SizedBox(
+                              height: getHeight(context, 41),
+                              width: getWidth(
+                                  context, totalMoney / firstGrade * 114),
+                              child: const DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: AppTheme.mainGreenColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3),
+                                    bottomLeft: Radius.circular(3),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: getHeight(context, 48),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(child: Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+
+                            SizedBox(
+                              height: getHeight(context, 41),
+                              width: getWidth(
+                                  context, (1 - totalMoney / firstGrade) * 114),
+                              child: const ColoredBox(
+                                color: AppTheme.moneyScaleGreenColor,
+                              ),
+                            ),
+                            Container(
+                              height: getHeight(context, 48),
+                              width: getWidth(context, 3),
+                              decoration: BoxDecoration(
+                                gradient: AppTheme.moneyScaleStickColor,
+                                borderRadius: BorderRadius.circular(13),
+                              ),
+                            ),
+                          ],
+                        ),)
+
+                      ],
                     ),
                   ] else ...[
                     Row(
@@ -60,228 +248,86 @@ class MoneyScale extends StatelessWidget {
                             SizedBox(
                               height: getHeight(context, 41),
                               width: getWidth(
-                                  context, additionalMoney / firstGrade * 113),
-                              child: const ColoredBox(
-                                color: AppTheme.moneyScaleGreenColor,
+                                  context, totalMoney / firstGrade * 114),
+                              child: const DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: AppTheme.mainGreenColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(3),
+                                    bottomLeft: Radius.circular(3),
+                                  ),
+                                ),
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 45),
+                              height: getHeight(context, 48),
                               width: getWidth(context, 3),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
                               ),
                             ),
-
                           ],
                         ),
                         Expanded(
                           child: SizedBox(
                             height: getHeight(context, 41),
+                            width: getWidth(
+                                context, (1 - totalMoney / firstGrade) * 114),
                             child: const ColoredBox(
-                              color: AppTheme.mainPinkColor,
+                              color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ]
-              ] else if (totalMoney > firstGrade) ...[
-                SizedBox(
-                  height: getHeight(context, 41),
-                  width: getWidth(context, 113),
-                  child: const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: AppTheme.mainGreenGradient,
+                  ]
+                ],
+                Padding(
+                  padding: EdgeInsets.only(right: getWidth(context, 5)),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '₽ ${sumToString(firstGrade)}',
+                          style: TextLocalStyles.roboto400.copyWith(
+                            fontSize: 14,
+                            color: Colors.white,
+                            height: 16.41 / 14,
+                            fontWeight: FontWeight.w100
+                          ),
+                        ),
+                        Text(
+                          'Стандарт',
+                          style: TextLocalStyles.roboto600.copyWith(
+                            fontSize: 14,
+                            color: Colors.white,
+                            height: 16.41 / 14,
+                            fontWeight: FontWeight.w700
+                          ),
+
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ] else ...[
-                if ((totalMoney + additionalMoney) < firstGrade) ...[
-                  Row(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
-
-                          SizedBox(
-                            height: getHeight(context, 41),
-                            width: getWidth(
-                                context, totalMoney / firstGrade * 113),
-                            child: const ColoredBox(
-                              color: AppTheme.mainGreenColor,
-                            ),
-                          ),
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
-                        ],
-                      ),
-                      additionalMoney != 0
-                          ? Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
-
-                          SizedBox(
-                            height: getHeight(context, 41),
-                            width: getWidth(context,
-                                additionalMoney / firstGrade * 113),
-                            child: const ColoredBox(
-                              color: AppTheme.moneyScaleGreenColor,
-                            ),
-                          ),
-
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
-                        ],
-                      )
-                          : const SizedBox.shrink(),
-                      Expanded(
-                        child: SizedBox(
-                          height: getHeight(context, 41),
-                          width: getWidth(
-                              context,
-                              (1 -
-                                  (totalMoney + additionalMoney) /
-                                      firstGrade) *
-                                  113),
-                          child: const ColoredBox(
-                            color: AppTheme.mainPinkColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ] else if ((totalMoney + additionalMoney) == firstGrade) ...[
-                  Row(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
-
-                          SizedBox(
-                            height: getHeight(context, 41),
-                            width: getWidth(
-                                context, totalMoney / firstGrade * 113),
-                            child: const ColoredBox(
-                              color: AppTheme.mainGreenColor,
-                            ),
-                          ),
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(child: Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
-
-                          SizedBox(
-                            height: getHeight(context, 41),
-                            width: getWidth(
-                                context, (1 - totalMoney / firstGrade) * 113),
-                            child: const ColoredBox(
-                              color: AppTheme.moneyScaleGreenColor,
-                            ),
-                          ),
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
-                        ],
-                      ),)
-
-                    ],
-                  ),
-                ] else ...[
-                  Row(
-                    children: [
-                      Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
-
-                          SizedBox(
-                            height: getHeight(context, 41),
-                            width: getWidth(
-                                context, totalMoney / firstGrade * 113),
-                            child: const ColoredBox(
-                              color: AppTheme.mainGreenColor,
-                            ),
-                          ),
-                          Container(
-                            height: getHeight(context, 45),
-                            width: getWidth(context, 3),
-                            decoration: BoxDecoration(
-                              gradient: AppTheme.moneyScaleStickColor,
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          height: getHeight(context, 41),
-                          width: getWidth(
-                              context, (1 - totalMoney / firstGrade) * 113),
-                          child: const ColoredBox(
-                            color: AppTheme.moneyScaleGreenColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ]
               ],
-              Padding(
-                padding: EdgeInsets.only(right: getWidth(context, 3)),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    '${sumToString(firstGrade)} ₽\nСтандарт',
-                    style: TextLocalStyles.roboto600.copyWith(
-                      fontSize: 14,
-                      color: Colors.white,
-                      height: 16.41 / 14,
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
         SizedBox(
-          height: getHeight(context, 45),
-          width: getWidth(context, 113),
+          height: getHeight(context, 48),
+          width: getWidth(context, 114),
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
               if ((totalMoney + additionalMoney) <= firstGrade) ...[
                 SizedBox(
                   height: getHeight(context, 41),
-                  width: getWidth(context, 113),
+                  width: getWidth(context, 114),
                   child: const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: AppTheme.mainPinkGradient,
@@ -302,13 +348,13 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 (totalMoney - firstGrade) /
                                     (secondGrade - firstGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -328,14 +374,14 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 additionalMoney /
                                     (secondGrade - firstGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
 
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -355,7 +401,7 @@ class MoneyScale extends StatelessWidget {
                                       firstGrade +
                                       additionalMoney) /
                                       (secondGrade - firstGrade)) *
-                                  113),
+                                  114),
                           child: const ColoredBox(
                             color: AppTheme.mainPinkColor,
                           ),
@@ -376,13 +422,13 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 (totalMoney + additionalMoney - firstGrade) /
                                     (secondGrade - firstGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -401,7 +447,7 @@ class MoneyScale extends StatelessWidget {
                                       additionalMoney -
                                       firstGrade) /
                                       (secondGrade - firstGrade))) *
-                                  113)),
+                                  114)),
                           child: const ColoredBox(
                             color: AppTheme.mainPinkColor,
                           ),
@@ -415,7 +461,7 @@ class MoneyScale extends StatelessWidget {
                   if (totalMoney > secondGrade) ...[
                     SizedBox(
                       height: getHeight(context, 41),
-                      width: getWidth(context, 113),
+                      width: getWidth(context, 114),
                       child: const DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: AppTheme.mainGreenGradient,
@@ -435,13 +481,13 @@ class MoneyScale extends StatelessWidget {
                                   context,
                                   (totalMoney - firstGrade) /
                                       (secondGrade - firstGrade) *
-                                      113),
+                                      114),
                               child: const ColoredBox(
                                 color: AppTheme.mainGreenColor,
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 45),
+                              height: getHeight(context, 48),
                               width: getWidth(context, 3),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
@@ -457,7 +503,7 @@ class MoneyScale extends StatelessWidget {
                               (1 -
                                   (totalMoney - firstGrade) /
                                       (secondGrade - firstGrade)) *
-                                  113),
+                                  114),
                           child: const ColoredBox(
                             color: AppTheme.moneyScaleGreenColor,
                           ),
@@ -468,7 +514,7 @@ class MoneyScale extends StatelessWidget {
                 ] else ...[
                   SizedBox(
                     height: getHeight(context, 41),
-                    width: getWidth(context, 113),
+                    width: getWidth(context, 114),
                     child: const DecoratedBox(
                       decoration: BoxDecoration(
                         color: AppTheme.moneyScaleGreenColor,
@@ -478,17 +524,32 @@ class MoneyScale extends StatelessWidget {
                 ],
               ],
               Padding(
-                padding: EdgeInsets.only(right: getWidth(context, 3)),
+                padding: EdgeInsets.only(right: getWidth(context, 5)),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    '${sumToString(secondGrade)} ₽\nПремиум',
-                    style: TextLocalStyles.roboto600.copyWith(
-                      fontSize: 14,
-                      color: Colors.white,
-                      height: 16.41 / 14,
-                    ),
-                    textAlign: TextAlign.end,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '₽ ${sumToString(secondGrade)}',
+                        style: TextLocalStyles.roboto400.copyWith(
+                          fontSize: 14,
+                          color: Colors.white,
+                          height: 16.41 / 14,
+                        ),
+
+                      ),
+                      Text(
+                        'Премиум',
+                        style: TextLocalStyles.roboto600.copyWith(
+                          fontSize: 14,
+                          color: Colors.white,
+                          height: 16.41 / 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -496,18 +557,22 @@ class MoneyScale extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: getHeight(context, 45),
-          width: getWidth(context, 113),
+          height: getHeight(context, 48),
+          width: getWidth(context, 114),
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
               if ((totalMoney + additionalMoney) <= secondGrade) ...[
                 SizedBox(
                   height: getHeight(context, 41),
-                  width: getWidth(context, 113),
+                  width: getWidth(context, 114),
                   child: const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: AppTheme.mainPinkGradient,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(3),
+                        bottomRight: Radius.circular(3),
+                      ),
                     ),
                   ),
                 )
@@ -525,14 +590,14 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 (totalMoney - secondGrade) /
                                     (thirdGrade - secondGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
 
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -552,13 +617,13 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 additionalMoney /
                                     (thirdGrade - secondGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -578,7 +643,7 @@ class MoneyScale extends StatelessWidget {
                                       secondGrade +
                                       additionalMoney) /
                                       (thirdGrade - secondGrade)) *
-                                  113),
+                                  114),
                           child: const ColoredBox(
                             color: AppTheme.mainPinkColor,
                           ),
@@ -599,14 +664,14 @@ class MoneyScale extends StatelessWidget {
                                 context,
                                 (totalMoney + additionalMoney - secondGrade) /
                                     (thirdGrade - secondGrade) *
-                                    113),
+                                    114),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
 
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -625,7 +690,7 @@ class MoneyScale extends StatelessWidget {
                                       additionalMoney -
                                       secondGrade) /
                                       (thirdGrade - secondGrade))) *
-                                  113)),
+                                  114)),
                           child: const ColoredBox(
                             color: AppTheme.mainPinkColor,
                           ),
@@ -642,7 +707,7 @@ class MoneyScale extends StatelessWidget {
 
                       SizedBox(
                         height: getHeight(context, 41),
-                        width: getWidth(context, 113),
+                        width: getWidth(context, 114),
                         child: const DecoratedBox(
                           decoration: BoxDecoration(
                             gradient: AppTheme.mainGreenGradient,
@@ -651,7 +716,7 @@ class MoneyScale extends StatelessWidget {
                       ),
 
                       Container(
-                        height: getHeight(context, 45),
+                        height: getHeight(context, 48),
                         width: getWidth(context, 3),
                         decoration: BoxDecoration(
                           gradient: AppTheme.moneyScaleStickColor,
@@ -670,14 +735,14 @@ class MoneyScale extends StatelessWidget {
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
-                                context, totalMoney / thirdGrade * 113),
+                                context, totalMoney / thirdGrade * 114),
                             child: const ColoredBox(
                               color: AppTheme.mainGreenColor,
                             ),
                           ),
 
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -693,13 +758,13 @@ class MoneyScale extends StatelessWidget {
                           SizedBox(
                             height: getHeight(context, 41),
                             width: getWidth(
-                                context, (1 - totalMoney / thirdGrade) * 113),
+                                context, (1 - totalMoney / thirdGrade) * 114),
                             child: const ColoredBox(
                               color: AppTheme.moneyScaleGreenColor,
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 45),
+                            height: getHeight(context, 48),
                             width: getWidth(context, 3),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
@@ -713,17 +778,31 @@ class MoneyScale extends StatelessWidget {
                 ],
               ],
               Padding(
-                padding: EdgeInsets.only(right: getWidth(context, 3)),
+                padding: EdgeInsets.only(right: getWidth(context, 5)),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    '${sumToString(thirdGrade)} ₽\nДелюкс',
-                    style: TextLocalStyles.roboto600.copyWith(
-                      fontSize: 14,
-                      color: Colors.white,
-                      height: 16.41 / 14,
-                    ),
-                    textAlign: TextAlign.end,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '₽ ${sumToString(thirdGrade)}',
+                        style: TextLocalStyles.roboto400.copyWith(
+                          fontSize: 14,
+                          color: Colors.white,
+                          height: 16.41 / 14,
+                        ),
+                      ),
+                      Text(
+                        'Делюкс',
+                        style: TextLocalStyles.roboto600.copyWith(
+                          fontSize: 14,
+                          color: Colors.white,
+                          height: 16.41 / 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

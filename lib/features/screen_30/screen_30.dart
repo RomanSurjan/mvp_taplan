@@ -277,7 +277,7 @@ Widget containerTimer(BuildContext context, int date, String label) {
     decoration: const BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          Color.fromRGBO(113, 115, 117, 1),
+          Color.fromRGBO(114, 114, 117, 1),
           Color.fromRGBO(157, 167, 176, 0.6),
         ],
         end: Alignment.topCenter,

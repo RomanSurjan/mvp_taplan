@@ -57,7 +57,7 @@ class PickUpPriceContainer extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: getWidth(context, 10),
+                    left: getWidth(context, 5),
                   ),
                 ),
                 if (child == null) ...[

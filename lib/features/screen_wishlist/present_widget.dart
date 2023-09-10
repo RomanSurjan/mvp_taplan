@@ -9,7 +9,6 @@ import 'package:mvp_taplan/theme/text_styles.dart';
 /// Виджет подарков для экрана "Мой список желанных подарков".
 
 class PresentWidget extends StatelessWidget {
-
   final VoidCallback? callback;
   final bool isTop;
   final double height;
@@ -25,8 +24,6 @@ class PresentWidget extends StatelessWidget {
     required this.currentModel,
   });
 
-
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -41,6 +38,7 @@ class PresentWidget extends StatelessWidget {
             width: width,
             height: height,
           ),
+          const SizedBox(height: 1),
           SizedBox(
             width: width,
             child: Stack(
@@ -88,10 +86,10 @@ class PresentWidget extends StatelessWidget {
                   left: currentModel.gradeValueFirst / currentModel.fullPrice * width,
                   child: SizedBox(
                     height: getHeight(context, 24),
-                    width: getWidth(context, 1.5),
+                    width: getWidth(context, 2),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(75, 175, 147, 0.5),
+                        color: const Color.fromRGBO(75, 175, 147, 0.8),
                         borderRadius: BorderRadius.circular(13),
                       ),
                     ),
@@ -101,10 +99,10 @@ class PresentWidget extends StatelessWidget {
                   left: currentModel.gradeValueSecond / currentModel.fullPrice * width,
                   child: SizedBox(
                     height: getHeight(context, 24),
-                    width: getWidth(context, 1.5),
+                    width: getWidth(context, 2),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(75, 175, 147, 0.5),
+                        color: const Color.fromRGBO(75, 175, 147, 0.8),
                         borderRadius: BorderRadius.circular(13),
                       ),
                     ),
@@ -115,8 +113,8 @@ class PresentWidget extends StatelessWidget {
                   children: [
                     Text(
                       isTop
-                          ? "  Собрано ${sumToString(currentModel.alreadyGet)} ₽"
-                          : "  ${sumToString(currentModel.alreadyGet)} ₽",
+                          ? "  Собрано ₽ ${sumToString(currentModel.alreadyGet)}"
+                          : " ₽ ${sumToString(currentModel.alreadyGet)}",
                       style: TextLocalStyles.roboto600.copyWith(
                         color: Colors.white,
                         fontSize: getHeight(context, 14),
@@ -124,8 +122,8 @@ class PresentWidget extends StatelessWidget {
                     ),
                     Text(
                       isTop
-                          ? "Осталось  ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)} ₽  "
-                          : "${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)} ₽  ",
+                          ? "Цена ₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)}  "
+                          : "₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)}   ",
                       style: TextLocalStyles.roboto600.copyWith(
                         color: Colors.white,
                         fontSize: getHeight(context, 14),

@@ -15,7 +15,7 @@ class PickUpDate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
           onTap?.call();
         },

@@ -96,7 +96,7 @@ class _Screen225State extends State<Screen225> {
               ],
             ),
             SizedBox(
-              height: getHeight(context, 45),
+              height: getHeight(context, 48),
             ),
             dateOfEvent(
               context,

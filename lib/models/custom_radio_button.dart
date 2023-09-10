@@ -71,14 +71,13 @@ class CustomRadioButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
         border: Border.all(
-          color: AppTheme.inactiveButtonBorderColor,
+          color: AppTheme.mainBlueColor,
           width: 1,
         ),
-        color: Colors.transparent,
       ),
       caption: caption,
       textStyle: TextLocalStyles.roboto500.copyWith(
-        color: AppTheme.inactiveButtonBorderColor,
+        color: AppTheme.mainBlueColor,
         fontSize: 16,
       ),
     );

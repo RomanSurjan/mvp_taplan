@@ -5,6 +5,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onTheme;
   final String name;
   final bool hasLightTheme;
+  final double? fontSize;
 
   const CustomAppBar({
     super.key,
@@ -12,53 +13,51 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onTheme,
     required this.name,
     this.hasLightTheme = true,
+    this.fontSize,
   });
 
   @override
   Widget build(BuildContext context) {
-
-
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
-        return AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: state.appBarColor,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: [
-              GradientAnimatedIconButton(
-                icon: 'assets/svg/arrow_back.svg',
-                onPressed: onBack ??
-                    () {
-                      Navigator.pop(context);
-                    },
+    return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
+      return AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GradientAnimatedIconButton(
+              icon: 'assets/svg/arrow_back.svg',
+              onPressed: onBack ??
+                  () {
+                    Navigator.pop(context);
+                  },
+            ),
+            Text(
+              name,
+              style: TextLocalStyles.roboto400.copyWith(
+                fontSize: fontSize ?? 18,
+                color: state.appBarTextColor,
+                height: 21.09 / 18,
               ),
-              Text(
-                name,
-                style: TextLocalStyles.roboto400.copyWith(
-                  fontSize: 18,
-                  color: state.appBarTextColor,
-                  height: 21.09 / 18,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              hasLightTheme
-                  ? GradientAnimatedIconButton(
-                      icon: state.isDark? 'assets/svg/charm_sun.svg' : 'assets/svg/moon.svg',
-                      onPressed: onTheme ?? () {
-                        context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
-                      },
-                    )
-                  : SizedBox(
-                      height: getHeight(context, 40),
-                      width: getHeight(context, 40),
-                    )
-            ],
-          ),
-        );
-      }
-    );
+              textAlign: TextAlign.center,
+            ),
+            hasLightTheme
+                ? GradientAnimatedIconButton(
+                    icon: state.isDark ? 'assets/svg/charm_sun.svg' : 'assets/svg/moon.svg',
+                    onPressed: onTheme ??
+                        () {
+                          context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
+                        },
+                  )
+                : SizedBox(
+                    height: getHeight(context, 40),
+                    width: getHeight(context, 40),
+                  )
+          ],
+        ),
+      );
+    });
   }
 
   @override
@@ -77,8 +76,6 @@ class GradientAnimatedIconButton extends StatefulWidget {
 }
 
 class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton> {
-
-
   int index = 0;
   bool isPressed = false;
 
@@ -142,7 +139,6 @@ class _GradientAnimatedIconButtonState extends State<GradientAnimatedIconButton>
           widget.onPressed.call();
           index = 0;
           isPressed = false;
-
 
           setState(() {});
         });

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+               BlueprintIdentifier = "33CC10EC2044A3C60003C048"
                BuildableName = "mvp_taplan.app"
                BlueprintName = "Runner"
                ReferencedContainer = "container:Runner.xcodeproj">
@@ -30,7 +30,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+            BlueprintIdentifier = "33CC10EC2044A3C60003C048"
             BuildableName = "mvp_taplan.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
@@ -64,7 +64,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+            BlueprintIdentifier = "33CC10EC2044A3C60003C048"
             BuildableName = "mvp_taplan.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
@@ -81,7 +81,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "33CC10EC2044A3C60003C045"
+            BlueprintIdentifier = "33CC10EC2044A3C60003C048"
             BuildableName = "mvp_taplan.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">

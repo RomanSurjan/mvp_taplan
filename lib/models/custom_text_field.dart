@@ -14,8 +14,6 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
   });
 
-
-
   @override
   Widget build(BuildContext context) {
     final OutlineInputBorder outlinedBorder = OutlineInputBorder(
@@ -23,26 +21,31 @@ class CustomTextField extends StatelessWidget {
         color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
         width: 1.2,
       ),
-      //borderRadius: BorderRadius.circular(8),
     );
     return SizedBox(
       height: height,
       width: width,
       child: TextField(
+        expands: true,
         style: TextLocalStyles.roboto400.copyWith(
           color: Colors.white,
           fontSize: getHeight(context, 16),
         ),
         cursorColor: const Color.fromRGBO(166, 173, 181, 1),
-        maxLines: maxLines,
+        maxLines: null,
+        textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
-          border: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(8)),
-          focusedBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(8)),
-          enabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(8)),
+          border: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(4)),
+          focusedBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(4)),
+          enabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(4)),
           hintText: hintText,
           hintStyle: TextLocalStyles.roboto400.copyWith(
             color: const Color.fromRGBO(166, 173, 181, 1),
             fontSize: getHeight(context, 16),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: getWidth(context, 10),
+            vertical: getHeight(context, 15)
           ),
           filled: true,
           fillColor: context.read<ThemeBloc>().state.dockColor,

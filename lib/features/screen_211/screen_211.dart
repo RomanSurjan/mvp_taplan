@@ -68,7 +68,7 @@ class _Screen211State extends State<Screen211> {
                     ),
                   ),
                   Text(
-                    '02 июля 2023',
+                    '${nowTime.day > 10 ? '${nowTime.day}': '0${nowTime.day}'} ${switchMonthToString(nowTime.month)} ${nowTime.year}',
                     style: TextLocalStyles.roboto500.copyWith(
                       color: state.timeScreenTextColor,
                       fontSize: 17,
@@ -157,7 +157,8 @@ class _Screen211State extends State<Screen211> {
                 children: [
                   const Expanded(child: SizedBox()),
                   MvpGradientButton(
-                    label: 'Подтвердить время\n$pickedTime',
+                    opacity: 0.3,
+                    label: 'Подтвердить\nвремя $pickedTime',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 164),
                     onTap: () {
@@ -172,6 +173,40 @@ class _Screen211State extends State<Screen211> {
         );
       }),
     );
+
+
+  }
+
+
+  String switchMonthToString(int month, {bool isNative = false}) {
+    switch (month) {
+      case 1:
+        return isNative ? 'Январь' : 'Января';
+      case 2:
+        return isNative ? 'Февраль' : 'Февраля';
+      case 3:
+        return isNative ? 'Март' : 'Марта';
+      case 4:
+        return isNative ? 'Апрель' : 'Апреля';
+      case 5:
+        return isNative ? 'Май' : 'Мая';
+      case 6:
+        return isNative ? 'Июнь' : 'Июня';
+      case 7:
+        return isNative ? 'Июль' : 'Июля';
+      case 8:
+        return isNative ? 'Август' : 'Августа';
+      case 9:
+        return isNative ? 'Сентябрь' : 'Сентября';
+      case 10:
+        return isNative ? 'Октябрь' : 'Октября';
+      case 11:
+        return isNative ? 'Ноябрь' : 'Ноября';
+      case 12:
+        return isNative ? 'Декабрь' : 'Декабря';
+      default:
+        return 'Ошибка';
+    }
   }
 
   @override

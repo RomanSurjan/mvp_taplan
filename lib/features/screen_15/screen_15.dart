@@ -9,12 +9,12 @@ import 'package:mvp_taplan/blocs/paymennt_bloc/payment_bloc.dart';
 import 'package:mvp_taplan/blocs/paymennt_bloc/payment_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
-import 'package:mvp_taplan/features/screen_228/screen_228.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Screen15 extends StatefulWidget {
   final MvpPresentModel currentModel;
@@ -40,16 +40,6 @@ class _Screen15State extends State<Screen15> {
     setState(() {});
   }
 
-  void getChecker() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final checker = prefs.getBool('checker');
-
-    if (checker != null) {
-      isPicked = checker;
-    }
-    setState(() {});
-  }
 
   void setChecker(bool checker) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,7 +51,6 @@ class _Screen15State extends State<Screen15> {
   void initState() {
     super.initState();
     getDock();
-    getChecker();
   }
 
   bool isPicked = false;
@@ -71,6 +60,7 @@ class _Screen15State extends State<Screen15> {
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
+      fontSize: 17,
       appBarLabel: 'Пользовательское соглашение\n(публичная оферта)',
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -80,7 +70,16 @@ class _Screen15State extends State<Screen15> {
           return Column(
             children: [
               SizedBox(
-                height: getHeight(context, 30),
+                height: getHeight(context, 5),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Image.asset(
+                  'assets/images/sk_logo_main.png',
+                ),
+              ),
+              SizedBox(
+                height: getHeight(context, 4),
               ),
               Image.asset(
                 state.logoPath,
@@ -139,7 +138,7 @@ class _Screen15State extends State<Screen15> {
                   InkWell(
                     onTap: () {
                       isPicked = !isPicked;
-                      setChecker(isPicked);
+                      //setChecker(isPicked);
                       setState(() {});
                     },
                     child: SizedBox(
@@ -177,9 +176,17 @@ class _Screen15State extends State<Screen15> {
               Row(
                 children: [
                   MvpGradientButton(
-                    label: 'Скачать\nв Pdf формате',
+                    opacity: 0.3,
+                    label: 'Скачать\nв pdf формате',
                     gradient: AppTheme.mainGreyGradient,
                     width: getWidth(context, 164),
+                    onTap: () async{
+                      final Uri url = Uri.parse('https://qviz.fun/media/agreement_v3/agreement.pdf/');
+                      if (!await launchUrl(url)) {
+                      throw Exception('Could not launch $url');
+                      }
+
+                    },
                   ),
                   SizedBox(
                     width: getWidth(context, 15),
@@ -201,12 +208,6 @@ class _Screen15State extends State<Screen15> {
                         );
                       } else {
                         context.read<PaymentBloc>().add(InitPaymentEvent(context.read<BuyTogetherBloc>().state.additionalSum));
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => Screen228(
-                                      currentModel: widget.currentModel,
-                                    )));
                       }
                     },
                   ),

@@ -78,58 +78,69 @@ class Screen30State extends State<Screen30> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<DateTimeBloc, DateTimeState>(
-        builder: (context, state) {
-          if (state.rangeToStream == null) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.mainGreenColor,
-              ),
-            );
-          }
+      body: SafeArea(
+        child: BlocBuilder<DateTimeBloc, DateTimeState>(
+          builder: (context, state) {
+            if (state.rangeToStream == null) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppTheme.mainGreenColor,
+                ),
+              );
+            }
 
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/bgImage.png'),
-                fit: BoxFit.cover,
-                alignment: Alignment(0.5, -0.66),
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/bgImage.png'),
+                  fit: BoxFit.cover,
+                  alignment: Alignment(0.5, -0.66),
+                ),
               ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      width: getWidth(context, 375),
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.fitWidth,
+              child: Stack(
+                children: [
+                  Positioned(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: getWidth(context, 375),
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          fit: BoxFit.fitWidth,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: getHeight(context, 154),
-                  right: getWidth(context, 7),
-                  child: myWishes(
-                    context,
-                    rangeToBirthday: range,
-                    rangeToStream: state.rangeToStream!,
+                  Positioned.fill(
+                    top: getHeight(context, 10),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Image.asset(
+                        'assets/images/sk_logo_main.png',
+                      ),
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: getHeight(context, 138),
-                  left: getWidth(context, 5),
-                  child: wishList(context),
-                ),
-              ],
-            ),
-          );
-        },
+                  Positioned(
+                    top: getHeight(context, 154),
+                    right: getWidth(context, 7),
+                    child: myWishes(
+                      context,
+                      rangeToBirthday: range,
+                      rangeToStream: state.rangeToStream!,
+                    ),
+                  ),
+                  Positioned(
+                    top: getHeight(context, 138),
+                    left: getWidth(context, 5),
+                    child: wishList(context),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -183,9 +194,11 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
         RotatedBox(
           quarterTurns: 2,
           child: InkWell(
-            onTap: ()  {
+            onTap: () {
               final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
-              context.read<PostcardBloc>().add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
+              context
+                  .read<PostcardBloc>()
+                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -243,8 +256,9 @@ Widget myDream(BuildContext context, DateTime range) {
           quarterTurns: 2,
           child: InkWell(
             onTap: () {
-
-              context.read<PostcardBloc>().add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+              context
+                  .read<PostcardBloc>()
+                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -263,7 +277,7 @@ Widget containerTimer(BuildContext context, int date, String label) {
     decoration: const BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          Color.fromRGBO(113, 115, 117, 1),
+          Color.fromRGBO(114, 114, 117, 1),
           Color.fromRGBO(157, 167, 176, 0.6),
         ],
         end: Alignment.topCenter,

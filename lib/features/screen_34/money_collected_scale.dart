@@ -20,22 +20,24 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(children: [
-          Text(
-            "Собрано ${sumToString(collected)} ₽",
-            style: TextLocalStyles.roboto600.copyWith(
-              fontSize: 16,
+        Row(
+          children: [
+            Text(
+              "Собрано ${sumToString(collected)} ₽",
+              style: TextLocalStyles.roboto600.copyWith(
+                fontSize: 16,
+              ),
             ),
-          ),
-          const Expanded(flex: 1, child: SizedBox(height: 1)),
-          Text(
-            "Осталось ${sumToString(leftToCollect)} ₽",
-            style: TextLocalStyles.roboto600.copyWith(
-              fontSize: 16,
-              color: AppTheme.mainPinkColor,
-            ),
-          )
-        ]),
+            const Expanded(flex: 1, child: SizedBox(height: 1)),
+            Text(
+              "Осталось ${sumToString(leftToCollect)} ₽",
+              style: TextLocalStyles.roboto600.copyWith(
+                fontSize: 16,
+                color: AppTheme.mainPinkColor,
+              ),
+            )
+          ],
+        ),
         Row(
           children: [
             Expanded(
@@ -49,8 +51,8 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
               ),
             ),
             Container(
-              width: 1,
-              height: 44,
+              width: getWidth(context, 1),
+              height: getHeight(context, 47),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(1.5),
                 color: AppTheme.mainGreenColor,
@@ -76,8 +78,8 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 1,
-                height: 44,
+                width: 0.6,
+                height: 40,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1.5),
                   color: AppTheme.mainGreenColor,

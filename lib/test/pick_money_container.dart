@@ -30,7 +30,7 @@ class PickMoneyContainer extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               color: const Color.fromRGBO(127, 164, 234, 1),
-              width: getWidth(context, 1),
+              width: getWidth(context, 3),
             ),
           ),
           child: Align(

@@ -49,6 +49,8 @@ class ShowcaseCard {
 
   final String id;
   final String photo;
+  final int invested;
+  final int total;
   final bool boughtEarly;
   final bool groupPurchase;
   final bool deliver;
@@ -56,6 +58,8 @@ class ShowcaseCard {
   ShowcaseCard({
     required this.id,
     required this.photo,
+    required this.invested,
+    required this.total,
     required this.boughtEarly,
     required this.groupPurchase,
     required this.deliver,
@@ -63,10 +67,12 @@ class ShowcaseCard {
 
   factory ShowcaseCard.fromJson(Map<String, dynamic> json){
     return ShowcaseCard(
-      id: json['id'],
-      photo: json["photo"],
+      id: json['id'] as String,
+      photo: json["photo"] as String,
+      invested: json["invested"] as int,
+      total: json["total"] as int,
       boughtEarly: json["bought_early"] != 0,
-      groupPurchase: json["group_purchase"],
+      groupPurchase: json["group_purchase"] as bool,
       deliver: json["deliver"] != 0,
     );
   }

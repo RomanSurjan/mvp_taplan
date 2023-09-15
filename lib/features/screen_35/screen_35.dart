@@ -44,6 +44,13 @@ class _Screen35State extends State<Screen35> {
         builder: (context,themeState) {
           return BlocBuilder<ShowcaseBloc, ShowcaseState>(
             builder: (context, state) {
+              double investedSum = 0;
+              double totalSum = 0;
+              for(var i in state.userModel.presents){
+                investedSum += i.invested;
+                totalSum += i.total;
+              }
+              final double alreadyGetSumPercentage = (investedSum / totalSum * 100);
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: getWidth(context, 16),
@@ -67,39 +74,41 @@ class _Screen35State extends State<Screen35> {
                             ),
                           ),
                         ),
-                        SizedBox(width: getWidth(context, 8)),
+                        SizedBox(
+                            width: getWidth(context, 8),
+                            height: getHeight(context, 62),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Наталья Фадеева',
-                              style: TextLocalStyles.roboto500.copyWith(
+                              state.userModel.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
                                 color: themeState.presentScreenLabelColor,
-                                height: 16.41 / 14,
-                                fontSize: 14,
+                                fontSize: 13.8,
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Ближайший праздник',
-                              style: TextLocalStyles.roboto600.copyWith(
-                                color: themeState.birthdayLabelShowcase,
-                                height: 16.41 / 14,
-                                fontSize: 14,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF7FA4EA),
+                                fontSize: 13.5,
+                                decoration: TextDecoration.underline
                               ),
                             ),
                             Text(
-                              'День рождения',
+                              state.userModel.celebrate.name,
                               style: TextLocalStyles.roboto400.copyWith(
                                 color: themeState.birthdayLabelShowcase,
-                                height: 14.06 / 12,
                                 fontSize: 12,
                               ),
                             ),
                             Text(
-                              '30.06 (27+ дней)',
+                              state.userModel.celebrate.date,
                               style: TextLocalStyles.roboto400.copyWith(
                                 color: themeState.secondaryTextColorShowcase,
-                                height: 14.06 / 12,
                                 fontSize: 12,
                               ),
                             ),
@@ -113,8 +122,8 @@ class _Screen35State extends State<Screen35> {
                             //setState(() {});
                           },
                           child: SizedBox(
-                            width: getWidth(context, 114),
-                            height: getHeight(context, 46),
+                            width: getWidth(context, 62),
+                            height: 62,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
@@ -129,16 +138,25 @@ class _Screen35State extends State<Screen35> {
                                   width: 1,
                                 ),
                               ),
-                              child: Center(
-                                child: Text(
-                                  'Желанные\nбукеты',
-                                  style: TextLocalStyles.roboto500.copyWith(
-                                    color: const Color.fromRGBO(82, 182, 154, 1),
-                                    fontSize: 14,
-                                    height: 16.41 / 14,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Намекнуть\nо желании',
+                                    style: TextLocalStyles.roboto500.copyWith(
+                                      color: const Color.fromRGBO(82, 182, 154, 1),
+                                      fontSize: 9.9,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
+                                  SizedBox(
+                                    child: SvgPicture.asset(
+                                      'assets/svg/share.svg',
+                                      color: const Color.fromRGBO(82, 182, 154, 1),
+                                      fit: BoxFit.fitHeight
+                                    )
+                                  )
+                                ]
                               ),
                             ),
                           ),
@@ -159,22 +177,22 @@ class _Screen35State extends State<Screen35> {
                                   height: getHeight(context, 128),
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                          state.listOfCards[i * 3 + j].photo,
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      // image: DecorationImage(
+                                      //   image: NetworkImage(
+                                      //     state.listOfCards[i * 3 + j].photo,
+                                      //   ),
+                                      //   fit: BoxFit.cover,
+                                      // ),
                                     ),
                                     child: Align(
                                       alignment: Alignment.center,
-                                      child: state.listOfCards[i * 3 + j].boughtEarly
-                                          ? boughtEarly(context)
-                                          : state.listOfCards[i * 3 + j].groupPurchase
-                                              ? groupBuy(context)
-                                              : state.listOfCards[i * 3 + j].deliver
-                                                  ? deliver(context)
-                                                  : null,
+                                      // child: state.listOfCards[i * 3 + j].boughtEarly
+                                      //     ? boughtEarly(context)
+                                      //     : state.listOfCards[i * 3 + j].groupPurchase
+                                      //         ? groupBuy(context)
+                                      //         : state.listOfCards[i * 3 + j].deliver
+                                      //             ? deliver(context)
+                                      //             : null,
                                     ),
                                   ),
                                 ),
@@ -189,8 +207,22 @@ class _Screen35State extends State<Screen35> {
                         ]
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Итого собрано $investedSum (${alreadyGetSumPercentage.toStringAsFixed(0)}%)",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFFA399D2),
+                            fontSize: 12,
+                          ),
+                        )
+                      ]
+
+                    ),
                     SizedBox(
-                      height: getHeight(context, 65),
+                      height: getHeight(context, 32),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

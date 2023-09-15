@@ -4,12 +4,21 @@ import 'package:mvp_taplan/blocs/showcase_bloc/showcase_event.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_state.dart';
 
 class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
-  ShowcaseBloc() : super(ShowcaseState(listOfCards: [])) {
+  ShowcaseBloc() : super(ShowcaseState(
+      userModel: UserModel(
+          celebrate: Celebrate(
+            id: 0,
+            name: '',
+            date: ''
+          ),
+          name: '',
+          presents: []
+      )
+  )) {
     on<GetShowcaseCardsEvent>(_onGetShowcase);
   }
 
   _onGetShowcase(GetShowcaseCardsEvent event, Emitter<ShowcaseState> emitter) async {
-    final listOfCards = <ShowcaseCard>[];
 
     final response = await Dio().post(
       'https://qviz.fun/api/v1/get/wishlist/',
@@ -19,22 +28,11 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
       },
     );
 
-
-    for (int i = 0; i < response.data.length; i++) {
-      listOfCards.add(
-        ShowcaseCard(
-          id: response.data["presents"][i]['id'],
-          photo: response.data["presents"][i]["photo"],
-          boughtEarly: response.data["presents"][i]["bought_early"] != 0,
-          groupPurchase: response.data["presents"][i]["group_purchase"],
-          deliver: response.data["presents"][i]["deliver"] != 0,
-        ),
-      );
-    }
+    final UserModel userModel = UserModel.fromJson(response.data);
 
     emitter(
       state.copyWith(
-        listOfCards: listOfCards,
+        userModel: userModel,
       ),
     );
   }

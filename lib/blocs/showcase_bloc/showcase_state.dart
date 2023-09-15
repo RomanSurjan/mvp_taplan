@@ -14,7 +14,7 @@ class UserModel {
     return UserModel(
       celebrate: Celebrate.fromJson(json['nearest_holiday'] as List<dynamic>),
       name: json['username'] as String,
-      presents: (json["presents"] as List<ShowcaseCard>).map((dynamic e) {
+      presents: (json["presents"] as List<dynamic>).map((dynamic e) {
         ShowcaseCard showcaseCard = ShowcaseCard.fromJson(e as Map<String, dynamic>);
         return showcaseCard;
       }).toList(),

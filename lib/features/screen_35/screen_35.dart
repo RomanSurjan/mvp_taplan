@@ -220,7 +220,9 @@ class _Screen35State extends State<Screen35> {
                       children: [
                         for(int i = 0; i< iconsForButtons.length; i++)
                         ButtonGroup(
-                          colorMain: const Color.fromRGBO(163, 153, 210, 1),
+                          colorMain: (catNumber - 1 == i)
+                              ? const Color.fromRGBO(82, 182, 154, 1)
+                              : const Color.fromRGBO(110, 210, 182, 1),
                           picture: iconsForButtons[i],
                           text: namesOfButtons[i],
                           isPressed: catNumber - 1 == i,

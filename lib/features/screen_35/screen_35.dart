@@ -6,6 +6,7 @@ import 'package:mvp_taplan/blocs/showcase_bloc/showcase_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_35/buttons_for_categories.dart';
+import 'package:mvp_taplan/features/screen_35/showcase_present_widget.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -50,7 +51,9 @@ class _Screen35State extends State<Screen35> {
                 investedSum += i.invested;
                 totalSum += i.total;
               }
-              final double alreadyGetSumPercentage = (investedSum / totalSum * 100);
+              final double investedSumPercentage = (investedSum / totalSum * 100);
+              final double cardWight = (MediaQuery.of(context).size.width - 36) / 3;
+              final double cardHeight = cardWight / 113 * 128;
               return Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: getWidth(context, 16),
@@ -172,29 +175,17 @@ class _Screen35State extends State<Screen35> {
                           Row(
                             children: [
                               for (int j = 0; j < 3; j++) ...[
-                                SizedBox(
-                                  width: getWidth(context, 114),
-                                  height: getHeight(context, 128),
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      // image: DecorationImage(
-                                      //   image: NetworkImage(
-                                      //     state.listOfCards[i * 3 + j].photo,
-                                      //   ),
-                                      //   fit: BoxFit.cover,
-                                      // ),
-                                    ),
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      // child: state.listOfCards[i * 3 + j].boughtEarly
-                                      //     ? boughtEarly(context)
-                                      //     : state.listOfCards[i * 3 + j].groupPurchase
-                                      //         ? groupBuy(context)
-                                      //         : state.listOfCards[i * 3 + j].deliver
-                                      //             ? deliver(context)
-                                      //             : null,
-                                    ),
-                                  ),
+                                ShowcasePresentWidget(
+                                  callback: (){},
+                                  id: state.userModel.presents[i * 3 + j].id,
+                                  photo: state.userModel.presents[i * 3 + j].photo,
+                                  invested: state.userModel.presents[i * 3 + j].invested,
+                                  total: state.userModel.presents[i * 3 + j].total,
+                                  boughtEarly: state.userModel.presents[i * 3 + j].boughtEarly,
+                                  groupPurchase: state.userModel.presents[i * 3 + j].groupPurchase,
+                                  deliver: state.userModel.presents[i * 3 + j].deliver,
+                                  height: cardHeight,
+                                  width: cardWight,
                                 ),
                                 if ((i * 3 + j) % 3 != 2)
                                   SizedBox(
@@ -203,7 +194,7 @@ class _Screen35State extends State<Screen35> {
                               ],
                             ],
                           ),
-                          SizedBox(height: getHeight(context, 2)),
+                          SizedBox(height: getHeight(context, 4)),
                         ]
                       ],
                     ),
@@ -211,7 +202,7 @@ class _Screen35State extends State<Screen35> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "Итого собрано $investedSum (${alreadyGetSumPercentage.toStringAsFixed(0)}%)",
+                          "Итого собрано $investedSum (${investedSumPercentage.toStringAsFixed(0)}%)",
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Color(0xFFA399D2),
@@ -222,7 +213,7 @@ class _Screen35State extends State<Screen35> {
 
                     ),
                     SizedBox(
-                      height: getHeight(context, 32),
+                      height: getHeight(context, 15),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -98,6 +98,9 @@ class ThemeState {
   Color get secondaryTextColorShowcase =>
       isDark ? const Color.fromRGBO(143, 153, 163, 1) : const Color.fromRGBO(98, 118, 132, 1);
 
+  Color get dotGreenColor =>
+      isDark ? AppTheme.mainGreenColor : const Color.fromRGBO(82, 182, 154, 1);
+
   List<Color> get calendarGradient => isDark
       ? [
           const Color.fromRGBO(70, 72, 81, 1),

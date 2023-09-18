@@ -236,7 +236,7 @@ class _Screen214State extends State<Screen214> {
                             gradient: AppTheme.mainGreenGradient,
                             width: getWidth(context, 109),
                             onTap: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => Screen215(

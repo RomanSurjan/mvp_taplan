@@ -2,31 +2,42 @@ part of 'models.dart';
 
 class MvpGradientButton extends StatelessWidget {
   final String label;
-  final LinearGradient gradient;
+  final LinearGradient? gradient;
   final double width;
   final double? height;
   final VoidCallback? onTap;
   final bool hasRichText;
   final String? secondLabel;
   final double? opacity;
+  final double? fontSize;
+  final double? heightFont;
+  final Color? textColor;
 
   const MvpGradientButton({
     super.key,
     required this.label,
-    required this.gradient,
+    this.gradient,
     required this.width,
     this.height,
     this.onTap,
     this.hasRichText = false,
     this.secondLabel,
     this.opacity,
+    this.fontSize,
+    this.heightFont,
+    this.textColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTap?.call();
+        Timer(
+          const Duration(milliseconds: 500),
+          () {
+            onTap?.call();
+          },
+        );
       },
       child: SizedBox(
         height: height ?? getHeight(context, 44),
@@ -49,11 +60,11 @@ class MvpGradientButton extends StatelessWidget {
             child: hasRichText
                 ? Text.rich(
                     style: TextLocalStyles.roboto600.copyWith(
-                      color: context.watch<ThemeBloc>().state.isDark
+                      color: textColor ?? (context.watch<ThemeBloc>().state.isDark
                           ? const Color.fromRGBO(110, 210, 182, 1)
-                          : const Color.fromRGBO(82, 182, 154, 1),
-                      fontSize: 13,
-                      height: 15.23 / 13,
+                          : const Color.fromRGBO(82, 182, 154, 1)),
+                      fontSize: fontSize ?? 13,
+                      height: heightFont ?? 15.23 / 13,
                     ),
                     TextSpan(
                       text: label,
@@ -62,8 +73,8 @@ class MvpGradientButton extends StatelessWidget {
                           text: secondLabel,
                           style: TextLocalStyles.roboto600.copyWith(
                             color: Colors.red,
-                            fontSize: 13,
-                            height: 15.23 / 13,
+                            fontSize: fontSize ?? 13,
+                            height: heightFont ?? 15.23 / 13,
                           ),
                         ),
                       ],
@@ -73,11 +84,11 @@ class MvpGradientButton extends StatelessWidget {
                 : Text(
                     label,
                     style: TextLocalStyles.roboto600.copyWith(
-                      color: context.watch<ThemeBloc>().state.isDark
+                      color: textColor ?? (context.watch<ThemeBloc>().state.isDark
                           ? const Color.fromRGBO(110, 210, 182, 1)
-                          : const Color.fromRGBO(82, 182, 154, 1),
-                      fontSize: 13,
-                      height: 15.23 / 13,
+                          : const Color.fromRGBO(82, 182, 154, 1)),
+                      fontSize: fontSize ?? 13,
+                      height: heightFont ?? 15.23 / 13,
                     ),
                     textAlign: TextAlign.center,
                   ),

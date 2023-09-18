@@ -74,7 +74,7 @@ class PresentWidget extends StatelessWidget {
                             end: Alignment.centerRight,
                             colors: [
                               AppTheme.wishListScaleRightColor,
-                              AppTheme.wishListScaleRightColor.withOpacity(0.6),
+                              AppTheme.wishListScaleRightColor.withOpacity(0.2),
                             ],
                           ),
                         ),
@@ -86,10 +86,10 @@ class PresentWidget extends StatelessWidget {
                   left: currentModel.gradeValueFirst / currentModel.fullPrice * width,
                   child: SizedBox(
                     height: getHeight(context, 24),
-                    width: getWidth(context, 2),
+                    width: getWidth(context, 1.5),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(75, 175, 147, 0.8),
+                        color: const Color.fromRGBO(110, 210, 182, 0.8),
                         borderRadius: BorderRadius.circular(13),
                       ),
                     ),
@@ -99,10 +99,10 @@ class PresentWidget extends StatelessWidget {
                   left: currentModel.gradeValueSecond / currentModel.fullPrice * width,
                   child: SizedBox(
                     height: getHeight(context, 24),
-                    width: getWidth(context, 2),
+                    width: getWidth(context, 1.5),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(75, 175, 147, 0.8),
+                        color: const Color.fromRGBO(110, 210, 182, 0.8),
                         borderRadius: BorderRadius.circular(13),
                       ),
                     ),
@@ -122,8 +122,8 @@ class PresentWidget extends StatelessWidget {
                     ),
                     Text(
                       isTop
-                          ? "Цена ₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)}  "
-                          : "₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet)}   ",
+                          ? "Цена ₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet > 0 ? currentModel.gradeValueFirst - currentModel.alreadyGet : currentModel.gradeValueSecond - currentModel.alreadyGet > 0 ? currentModel.gradeValueSecond - currentModel.alreadyGet : currentModel.gradeValueThird - currentModel.alreadyGet)}  "
+                          : "₽ ${sumToString(currentModel.gradeValueFirst - currentModel.alreadyGet > 0 ? currentModel.gradeValueFirst - currentModel.alreadyGet : currentModel.gradeValueSecond - currentModel.alreadyGet > 0 ? currentModel.gradeValueSecond - currentModel.alreadyGet : currentModel.gradeValueThird - currentModel.alreadyGet)}   ",
                       style: TextLocalStyles.roboto600.copyWith(
                         color: Colors.white,
                         fontSize: getHeight(context, 14),

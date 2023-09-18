@@ -9,6 +9,8 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 
+//import 'journal/features/main_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }

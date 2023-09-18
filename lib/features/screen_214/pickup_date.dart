@@ -40,7 +40,7 @@ class PickUpDate extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       fontFamily: 'Roboto',
                       color: context.read<ThemeBloc>().state.postcardContainerTextColor,
                     ),

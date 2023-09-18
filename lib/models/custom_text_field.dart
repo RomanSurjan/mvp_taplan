@@ -5,13 +5,14 @@ class CustomTextField extends StatelessWidget {
   final double width;
   final int? maxLines;
   final String? hintText;
+  final TextEditingController? controller;
 
   const CustomTextField({
     super.key,
     required this.height,
     required this.width,
     this.maxLines,
-    this.hintText,
+    this.hintText, this.controller,
   });
 
   @override
@@ -26,9 +27,10 @@ class CustomTextField extends StatelessWidget {
       height: height,
       width: width,
       child: TextField(
+        controller: controller,
         expands: true,
         style: TextLocalStyles.roboto400.copyWith(
-          color: Colors.white,
+          color:  const Color.fromRGBO(166, 173, 181, 1),
           fontSize: getHeight(context, 16),
         ),
         cursorColor: const Color.fromRGBO(166, 173, 181, 1),

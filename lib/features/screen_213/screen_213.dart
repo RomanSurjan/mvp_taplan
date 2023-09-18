@@ -44,6 +44,8 @@ class _Screen213State extends State<Screen213> {
 
   bool isVisible = false;
 
+  TextEditingController controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -71,7 +73,46 @@ class _Screen213State extends State<Screen213> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(
-                          top: getHeight(context, 20),
+                          top: getHeight(context, 14),
+                        ),
+                      ),
+                      PostCardViewWidget(
+                        currentIndex: i,
+                        onPageChanged: (index) {
+                          if (index > i) {
+                            i = index;
+                            currentHoliday = state.nameOfEvents[i];
+                            mapOfEvents.remove(state.nameOfEvents[i - 1]);
+                            mapOfEvents.addAll({
+                              state.nameOfEvents[i]: ['', '']
+                            });
+                          } else {
+                            i = index;
+                            currentHoliday = state.nameOfEvents[i];
+                            mapOfEvents.remove(state.nameOfEvents[i + 1]);
+                            mapOfEvents.addAll({
+                              state.nameOfEvents[i]: ['', '']
+                            });
+                          }
+
+                          setState(() {});
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 14),
+                        ),
+                      ),
+                      CustomTextField(
+                        height: getHeight(context, 180),
+                        width: getWidth(context, 343),
+                        hintText: 'Текст открытки',
+                        controller: controller,
+                        maxLines: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 16),
                         ),
                       ),
                       Padding(
@@ -99,6 +140,7 @@ class _Screen213State extends State<Screen213> {
                               text: 'Приложить\nк подарку',
                               hasStar: true,
                               isPressed: isPressedThird,
+                              isActive: widget.additionalSum >= 1000,
                               onTap: () {
                                 if (widget.additionalSum >= 1000) {
                                   isPressedThird = !isPressedThird;
@@ -111,34 +153,7 @@ class _Screen213State extends State<Screen213> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          top: getHeight(context, 5),
-                        ),
-                      ),
-                      PostCardViewWidget(
-                        currentIndex: i,
-                        onPageChanged: (index) {
-                          if (index > i) {
-                            i = index;
-                            currentHoliday = state.nameOfEvents[i];
-                            mapOfEvents.remove(state.nameOfEvents[i - 1]);
-                            mapOfEvents.addAll({
-                              state.nameOfEvents[i]: ['', '']
-                            });
-                          } else {
-                            i = index;
-                            currentHoliday = state.nameOfEvents[i];
-                            mapOfEvents.remove(state.nameOfEvents[i + 1]);
-                            mapOfEvents.addAll({
-                              state.nameOfEvents[i]: ['', '']
-                            });
-                          }
-
-                          setState(() {});
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: getHeight(context, 2),
+                          top: getHeight(context, 6),
                         ),
                       ),
                       Text(
@@ -149,17 +164,7 @@ class _Screen213State extends State<Screen213> {
                           height: 16.41 / 14,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: getHeight(context, 11),
-                        ),
-                      ),
-                      CustomTextField(
-                        height: getHeight(context, 180),
-                        width: getWidth(context, 343),
-                        hintText: 'Текст открытки',
-                        maxLines: 10,
-                      ),
+
                       Padding(
                         padding: EdgeInsets.only(
                           top: getHeight(context, 16),
@@ -174,7 +179,7 @@ class _Screen213State extends State<Screen213> {
                       MvpGradientButton(
                         onTap: () {
                           isVisible = true;
-                          Future.delayed(const Duration(milliseconds: 700),(){
+                          Future.delayed(const Duration(milliseconds: 700), () {
                             isVisible = false;
                             setState(() {});
                           });
@@ -209,7 +214,7 @@ class _Screen213State extends State<Screen213> {
                   ),
                   child: Center(
                     child: Text(
-                      'Сообщение сохранено',
+                      controller.text.isEmpty ? 'Сообщение не введено' : 'Сообщение сохранено',
                       style: TextLocalStyles.roboto500.copyWith(
                         fontSize: 14,
                         height: 16.41 / 14,

@@ -30,7 +30,7 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
             ),
             const Expanded(flex: 1, child: SizedBox(height: 1)),
             Text(
-              "Осталось ${sumToString(leftToCollect)} ₽",
+              "Осталось ${sumToString(leftToCollect > 0 ? leftToCollect : 0)} ₽",
               style: TextLocalStyles.roboto600.copyWith(
                 fontSize: 16,
                 color: AppTheme.mainPinkColor,
@@ -87,7 +87,7 @@ class MoneyCollectedScaleWidget extends StatelessWidget {
               ),
             ],
             Expanded(
-              flex: leftToCollect - additionalSum,
+              flex: leftToCollect - additionalSum > 0 ? leftToCollect - additionalSum : 0,
               child: Container(
                 height: 38,
                 decoration: const BoxDecoration(

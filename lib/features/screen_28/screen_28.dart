@@ -428,29 +428,29 @@ class _Screen28State extends State<Screen28> {
   String switchMonthToString(int month, {bool isNative = false}) {
     switch (month) {
       case 1:
-        return isNative ? 'Январь' : 'Января';
+        return isNative ? 'Январь' : 'января';
       case 2:
-        return isNative ? 'Февраль' : 'Февраля';
+        return isNative ? 'Февраль' : 'февраля';
       case 3:
-        return isNative ? 'Март' : 'Марта';
+        return isNative ? 'Март' : 'марта';
       case 4:
-        return isNative ? 'Апрель' : 'Апреля';
+        return isNative ? 'Апрель' : 'апреля';
       case 5:
-        return isNative ? 'Май' : 'Мая';
+        return isNative ? 'Май' : 'мая';
       case 6:
-        return isNative ? 'Июнь' : 'Июня';
+        return isNative ? 'Июнь' : 'июня';
       case 7:
-        return isNative ? 'Июль' : 'Июля';
+        return isNative ? 'Июль' : 'июля';
       case 8:
-        return isNative ? 'Август' : 'Августа';
+        return isNative ? 'Август' : 'августа';
       case 9:
-        return isNative ? 'Сентябрь' : 'Сентября';
+        return isNative ? 'Сентябрь' : 'сентября';
       case 10:
-        return isNative ? 'Октябрь' : 'Октября';
+        return isNative ? 'Октябрь' : 'октября';
       case 11:
-        return isNative ? 'Ноябрь' : 'Ноября';
+        return isNative ? 'Ноябрь' : 'ноября';
       case 12:
-        return isNative ? 'Декабрь' : 'Декабря';
+        return isNative ? 'Декабрь' : 'декабря';
       default:
         return 'Ошибка';
     }

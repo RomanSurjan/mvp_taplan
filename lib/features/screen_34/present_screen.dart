@@ -42,7 +42,7 @@ class PresentScreen extends StatefulWidget {
 }
 
 class PresentScreenState extends State<PresentScreen> {
-  DateTime dateOfBorn = DateTime(2024, 5, 17, 0);
+  DateTime dateOfBorn = DateTime(2024, 5, 17, 20);
   late BuyingOption buyingOption = widget.buyingOption;
   late Timer update;
 
@@ -333,7 +333,6 @@ class PresentScreenState extends State<PresentScreen> {
                                     case 4:
                                       additionalSum = widget.fourthAmount;
                                   }
-                                  sumController.clear();
                                   setState(() {});
                                 },
                               ),

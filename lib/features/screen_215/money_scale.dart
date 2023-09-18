@@ -77,8 +77,8 @@ class MoneyScale extends StatelessWidget {
                                 ),
                               ),
                               Container(
-                                height: getHeight(context, 48),
-                                width: getWidth(context, 3),
+                                height: getHeight(context, 46),
+                                width: getWidth(context, 2),
                                 decoration: BoxDecoration(
                                   gradient: AppTheme.moneyScaleStickColor,
                                   borderRadius: BorderRadius.circular(13),
@@ -132,8 +132,8 @@ class MoneyScale extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -156,8 +156,8 @@ class MoneyScale extends StatelessWidget {
                             ),
 
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -204,8 +204,8 @@ class MoneyScale extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -226,8 +226,8 @@ class MoneyScale extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -260,8 +260,8 @@ class MoneyScale extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -354,8 +354,8 @@ class MoneyScale extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -381,8 +381,8 @@ class MoneyScale extends StatelessWidget {
                           ),
 
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -428,8 +428,8 @@ class MoneyScale extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -487,8 +487,8 @@ class MoneyScale extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: getHeight(context, 48),
-                              width: getWidth(context, 3),
+                              height: getHeight(context, 46),
+                              width: getWidth(context, 2),
                               decoration: BoxDecoration(
                                 gradient: AppTheme.moneyScaleStickColor,
                                 borderRadius: BorderRadius.circular(13),
@@ -597,8 +597,8 @@ class MoneyScale extends StatelessWidget {
                           ),
 
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -623,8 +623,8 @@ class MoneyScale extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -671,8 +671,8 @@ class MoneyScale extends StatelessWidget {
                           ),
 
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -716,8 +716,8 @@ class MoneyScale extends StatelessWidget {
                       ),
 
                       Container(
-                        height: getHeight(context, 48),
-                        width: getWidth(context, 3),
+                        height: getHeight(context, 46),
+                        width: getWidth(context, 2),
                         decoration: BoxDecoration(
                           gradient: AppTheme.moneyScaleStickColor,
                           borderRadius: BorderRadius.circular(13),
@@ -742,8 +742,8 @@ class MoneyScale extends StatelessWidget {
                           ),
 
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),
@@ -764,8 +764,8 @@ class MoneyScale extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: getHeight(context, 48),
-                            width: getWidth(context, 3),
+                            height: getHeight(context, 46),
+                            width: getWidth(context, 2),
                             decoration: BoxDecoration(
                               gradient: AppTheme.moneyScaleStickColor,
                               borderRadius: BorderRadius.circular(13),

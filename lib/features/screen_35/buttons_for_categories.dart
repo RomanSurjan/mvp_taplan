@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
-import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
 class ButtonGroup extends StatelessWidget {
@@ -33,8 +32,8 @@ class ButtonGroup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: getHeight(context, 62),
-            height: getHeight(context, 62),
+            width: 62,
+            height: 62,
             decoration: BoxDecoration(
               color: colorMain,
               borderRadius: BorderRadius.circular(10),
@@ -60,10 +59,10 @@ class ButtonGroup extends StatelessWidget {
             child: SvgPicture.asset(
               picture,
               colorFilter: ColorFilter.mode(
-                isPressed ? Colors.white : const Color.fromRGBO(147, 136, 204, 1),
+                isPressed ? Colors.white : const Color.fromRGBO(66, 157, 132, 1),
                 BlendMode.srcIn,
               ),
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.fill,
             ),
           ),
           const SizedBox(

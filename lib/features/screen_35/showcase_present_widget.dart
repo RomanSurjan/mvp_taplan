@@ -17,9 +17,8 @@ class ShowcasePresentWidget extends StatelessWidget {
   final bool deliver;
   final double height;
   final double width;
-  late double investedPercentage;
 
-  ShowcasePresentWidget({
+  const ShowcasePresentWidget({
     super.key,
     required this.callback,
     required this.id,
@@ -35,7 +34,7 @@ class ShowcasePresentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    investedPercentage = (invested / total * 100);
+    double investedPercentage = (invested / total * 100);
     return InkWell(
       onTap: () {
         callback?.call();

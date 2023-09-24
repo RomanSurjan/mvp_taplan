@@ -17,9 +17,8 @@ class ShowcasePresentWidget extends StatelessWidget {
   final bool deliver;
   final double height;
   final double width;
-  late double investedPercentage;
 
-  ShowcasePresentWidget({
+  const ShowcasePresentWidget({
     super.key,
     required this.callback,
     required this.id,
@@ -31,12 +30,11 @@ class ShowcasePresentWidget extends StatelessWidget {
     required this.deliver,
     required this.height,
     required this.width,
-  }){
-    investedPercentage = (invested / total * 100);
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
+    double investedPercentage = (invested / total * 100);
     return InkWell(
       onTap: () {
         callback?.call();
@@ -209,7 +207,10 @@ class SocialIcon extends StatelessWidget {
             width: 14,
             child: SvgPicture.asset(
                 icon,
-                color: color,
+                colorFilter: ColorFilter.mode(
+                  color,
+                  BlendMode.srcIn
+                ),
                 fit: BoxFit.fitHeight
             )
         ),

@@ -52,11 +52,12 @@ class _Screen35State extends State<Screen35> {
                 totalSum += i.total;
               }
               final double investedSumPercentage = (investedSum / totalSum * 100);
-              final double cardWight = (MediaQuery.of(context).size.width - 36) / 3;
+              final double cardWight = (MediaQuery.of(context).size.width - 38) / 3;
               final double cardHeight = cardWight / 113 * 128;
+              final buttonSize = MediaQuery.of(context).size.width / 375 * 62;
               return Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: getWidth(context, 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
                 ),
                 child: Column(
                   children: [
@@ -155,7 +156,10 @@ class _Screen35State extends State<Screen35> {
                                   SizedBox(
                                     child: SvgPicture.asset(
                                       'assets/svg/share.svg',
-                                      color: const Color.fromRGBO(82, 182, 154, 1),
+                                      colorFilter: const ColorFilter.mode(
+                                        Color.fromRGBO(82, 182, 154, 1),
+                                        BlendMode.srcIn
+                                      ),
                                       fit: BoxFit.fitHeight
                                     )
                                   )
@@ -225,6 +229,7 @@ class _Screen35State extends State<Screen35> {
                               : const Color.fromRGBO(110, 210, 182, 1),
                           picture: iconsForButtons[i],
                           text: namesOfButtons[i],
+                          size: buttonSize,
                           isPressed: catNumber - 1 == i,
                           onTap: () {},
                         )

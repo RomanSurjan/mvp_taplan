@@ -10,6 +10,7 @@ class ButtonGroup extends StatelessWidget {
   final Color colorMain;
   final String picture;
   final String text;
+  final double size;
   final bool isPressed;
   final VoidCallback? onTap;
 
@@ -18,6 +19,7 @@ class ButtonGroup extends StatelessWidget {
     required this.colorMain,
     required this.picture,
     required this.text,
+    required this.size,
     required this.isPressed,
     this.onTap,
   });
@@ -32,8 +34,8 @@ class ButtonGroup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 62,
-            height: 62,
+            width: size,
+            height: size,
             decoration: BoxDecoration(
               color: colorMain,
               borderRadius: BorderRadius.circular(10),

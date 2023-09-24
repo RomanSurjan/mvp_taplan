@@ -170,27 +170,7 @@ class PresentScreenState extends State<PresentScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: getHeight(context, 10),
-                    ),
-                  ),
-                  MoneyCollectedScaleWidget(
-                    collected: additionalSum + carModel.alreadyGet > carModel.gradeValueFirst
-                        ? carModel.alreadyGet + additionalSum
-                        : additionalSum + carModel.alreadyGet > carModel.gradeValueSecond
-                            ? carModel.alreadyGet + additionalSum
-                            : additionalSum + carModel.alreadyGet > carModel.gradeValueThird
-                                ? carModel.alreadyGet + additionalSum
-                                : carModel.alreadyGet,
-                    total: additionalSum + carModel.alreadyGet < carModel.gradeValueFirst
-                        ? carModel.gradeValueFirst
-                        : additionalSum + carModel.alreadyGet < carModel.gradeValueSecond
-                            ? carModel.gradeValueSecond
-                            : carModel.gradeValueThird,
-                    additionalSum: additionalSum,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: getHeight(context, 5),
+                      top: getHeight(context, 6),
                     ),
                   ),
                   Container(
@@ -317,8 +297,8 @@ class PresentScreenState extends State<PresentScreen> {
 
                                   (sumController.text == "₽  ")
                                       ? sumController.value = sumController.value.copyWith(
-                                          text: "",
-                                        )
+                                    text: "",
+                                  )
                                       : null;
                                   switch (amountIndex) {
                                     case 1:
@@ -355,7 +335,7 @@ class PresentScreenState extends State<PresentScreen> {
                                 isActive: buyingOption == BuyingOption.buyTogether,
                                 onChanged: (index) {
                                   setState(
-                                    () {
+                                        () {
                                       amountIndex = index;
                                       additionalSum = widget.secondAmount;
                                     },
@@ -392,6 +372,26 @@ class PresentScreenState extends State<PresentScreen> {
                         ],
                       ),
                     ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: getHeight(context, 7),
+                    ),
+                  ),
+                  MoneyCollectedScaleWidget(
+                    collected: additionalSum + carModel.alreadyGet > carModel.gradeValueFirst
+                        ? carModel.alreadyGet + additionalSum
+                        : additionalSum + carModel.alreadyGet > carModel.gradeValueSecond
+                        ? carModel.alreadyGet + additionalSum
+                        : additionalSum + carModel.alreadyGet > carModel.gradeValueThird
+                        ? carModel.alreadyGet + additionalSum
+                        : carModel.alreadyGet,
+                    total: additionalSum + carModel.alreadyGet < carModel.gradeValueFirst
+                        ? carModel.gradeValueFirst
+                        : additionalSum + carModel.alreadyGet < carModel.gradeValueSecond
+                        ? carModel.gradeValueSecond
+                        : carModel.gradeValueThird,
+                    additionalSum: additionalSum,
                   ),
                   Padding(
                     padding: EdgeInsets.only(

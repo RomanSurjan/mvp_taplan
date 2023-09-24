@@ -32,11 +32,27 @@ class PresentWidget extends StatelessWidget {
       },
       child: Column(
         children: [
-          Image.network(
-            isTop ? currentModel.bigImage : currentModel.smallImage,
-            fit: BoxFit.cover,
+          Container(
             width: width,
             height: height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                    isTop ? currentModel.bigImage : currentModel.smallImage,
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: isTop? Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                'До уровня \"Премиум\" осталось ₽ ${sumToString(currentModel.gradeValueSecond - currentModel.alreadyGet)}',
+                style: TextLocalStyles.roboto600.copyWith(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ): null,
           ),
           const SizedBox(height: 1),
           SizedBox(

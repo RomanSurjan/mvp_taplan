@@ -29,7 +29,7 @@ class Screen30 extends StatefulWidget {
 
 class Screen30State extends State<Screen30> {
   var flagForTip = false;
-  DateTime dateOfBorn = DateTime(2024, 5, 17, 0);
+  DateTime dateOfBorn = DateTime(2024, 5, 17, 20);
 
   var isFirst = false;
   bool isTaped = false;
@@ -69,10 +69,6 @@ class Screen30State extends State<Screen30> {
     update.cancel();
 
     super.dispose();
-  }
-
-  void setStateIfMounted(f) {
-    if (mounted) setState(f);
   }
 
   @override

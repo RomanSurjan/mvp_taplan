@@ -43,6 +43,7 @@ class _Screen213State extends State<Screen213> {
   bool isPressedThird = false;
 
   bool isVisible = false;
+  bool isMainButtonActive = false;
 
   TextEditingController controller = TextEditingController();
 
@@ -50,6 +51,7 @@ class _Screen213State extends State<Screen213> {
   void initState() {
     super.initState();
 
+    isMainButtonActive = controller.text.isNotEmpty;
     currentHoliday = context.read<PostcardBloc>().state.mapOfEvents.keys.first;
   }
 
@@ -104,11 +106,26 @@ class _Screen213State extends State<Screen213> {
                         ),
                       ),
                       CustomTextField(
-                        height: getHeight(context, 180),
+                        height: getHeight(context, 100),
                         width: getWidth(context, 343),
                         hintText: 'Текст открытки',
                         controller: controller,
                         maxLines: 10,
+                        onChanged: (value) {
+                          isMainButtonActive = controller.text.isNotEmpty;
+                          setState(() {});
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: getHeight(context, 6),
+                        ),
+                      ),
+                      CustomTextField(
+                        height: getHeight(context, 37),
+                        width: getWidth(context, 343),
+                        hintText: 'Подпись',
+                        maxLines: 1,
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -164,7 +181,6 @@ class _Screen213State extends State<Screen213> {
                           height: 16.41 / 14,
                         ),
                       ),
-
                       Padding(
                         padding: EdgeInsets.only(
                           top: getHeight(context, 16),
@@ -176,21 +192,27 @@ class _Screen213State extends State<Screen213> {
                           top: getHeight(context, 16),
                         ),
                       ),
-                      MvpGradientButton(
+                      PostcardButton(
+                        fontSize: 15,
+                        fontHeight: 17.58 / 15,
+                        isActive: isMainButtonActive,
                         onTap: () {
                           isVisible = true;
-                          Future.delayed(const Duration(milliseconds: 700), () {
+                          Future.delayed(const Duration(milliseconds: 900), () {
                             isVisible = false;
                             setState(() {});
                           });
                           setState(() {});
-                          //Navigator.pop(context);
+                          if (isMainButtonActive) {
+                            Future.delayed(const Duration(milliseconds: 1100), () {
+                              Navigator.pop(context);
+                            });
+                          }
                         },
-                        label:
-                            'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
-                        gradient: AppTheme.mainGreenGradient,
                         width: getWidth(context, 348),
                         height: getHeight(context, 46),
+                        text:
+                            'Опубликовать в назначенное время и/или\nприложить открытку к подарку',
                       ),
                     ],
                   );

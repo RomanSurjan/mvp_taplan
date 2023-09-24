@@ -68,7 +68,7 @@ class _Screen211State extends State<Screen211> {
                     ),
                   ),
                   Text(
-                    '${nowTime.day > 10 ? '${nowTime.day}': '0${nowTime.day}'} ${switchMonthToString(nowTime.month)} ${nowTime.year}',
+                    '${nowTime.day > 10 ? '${nowTime.day}' : '0${nowTime.day}'} ${switchMonthToString(nowTime.month)} ${nowTime.year}',
                     style: TextLocalStyles.roboto500.copyWith(
                       color: state.timeScreenTextColor,
                       fontSize: 17,
@@ -88,14 +88,22 @@ class _Screen211State extends State<Screen211> {
               child: ColoredBox(
                 color: state.dockColor,
                 child: CupertinoTheme(
-                  data:  CupertinoThemeData(
+                  data: CupertinoThemeData(
                     textTheme: CupertinoTextThemeData(
                       dateTimePickerTextStyle: TextStyle(
-                        color: state.isDark? Colors.white : Colors.black,
+                        color: state.isDark ? Colors.white : Colors.black,
                       ),
                     ),
                   ),
                   child: CupertinoDatePicker(
+                    initialDateTime: DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                      DateTime.now().hour,
+                      DateTime.now().minute + (5 - DateTime.now().minute % 5),
+                    ),
+                    minuteInterval: 5,
                     onDateTimeChanged: (DateTime value) {
                       pickedTime =
                           '${value.hour} : ${value.minute < 10 ? '0${value.minute}' : '${value.minute}'}';
@@ -173,10 +181,7 @@ class _Screen211State extends State<Screen211> {
         );
       }),
     );
-
-
   }
-
 
   String switchMonthToString(int month, {bool isNative = false}) {
     switch (month) {

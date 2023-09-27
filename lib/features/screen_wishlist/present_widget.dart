@@ -46,7 +46,7 @@ class PresentWidget extends StatelessWidget {
             child: isTop? Align(
               alignment: Alignment.bottomCenter,
               child: Text(
-                'До уровня \"Премиум\" осталось ₽ ${sumToString(currentModel.gradeValueSecond - currentModel.alreadyGet)}',
+                'До уровня "Премиум" осталось ₽ ${sumToString(currentModel.gradeValueSecond - currentModel.alreadyGet)}',
                 style: TextLocalStyles.roboto600.copyWith(
                   color: Colors.white,
                   fontSize: 16,

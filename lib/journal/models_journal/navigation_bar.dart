@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
 import 'package:mvp_taplan/models/models.dart';
 
 class CustomNavigationBar extends StatelessWidget {
@@ -28,7 +29,17 @@ class CustomNavigationBar extends StatelessWidget {
         children: [
           for (int i = 0; i < svgForBar.length; i++)
             if (i != 2)
-              rectangleMainBarItem(context, svg: svgForBar[i])
+              InkWell(
+                onTap: (){
+                  if(i == 4){
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const Screen38()));
+                  }
+                },
+                child: rectangleMainBarItem(
+                  context,
+                  svg: svgForBar[i],
+                ),
+              )
             else
               circleMainBarItem(context, svg: svgForBar[i])
         ],

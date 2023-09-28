@@ -113,7 +113,7 @@ class ShowcasePresentWidget extends StatelessWidget {
               )
             ]
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 1),
           SizedBox(
             width: width,
             child: Stack(

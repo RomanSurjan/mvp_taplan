@@ -61,8 +61,11 @@ class _Screen35State extends State<Screen35> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: getHeight(context, 17),
+                    const Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        width: 1,
+                      )
                     ),
                     Row(
                       children: [
@@ -126,7 +129,7 @@ class _Screen35State extends State<Screen35> {
                             //setState(() {});
                           },
                           child: SizedBox(
-                            width: getWidth(context, 62),
+                            width: 62,
                             height: 62,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
@@ -170,8 +173,11 @@ class _Screen35State extends State<Screen35> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: getHeight(context, 16),
+                    const Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          width: 1,
+                        )
                     ),
                     Column(
                       children: [
@@ -216,8 +222,11 @@ class _Screen35State extends State<Screen35> {
                       ]
 
                     ),
-                    SizedBox(
-                      height: getHeight(context, 15),
+                    const Expanded(
+                        flex: 1,
+                        child: SizedBox(
+                          width: 1,
+                        )
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,6 +243,9 @@ class _Screen35State extends State<Screen35> {
                           onTap: () {},
                         )
                       ],
+                    ),
+                    const SizedBox(
+                      height: 3
                     )
                   ],
                 ),

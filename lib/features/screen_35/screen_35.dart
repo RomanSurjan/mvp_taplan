@@ -51,204 +51,216 @@ class _Screen35State extends State<Screen35> {
                 investedSum += i.invested;
                 totalSum += i.total;
               }
+
+              // Соотношение сторон у части экрана с полезным содержимым 1 к 1.784,
+              // Если оно меньше, то по бокам добавляем пустые поля,
+              // размер которых рассчитывается ниже.
+
+              // Определяем достаточное ли соотношение сторон
+              final bool isPortraitOrientation = (
+                  (MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) > 1.784);
+              // Определяем ширину полезной части. Остальное займут пустые поля.
+              final double columnWidth = (isPortraitOrientation)
+                  ? MediaQuery.of(context).size.width
+                  : (MediaQuery.of(context).size.height / 1.792);
               final double investedSumPercentage = (investedSum / totalSum * 100);
-              final double cardWight = (MediaQuery.of(context).size.width - 38) / 3;
+              final double cardWight = (columnWidth - 38) / 3;
               final double cardHeight = cardWight / 113 * 128;
-              final buttonSize = MediaQuery.of(context).size.width / 375 * 62;
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                ),
-                child: Column(
-                  children: [
-                    const Expanded(
-                      flex: 1,
-                      child: SizedBox(
-                        width: 1,
-                      )
+              final buttonSize = columnWidth / 375 * 62;
+              return Row (
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: columnWidth,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
                     ),
-                    Row(
+                    child: Column(
                       children: [
-                        SizedBox(
-                          height: getHeight(context, 54),
-                          width: getHeight(context, 54),
-                          child: const DecoratedBox(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/img.png'),
-                              ),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+                        const Expanded(
+                          flex: 1,
+                          child: SizedBox()
                         ),
-                        SizedBox(
-                            width: getWidth(context, 8),
-                            height: getHeight(context, 62),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
                           children: [
-                            Text(
-                              state.userModel.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: themeState.presentScreenLabelColor,
-                                fontSize: 13.8,
+                            const SizedBox(
+                              height: 54,
+                              width: 54,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/img.png'),
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                            const Text(
-                              'Ближайший праздник',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF7FA4EA),
-                                fontSize: 13.5,
-                                decoration: TextDecoration.underline
-                              ),
+                            const SizedBox(
+                              width: 8,
+                              height: 62,
                             ),
-                            Text(
-                              state.userModel.celebrate.name,
-                              style: TextLocalStyles.roboto400.copyWith(
-                                color: themeState.birthdayLabelShowcase,
-                                fontSize: 12,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  state.userModel.name,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: themeState.presentScreenLabelColor,
+                                    fontSize: 13.8,
+                                  ),
+                                ),
+                                const Text(
+                                  'Ближайший праздник',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF7FA4EA),
+                                    fontSize: 13.5,
+                                    decoration: TextDecoration.underline
+                                  ),
+                                ),
+                                Text(
+                                  state.userModel.celebrate.name,
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    color: themeState.birthdayLabelShowcase,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                Text(
+                                  state.userModel.celebrate.date,
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    color: themeState.secondaryTextColorShowcase,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              state.userModel.celebrate.date,
-                              style: TextLocalStyles.roboto400.copyWith(
-                                color: themeState.secondaryTextColorShowcase,
-                                fontSize: 12,
+                            const Expanded(child: SizedBox()),
+                            InkWell(
+                              onTap: (){
+                                //context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(2));
+                                //catNumber = 0;
+                                //setState(() {});
+                              },
+                              child: SizedBox(
+                                width: 62,
+                                height: 62,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromRGBO(98, 198, 170, 0.1),
+                                        Color.fromRGBO(68, 168, 140, 0.1),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(98, 198, 170, 1),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Намекнуть\nо желании',
+                                        style: TextLocalStyles.roboto500.copyWith(
+                                          color: const Color.fromRGBO(82, 182, 154, 1),
+                                          fontSize: 10,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        child: SvgPicture.asset(
+                                          'assets/svg/share.svg',
+                                          colorFilter: const ColorFilter.mode(
+                                            Color.fromRGBO(82, 182, 154, 1),
+                                            BlendMode.srcIn
+                                          ),
+                                          fit: BoxFit.fitHeight
+                                        )
+                                      )
+                                    ]
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const Expanded(child: SizedBox()),
-                        InkWell(
-                          onTap: (){
-                            //context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(2));
-                            //catNumber = 0;
-                            //setState(() {});
-                          },
-                          child: SizedBox(
-                            width: 62,
-                            height: 62,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color.fromRGBO(98, 198, 170, 0.1),
-                                    Color.fromRGBO(68, 168, 140, 0.1),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: const Color.fromRGBO(98, 198, 170, 1),
-                                  width: 1,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        const Expanded(
+                          flex: 1,
+                          child: SizedBox()
+                        ),
+                        const SizedBox(height: 3),
+                        Column(
+                          children: [
+                            for (int i = 0; i < 3; i++) ...[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Намекнуть\nо желании',
-                                    style: TextLocalStyles.roboto500.copyWith(
-                                      color: const Color.fromRGBO(82, 182, 154, 1),
-                                      fontSize: 9.9,
+                                  for (int j = 0; j < 3; j++) ...[
+                                    ShowcasePresentWidget(
+                                      callback: (){},
+                                      id: state.userModel.presents[i * 3 + j].id,
+                                      photo: state.userModel.presents[i * 3 + j].photo,
+                                      invested: state.userModel.presents[i * 3 + j].invested,
+                                      total: state.userModel.presents[i * 3 + j].total,
+                                      boughtEarly: state.userModel.presents[i * 3 + j].boughtEarly,
+                                      groupPurchase: state.userModel.presents[i * 3 + j].groupPurchase,
+                                      deliver: state.userModel.presents[i * 3 + j].deliver,
+                                      height: cardHeight,
+                                      width: cardWight,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(
-                                    child: SvgPicture.asset(
-                                      'assets/svg/share.svg',
-                                      colorFilter: const ColorFilter.mode(
-                                        Color.fromRGBO(82, 182, 154, 1),
-                                        BlendMode.srcIn
-                                      ),
-                                      fit: BoxFit.fitHeight
-                                    )
-                                  )
-                                ]
+                                  ],
+                                ],
                               ),
-                            ),
-                          ),
+                              const SizedBox(height: 4),
+                            ]
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Итого собрано $investedSum (${investedSumPercentage.toStringAsFixed(0)}%)",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFA399D2),
+                                fontSize: 12,
+                              ),
+                            )
+                          ]
+                        ),
+                        const Expanded(
+                          flex: 1,
+                          child: SizedBox()
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            for(int i = 0; i< iconsForButtons.length; i++)
+                              ButtonGroup(
+                                colorMain: (catNumber - 1 == i)
+                                    ? const Color.fromRGBO(82, 182, 154, 1)
+                                    : const Color.fromRGBO(110, 210, 182, 1),
+                                picture: iconsForButtons[i],
+                                text: namesOfButtons[i],
+                                size: buttonSize,
+                                isPressed: catNumber - 1 == i,
+                                onTap: () {},
+                              )
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                        const Expanded(
+                          flex: 1,
+                          child: SizedBox()
                         ),
                       ],
                     ),
-                    const Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          width: 1,
-                        )
-                    ),
-                    Column(
-                      children: [
-                        for (int i = 0; i < 3; i++) ...[
-                          Row(
-                            children: [
-                              for (int j = 0; j < 3; j++) ...[
-                                ShowcasePresentWidget(
-                                  callback: (){},
-                                  id: state.userModel.presents[i * 3 + j].id,
-                                  photo: state.userModel.presents[i * 3 + j].photo,
-                                  invested: state.userModel.presents[i * 3 + j].invested,
-                                  total: state.userModel.presents[i * 3 + j].total,
-                                  boughtEarly: state.userModel.presents[i * 3 + j].boughtEarly,
-                                  groupPurchase: state.userModel.presents[i * 3 + j].groupPurchase,
-                                  deliver: state.userModel.presents[i * 3 + j].deliver,
-                                  height: cardHeight,
-                                  width: cardWight,
-                                ),
-                                if ((i * 3 + j) % 3 != 2)
-                                  SizedBox(
-                                    width: getWidth(context, 2),
-                                  )
-                              ],
-                            ],
-                          ),
-                          SizedBox(height: getHeight(context, 4)),
-                        ]
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Итого собрано $investedSum (${investedSumPercentage.toStringAsFixed(0)}%)",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFFA399D2),
-                            fontSize: 12,
-                          ),
-                        )
-                      ]
-
-                    ),
-                    const Expanded(
-                        flex: 1,
-                        child: SizedBox(
-                          width: 1,
-                        )
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for(int i = 0; i< iconsForButtons.length; i++)
-                        ButtonGroup(
-                          colorMain: (catNumber - 1 == i)
-                              ? const Color.fromRGBO(82, 182, 154, 1)
-                              : const Color.fromRGBO(110, 210, 182, 1),
-                          picture: iconsForButtons[i],
-                          text: namesOfButtons[i],
-                          size: buttonSize,
-                          isPressed: catNumber - 1 == i,
-                          onTap: () {},
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 3
-                    )
-                  ],
-                ),
+                  )
+                ]
               );
             },
           );

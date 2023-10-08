@@ -33,13 +33,19 @@ class _Screen15State extends State<Screen15> {
 
   void getDock() async {
     final dio = Dio();
-    final response = await dio.get('https://qviz.fun/api/v1/agreement/');
+    try {
+      final response = await dio.get(
+        'https://qviz.fun/api/v1/agreement/',
+        options: Options(),
+      );
 
-    dock = response.data['agreement'];
+      dock = response.data['agreement'];
 
-    setState(() {});
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
-
 
   void setChecker(bool checker) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -180,12 +186,12 @@ class _Screen15State extends State<Screen15> {
                     label: 'Скачать\nв pdf формате',
                     gradient: AppTheme.mainGreyGradient,
                     width: getWidth(context, 164),
-                    onTap: () async{
-                      final Uri url = Uri.parse('https://qviz.fun/media/agreement_v3/agreement.pdf/');
+                    onTap: () async {
+                      final Uri url =
+                      Uri.parse('https://qviz.fun/media/agreement_v3/agreement.pdf/');
                       if (!await launchUrl(url)) {
-                      throw Exception('Could not launch $url');
+                        throw Exception('Could not launch $url');
                       }
-
                     },
                   ),
                   SizedBox(
@@ -195,19 +201,23 @@ class _Screen15State extends State<Screen15> {
                     label: 'Перейти\nк оплате',
                     gradient: AppTheme.mainGreenGradient,
                     width: getWidth(context, 164),
-                    onTap: ()async {
+                    onTap: () async {
                       if (!isPicked) {
                         textColor = Colors.red;
                         setState(() {});
                         Timer(
                           const Duration(seconds: 2),
-                          () {
+                              () {
                             textColor = AppTheme.mainGreenColor;
                             setState(() {});
                           },
                         );
                       } else {
-                        context.read<PaymentBloc>().add(InitPaymentEvent(context.read<BuyTogetherBloc>().state.additionalSum));
+                        context.read<PaymentBloc>().add(
+                            InitPaymentEvent(context
+                                .read<BuyTogetherBloc>()
+                                .state
+                                .additionalSum));
                       }
                     },
                   ),

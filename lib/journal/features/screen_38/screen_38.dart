@@ -16,7 +16,6 @@ class _Screen38State extends State<Screen38> {
       appBarLabel: 'Содержание номера',
       child: Stack(
         children: [
-
           Padding(
             padding: EdgeInsets.only(
               top: getHeight(context, 18),

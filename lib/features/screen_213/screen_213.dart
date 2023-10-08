@@ -122,7 +122,7 @@ class _Screen213State extends State<Screen213> {
                         ),
                       ),
                       CustomTextField(
-                        height: getHeight(context, 37),
+                        height: getHeight(context, 40),
                         width: getWidth(context, 343),
                         hintText: 'Подпись',
                         maxLines: 1,
@@ -176,7 +176,7 @@ class _Screen213State extends State<Screen213> {
                       Text(
                         '* Бесплатная печатная открытка при подарке от ₽1000',
                         style: TextLocalStyles.roboto500.copyWith(
-                          color: AppTheme.mainGreenColor,
+                          color: const Color.fromRGBO(110, 210, 182, 1),
                           fontSize: getHeight(context, 16),
                           height: 16.41 / 14,
                         ),

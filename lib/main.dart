@@ -7,6 +7,7 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
+import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 //import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/journal/features/main_screen.dart';
 
@@ -64,6 +65,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const MainScreen();
+    return const Screen30();
   }
 }

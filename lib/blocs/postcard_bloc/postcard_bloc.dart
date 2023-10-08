@@ -31,6 +31,10 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
         nameOfEvents.add(response.data["postcards"][i][1]);
       }
 
+      print(postcards[0]);
+      print(response.data['simple_postcards']);
+      print(response.data['hb_index']);
+
       mapOfEvents.addAll(Map.from(response.data['events']));
 
       emitter(

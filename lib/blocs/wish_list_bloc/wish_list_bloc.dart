@@ -19,6 +19,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
           'blogger_id': '1',
         },
       );
+      //print(response.data);
 
       for (final el in response.data['present_info']) {
         wishList.add(

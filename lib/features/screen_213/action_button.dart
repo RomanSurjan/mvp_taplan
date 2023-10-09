@@ -31,7 +31,7 @@ class PostcardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width ?? getWidth(context, 110),
-      height: height ?? getHeight(context, 32),
+      height: height ?? getHeight(context, 35),
       child: MvpGradientButton(
         onTap: () {
           onTap?.call();

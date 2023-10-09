@@ -26,3 +26,5 @@ part 'custom_text_field.dart';
 part 'size_model.dart';
 
 part 'date_and_time_to_string.dart';
+
+part 'content_model.dart';

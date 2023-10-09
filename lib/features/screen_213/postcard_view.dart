@@ -3,11 +3,13 @@ part of 'screen_213.dart';
 class PostCardViewWidget extends StatelessWidget {
   final void Function(int)? onPageChanged;
   final int currentIndex;
+  final List<String> postcards;
 
   const PostCardViewWidget({
     super.key,
     this.onPageChanged,
     required this.currentIndex,
+    required this.postcards,
   });
 
   @override
@@ -39,10 +41,10 @@ class PostCardViewWidget extends StatelessWidget {
                       child: PageView.builder(
                         onPageChanged: onPageChanged,
                         controller: controller,
-                        itemCount: state.postcards.length,
+                        itemCount: postcards.length,
                         itemBuilder: (context, index) {
                           return Image.network(
-                            state.postcards[index],
+                            postcards[index],
                             width: getWidth(context, 375),
                             height: getHeight(context, 239),
                             fit: BoxFit.fill,
@@ -126,7 +128,7 @@ class PostCardViewWidget extends StatelessWidget {
                     Padding(padding: EdgeInsets.only(left: getWidth(context, 8))),
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.only(left: getWidth(context, 3)),
-                itemCount: state.postcards.length,
+                itemCount: postcards.length,
                 itemBuilder: (context, index) {
                   return SizedBox(
                     height: getHeight(context, 6),

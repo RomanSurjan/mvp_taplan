@@ -64,9 +64,9 @@ class WishListScreenState extends State<WishListScreen> {
                         MvpGradientButton(
                           opacity: context.watch<ThemeBloc>().state.isDark ? 0.25 : 0.15,
                           onTap: () {
+                            context.read<PostcardBloc>().add(
+                                ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
                             if (state.currentModel!.id == 4) {
-                              context.read<PostcardBloc>().add(
-                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -75,8 +75,7 @@ class WishListScreenState extends State<WishListScreen> {
                                 ),
                               );
                             } else {
-                              context.read<PostcardBloc>().add(
-                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -94,13 +93,9 @@ class WishListScreenState extends State<WishListScreen> {
                         MvpGradientButton(
                           opacity: context.watch<ThemeBloc>().state.isDark ? 0.35 : 0.25,
                           onTap: () {
-                            if (state.currentModel!.id == 4) {
-                              context.read<PostcardBloc>().add(
-                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
-                            } else {
-                              context.read<PostcardBloc>().add(
-                                  ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
-                            }
+                            context.read<PostcardBloc>().add(
+                                ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -64,10 +64,11 @@ class _Screen213State extends State<Screen213> {
           BlocBuilder<PostcardBloc, PostcardState>(
             builder: (context, state) {
               final mapOfEvents = state.mapOfEvents;
-
-              mapOfEvents.addAll({
-                state.nameOfEvents[i]: ['', ''],
-              });
+              if (state.currentHolidayType != HolidayType.just) {
+                mapOfEvents.addAll({
+                  state.nameOfEvents[i]: ['', ''],
+                });
+              }
 
               return BlocBuilder<ThemeBloc, ThemeState>(
                 builder: (context, themeState) {
@@ -83,21 +84,71 @@ class _Screen213State extends State<Screen213> {
                         onPageChanged: (index) {
                           if (index > i) {
                             i = index;
-                            currentHoliday = state.nameOfEvents[i];
-                            mapOfEvents.remove(state.nameOfEvents[i - 1]);
-                            mapOfEvents.addAll({
-                              state.nameOfEvents[i]: ['', '']
-                            });
+                            if (state.currentHolidayType == HolidayType.just) {
+                              if (i < 4 || i > 8) {
+                                currentHoliday = state.nameOfEvents[i - 5 > 0 ? i - 5 : i];
+                                mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i - 1]);
+
+                                String date = DateTime.now().month >
+                                        int.parse(
+                                            state.justPostcards[i].split('/').last.substring(2, 4))
+                                    ? '2024-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}'
+                                    : '2023-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}';
+                                mapOfEvents.addAll({
+                                  state.nameOfEvents[i - 5 > 0 ? i - 5 : i]: [date, '20:00']
+                                });
+                              } else {
+                                mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i - 1]);
+                                currentHoliday = 'Просто так';
+
+                                setState(() {});
+                              }
+                            } else {
+                              currentHoliday = state.nameOfEvents[i];
+                              mapOfEvents.remove(state.nameOfEvents[i - 1]);
+                              mapOfEvents.addAll({
+                                state.nameOfEvents[i]: ['', '']
+                              });
+                            }
                           } else {
                             i = index;
-                            currentHoliday = state.nameOfEvents[i];
-                            mapOfEvents.remove(state.nameOfEvents[i + 1]);
-                            mapOfEvents.addAll({
-                              state.nameOfEvents[i]: ['', '']
-                            });
+                            if (state.currentHolidayType == HolidayType.just) {
+                              if (i < 4 || i > 8) {
+
+                                String date = DateTime.now().month >
+                                    int.parse(
+                                        state.justPostcards[i].split('/').last.substring(2, 4))
+                                    ? '2024-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}'
+                                    : '2023-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}';
+
+                                currentHoliday = state.nameOfEvents[i - 5 > 0 ? i - 5 : i];
+                                mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i + 1]);
+                                mapOfEvents.addAll({
+                                  state.nameOfEvents[i - 5 > 0 ? i - 5 : i]: [
+                                    date,
+                                    '20:00'
+                                  ]
+                                });
+                              } else {
+                                mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i + 1]);
+                                currentHoliday = 'Просто так';
+                                setState(() {});
+                              }
+                            } else {
+                              currentHoliday = state.nameOfEvents[i];
+                              mapOfEvents.remove(state.nameOfEvents[i + 1]);
+                              mapOfEvents.addAll({
+                                state.nameOfEvents[i]: ['', '']
+                              });
+                            }
                           }
 
                           setState(() {});
+                        },
+                        postcards: switch (state.currentHolidayType) {
+                          HolidayType.just => state.justPostcards,
+                          HolidayType.stream => state.streamPostcards,
+                          HolidayType.birthday => state.hbPostcards,
                         },
                       ),
                       Padding(
@@ -186,7 +237,7 @@ class _Screen213State extends State<Screen213> {
                           top: getHeight(context, 16),
                         ),
                       ),
-                      currentHolidayType(state.currentHolidayType, i, mapOfEvents),
+                      currentHolidayType(state.currentHolidayType, mapOfEvents),
                       Padding(
                         padding: EdgeInsets.only(
                           top: getHeight(context, 16),
@@ -253,11 +304,15 @@ class _Screen213State extends State<Screen213> {
     );
   }
 
-  Widget currentHolidayType(HolidayType currentHolidayType, int i, Map<String, List> mapOfEvents) {
+  Widget currentHolidayType(HolidayType currentHolidayType, Map<String, List> mapOfEvents) {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, themeState) {
         return BlocBuilder<DateTimeBloc, DateTimeState>(
           builder: (context, dateTimeState) {
+            if (mapOfEvents[currentHoliday] == null) {
+              return const SizedBox.shrink();
+            }
+
             final currentDate = mapOfEvents[currentHoliday]![0].isEmpty
                 ? dateTimeState.date.isEmpty
                     ? "Выберите дату"

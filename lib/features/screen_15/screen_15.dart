@@ -43,7 +43,7 @@ class _Screen15State extends State<Screen15> {
 
       setState(() {});
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 

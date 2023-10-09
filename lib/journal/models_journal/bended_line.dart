@@ -2,14 +2,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class BendedLinePainter extends CustomPainter{
-  final Color color;
-  final double leftPadding;
   static const halfLineWidth = 2.0;
   static const roundingRadius = 5.0;
 
+  final Color color;
+  final double leftPadding;
+  final double bottomPadding;
+
+
   const BendedLinePainter({
     required this.color,
-    required this.leftPadding
+    required this.leftPadding,
+    required this.bottomPadding,
   });
 
   @override
@@ -34,7 +38,7 @@ class BendedLinePainter extends CustomPainter{
     );
     canvas.drawLine(
         Offset((leftPadding + halfLineWidth), (roundingRadius + halfLineWidth)),
-        Offset((leftPadding + halfLineWidth), size.height),
+        Offset((leftPadding + halfLineWidth), size.height - bottomPadding),
         line
     );
   }

@@ -9,12 +9,18 @@ class PostcardState {
   final Map<String, List> mapOfEvents;
   final List<String> nameOfEvents;
   final HolidayType currentHolidayType;
+  final List<String> streamPostcards;
+  final List<String> justPostcards;
+  final List<String> hbPostcards;
 
-  PostcardState( {
+  PostcardState({
     required this.nameOfEvents,
     required this.postcards,
     required this.mapOfEvents,
     this.currentHolidayType = HolidayType.just,
+    required this.streamPostcards,
+    required this.justPostcards,
+    required this.hbPostcards,
   });
 
   PostcardState copyWith({
@@ -22,12 +28,19 @@ class PostcardState {
     Map<String, List>? mapOfEvents,
     HolidayType? currentHolidayType,
     List<String>? nameOfEvents,
+    int? hbIndex,
+    List<String>? streamPostcards,
+    List<String>? justPostcards,
+    List<String>? hbPostcards,
   }) {
     return PostcardState(
       postcards: postcards ?? this.postcards,
       mapOfEvents: mapOfEvents ?? this.mapOfEvents,
       currentHolidayType: currentHolidayType ?? this.currentHolidayType,
       nameOfEvents: nameOfEvents ?? this.nameOfEvents,
+      streamPostcards: streamPostcards ?? this.streamPostcards,
+      justPostcards: justPostcards ?? this.justPostcards,
+      hbPostcards: hbPostcards ?? this.hbPostcards,
     );
   }
 }

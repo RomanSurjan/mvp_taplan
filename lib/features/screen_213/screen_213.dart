@@ -173,10 +173,10 @@ class _Screen213State extends State<Screen213> {
                         ),
                       ),
                       CustomTextField(
-                        height: getHeight(context, 40),
+                        height: getHeight(context, 50),
                         width: getWidth(context, 343),
                         hintText: 'Подпись',
-                        maxLines: 1,
+                        textAlignVertical: TextAlignVertical.center,
                       ),
                       Padding(
                         padding: EdgeInsets.only(

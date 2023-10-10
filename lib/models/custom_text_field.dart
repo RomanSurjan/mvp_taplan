@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final TextEditingController? controller;
   final Function(String?)? onChanged;
+  final TextAlignVertical? textAlignVertical;
 
   const CustomTextField({
     super.key,
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.controller,
     this.onChanged,
+    this.textAlignVertical,
   });
 
   @override
@@ -39,7 +41,7 @@ class CustomTextField extends StatelessWidget {
         ),
         cursorColor: const Color.fromRGBO(166, 173, 181, 1),
         maxLines: null,
-        textAlignVertical: TextAlignVertical.top,
+        textAlignVertical: textAlignVertical ?? TextAlignVertical.top,
         decoration: InputDecoration(
           border: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(4)),
           focusedBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(4)),
@@ -50,7 +52,9 @@ class CustomTextField extends StatelessWidget {
             fontSize: getHeight(context, 16),
           ),
           contentPadding: EdgeInsets.symmetric(
-              horizontal: getWidth(context, 10), vertical: getHeight(context, 15)),
+            horizontal: getWidth(context, 10),
+            vertical: getHeight(context, 15),
+          ),
           filled: true,
           fillColor: context.read<ThemeBloc>().state.dockColor,
         ),

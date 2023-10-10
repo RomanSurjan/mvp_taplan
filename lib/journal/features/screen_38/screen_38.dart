@@ -9,7 +9,7 @@ import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
 class Screen38 extends StatefulWidget {
-  const Screen38({Key? key}) : super(key: key);
+  const Screen38({super.key});
 
   @override
   State<Screen38> createState() => _Screen38State();
@@ -27,46 +27,48 @@ class _Screen38State extends State<Screen38> {
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
       appBarLabel: 'Содержание номера',
-      child: BlocBuilder<JournalBloc, JournalState>(builder: (context, state) {
-        return Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                top: getHeight(context, 18),
-                right: getWidth(context, 16),
-                left: getWidth(context, 16),
-              ),
-              child: Column(
-                children: [
-                  for (int i = 0; i < state.contentList.length; i++) ...[
-                    ContentBox(
-                      pages: state.contentList[i].page,
-                      label: state.contentList[i].label,
-                    ),
+      child: BlocBuilder<JournalBloc, JournalState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: getHeight(context, 18),
+                  right: getWidth(context, 16),
+                  left: getWidth(context, 16),
+                ),
+                child: Column(
+                  children: [
+                    for (int i = 0; i < state.contentList.length; i++) ...[
+                      ContentBox(
+                        pages: state.contentList[i].page,
+                        label: state.contentList[i].label,
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 9),
+                      )
+                    ],
                     SizedBox(
-                      height: getHeight(context, 9),
+                      height: getHeight(context, 85),
                     )
                   ],
-                  SizedBox(
-                    height: getHeight(context, 85),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: getHeight(context, 812),
-              width: getWidth(context, 375),
-              child: CustomPaint(
-                painter: BendedLinePainter(
-                  color: const Color.fromRGBO(98, 198, 170, 1),
-                  leftPadding: getWidth(context, 75),
-                  bottomPadding: getHeight(context, 94),
                 ),
               ),
-            ),
-          ],
-        );
-      }),
+              SizedBox(
+                height: getHeight(context, 812),
+                width: getWidth(context, 375),
+                child: CustomPaint(
+                  painter: BendedLinePainter(
+                    color: const Color.fromRGBO(98, 198, 170, 1),
+                    leftPadding: getWidth(context, 75),
+                    bottomPadding: getHeight(context, 94),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -89,7 +91,9 @@ class ContentBox extends StatelessWidget {
         child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
-              color: context.watch<ThemeBloc>().state.isDark? const Color.fromRGBO(58, 60, 69, 1): Colors.white,
+              color: context.watch<ThemeBloc>().state.isDark
+                  ? const Color.fromRGBO(58, 60, 69, 1)
+                  : Colors.white,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +115,7 @@ class ContentBox extends StatelessWidget {
                 Text(
                   label,
                   style: TextLocalStyles.roboto400.copyWith(
-                    color: context.watch<ThemeBloc>().state.isDark? Colors.white:Colors.black,
+                    color: context.watch<ThemeBloc>().state.isDark ? Colors.white : Colors.black,
                     fontSize: getHeight(context, 18),
                     height: 21.09 / 18,
                   ),

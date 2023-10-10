@@ -27,7 +27,7 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
         },
       );
 
-      for (int i = 6; i < response.data.length; i++) {
+      for (int i = 0; i < response.data.length; i++) {
         contentList.add(
           MvpContentModel(
             label: response.data[i]['paragraph'],
@@ -43,7 +43,8 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
 
       emitter(
         state.copyWith(
-          contentList: contentList,
+          contentList: contentList.getRange(6, contentList.length - 1).toList(),
+          videosList: videos,
         ),
       );
     } catch (e) {

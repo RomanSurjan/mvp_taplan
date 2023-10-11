@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
 import 'package:mvp_taplan/blocs/paymennt_bloc/payment_bloc.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PaymentBloc>(
           create: (context) => PaymentBloc(),
+        ),
+        BlocProvider<AuthorizationBloc>(
+          create: (context) => AuthorizationBloc(),
         ),
         BlocProvider(
           create: (context) => ShowcaseBloc(),

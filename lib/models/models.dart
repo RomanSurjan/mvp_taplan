@@ -11,6 +11,8 @@ import 'package:mvp_taplan/theme/text_styles.dart';
 
 part 'mvp_appbar.dart';
 
+part 'mvp_appbar_registration.dart';
+
 part 'mvp_scaffold_model.dart';
 
 part 'custom_radio.dart';

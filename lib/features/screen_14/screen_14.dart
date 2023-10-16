@@ -20,6 +20,31 @@ class Screen14 extends StatefulWidget {
 }
 
 class _Screen14State extends State<Screen14> {
+  static const keyboardTitle = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  static const keyboardSubtitle = [
+    '',
+    'A B C',
+    'D E F',
+    'G H I',
+    'J K L',
+    'M N O',
+    'P Q R S',
+    'T U V',
+    'W X W Z',
+  ];
+
+  List<Color> logIn = [
+    const Color.fromRGBO(98, 198, 170, 0.1),
+    const Color.fromRGBO(68, 168, 140, 0.1),
+    const Color.fromRGBO(82, 182, 154, 0.5),
+  ];
+  List<Color> repeatMessage = [
+    const Color.fromRGBO(98, 198, 170, 0.1),
+    const Color.fromRGBO(68, 168, 140, 0.1),
+    const Color.fromRGBO(82, 182, 154, 0.5),
+  ];
+
   bool isPicked = false;
   List<String> code = ['_', ' ', ' ', ' '];
 
@@ -31,32 +56,8 @@ class _Screen14State extends State<Screen14> {
     return width / 375 * MediaQuery.of(context).size.width;
   }
 
-  List<String> keyboardTitle = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  List<Color> repeatMessage = [
-    const Color.fromRGBO(98, 198, 170, 0.1),
-    const Color.fromRGBO(68, 168, 140, 0.1),
-    const Color.fromRGBO(82, 182, 154, 0.5),
-  ];
-
-  List<Color> logIn = [
-    const Color.fromRGBO(98, 198, 170, 0.1),
-    const Color.fromRGBO(68, 168, 140, 0.1),
-    const Color.fromRGBO(82, 182, 154, 0.5),
-  ];
   bool isActiveRepeatMessage = false;
   bool isActiveLogIn = false;
-
-  List<String> keyboardSubtitle = [
-    '',
-    'A B C',
-    'D E F',
-    'G H I',
-    'J K L',
-    'M N O',
-    'P Q R S',
-    'T U V',
-    'W X W Z',
-  ];
   late Color borderColorField;
   bool isStop = false;
 
@@ -64,14 +65,8 @@ class _Screen14State extends State<Screen14> {
     if (digit != '-1') {
       for (int i = 0; i < 4; i++) {
         if (i == 0) {
-          if ((code[0] == '' &&
-                  code[1] == ' ' &&
-                  code[2] == ' ' &&
-                  code[3] == ' ') ||
-              (code[0] == '_' &&
-                  code[1] == ' ' &&
-                  code[2] == ' ' &&
-                  code[3] == ' ')) {
+          if ((code[0] == '' && code[1] == ' ' && code[2] == ' ' && code[3] == ' ') ||
+              (code[0] == '_' && code[1] == ' ' && code[2] == ' ' && code[3] == ' ')) {
             code[0] = digit;
             code[1] = '_';
             break;
@@ -113,13 +108,9 @@ class _Screen14State extends State<Screen14> {
     setState(() {});
   }
 
-
   @override
   void initState() {
     super.initState();
-    borderColorField = context.read<ThemeBloc>().state.isDark
-        ? const Color.fromRGBO(124, 68, 121, 1)
-        : const Color.fromRGBO(238, 173, 235, 1);
 
     Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (!mounted) {
@@ -202,340 +193,309 @@ class _Screen14State extends State<Screen14> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: state.isDark
-            ? AppTheme.backgroundColor
-            : const Color.fromRGBO(240, 247, 254, 1),
-        appBar: CustomAppBarRegistration(
-          name: 'Сервис желанных подарков',
-          onTheme: () {
-            context
-                .read<ThemeBloc>()
-                .add(SwitchThemeEvent(isDark: !state.isDark));
-            Timer(
-              const Duration(),
-              () {
-                borderColorField = context.read<ThemeBloc>().state.isDark
-                    ? const Color.fromRGBO(124, 68, 121, 1)
-                    : const Color.fromRGBO(238, 173, 235, 1);
-                setState(() {});
-              },
-            );
-          },
-        ),
-        body: SafeArea(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: getHeight(context, 11),
-                  ),
-                  Stack(
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional.topEnd,
-                        child: Image.asset('assets/images/image 304.png'),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional.center,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: getHeight(context, 18),
-                            ),
-                            SvgPicture.asset(
-                                context.read<ThemeBloc>().state.isDark
-                                    ? 'assets/svg/logo_light.svg'
-                                    : 'assets/svg/logo.svg'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: getHeight(context, 16),
-                  ),
-                  Text(
-                    'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
-                    style: TextLocalStyles.roboto400.copyWith(
-                      fontSize: 15.5,
-                      color: state.isDark
-                          ? const Color.fromRGBO(233, 235, 237, 1)
-                          : const Color.fromRGBO(22, 26, 29, 1),
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        borderColorField = state.isDark
+            ? const Color.fromRGBO(124, 68, 121, 1)
+            : const Color.fromRGBO(238, 173, 235, 1);
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor:
+              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
+          appBar: CustomAppBarRegistration(
+            name: 'Сервис желанных подарков',
+            onTheme: () {
+              context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
+            },
+          ),
+          body: SafeArea(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getWidth(context, 16),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: getHeight(context, 11),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: getHeight(context, 16),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      for (int i = 0; i < 4; i++) fieldCode(context, i),
-                    ],
-                  ),
-                  SizedBox(
-                    height: getHeight(context, 10),
-                  ),
-                  SizedBox(
-                    height: getHeight(context, 44),
-                    width: getWidth(context, 344),
-                    child: Row(
+                    Stack(
                       children: [
-                        Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            splashColor: isActiveRepeatMessage
-                                ? null
-                                : Colors.transparent,
-                            highlightColor: isActiveRepeatMessage
-                                ? null
-                                : Colors.transparent,
-                            onTap: isActiveRepeatMessage
-                                ? () {
-                                    repeatMessage = [
-                                      const Color.fromRGBO(98, 198, 170, 0.1),
-                                      const Color.fromRGBO(68, 168, 140, 0.1),
-                                      const Color.fromRGBO(82, 182, 154, 0.5),
-                                    ];
-                                    isActiveRepeatMessage = false;
-
-                                    setState(() {});
-                                    Timer(
-                                      const Duration(seconds: 30),
-                                      () {
-                                        repeatMessage = [
-                                          const Color.fromRGBO(
-                                              98, 198, 170, 0.3),
-                                          const Color.fromRGBO(
-                                              68, 168, 140, 0.3),
-                                          const Color.fromRGBO(
-                                              110, 210, 182, 1),
-                                        ];
-                                        isActiveRepeatMessage = true;
-                                        setState(() {});
-                                      },
-                                    );
-                                  }
-                                : null,
-                            child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                SizedBox.expand(
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          repeatMessage[0],
-                                          repeatMessage[1],
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            98, 198, 170, 1),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: getHeight(context, 5)),
-                                      child: Text(
-                                        'Послать код\n повторно',
-                                        textAlign: TextAlign.center,
-                                        style:
-                                            TextLocalStyles.roboto500.copyWith(
-                                          color: repeatMessage[2],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        Align(
+                          alignment: AlignmentDirectional.topEnd,
+                          child: Image.asset(
+                            'assets/images/image 304.png',
                           ),
                         ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            splashColor:
-                                isActiveLogIn ? null : Colors.transparent,
-                            highlightColor:
-                                isActiveLogIn ? null : Colors.transparent,
-                            onTap: () {
-                              if (isActiveLogIn) {
-                                if (code[0] ==
-                                        context
-                                            .read<AuthorizationBloc>()
-                                            .state
-                                            .code[0] &&
-                                    code[1] ==
-                                        context
-                                            .read<AuthorizationBloc>()
-                                            .state
-                                            .code[1] &&
-                                    code[2] ==
-                                        context
-                                            .read<AuthorizationBloc>()
-                                            .state
-                                            .code[2] &&
-                                    code[3] ==
-                                        context
-                                            .read<AuthorizationBloc>()
-                                            .state
-                                            .code[3]) {
-                                  isStop = true;
-                                  setState(() {});
-                                  Timer(const Duration(milliseconds: 500), () {
-                                    // Navigator.popUntil(context,
-                                    //     (route) => !Navigator.canPop(context));
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const Screen30(),
-                                      ),
-                                    );
-                                  });
-                                } else {
-                                  for (int i = 0; i < 4; i++) {
-                                    changeCode('-1');
-                                  }
-                                  borderColorField = Colors.red;
-                                  setState(() {});
-
-                                  Timer(const Duration(milliseconds: 500), () {
-                                    borderColorField = context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
-                                        ? const Color.fromRGBO(124, 68, 121, 1)
-                                        : const Color.fromRGBO(
-                                            238, 173, 235, 1);
-                                  });
-                                }
-                              }
-                            },
-                            child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                SizedBox.expand(
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          logIn[0],
-                                          logIn[1],
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color.fromRGBO(
-                                            98, 198, 170, 1),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Войти',
-                                          textAlign: TextAlign.center,
-                                          style: TextLocalStyles.roboto500
-                                              .copyWith(
-                                            color: logIn[2],
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: getWidth(context, 10),
-                                        ),
-                                        SvgPicture.asset(
-                                          'assets/svg/arrow.svg',
-                                          fit: BoxFit.scaleDown,
-                                          colorFilter: ColorFilter.mode(
-                                              logIn[2], BlendMode.srcIn),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        Align(
+                          alignment: AlignmentDirectional.center,
+                          child: SvgPicture.asset(
+                            context.read<ThemeBloc>().state.isDark
+                                ? 'assets/svg/logo_light.svg'
+                                : 'assets/svg/logo.svg',
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: getHeight(context, 56),
-                  ),
-                  for (int i = 0; i < 3; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (int k = 0; k < 3; k++)
-                          InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {
-                              changeCode(keyboardTitle[k + i * 3]);
-                              setState(() {});
-                            },
-                            child: buttonKeyboard(keyboardTitle[k + i * 3],
-                                keyboardSubtitle[k + i * 3]),
-                          ),
                       ],
                     ),
                     SizedBox(
-                      height: getHeight(context, 8),
+                      height: getHeight(context, 16),
                     ),
-                  ],
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: getWidth(context, 106),
+                    Text(
+                      'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
+                      style: TextLocalStyles.roboto400.copyWith(
+                        fontSize: 15.5,
+                        color: state.isDark
+                            ? const Color.fromRGBO(233, 235, 237, 1)
+                            : const Color.fromRGBO(22, 26, 29, 1),
                       ),
-                      InkWell(
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: getHeight(context, 16),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        for (int i = 0; i < 4; i++) fieldCode(context, i),
+                      ],
+                    ),
+                    SizedBox(
+                      height: getHeight(context, 10),
+                    ),
+                    SizedBox(
+                      height: getHeight(context, 44),
+                      width: getWidth(context, 344),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              splashColor: isActiveRepeatMessage ? null : Colors.transparent,
+                              highlightColor: isActiveRepeatMessage ? null : Colors.transparent,
+                              onTap: isActiveRepeatMessage
+                                  ? () {
+                                      repeatMessage = [
+                                        const Color.fromRGBO(98, 198, 170, 0.1),
+                                        const Color.fromRGBO(68, 168, 140, 0.1),
+                                        const Color.fromRGBO(82, 182, 154, 0.5),
+                                      ];
+                                      isActiveRepeatMessage = false;
+
+                                      setState(() {});
+                                      Timer(
+                                        const Duration(seconds: 30),
+                                        () {
+                                          repeatMessage = [
+                                            const Color.fromRGBO(98, 198, 170, 0.3),
+                                            const Color.fromRGBO(68, 168, 140, 0.3),
+                                            const Color.fromRGBO(110, 210, 182, 1),
+                                          ];
+                                          isActiveRepeatMessage = true;
+                                          setState(() {});
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  SizedBox.expand(
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            repeatMessage[0],
+                                            repeatMessage[1],
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color.fromRGBO(98, 198, 170, 1),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: getHeight(context, 5),
+                                        ),
+                                        child: Text(
+                                          'Послать код\n повторно',
+                                          textAlign: TextAlign.center,
+                                          style: TextLocalStyles.roboto500.copyWith(
+                                            color: repeatMessage[2],
+                                            fontSize: getHeight(context, 14),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              splashColor: isActiveLogIn ? null : Colors.transparent,
+                              highlightColor: isActiveLogIn ? null : Colors.transparent,
+                              onTap: () {
+                                if (isActiveLogIn) {
+                                  if (code[0] == context.read<AuthorizationBloc>().state.code![0] &&
+                                      code[1] == context.read<AuthorizationBloc>().state.code![1] &&
+                                      code[2] == context.read<AuthorizationBloc>().state.code![2] &&
+                                      code[3] == context.read<AuthorizationBloc>().state.code![3]) {
+                                    isStop = true;
+                                    setState(() {});
+                                    Timer(const Duration(milliseconds: 500), () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const Screen30(),
+                                        ),
+                                      );
+                                    });
+                                  } else {
+                                    for (int i = 0; i < 4; i++) {
+                                      changeCode('-1');
+                                    }
+                                    borderColorField = Colors.red;
+                                    setState(() {});
+
+                                    Timer(const Duration(milliseconds: 500), () {
+                                      borderColorField = context.read<ThemeBloc>().state.isDark
+                                          ? const Color.fromRGBO(124, 68, 121, 1)
+                                          : const Color.fromRGBO(238, 173, 235, 1);
+                                    });
+                                  }
+                                }
+                              },
+                              child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  SizedBox.expand(
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            logIn[0],
+                                            logIn[1],
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: const Color.fromRGBO(98, 198, 170, 1),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Войти',
+                                            textAlign: TextAlign.center,
+                                            style: TextLocalStyles.roboto500.copyWith(
+                                              color: logIn[2],
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: getWidth(context, 10),
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/svg/arrow.svg',
+                                            fit: BoxFit.scaleDown,
+                                            colorFilter:
+                                                ColorFilter.mode(logIn[2], BlendMode.srcIn),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: getHeight(context, 56),
+                    ),
+                    for (int i = 0; i < 3; i++) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int k = 0; k < 3; k++)
+                            InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                changeCode(keyboardTitle[k + i * 3]);
+                                setState(() {});
+                              },
+                              child: buttonKeyboard(
+                                context,
+                                title: keyboardTitle[k + i * 3],
+                                subtitle: keyboardSubtitle[k + i * 3],
+                              ),
+                            ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 8),
+                      ),
+                    ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: getWidth(context, 106),
+                        ),
+                        InkWell(
                           borderRadius: BorderRadius.circular(8),
                           onTap: () {
                             changeCode('0');
 
                             setState(() {});
                           },
-                          child: buttonKeyboard('0', '')),
-                      SizedBox(
-                        width: getWidth(context, 106),
-                        child: InkWell(
+                          child: buttonKeyboard(
+                            context,
+                            title: '0',
+                            subtitle: '',
+                          ),
+                        ),
+                        SizedBox(
+                          width: getWidth(context, 106),
+                          child: InkWell(
                             borderRadius: BorderRadius.circular(8),
                             onTap: () {
                               changeCode('-1');
                               setState(() {});
                             },
-                            child: SvgPicture.asset('assets/svg/erase.svg')),
-                      ),
-                    ],
-                  )
-                ],
+                            child: SvgPicture.asset('assets/svg/erase.svg'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
-  Widget buttonKeyboard(title, subtitle) {
+  Widget buttonKeyboard(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+  }) {
     return SizedBox(
       height: getHeight(context, 54),
       width: getWidth(context, 106),
@@ -555,7 +515,9 @@ class _Screen14State extends State<Screen14> {
         ),
         child: Padding(
           padding: EdgeInsets.only(
-              top: getHeight(context, 5.5), bottom: getHeight(context, 5.5)),
+            top: getHeight(context, 5.5),
+            bottom: getHeight(context, 5.5),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -576,7 +538,7 @@ class _Screen14State extends State<Screen14> {
                       : const Color.fromRGBO(57, 57, 57, 1),
                   fontSize: 12,
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -584,9 +546,9 @@ class _Screen14State extends State<Screen14> {
     );
   }
 
-  Widget fieldCode(BuildContext context, index) {
+  Widget fieldCode(BuildContext context, int index) {
     return SizedBox(
-      width: 76,
+      width: getWidth(context, 76),
       height: getHeight(context, 86),
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -611,7 +573,7 @@ class _Screen14State extends State<Screen14> {
                 color: context.read<ThemeBloc>().state.isDark
                     ? const Color.fromRGBO(255, 255, 255, 1)
                     : const Color.fromRGBO(88, 88, 88, 1),
-                fontSize: code[index] == '_' ? 34 : 40,
+                fontSize: code[index] == '_' ? getHeight(context, 34) : getHeight(context, 40),
                 fontFamily: 'Digital',
                 fontWeight: FontWeight.w500,
               ),

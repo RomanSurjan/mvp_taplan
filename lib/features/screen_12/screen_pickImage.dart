@@ -155,7 +155,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                     ),
                                     child: SizedBox(
                                       height: getHeight(context, 240),
-                                      width: getWidth(context, 240),
+                                      width: getHeight(context, 240),
                                       child: DecoratedBox(
                                           decoration: BoxDecoration(
                                             border: Border.all(
@@ -184,7 +184,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                         ),
                                         child: SizedBox(
                                           height: getHeight(context, 240),
-                                          width: getWidth(context, 240),
+                                          width: getHeight(context, 240),
                                           child: DecoratedBox(
                                             decoration: BoxDecoration(
                                               border: Border.all(
@@ -198,11 +198,14 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                         ),
                                       ),
                                     ),
-                                    Opacity(
-                                      opacity: 0.8,
-                                      child: Image.memory(
-                                        pickedImageAsBytes,
-                                        fit: BoxFit.fill,
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: Opacity(
+                                        opacity: 0.8,
+                                        child: Image.memory(
+                                          pickedImageAsBytes,
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
                                     ), //Image.file(imageFile!),
                                   ],
@@ -223,7 +226,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
                               ),
                               child: SizedBox(
                                 height: getHeight(context, 240),
-                                width: getWidth(context, 240),
+                                width: getHeight(context, 240),
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     border: Border.all(

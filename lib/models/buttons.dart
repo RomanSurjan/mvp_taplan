@@ -110,6 +110,93 @@ class ButtonGroup extends StatelessWidget {
   }
 }
 
+class ButtonGroupWish extends StatelessWidget {
+  static const blur = 4.0;
+  final Color colorMain;
+  final String picture;
+  final Color colorCount;
+  final String text;
+  final bool isPressed;
+  final VoidCallback onTap;
+
+  const ButtonGroupWish({
+    super.key,
+    required this.colorMain,
+    required this.picture,
+    required this.colorCount,
+    required this.text,
+    required this.isPressed,
+    required this.onTap,
+
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: () {
+        onTap.call();
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.topEnd,
+            children: [
+              Container(
+                width: 62,
+                height: 62,
+                decoration: BoxDecoration(
+                  color: colorMain,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: 2, color: colorMain),
+                  boxShadow: [
+                    BoxShadow(
+                      offset:
+                      isPressed ? const Offset(5, 5) : const Offset(-5, -5),
+                      blurRadius: blur,
+                      color: const Color.fromRGBO(0, 0, 0, 0.3),
+                      inset: true,
+                    ),
+                    BoxShadow(
+                      offset:
+                      isPressed ? const Offset(-5, -5) : const Offset(5, 5),
+                      blurRadius: blur,
+                      color: const Color.fromRGBO(255, 255, 255, 0.4),
+                      inset: true,
+                    ),
+                  ],
+                ),
+                child: SvgPicture.asset(
+                  picture,
+                  height: 40,
+                  width: 44,
+                  fit: BoxFit.scaleDown,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextLocalStyles.roboto500.copyWith(
+              fontWeight: isPressed ? FontWeight.w600 : FontWeight.w400,
+              fontSize: 12,
+              color: !context.read<ThemeBloc>().state.isDark
+                  ? const Color.fromRGBO(22, 26, 29, 1)
+                  : const Color.fromRGBO(233, 235, 237, 1),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class PickCelebrateButton extends StatelessWidget {
   final bool isPressed;
   final VoidCallback? onTap;
@@ -137,13 +224,13 @@ class PickCelebrateButton extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 offset: isPressed ? const Offset(5, 5) : const Offset(-5, -5),
-                blurRadius: 4,
+                blurRadius: 10,
                 color: const Color.fromRGBO(0, 0, 0, 0.5),
                 inset: true,
               ),
               BoxShadow(
                 offset: isPressed ? const Offset(-5, -5) : const Offset(5, 5),
-                blurRadius: 4,
+                blurRadius: 10,
                 color: const Color.fromRGBO(255, 255, 255, 0.5),
                 inset: true,
               ),

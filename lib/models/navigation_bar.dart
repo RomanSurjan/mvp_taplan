@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/features/screen_12/screen_12.dart';
 import 'package:mvp_taplan/features/screen_26/screen_26.dart';
+import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -39,31 +40,59 @@ class CustomNavigationBar extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            width: getWidth(context, 176),
-            height: getHeight(context, 32),
+            width: getWidth(context, 371),
+            height: getHeight(context, 40),
             child: isTelegram
                 ? DecoratedBox(
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(255, 255, 255, 0.61),
                       borderRadius: BorderRadius.circular(3),
                     ),
-                    child: Text(
-                      context.read<AuthorizationBloc>().state.authToken == ''
-                          ? 'Для подписки просим\nзарегистрироваться'
-                          : 'Запрос отправлен',
-                      textAlign: TextAlign.center,
-                      style: TextLocalStyles.roboto500.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: const Color.fromRGBO(57, 57, 57, 1),
-                        fontSize: 14,
-                        height: 16 / 14,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 2),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              context
+                                          .read<AuthorizationBloc>()
+                                          .state
+                                          .authToken ==
+                                      null
+                                  ? 'Для запроса на подписку на канал\nпредлагаем Вам зарегестироваться'
+                                  : 'Запрос отправлен',
+                              textAlign: TextAlign.center,
+                              style: TextLocalStyles.roboto500.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(57, 57, 57, 1),
+                                fontSize: getHeight(context, 14),
+                                height: 16.41 / 14,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: getWidth(context, 31),
+                              ),
+                              child: SvgPicture.asset(
+                                'assets/svg/arrow_down_long.svg',
+                                colorFilter: ColorFilter.mode(
+                                    Color.fromRGBO(57, 57, 57, 1),
+                                    BlendMode.srcIn),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
                 : null,
           ),
           SizedBox(
-            height: getHeight(context, 76),
+            height: getHeight(context, 100),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -71,18 +100,19 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[0],
-                  onTap: context.read<AuthorizationBloc>().state.authToken == ''
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const Screen12(
-                                isPressed: false,
-                              ),
-                            ),
-                          );
-                        }
-                      : () {},
+                  onTap:
+                      context.read<AuthorizationBloc>().state.authToken == null
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const Screen12(
+                                    isPressed: false,
+                                  ),
+                                ),
+                              );
+                            }
+                          : () {},
                   isActive: true,
                 ),
                 const SizedBox(
@@ -91,18 +121,19 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[1],
-                  onTap: context.read<AuthorizationBloc>().state.authToken == ''
-                      ? () {}
-                      : () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const Screen26(),
-                            ),
-                          );
-                        },
+                  onTap:
+                      context.read<AuthorizationBloc>().state.authToken == null
+                          ? () {}
+                          : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const Screen26(),
+                                ),
+                              );
+                            },
                   isActive:
-                      context.read<AuthorizationBloc>().state.authToken == ''
+                      context.read<AuthorizationBloc>().state.authToken == null
                           ? false
                           : true,
                 ),
@@ -116,9 +147,17 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[3],
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ScreenSendWishlist(
+                        ),
+                      ),
+                    );
+                  },
                   isActive:
-                      context.read<AuthorizationBloc>().state.authToken == ''
+                      context.read<AuthorizationBloc>().state.authToken == null
                           ? false
                           : true,
                 ),
@@ -182,6 +221,8 @@ class CustomNavigationBar extends StatelessWidget {
     required String svg,
   }) {
     return InkWell(
+      hoverColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: onTapTelegram,
       child: SizedBox(
         height: getWidth(context, 72),
@@ -190,7 +231,7 @@ class CustomNavigationBar extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: const Color.fromRGBO(105, 205, 177, 1),
-              width: getWidth(context, 2),
+              width: getHeight(context, 2),
             ),
             shape: BoxShape.circle,
             gradient: const LinearGradient(
@@ -232,10 +273,9 @@ class CustomNavigationBar extends StatelessWidget {
                   ],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(15),
             child: SvgPicture.asset(
               svg,
-              fit: BoxFit.scaleDown,
             ),
           ),
         ),

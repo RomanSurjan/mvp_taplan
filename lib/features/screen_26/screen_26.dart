@@ -13,11 +13,12 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_addContact/screen_addContact.dart';
+import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-import 'buttons.dart';
+import '../../models/buttons.dart';
 
 class Screen26 extends StatefulWidget {
   const Screen26({super.key});
@@ -43,29 +44,18 @@ class Screen26State extends State<Screen26> {
     );
     userData = response.data;
   }
-
+  int group = 0;
   Map contacts = {};
   List<int> count = [0, 0, 0, 0, 0];
 
-  void getContacts() async {
+  void updateContacts() {
     buffContacts.clear();
     visibleContacts.clear();
     count = [0, 0, 0, 0, 0];
-    String url = 'https://qviz.fun/api/v1/peoplelist/';
-    final dio = Dio();
-    final response = await dio.post(url,
-        options: Options(headers: {
-          'Authorization':
-              "Token ${context.read<AuthorizationBloc>().state.authToken}",
-        }));
-    log(response.data.toString());
-    setState(() {
-      contacts = response.data;
-    });
     for (int i = 0; i < 5; i++) {
       for (int k = 0;
-          k < int.parse(contacts['people'].length.toString());
-          k++) {
+      k < int.parse(contacts['people'].length.toString());
+      k++) {
         if (contacts['people'][k]['cat'] == (i + 1)) {
           count[i]++;
         }
@@ -73,13 +63,13 @@ class Screen26State extends State<Screen26> {
     }
     int length = 0;
     for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
-      if (buttonGroupIsPressed[0] == true) {
-        if (contacts['people'][k]['cat'] == (1)) {
+      if (buttonGroupIsPressed[group] == true) {
+        if (contacts['people'][k]['cat'] == (group+1)) {
           buffContacts[contacts['people'][k]['id']] = contacts['people'][k];
         }
       } else {
         if (buffContacts.containsKey(contacts['people'][k]['id']) &&
-            contacts['people'][k]['cat'] == (1)) {
+            contacts['people'][k]['cat'] == (group+1)) {
           buffContacts.remove(contacts['people'][k]['id']);
         }
       }
@@ -94,6 +84,24 @@ class Screen26State extends State<Screen26> {
     });
     log(visibleContacts.length.toString());
     setState(() {});
+  }
+
+  void getContacts() async {
+
+
+    String url = 'https://qviz.fun/api/v1/peoplelist/';
+    final dio = Dio();
+    final response = await dio.post(url,
+        options: Options(headers: {
+          'Authorization':
+              "Token ${context.read<AuthorizationBloc>().state.authToken}",
+        }));
+    log(response.data.toString());
+    setState(() {
+      contacts = response.data;
+    });
+    updateContacts();
+
   }
 
   static const List<Color> buttonGroupColorMain = [
@@ -149,10 +157,8 @@ class Screen26State extends State<Screen26> {
 
   @override
   void initState() {
-    super.initState();
-
-    getUserData();
     getContacts();
+    super.initState();
   }
 
   @override
@@ -568,51 +574,12 @@ class Screen26State extends State<Screen26> {
                   text: buttonGroupText[i],
                   isPressed: buttonGroupIsPressed[i],
                   onTap: () {
+                    group = i;
                     for (int j = 0; j < 5; j++) {
                       buttonGroupIsPressed[j] = false;
                     }
                     buttonGroupIsPressed[i] = true;
-                    setState(() {});
-
-                    if (dataIsOk()) {
-                      isOk = true;
-                    } else {
-                      isOk = false;
-                    }
-
-                    int length = 0;
-                    buffContacts.clear();
-
-                    for (int k = 0;
-                        k < int.parse(contacts['people'].length.toString());
-                        k++) {
-                      if (buttonGroupIsPressed[i] == true) {
-                        if (contacts['people'][k]['cat'] == (i + 1)) {
-                          buffContacts[contacts['people'][k]['id']] =
-                              contacts['people'][k];
-                        }
-                      } else {
-                        if (buffContacts
-                                .containsKey(contacts['people'][k]['id']) &&
-                            contacts['people'][k]['cat'] == (i + 1)) {
-                          buffContacts.remove(contacts['people'][k]['id']);
-                        }
-                      }
-                    }
-
-                    visibleContacts.clear();
-
-                    buffContacts.forEach((key, value) {
-                      visibleContacts[length] = buffContacts[key];
-                      visibleContacts[length]['add'] = true;
-                      length++;
-                    });
-
-                    // log(buffContacts.toString());
-                    // log(buffContacts.length.toString());
-                    log(visibleContacts.length.toString());
-                    // log(visibleContacts.toString());
-
+                    updateContacts();
                     setState(() {});
                   },
                 ),
@@ -905,10 +872,19 @@ class Screen26State extends State<Screen26> {
                     setState(() {});
                   }),
               BottomNavButton(
-                picture: 'assets/svg/share.svg',
+                picture: 'assets/svg/sharenav.svg',
                 isPressed: buttonNavIsPressed[3],
                 onTap: () {
                   buttonNavIsPressed[3] = !buttonNavIsPressed[3];
+                  if(buttonNavIsPressed[3]){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ScreenSendWishlist(
+                        ),
+                      ),
+                    );
+                  }
                   setState(() {});
                 },
               ),

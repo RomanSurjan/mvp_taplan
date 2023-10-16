@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
@@ -11,6 +13,7 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_event.dart';
+import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -83,6 +86,9 @@ class Screen30State extends State<Screen30> {
   void initState() {
     super.initState();
 
+
+    print(context.read<AuthorizationBloc>().state is UnAuthorizationState);
+
     _onGetCover();
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
@@ -118,85 +124,89 @@ class Screen30State extends State<Screen30> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<DateTimeBloc, DateTimeState>(
-          builder: (context, state) {
-            if (state.rangeToStream == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppTheme.mainGreenColor,
-                ),
-              );
-            }
+        child: BlocBuilder<AuthorizationBloc, AuthState>(
+          builder: (context, authState) {
+            return BlocBuilder<DateTimeBloc, DateTimeState>(
+              builder: (context, state) {
+                if (state.rangeToStream == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppTheme.mainGreenColor,
+                    ),
+                  );
+                }
 
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(cover),
-                  fit: BoxFit.cover,
-                  alignment: Alignment(0.5, -0.66),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        width: getWidth(context, 375),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          fit: BoxFit.fitWidth,
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(cover),
+                      fit: BoxFit.cover,
+                      alignment: const Alignment(0.5, -0.66),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: getWidth(context, 375),
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    top: getHeight(context, 10),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Image.network(
-                        'assets/images/sk_logo_main.png',
+                      Positioned.fill(
+                        top: getHeight(context, 10),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Image.network(
+                            'assets/images/sk_logo_main.png',
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    top: getHeight(context, 154),
-                    right: getWidth(context, 7),
-                    child: myWishes(
-                      context,
-                      rangeToBirthday: range,
-                      rangeToStream: state.rangeToStream!,
-                    ),
-                  ),
-                  Positioned(
-                    top: getHeight(context, 138),
-                    left: getWidth(context, 5),
-                    child: wishList(context),
-                  ),
-                  Positioned(
-                    top: getHeight(context, 700),
-                    left: getWidth(context, 0),
-                    child: SizedBox(
-                        width: getWidth(context, 375),
-                        child: CustomNavigationBar(onTapTelegram: () {
-                          isTelegram = true;
-                          setState(() {});
-
-                          Timer(
-                            const Duration(seconds: 3),
-                                () {
-                              isTelegram = false;
+                      Positioned(
+                        top: getHeight(context, 154),
+                        right: getWidth(context, 7),
+                        child: myWishes(
+                          context,
+                          rangeToBirthday: range,
+                          rangeToStream: state.rangeToStream!,
+                        ),
+                      ),
+                      Positioned(
+                        top: getHeight(context, 138),
+                        left: getWidth(context, 5),
+                        child: wishList(context),
+                      ),
+                      Positioned(
+                        top: getHeight(context, 669),
+                        left: getWidth(context, 0),
+                        child: SizedBox(
+                            width: getWidth(context, 375),
+                            child: CustomNavigationBar(onTapTelegram: () {
+                              isTelegram = true;
                               setState(() {});
-                            },
-                          );
-                        }, isTelegram: isTelegram,)),
+
+                              Timer(
+                                const Duration(seconds: 3),
+                                    () {
+                                  isTelegram = false;
+                                  setState(() {});
+                                },
+                              );
+                            }, isTelegram: isTelegram,)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );

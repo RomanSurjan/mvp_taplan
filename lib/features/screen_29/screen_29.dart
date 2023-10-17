@@ -13,8 +13,6 @@ import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 
 import 'package:flutter/material.dart';
 
-
-
 class Screen29 extends StatefulWidget {
   const Screen29({super.key});
 
@@ -41,22 +39,18 @@ class Screen29State extends State<Screen29> {
   Map contacts = {};
   ScrollController scrollController = ScrollController();
 
-
   void getContacts() async {
     var url = 'https://qviz.fun/api/v1/peoplelist/';
     var dio = Dio();
     var response = await dio.post(url,
-        options: Options(headers: {
-          'Authorization': "Token ec0d55b15a9a8cabb7951e88ee5333627043d1d4"
-        }));
+        options:
+            Options(headers: {'Authorization': "Token ec0d55b15a9a8cabb7951e88ee5333627043d1d4"}));
     log(response.data.toString());
     setState(() {
       contacts = response.data;
     });
     for (int i = 0; i < 5; i++) {
-      for (int k = 0;
-      k < int.parse(contacts['people'].length.toString());
-      k++) {
+      for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
         if (contacts['people'][k]['cat'] == (i + 1)) {
           countContacts[i]++;
         }
@@ -129,7 +123,6 @@ class Screen29State extends State<Screen29> {
 
     getToken();
     getContacts();
-
   }
 
   @override
@@ -178,8 +171,6 @@ class Screen29State extends State<Screen29> {
         ],
       ),
     );
-
-
   }
 
   Widget createEvent(BuildContext context) {
@@ -211,9 +202,8 @@ class Screen29State extends State<Screen29> {
                     'Коллектив ООО “Таплан”',
                     style: TextLocalStyles.roboto500.copyWith(
                       color: context.read<ThemeBloc>().state.isDark
-                        ? Colors.white
+                          ? Colors.white
                           : const Color.fromRGBO(22, 26, 29, 1),
-
                       fontSize: 16,
                       height: 0,
                     ),
@@ -236,9 +226,7 @@ class Screen29State extends State<Screen29> {
             ),
             const Expanded(child: SizedBox()),
             InkWell(
-              onTap: () {
-
-              },
+              onTap: () {},
               child: SizedBox(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
@@ -287,8 +275,8 @@ class Screen29State extends State<Screen29> {
       width: getWidth(context, 375),
       child: ColoredBox(
         color: context.watch<ThemeBloc>().state.isDark
-            ? const Color.fromRGBO(0, 0, 0, 0.1) : const Color.fromRGBO(255, 255, 255, 0.75),
-
+            ? const Color.fromRGBO(0, 0, 0, 0.1)
+            : const Color.fromRGBO(255, 255, 255, 0.75),
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: getWidth(context, 16),
@@ -413,20 +401,16 @@ class Screen29State extends State<Screen29> {
                                 horizontal: getWidth(context, 5.5),
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                        top: getHeight(context, 3)),
+                                    padding: EdgeInsets.only(top: getHeight(context, 3)),
                                     child: Text(
                                       data,
                                       style: TextLocalStyles.roboto400.copyWith(
                                         color: !context.read<ThemeBloc>().state.isDark
-                                            ? const Color.fromRGBO(
-                                            157, 167, 176, 1)
-                                            : const Color.fromRGBO(
-                                            244, 199, 217, 1),
+                                            ? const Color.fromRGBO(157, 167, 176, 1)
+                                            : const Color.fromRGBO(244, 199, 217, 1),
                                         fontSize: getHeight(context, 14),
                                       ),
                                     ),
@@ -443,27 +427,21 @@ class Screen29State extends State<Screen29> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: !context.read<ThemeBloc>().state.isDark
-                                            ? const Color.fromRGBO(
-                                            237, 244, 251, 1)
-                                            : const Color.fromRGBO(
-                                            87, 99, 107, 1),
+                                            ? const Color.fromRGBO(237, 244, 251, 1)
+                                            : const Color.fromRGBO(87, 99, 107, 1),
                                       ),
                                       child: InkWell(
                                         onTap: () async {
                                           await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                              const Screen28(),
+                                              builder: (context) => const Screen28(),
                                             ),
                                           );
                                           setState(
-                                                () {
+                                            () {
                                               data =
-                                                  BlocProvider.of<DateTimeBloc>(
-                                                      context)
-                                                      .state
-                                                      .date;
+                                                  BlocProvider.of<DateTimeBloc>(context).state.date;
                                               if (data == '') data = "ДД.ММ.ГГГГ";
                                               if (dataIsOk(context)) {
                                                 isOk = true;
@@ -476,8 +454,7 @@ class Screen29State extends State<Screen29> {
                                         child: const Icon(
                                           Icons.more_vert,
                                           size: 16,
-                                          color:
-                                          Color.fromRGBO(166, 173, 181, 1),
+                                          color: Color.fromRGBO(166, 173, 181, 1),
                                         ),
                                       ),
                                     ),
@@ -513,8 +490,7 @@ class Screen29State extends State<Screen29> {
                                 horizontal: getWidth(context, 6),
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 2),
@@ -534,10 +510,8 @@ class Screen29State extends State<Screen29> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: !context.read<ThemeBloc>().state.isDark
-                                            ? const Color.fromRGBO(
-                                            237, 244, 251, 1)
-                                            : const Color.fromRGBO(
-                                            87, 99, 107, 1),
+                                            ? const Color.fromRGBO(237, 244, 251, 1)
+                                            : const Color.fromRGBO(87, 99, 107, 1),
                                       ),
                                       child: const Icon(
                                         Icons.more_vert,
@@ -563,9 +537,7 @@ class Screen29State extends State<Screen29> {
                                   : const Color.fromRGBO(87, 99, 107, 1),
                             ),
                             child: Icon(
-                              isOk
-                                  ? Icons.check_rounded
-                                  : Icons.question_mark_rounded,
+                              isOk ? Icons.check_rounded : Icons.question_mark_rounded,
                               color: const Color.fromRGBO(157, 167, 176, 1),
                             ),
                           ),
@@ -621,28 +593,33 @@ class Screen29State extends State<Screen29> {
                         isOk = false;
                       }
 
-                      for (int k = 0;
-                      k < int.parse(contacts['people'].length.toString());
-                      k++) {
+                      for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
+
+
                         if (buttonGroupIsPressed[i] == true) {
                           if (contacts['people'][k]['cat'] == (i + 1)) {
-                            buffContacts[contacts['people'][k]['id']] =
-                            contacts['people'][k];
+                            buffContacts[contacts['people'][k]['id']] = contacts['people'][k];
                           }
                         } else {
-                          if (buffContacts
-                              .containsKey(contacts['people'][k]['id']) &&
+                          if (buffContacts.containsKey(contacts['people'][k]['id']) &&
                               contacts['people'][k]['cat'] == (i + 1)) {
                             buffContacts.remove(contacts['people'][k]['id']);
                           }
                         }
                       }
                       visibleContacts.clear();
+                      int j = 0;
                       buffContacts.forEach((key, value) {
-                        int i = 0;
-                        visibleContacts[i] = value;
-                        visibleContacts[i]['add'] = true;
-                        i++;
+                        print(value['id']);
+
+                        visibleContacts[j] = value;
+                        visibleContacts[j]['add'] = true;
+                        j++;
+                      });
+
+                      print('\n');
+                      visibleContacts.forEach((key, value) {
+                        print(value['id']);
                       });
 
                       setState(() {});
@@ -659,12 +636,11 @@ class Screen29State extends State<Screen29> {
   bool dataIsOk(BuildContext context) {
     return (data != "ДД.ММ.ГГГГ" &&
         ((buttonGroupIsPressed[0] != false ||
-            buttonGroupIsPressed[1] != false ||
-            buttonGroupIsPressed[2] != false ||
-            buttonGroupIsPressed[3] != false ||
-            buttonGroupIsPressed[4] != false) ||
-            (buttonCelebrateIsPressed[0] != false ||
-                buttonCelebrateIsPressed[1] != false)));
+                buttonGroupIsPressed[1] != false ||
+                buttonGroupIsPressed[2] != false ||
+                buttonGroupIsPressed[3] != false ||
+                buttonGroupIsPressed[4] != false) ||
+            (buttonCelebrateIsPressed[0] != false || buttonCelebrateIsPressed[1] != false)));
   }
 
   Widget pickCelebrate(BuildContext context) {
@@ -740,13 +716,14 @@ class Screen29State extends State<Screen29> {
           itemBuilder: (context, index) {
             return DecoratedBox(
                 decoration: BoxDecoration(
-                  color: (index%2==0) ? Colors.transparent : const Color.fromRGBO(36, 38, 45, 1),
+                  color:
+                      (index % 2 == 0) ? Colors.transparent : const Color.fromRGBO(36, 38, 45, 1),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: getWidth(context, 16),
                   ),
-                  child: channel(context,index: index),
+                  child: channel(context, index: index),
                 ));
           },
           separatorBuilder: (_, __) => Padding(
@@ -760,10 +737,15 @@ class Screen29State extends State<Screen29> {
     );
   }
 
-  Widget channel(BuildContext context, {required int index,}) {
+  Widget channel(
+    BuildContext context, {
+    required int index,
+  }) {
     return Column(
       children: [
-        SizedBox(height: getHeight(context, 3),),
+        SizedBox(
+          height: getHeight(context, 3),
+        ),
         Row(
           children: [
             SizedBox(
@@ -788,8 +770,7 @@ class Screen29State extends State<Screen29> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  visibleContacts[index]['name'] +
-                      " (${index + 1}/${visibleContacts.length})",
+                  visibleContacts[index]['name'] + " (${index + 1}/${visibleContacts.length})",
                   style: TextLocalStyles.roboto500.copyWith(
                     color: !context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(65, 78, 88, 1)
@@ -853,8 +834,7 @@ class Screen29State extends State<Screen29> {
                 ),
                 child: InkWell(
                   onTap: () {
-                    visibleContacts[index]['add'] =
-                    !visibleContacts[index]['add'];
+                    visibleContacts[index]['add'] = !visibleContacts[index]['add'];
                     setState(() {});
                   },
                   child: SizedBox(
@@ -884,7 +864,7 @@ class Screen29State extends State<Screen29> {
               padding: EdgeInsets.only(
                 top: getHeight(context, 12),
               ),
-              child: buttonCheckContact(context ,index: index),
+              child: buttonCheckContact(context, index: index),
             ),
           ],
         ),
@@ -893,12 +873,14 @@ class Screen29State extends State<Screen29> {
             top: getHeight(context, 4),
           ),
         ),
-
       ],
     );
   }
 
-  Widget buttonCheckContact(BuildContext context, {required int index,}) {
+  Widget buttonCheckContact(
+    BuildContext context, {
+    required int index,
+  }) {
     return InkWell(
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
@@ -913,37 +895,36 @@ class Screen29State extends State<Screen29> {
         width: getWidth(context, 34),
         child: visibleContacts[index]['add']
             ? DecoratedBox(
-          decoration: BoxDecoration(
-              gradient: !context.read<ThemeBloc>().state.isDark
-                  ? null
-                  : AppTheme.mainGreenGradient,
-              color: !context.read<ThemeBloc>().state.isDark
-                  ? const Color.fromRGBO(221, 232, 245, 1)
-                  : null,
-              shape: BoxShape.circle),
-          child: Icon(
-            Icons.check,
-            color: !context.read<ThemeBloc>().state.isDark
-                ? const Color.fromRGBO(166, 173, 181, 1)
-                : Colors.white,
-          ),
-        )
+                decoration: BoxDecoration(
+                    gradient:
+                        !context.read<ThemeBloc>().state.isDark ? null : AppTheme.mainGreenGradient,
+                    color: !context.read<ThemeBloc>().state.isDark
+                        ? const Color.fromRGBO(221, 232, 245, 1)
+                        : null,
+                    shape: BoxShape.circle),
+                child: Icon(
+                  Icons.check,
+                  color: !context.read<ThemeBloc>().state.isDark
+                      ? const Color.fromRGBO(166, 173, 181, 1)
+                      : Colors.white,
+                ),
+              )
             : DecoratedBox(
-          decoration: BoxDecoration(
-            color: !context.read<ThemeBloc>().state.isDark
-                ? const Color.fromRGBO(221, 232, 245, 1)
-                : const Color.fromRGBO(69, 78, 84, 1),
-            shape: BoxShape.circle,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(5),
-            child: SizedBox(
-              child: SvgPicture.asset(
-                'assets/svg/add_plus.svg',
+                decoration: BoxDecoration(
+                  color: !context.read<ThemeBloc>().state.isDark
+                      ? const Color.fromRGBO(221, 232, 245, 1)
+                      : const Color.fromRGBO(69, 78, 84, 1),
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: SizedBox(
+                    child: SvgPicture.asset(
+                      'assets/svg/add_plus.svg',
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -978,7 +959,9 @@ class Screen29State extends State<Screen29> {
                     },
                   ),
                   // const BottomNavCenterButtonNotActive(),
-                  SizedBox(width: getWidth(context, 73),),
+                  SizedBox(
+                    width: getWidth(context, 73),
+                  ),
                   BottomNavButton(
                     picture: 'assets/svg/forward.svg',
                     isPressed: buttonNavIsPressed[3],
@@ -1006,64 +989,63 @@ class Screen29State extends State<Screen29> {
   }
 
   Widget groupCelebration(BuildContext context) {
-    return (buttonCelebrateIsPressed[0] == false &&
-        buttonCelebrateIsPressed[1] == false)
+    return (buttonCelebrateIsPressed[0] == false && buttonCelebrateIsPressed[1] == false)
         ? Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        for (int i = 0; i < 5; i++)
-          buttonGroupIsPressed[i]
-              ? Stack(
-            alignment: AlignmentDirectional.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: getWidth(context, 17),
-                height: getHeight(context, 17),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: groupColor[i],
+              for (int i = 0; i < 5; i++)
+                buttonGroupIsPressed[i]
+                    ? Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          SizedBox(
+                            width: getWidth(context, 17),
+                            height: getHeight(context, 17),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: groupColor[i],
+                              ),
+                            ),
+                          ),
+                          Text(
+                            strGroup[i],
+                            //textAlign: TextAlign.center,
+                            style: TextLocalStyles.roboto400.copyWith(
+                              color: Colors.white,
+                              fontSize: getHeight(context, 14),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+            ],
+          )
+        : SizedBox(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color.fromRGBO(98, 198, 170, 1),
+                    Color.fromRGBO(68, 168, 140, 1),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: getWidth(context, 3),
+                ),
+                child: Text(
+                  buttonCelebrateIsPressed[0] ? 'Торжество' : 'Группа',
+                  textAlign: TextAlign.center,
+                  style: TextLocalStyles.roboto400.copyWith(
+                    color: Colors.white,
+                    fontSize: getHeight(context, 15),
                   ),
                 ),
               ),
-              Text(
-                strGroup[i],
-                //textAlign: TextAlign.center,
-                style: TextLocalStyles.roboto400.copyWith(
-                  color: Colors.white,
-                  fontSize: getHeight(context, 14),
-                ),
-              ),
-            ],
-          )
-              : const SizedBox(),
-      ],
-    )
-        : SizedBox(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color.fromRGBO(98, 198, 170, 1),
-              Color.fromRGBO(68, 168, 140, 1),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: getWidth(context, 3),
-          ),
-          child: Text(
-            buttonCelebrateIsPressed[0] ? 'Торжество' : 'Группа',
-            textAlign: TextAlign.center,
-            style: TextLocalStyles.roboto400.copyWith(
-              color: Colors.white,
-              fontSize: getHeight(context, 15),
             ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }

@@ -610,8 +610,6 @@ class Screen29State extends State<Screen29> {
                       visibleContacts.clear();
                       int j = 0;
                       buffContacts.forEach((key, value) {
-                        print(value['id']);
-
                         visibleContacts[j] = value;
                         visibleContacts[j]['add'] = true;
                         j++;

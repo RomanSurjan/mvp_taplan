@@ -77,11 +77,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
       ) async {
     FormData formData;
     if (image != null) {
-      // var photo = MultipartFile.fromBytes(
-      //   image,
-      //   filename: 'image.png',
-      //   contentType: MediaType("image", "png"),
-      // );
+
       formData = FormData.fromMap({
         'name': name,
         'birthday': birthday,

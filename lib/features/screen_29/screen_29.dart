@@ -791,7 +791,7 @@ class Screen29State extends State<Screen29> {
                   visibleContacts[index]['name'] +
                       " (${index + 1}/${visibleContacts.length})",
                   style: TextLocalStyles.roboto500.copyWith(
-                    color: context.read<ThemeBloc>().state.isDark
+                    color: !context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(65, 78, 88, 1)
                         : Colors.white,
                     fontSize: 16,
@@ -801,7 +801,7 @@ class Screen29State extends State<Screen29> {
                 Text(
                   '28.09.2023 (+29 дней)',
                   style: TextLocalStyles.roboto400.copyWith(
-                    color: context.read<ThemeBloc>().state.isDark
+                    color: !context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(65, 78, 88, 1)
                         : Colors.white,
                     fontSize: 12,
@@ -836,7 +836,7 @@ class Screen29State extends State<Screen29> {
                 Text(
                   visibleContacts[index]['region'],
                   style: TextLocalStyles.roboto400.copyWith(
-                    color: context.read<ThemeBloc>().state.isDark
+                    color: !context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(98, 118, 132, 1)
                         : const Color.fromRGBO(188, 192, 200, 1),
                     fontSize: 14,
@@ -862,13 +862,13 @@ class Screen29State extends State<Screen29> {
                     width: getWidth(context, 34),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                          color: context.read<ThemeBloc>().state.isDark
+                          color: !context.read<ThemeBloc>().state.isDark
                               ? const Color.fromRGBO(221, 232, 245, 1)
                               : const Color.fromRGBO(69, 78, 84, 1),
                           shape: BoxShape.circle),
                       child: Icon(
                         Icons.close,
-                        color: context.read<ThemeBloc>().state.isDark
+                        color: !context.read<ThemeBloc>().state.isDark
                             ? const Color.fromRGBO(166, 173, 181, 1)
                             : Colors.white,
                       ),
@@ -906,7 +906,6 @@ class Screen29State extends State<Screen29> {
         if (visibleContacts[index]['add'] == false) {
           visibleContacts[index]['add'] = true;
         }
-        //visibleContacts[index]['add'] = !visibleContacts[index]['add'];
         setState(() {});
       },
       child: SizedBox(
@@ -915,23 +914,23 @@ class Screen29State extends State<Screen29> {
         child: visibleContacts[index]['add']
             ? DecoratedBox(
           decoration: BoxDecoration(
-              gradient: context.read<ThemeBloc>().state.isDark
+              gradient: !context.read<ThemeBloc>().state.isDark
                   ? null
                   : AppTheme.mainGreenGradient,
-              color: context.read<ThemeBloc>().state.isDark
+              color: !context.read<ThemeBloc>().state.isDark
                   ? const Color.fromRGBO(221, 232, 245, 1)
                   : null,
               shape: BoxShape.circle),
           child: Icon(
             Icons.check,
-            color: context.read<ThemeBloc>().state.isDark
+            color: !context.read<ThemeBloc>().state.isDark
                 ? const Color.fromRGBO(166, 173, 181, 1)
                 : Colors.white,
           ),
         )
             : DecoratedBox(
           decoration: BoxDecoration(
-            color: context.read<ThemeBloc>().state.isDark
+            color: !context.read<ThemeBloc>().state.isDark
                 ? const Color.fromRGBO(221, 232, 245, 1)
                 : const Color.fromRGBO(69, 78, 84, 1),
             shape: BoxShape.circle,
@@ -944,14 +943,6 @@ class Screen29State extends State<Screen29> {
               ),
             ),
           ),
-          // child: Icon(
-          //   //isFirst ? Icons.close : Icons.add,
-          //   visibleContacts[index]['add'] ? Icons.check : Icons.add,
-          //
-          //   color: context.read<ThemeBloc>().state.isDark
-          //       ? const Color.fromRGBO(166, 173, 181, 1)
-          //       : const Color.fromRGBO(157, 167, 176, 1),
-          // ),
         ),
       ),
     );

@@ -615,11 +615,6 @@ class Screen29State extends State<Screen29> {
                         j++;
                       });
 
-                      print('\n');
-                      visibleContacts.forEach((key, value) {
-                        print(value['id']);
-                      });
-
                       setState(() {});
                     }
                   },

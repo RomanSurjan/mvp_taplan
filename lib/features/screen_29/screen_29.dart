@@ -111,6 +111,8 @@ class Screen29State extends State<Screen29> {
   Map buffContacts = {};
   Map visibleContacts = {};
 
+  List<String> stateContact = ['Участник группового события', 'Виновник торжества', 'On-line участник'];
+
   bool isOk = false;
   List<String> strGroup = ['С', 'Д', 'Б', 'К', 'П'];
   List<bool> buttonNavIsPressed = [false, false, false, false, false];
@@ -612,6 +614,7 @@ class Screen29State extends State<Screen29> {
                       buffContacts.forEach((key, value) {
                         visibleContacts[j] = value;
                         visibleContacts[j]['add'] = true;
+                        visibleContacts[j]['state'] = 'Участник группового события';
                         j++;
                       });
 
@@ -705,12 +708,12 @@ class Screen29State extends State<Screen29> {
         trackColor: const Color.fromRGBO(73, 88, 99, 1),
         thumbColor: const Color.fromRGBO(129, 140, 147, 1),
         trackRadius: Radius.circular(getWidth(context, 2)),
-        child: ListView.separated(
+        child: ListView.builder(
           itemBuilder: (context, index) {
             return DecoratedBox(
                 decoration: BoxDecoration(
                   color:
-                      (index % 2 == 0) ? Colors.transparent : const Color.fromRGBO(36, 38, 45, 1),
+                      (index % 2 == 0) ? Colors.transparent : context.read<ThemeBloc>().state.isDark ? const Color.fromRGBO(36, 38, 45, 1) : const Color.fromRGBO(100, 188, 238, 0.15),
                 ),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -719,11 +722,6 @@ class Screen29State extends State<Screen29> {
                   child: channel(context, index: index),
                 ));
           },
-          separatorBuilder: (_, __) => Padding(
-            padding: EdgeInsets.only(
-              top: getHeight(context, 0),
-            ),
-          ),
           itemCount: visibleContacts.length,
         ),
       ),
@@ -747,7 +745,7 @@ class Screen29State extends State<Screen29> {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(visibleContacts[index]['person_photo']),
+                    image: NetworkImage('https://qviz.fun/${visibleContacts[index]['person_photo']}'),
                     fit: BoxFit.fill,
                   ),
                   shape: BoxShape.circle,
@@ -772,26 +770,41 @@ class Screen29State extends State<Screen29> {
                     height: 0,
                   ),
                 ),
-                Text(
-                  '28.09.2023 (+29 дней)',
-                  style: TextLocalStyles.roboto400.copyWith(
-                    color: !context.read<ThemeBloc>().state.isDark
-                        ? const Color.fromRGBO(65, 78, 88, 1)
-                        : Colors.white,
-                    fontSize: 12,
-                  ),
-                ),
                 SizedBox(
                   height: getHeight(context, 2),
                 ),
                 if (visibleContacts[index]['add'] == true) ...[
-                  Text(
-                    'Участник группового события',
-                    style: TextLocalStyles.roboto500.copyWith(
-                      color: const Color.fromRGBO(127, 164, 234, 0.81),
-                      fontSize: 14,
-                      height: 16.41 / 14,
-                      decoration: TextDecoration.underline,
+                  SizedBox(
+                    height: 15,
+                    width: getWidth(context, 200),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: visibleContacts[index]['state'],
+                        icon: null,
+                        iconSize: 0,
+                        isDense: true,
+                        isExpanded: true,
+                        dropdownColor: context.read<ThemeBloc>().state.dockColor,
+                        items: stateContact.map(
+                              (value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  color: AppTheme.moneyScaleGreenColor,
+                                  fontSize: 14,
+                                  decoration:  TextDecoration.underline,
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          visibleContacts[index]['state'] = value;
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ),
                 ] else ...[
@@ -813,7 +826,7 @@ class Screen29State extends State<Screen29> {
                     color: !context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(98, 118, 132, 1)
                         : const Color.fromRGBO(188, 192, 200, 1),
-                    fontSize: 14,
+                    fontSize: getHeight(context, 14),
                     height: 0,
                   ),
                 )

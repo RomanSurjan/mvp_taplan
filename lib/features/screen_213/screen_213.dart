@@ -114,20 +114,16 @@ class _Screen213State extends State<Screen213> {
                             i = index;
                             if (state.currentHolidayType == HolidayType.just) {
                               if (i < 4 || i > 8) {
-
                                 String date = DateTime.now().month >
-                                    int.parse(
-                                        state.justPostcards[i].split('/').last.substring(2, 4))
+                                        int.parse(
+                                            state.justPostcards[i].split('/').last.substring(2, 4))
                                     ? '2024-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}'
                                     : '2023-${state.justPostcards[i].split('/').last.substring(2, 4)}-${state.justPostcards[i].split('/').last.substring(0, 2)}';
 
                                 currentHoliday = state.nameOfEvents[i - 5 > 0 ? i - 5 : i];
                                 mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i + 1]);
                                 mapOfEvents.addAll({
-                                  state.nameOfEvents[i - 5 > 0 ? i - 5 : i]: [
-                                    date,
-                                    '20:00'
-                                  ]
+                                  state.nameOfEvents[i - 5 > 0 ? i - 5 : i]: [date, '20:00']
                                 });
                               } else {
                                 mapOfEvents.remove(state.nameOfEvents[i - 5 > 0 ? i - 5 : i + 1]);

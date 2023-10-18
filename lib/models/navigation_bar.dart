@@ -49,7 +49,7 @@ class CustomNavigationBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.only(top: 2),
                       child: Stack(
                         children: [
                           Align(
@@ -79,7 +79,7 @@ class CustomNavigationBar extends StatelessWidget {
                               ),
                               child: SvgPicture.asset(
                                 'assets/svg/arrow_down_long.svg',
-                                colorFilter: ColorFilter.mode(
+                                colorFilter: const ColorFilter.mode(
                                     Color.fromRGBO(57, 57, 57, 1),
                                     BlendMode.srcIn),
                               ),

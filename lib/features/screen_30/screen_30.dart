@@ -13,7 +13,6 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_event.dart';
-import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_event.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
@@ -85,9 +84,6 @@ class Screen30State extends State<Screen30> {
   @override
   void initState() {
     super.initState();
-
-
-    print(context.read<AuthorizationBloc>().state is UnAuthorizationState);
 
     _onGetCover();
     context.read<PostcardBloc>().add(GetPostcardsEvent());

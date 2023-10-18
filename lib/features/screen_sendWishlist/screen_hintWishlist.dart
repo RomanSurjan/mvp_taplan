@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +38,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
   TextEditingController country = TextEditingController(text: '');
   late List<Color> textFieldColor;
   bool isOk = true;
-  TextEditingController _textFieldScroll = TextEditingController(text: '');
+  final TextEditingController _textFieldScroll = TextEditingController(text: '');
 
   bool isPressedBirthday = true;
 
@@ -65,70 +64,6 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
     return width / 375 * MediaQuery.of(context).size.width;
   }
 
-  void _saveContact(
-      String name,
-      String phoneNumber,
-      String birthday,
-      String sex,
-      String telegram,
-      String region,
-      String cat,
-      Uint8List? image,
-      ) async {
-    FormData formData;
-    if (image != null) {
-
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-        //'person_photo': photo,
-      });
-    } else {
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-      });
-    }
-
-    try {
-      final response = await Dio().post(
-        'https://qviz.fun/api/v1/people/',
-        data: formData,
-        options: Options(
-          validateStatus: (status) {
-            return status! < 500;
-          },
-          headers: {
-            'Authorization':
-            "Token ${context.read<AuthorizationBloc>().state.authToken}",
-          },
-        ),
-      );
-      if (response.data['id'] != null) {
-        textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-        setState(() {});
-
-        Future.delayed(const Duration(milliseconds: 400), () {
-          Navigator.pop(context);
-        });
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   @override
   void initState() {
@@ -256,7 +191,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                               child: Text(
                                 'Повод и текст сообщения: ',
                                 style: TextLocalStyles.roboto400.copyWith(
-                                  color: Color.fromRGBO(240, 247, 254, 1),
+                                  color: const Color.fromRGBO(240, 247, 254, 1),
                                   fontSize: 15,
                                   height: 17.58 / 15,
                                 ),
@@ -316,14 +251,14 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(59, 61, 69, 1),
+                                    color: const Color.fromRGBO(59, 61, 69, 1),
                                     width: 2,
                                   ),
                                   borderRadius: BorderRadius.circular(6),
-                                  color: Color.fromRGBO(52, 54, 62, 1),
+                                  color: const Color.fromRGBO(52, 54, 62, 1),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: RawScrollbar(
@@ -331,14 +266,14 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                       radius: Radius.circular(getWidth(context, 8)),
                                       thickness: 5,
                                       trackVisibility: true,
-                                      trackColor: Color.fromRGBO(61, 63, 71, 1),
+                                      trackColor: const Color.fromRGBO(61, 63, 71, 1),
                                       thumbColor:
                                       const Color.fromRGBO(137, 137, 139, 1),
                                       trackRadius:
                                       Radius.circular(getWidth(context, 2)),
                                       // here's the actual text box
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             vertical: 8, horizontal: 10),
                                         child: TextField(
                                           maxLines: null,
@@ -522,12 +457,12 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: EdgeInsets.only(left: 12),
+                                            padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               'Ваши группы из списка контактов',
                                               style: TextLocalStyles.roboto500
                                                   .copyWith(
-                                                color: Color.fromRGBO(
+                                                color: const Color.fromRGBO(
                                                     105, 113, 119, 1),
                                                 fontSize: 14,
                                               ),
@@ -538,7 +473,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Padding(
-                                            padding: EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(right: 10),
                                             child: InkWell(
                                               onTap: () {},
                                               child: SvgPicture.asset(
@@ -554,7 +489,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 14,
                                 ),
                                 InkWell(
@@ -578,7 +513,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         width: getWidth(context, 24),
                                         height: getHeight(context, 24),
                                         fit: BoxFit.scaleDown,
-                                        colorFilter: ColorFilter.mode(Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
+                                        colorFilter: const ColorFilter.mode(Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
                                       ),
                                     ),
                                   ),
@@ -626,12 +561,12 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: EdgeInsets.only(left: 12),
+                                            padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               '27 декабря 2022',
                                               style: TextLocalStyles.roboto500
                                                   .copyWith(
-                                                color: Color.fromRGBO(200, 210, 219, 1),
+                                                color: const Color.fromRGBO(200, 210, 219, 1),
                                                 fontSize: 14,
                                               ),
                                               textAlign: TextAlign.justify,
@@ -641,7 +576,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Padding(
-                                            padding: EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(right: 10),
                                             child: InkWell(
                                               onTap: () {},
                                               child: SvgPicture.asset(
@@ -657,7 +592,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     ),
                                   ),
                                 ),
-                                Expanded(child: SizedBox.shrink(),),
+                                const Expanded(child: SizedBox.shrink(),),
                                 SizedBox(
                                   width: getWidth(context, 126),
                                   height: getHeight(context, 48),
@@ -682,12 +617,12 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: EdgeInsets.only(left: 12),
+                                            padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               '20:00',
                                               style: TextLocalStyles.roboto500
                                                   .copyWith(
-                                                color: Color.fromRGBO(200, 210, 219, 1),
+                                                color: const Color.fromRGBO(200, 210, 219, 1),
                                                 fontSize: 14,
                                               ),
                                               textAlign: TextAlign.justify,
@@ -697,7 +632,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Padding(
-                                            padding: EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(right: 10),
                                             child: InkWell(
                                               onTap: () {},
                                               child: SvgPicture.asset(
@@ -751,7 +686,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                   width: getWidth(context, 10),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top:2),
+                                  padding: const EdgeInsets.only(top:2),
                                   child: SizedBox(
                                     width: getWidth(context, 307),
                                     child: Text(
@@ -789,7 +724,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                               height: getHeight(context, 36),
                                               width: getHeight(context, 36),
                                               child: DecoratedBox(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: Color.fromRGBO(98, 198, 170, 1),
                                                   shape: BoxShape.circle,
                                                 ),
@@ -864,7 +799,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     }
 
                                     value = birthday.text;
-                                    String birthdayDDMMYY = '';
+                                    // String birthdayDDMMYY = '';
 
                                     regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
                                     if (regExp.hasMatch(value)) {
@@ -877,9 +812,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                       int? month = int.tryParse(
                                           dmy.substring(0, dmy.indexOf('.', 0)));
                                       dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                      int? year = int.tryParse(dmy.substring(
-                                        0,
-                                      ));
+                                      // int? year = int.tryParse(dmy.substring(
+                                      //   0,
+                                      // ));
                                       if (day! < 1 ||
                                           day > 31 ||
                                           month! < 1 ||
@@ -887,7 +822,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         textFieldColor[1] = Colors.red;
                                         isOk = false;
                                       } else {
-                                        birthdayDDMMYY = '$year-$month-$day';
+                                        //birthdayDDMMYY = '$year-$month-$day';
                                       }
                                     } else {
                                       textFieldColor[1] = Colors.red;
@@ -987,7 +922,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                           ],
                         ),
                       ),
-                      Expanded(child: SizedBox.shrink()),
+                      const Expanded(child: SizedBox()),
                       bottomNavBar(context),
                     ],
                   ),

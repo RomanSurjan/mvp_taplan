@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
-import 'package:mvp_taplan/features/screen_12/screen_pickImage.dart';
 import 'package:mvp_taplan/models/buttons.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -40,7 +38,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
   TextEditingController country = TextEditingController(text: '');
   late List<Color> textFieldColor;
   bool isOk = true;
-  TextEditingController _textFieldScroll = TextEditingController(text: '');
+  final TextEditingController _textFieldScroll = TextEditingController(text: '');
 
   bool isPressedBirthday = true;
 
@@ -52,29 +50,6 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
 
   Uint8List? image;
 
-  static const List<Color> buttonGroupColorMain = [
-    Color.fromRGBO(83, 170, 190, 1),
-    Color.fromRGBO(103, 143, 218, 1),
-    Color.fromRGBO(123, 108, 232, 1),
-    Color.fromRGBO(182, 104, 236, 1),
-    Color.fromRGBO(237, 143, 232, 1),
-  ];
-
-  static const List<Color> groupColor = [
-    Color.fromRGBO(45, 166, 193, 1),
-    Color.fromRGBO(103, 143, 218, 1),
-    Color.fromRGBO(123, 108, 232, 1),
-    Color.fromRGBO(182, 104, 236, 1),
-    Color.fromRGBO(123, 108, 232, 1),
-  ];
-
-  static const List<Color> buttonGroupColorCount = [
-    Color.fromRGBO(181, 218, 227, 1),
-    Color.fromRGBO(194, 210, 240, 1),
-    Color.fromRGBO(201, 195, 245, 1),
-    Color.fromRGBO(224, 192, 246, 1),
-    Color.fromRGBO(248, 208, 246, 1),
-  ];
   static const List<String> buttonGroupText = [
     "Авторские\nбукеты",
     "Ювелирные\nукрашение",
@@ -100,74 +75,6 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
     return width / 375 * MediaQuery.of(context).size.width;
   }
 
-  void _saveContact(
-    String name,
-    String phoneNumber,
-    String birthday,
-    String sex,
-    String telegram,
-    String region,
-    String cat,
-    Uint8List? image,
-  ) async {
-    FormData formData;
-    if (image != null) {
-      // var photo = MultipartFile.fromBytes(
-      //   image,
-      //   filename: 'image.png',
-      //   contentType: MediaType("image", "png"),
-      // );
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-        //'person_photo': photo,
-      });
-    } else {
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-      });
-    }
-
-    try {
-      final response = await Dio().post(
-        'https://qviz.fun/api/v1/people/',
-        data: formData,
-        options: Options(
-          validateStatus: (status) {
-            return status! < 500;
-          },
-          headers: {
-            'Authorization':
-                "Token ${context.read<AuthorizationBloc>().state.authToken}",
-          },
-        ),
-      );
-      if (response.data['id'] != null) {
-        textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-        setState(() {});
-
-        Future.delayed(const Duration(milliseconds: 400), () {
-          Navigator.pop(context);
-        });
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
 
   @override
   void initState() {
@@ -295,7 +202,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               child: Text(
                                 'Повод и текст сообщения: ',
                                 style: TextLocalStyles.roboto400.copyWith(
-                                  color: Color.fromRGBO(240, 247, 254, 1),
+                                  color: const Color.fromRGBO(240, 247, 254, 1),
                                   fontSize: 15,
                                   height: 17.58 / 15,
                                 ),
@@ -355,14 +262,14 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Color.fromRGBO(59, 61, 69, 1),
+                                    color: const Color.fromRGBO(59, 61, 69, 1),
                                     width: 2,
                                   ),
                                   borderRadius: BorderRadius.circular(6),
-                                  color: Color.fromRGBO(52, 54, 62, 1),
+                                  color: const Color.fromRGBO(52, 54, 62, 1),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: RawScrollbar(
@@ -370,14 +277,14 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                       radius: Radius.circular(getWidth(context, 8)),
                                       thickness: 5,
                                       trackVisibility: true,
-                                      trackColor: Color.fromRGBO(61, 63, 71, 1),
+                                      trackColor: const Color.fromRGBO(61, 63, 71, 1),
                                       thumbColor:
                                           const Color.fromRGBO(137, 137, 139, 1),
                                       trackRadius:
                                           Radius.circular(getWidth(context, 2)),
                                       // here's the actual text box
                                       child: Padding(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             vertical: 8, horizontal: 10),
                                         child: TextField(
                                           maxLines: null,
@@ -561,12 +468,12 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         Align(
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
-                                            padding: EdgeInsets.only(left: 12),
+                                            padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               'Ваши группы из списка контактов',
                                               style: TextLocalStyles.roboto500
                                                   .copyWith(
-                                                color: Color.fromRGBO(
+                                                color: const Color.fromRGBO(
                                                     105, 113, 119, 1),
                                                 fontSize: 14,
                                               ),
@@ -577,7 +484,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Padding(
-                                            padding: EdgeInsets.only(right: 10),
+                                            padding: const EdgeInsets.only(right: 10),
                                             child: InkWell(
                                               onTap: () {},
                                               child: SvgPicture.asset(
@@ -593,7 +500,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 14,
                                 ),
                                 InkWell(
@@ -617,7 +524,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         width: getWidth(context, 24),
                                         height: getHeight(context, 24),
                                         fit: BoxFit.scaleDown,
-                                        colorFilter: ColorFilter.mode(Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
+                                        colorFilter: const ColorFilter.mode(Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
                                       ),
                                     ),
                                   ),
@@ -671,7 +578,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                               height: getHeight(context, 36),
                                               width: getHeight(context, 36),
                                               child: DecoratedBox(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: Color.fromRGBO(98, 198, 170, 1),
                                                   shape: BoxShape.circle,
                                                 ),
@@ -746,7 +653,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                     }
 
                                     value = birthday.text;
-                                    String birthdayDDMMYY = '';
+                                    // String birthdayDDMMYY = '';
 
                                     regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
                                     if (regExp.hasMatch(value)) {
@@ -759,9 +666,9 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                       int? month = int.tryParse(
                                           dmy.substring(0, dmy.indexOf('.', 0)));
                                       dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                      int? year = int.tryParse(dmy.substring(
-                                        0,
-                                      ));
+                                      // int? year = int.tryParse(dmy.substring(
+                                      //   0,
+                                      // ));
                                       if (day! < 1 ||
                                           day > 31 ||
                                           month! < 1 ||
@@ -769,7 +676,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         textFieldColor[1] = Colors.red;
                                         isOk = false;
                                       } else {
-                                        birthdayDDMMYY = '$year-$month-$day';
+                                        // birthdayDDMMYY = '$year-$month-$day';
                                       }
                                     } else {
                                       textFieldColor[1] = Colors.red;
@@ -869,7 +776,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                           ],
                         ),
                       ),
-                      Expanded(child: SizedBox.shrink()),
+                      const Expanded(child: SizedBox.shrink()),
                       bottomNavBar(context),
                     ],
                   ),

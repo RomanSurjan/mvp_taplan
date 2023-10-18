@@ -86,20 +86,20 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
       String birthday,
       bool sex,
       Uint8List? image,
-      String person_photo,
+      String personPhoto,
       String phoneNumber,
       String telegram,
       String email,
       String region,
       bool admin,
-      int added_user,
+      int addedUser,
       bool register,
-      int? register_user_id,
+      int? registerUserId,
       String username,
-      String time_create,
+      String timeCreate,
       String status,
       String cat,
-      String? user_group,) async {
+      String? userGroup,) async {
     try {
       FormData formData;
       if (image != null) {
@@ -118,14 +118,14 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           "email": email,
           "region": region,
           "admin": admin,
-          "added_user": added_user,
+          "added_user": addedUser,
           "register": register,
-          "register_user_id": register_user_id,
+          "register_user_id": registerUserId,
           "username": username,
-          "time_create": time_create,
+          "time_create": timeCreate,
           "status": status,
           "cat": cat,
-          "user_group": user_group,
+          "user_group": userGroup,
           "person_photo": photo,
         });
       } else {
@@ -139,15 +139,15 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           "email": email,
           "region": region,
           "admin": admin,
-          "added_user": added_user,
+          "added_user": addedUser,
           "register": register,
-          "register_user_id": register_user_id,
+          "register_user_id": registerUserId,
           "username": username,
-          "time_create": time_create,
+          "time_create": timeCreate,
           "status": status,
           "cat": cat,
-          "user_group": user_group,
-          "person_photo": person_photo,
+          "user_group": userGroup,
+          "person_photo": personPhoto,
         });
       }
       final response = await Dio().put(
@@ -357,7 +357,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
               state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
                 name:
-                'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts != null
+                'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts.isNotEmpty
                     ? visibleContacts.length
                     : 0) + 1})',
                 onTheme: () {
@@ -1235,40 +1235,38 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                 }
 
                                 if (isOk) {
-                                  if (visibleContacts != null) {
-                                    if (id != visibleContacts.length) {
-                                      _saveChangeContact(
-                                        visibleContacts[id]['id'],
-                                        name.text,
-                                        birthday.text,
-                                        sex,
-                                        image,
-                                        visibleContacts[id]['person_photo'],
-                                        phone.text,
-                                        telegram.text,
-                                        email.text,
-                                        '${country.text}, ${city.text}',
-                                        visibleContacts[id]['admin'],
-                                        visibleContacts[id]['added_user'],
-                                        visibleContacts[id]['register'],
-                                        visibleContacts[id]['register_user_id'],
-                                        visibleContacts[id]['username'],
-                                        visibleContacts[id]['time_create'],
-                                        visibleContacts[id]['status'],
-                                        (idGroup + 1).toString(),
-                                        visibleContacts[id]['user_group'],);
-                                    }
-                                  else {
-                                    _saveContact(
-                                        name.text,
-                                        phone.text,
-                                        birthdayDDMMYY,
-                                        sex.toString(),
-                                        telegram.text,
-                                        '${country.text}, ${city.text}',
-                                        (idGroup + 1).toString(),
-                                        image);
+                                  if (id != visibleContacts.length) {
+                                    _saveChangeContact(
+                                      visibleContacts[id]['id'],
+                                      name.text,
+                                      birthday.text,
+                                      sex,
+                                      image,
+                                      visibleContacts[id]['person_photo'],
+                                      phone.text,
+                                      telegram.text,
+                                      email.text,
+                                      '${country.text}, ${city.text}',
+                                      visibleContacts[id]['admin'],
+                                      visibleContacts[id]['added_user'],
+                                      visibleContacts[id]['register'],
+                                      visibleContacts[id]['register_user_id'],
+                                      visibleContacts[id]['username'],
+                                      visibleContacts[id]['time_create'],
+                                      visibleContacts[id]['status'],
+                                      (idGroup + 1).toString(),
+                                      visibleContacts[id]['user_group'],);
                                   }
+                                else {
+                                  _saveContact(
+                                      name.text,
+                                      phone.text,
+                                      birthdayDDMMYY,
+                                      sex.toString(),
+                                      telegram.text,
+                                      '${country.text}, ${city.text}',
+                                      (idGroup + 1).toString(),
+                                      image);
                                 }
                               }else {
                                   setState(() {});

@@ -9,13 +9,9 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
-import 'package:mvp_taplan/features/screen_29/screen_29.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
-import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
-
 import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
 
-import 'features/screen_sendWishlist/screen_hintWishlist.dart';
 
 void main() {
   runApp(const MyApp());
@@ -83,11 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return PageView(
       children: const [
-        Screen29(),
         Screen30(),
-        // Screen38(),
-        //ScreenSendWishlist()
-        //ScreenHintWishlist()
+        Screen38(),
       ],
     );
   }

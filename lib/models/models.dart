@@ -11,6 +11,8 @@ import 'package:mvp_taplan/theme/text_styles.dart';
 
 part 'mvp_appbar.dart';
 
+part 'mvp_appbar_registration.dart';
+
 part 'mvp_scaffold_model.dart';
 
 part 'custom_radio.dart';
@@ -28,3 +30,7 @@ part 'size_model.dart';
 part 'date_and_time_to_string.dart';
 
 part 'content_model.dart';
+
+part 'text_field.dart';
+
+part 'button_green.dart';

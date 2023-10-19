@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
@@ -17,6 +20,7 @@ import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_34/present_screen.dart';
 import 'package:mvp_taplan/features/screen_wishlist/wish_list_screen.dart';
 import 'package:mvp_taplan/models/models.dart';
+import 'package:mvp_taplan/models/navigation_bar.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -36,11 +40,52 @@ class Screen30State extends State<Screen30> {
   bool isTapedHome = false;
   late Timer update;
   DateTime range = DateTime(2023);
+  late String cover;
+  bool isTelegram = false;
+
+  _onGetCover() async {
+    try {
+      var response = await Dio().post(
+        'https://qviz.fun/api/v1/get/taplink/',
+        data: {
+          'blogger_id': '1',
+        },
+      );
+
+
+      DateTime dateOfBorn = DateTime(int.parse(response.data['my_dream_date'].substring(0,4)),
+          int.parse(response.data['my_dream_date'].substring(5,7)),
+          int.parse(response.data['my_dream_date'].substring(8,10)),
+          int.parse(response.data['my_dream_date'].substring(11,13)));
+
+      cover = response.data['cover'];
+
+      update = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          DateTime nowDate = DateTime.now();
+          range = DateTime(
+            dateOfBorn.year - nowDate.year,
+            dateOfBorn.month - nowDate.month,
+            dateOfBorn.day - nowDate.day,
+            dateOfBorn.hour - nowDate.hour,
+            dateOfBorn.minute - nowDate.minute,
+            dateOfBorn.second - nowDate.second,
+          );
+
+          setState(() {});
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
 
+    _onGetCover();
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
     context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
@@ -75,67 +120,89 @@ class Screen30State extends State<Screen30> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<DateTimeBloc, DateTimeState>(
-          builder: (context, state) {
-            if (state.rangeToStream == null) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppTheme.mainGreenColor,
-                ),
-              );
-            }
+        child: BlocBuilder<AuthorizationBloc, AuthState>(
+          builder: (context, authState) {
+            return BlocBuilder<DateTimeBloc, DateTimeState>(
+              builder: (context, state) {
+                if (state.rangeToStream == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppTheme.mainGreenColor,
+                    ),
+                  );
+                }
 
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/images/bgImage.png'),
-                  fit: BoxFit.cover,
-                  alignment: Alignment(0.5, -0.66),
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        width: getWidth(context, 375),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          fit: BoxFit.fitWidth,
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(cover),
+                      fit: BoxFit.cover,
+                      alignment: const Alignment(0.5, -0.66),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: getWidth(context, 375),
+                            child: Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    top: getHeight(context, 10),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Image.asset(
-                        'assets/images/sk_logo_main.png',
+                      Positioned.fill(
+                        top: getHeight(context, 10),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Image.network(
+                            'assets/images/sk_logo_main.png',
+                          ),
+                        ),
                       ),
-                    ),
+                      Positioned(
+                        top: getHeight(context, 154),
+                        right: getWidth(context, 7),
+                        child: myWishes(
+                          context,
+                          rangeToBirthday: range,
+                          rangeToStream: state.rangeToStream!,
+                        ),
+                      ),
+                      Positioned(
+                        top: getHeight(context, 138),
+                        left: getWidth(context, 5),
+                        child: wishList(context),
+                      ),
+                      Positioned(
+                        top: getHeight(context, 669),
+                        left: getWidth(context, 0),
+                        child: SizedBox(
+                            width: getWidth(context, 375),
+                            child: CustomNavigationBar(onTapTelegram: () {
+                              isTelegram = true;
+                              setState(() {});
+
+                              Timer(
+                                const Duration(seconds: 3),
+                                    () {
+                                  isTelegram = false;
+                                  setState(() {});
+                                },
+                              );
+                            }, isTelegram: isTelegram,)),
+                      ),
+                    ],
                   ),
-                  Positioned(
-                    top: getHeight(context, 154),
-                    right: getWidth(context, 7),
-                    child: myWishes(
-                      context,
-                      rangeToBirthday: range,
-                      rangeToStream: state.rangeToStream!,
-                    ),
-                  ),
-                  Positioned(
-                    top: getHeight(context, 138),
-                    left: getWidth(context, 5),
-                    child: wishList(context),
-                  ),
-                ],
-              ),
+                );
+              },
             );
-          },
+          }
         ),
       ),
     );

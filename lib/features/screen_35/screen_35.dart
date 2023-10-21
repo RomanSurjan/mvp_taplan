@@ -20,11 +20,11 @@ class Screen35 extends StatefulWidget {
 class _Screen35State extends State<Screen35> {
 
   static const List<String> iconsForButtons = [
-    'assets/svg/bouquete.svg',
-    'assets/svg/jewerly.svg',
-    'assets/svg/picture.svg',
-    'assets/svg/photos.svg',
-    'assets/svg/sculpture.svg',
+    'assets/images/button_flower.png',
+    'assets/images/button_jewelry.png',
+    'assets/images/button_fashion.png',
+    'assets/images/button_tour.png',
+    'assets/images/button_art.png',
   ];
 
   static const List<String> namesOfButtons = [

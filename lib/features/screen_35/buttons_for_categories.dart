@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
@@ -58,12 +57,8 @@ class ButtonGroup extends StatelessWidget {
                 ),
               ],
             ),
-            child: SvgPicture.asset(
+            child: Image.asset(
               picture,
-              colorFilter: ColorFilter.mode(
-                isPressed ? Colors.white : const Color.fromRGBO(66, 157, 132, 1),
-                BlendMode.srcIn,
-              ),
               fit: BoxFit.fill,
             ),
           ),

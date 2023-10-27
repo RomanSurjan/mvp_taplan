@@ -38,7 +38,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
   TextEditingController country = TextEditingController(text: '');
   late List<Color> textFieldColor;
   bool isOk = true;
-  final TextEditingController _textFieldScroll = TextEditingController(text: '');
+  final TextEditingController _textFieldScroll = TextEditingController(text: 'Привет,\nя прошел(а) тест на определение желанных подарков, от которых я испытываю искренюю радость. Я хотел(а) бы получить один из этих подарков, что удовлетоврит мою потребность в эстетическом удовольствии, гармонии и внимании близкого человека.Буду искренне благодарен(а) желанному подарку.');
 
   bool isPressedBirthday = true;
 
@@ -205,6 +205,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                   color: const Color.fromRGBO(240, 247, 254, 1),
                                   fontSize: 15,
                                   height: 17.58 / 15,
+                                  fontWeight: FontWeight.w200,
                                 ),
                               ),
                             ),
@@ -216,7 +217,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                   child: textFieldRegistration(
                                     context,
                                     343,
-                                    'Имя члена группы',
+                                    'Просто так',
                                     name,
                                     false,
                                     textFieldColor[0],
@@ -257,7 +258,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               height: getHeight(context, 6),
                             ),
                             SizedBox(
-                              height: getHeight(context, 126),
+                              height: getHeight(context, 115),
                               width: getWidth(context, 343),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
@@ -269,7 +270,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                   color: const Color.fromRGBO(52, 54, 62, 1),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: RawScrollbar(
@@ -279,7 +280,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                       trackVisibility: true,
                                       trackColor: const Color.fromRGBO(61, 63, 71, 1),
                                       thumbColor:
-                                          const Color.fromRGBO(137, 137, 139, 1),
+                                          const Color.fromRGBO(73, 75, 83, 1),
                                       trackRadius:
                                           Radius.circular(getWidth(context, 2)),
                                       // here's the actual text box
@@ -333,7 +334,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                 'Введите контактные данные для пересылки',
                                 style: TextLocalStyles.roboto400.copyWith(
                                   color: state.isDark
-                                      ? Colors.white
+                                      ? const Color.fromRGBO(240, 247, 254, 1)
                                       : const Color.fromRGBO(22, 26, 29, 1),
                                   fontSize: 15,
                                   height: 17.58 / 15,
@@ -345,7 +346,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               child: textFieldRegistration(
                                 context,
                                 343,
-                                'Имя члена группы',
+                                'Имя человека, для сообщения о желании',
                                 name,
                                 false,
                                 textFieldColor[0],
@@ -433,10 +434,12 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                 'Или данные tg-чата для пересылки',
                                 style: TextLocalStyles.roboto400.copyWith(
                                     color: state.isDark
-                                        ? Colors.white
+                                        ? const Color.fromRGBO(240, 247, 254, 1)
                                         : const Color.fromRGBO(22, 26, 29, 1),
                                     fontSize: 15,
-                                    height: 16.41 / 14),
+                                    height: 16.41 / 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -446,7 +449,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               children: [
                                 SizedBox(
                                   width: getWidth(context, 284),
-                                  height: getHeight(context, 52),
+                                  height: getHeight(context, 48),
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       color: context.read<ThemeBloc>().state.isDark
@@ -534,30 +537,47 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                             SizedBox(
                               height: getHeight(context, 20),
                             ),
+
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Отправить список желаний',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  color: state.isDark
+                                      ? const Color.fromRGBO(240, 247, 254, 1)
+                                      : const Color.fromRGBO(22, 26, 29, 1),
+                                  fontSize: 15,
+                                  height: 17.58 / 15,
+                                ),
+                              ),
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 for (int i = 0; i < 5; i++)
-                                  ButtonGroupWish(
-                                    colorMain:
-                                        const Color.fromRGBO(110, 210, 182, 1),
-                                    picture: buttonGroupPicture[i],
-                                    colorCount:
-                                        const Color.fromRGBO(198, 237, 226, 1),
-                                    text: buttonGroupText[i],
-                                    isPressed: buttonGroupIsPressed[i],
-                                    onTap: () {
-                                      for (int j = 0; j < 5; j++) {
-                                        buttonGroupIsPressed[j] = false;
-                                      }
-                                      buttonGroupIsPressed[i] = true;
-                                      setState(() {});
-                                    },
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                                    child: ButtonGroupWish(
+                                      colorMain:
+                                          const Color.fromRGBO(110, 210, 182, 1),
+                                      picture: buttonGroupPicture[i],
+                                      colorCount:
+                                          const Color.fromRGBO(198, 237, 226, 1),
+                                      text: buttonGroupText[i],
+                                      isPressed: buttonGroupIsPressed[i],
+                                      onTap: () {
+                                        for (int j = 0; j < 5; j++) {
+                                          buttonGroupIsPressed[j] = false;
+                                        }
+                                        buttonGroupIsPressed[i] = true;
+                                        setState(() {});
+                                      },
+                                    ),
                                   ),
                               ],
                             ),
                             SizedBox(
-                              height: getHeight(context, 11),
+                              height: getHeight(context, 32),
                             ),
                             Row(
                               children: [
@@ -575,8 +595,8 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             SizedBox(
-                                              height: getHeight(context, 36),
-                                              width: getHeight(context, 36),
+                                              height: getHeight(context, 24),
+                                              width: getHeight(context, 24),
                                               child: DecoratedBox(
                                                 decoration: const BoxDecoration(
                                                   color: Color.fromRGBO(98, 198, 170, 1),
@@ -584,8 +604,8 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                                 ),
                                                 child: Align(
                                                   child: SizedBox(
-                                                    height: getHeight(context, 20),
-                                                    width: getHeight(context, 20),
+                                                    height: getHeight(context, 24),
+                                                    width: getHeight(context, 24),
                                                     child: SvgPicture.asset(
                                                       'assets/svg/miniplus.svg',
                                                       colorFilter: const ColorFilter.mode(
@@ -604,7 +624,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                               style: TextLocalStyles.roboto400.copyWith(
                                                 color: const Color.fromRGBO(110, 210, 182, 1),
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.w400,
+                                                fontWeight: FontWeight.w200,
                                               ),
                                               textAlign: TextAlign.center,
                                             ),

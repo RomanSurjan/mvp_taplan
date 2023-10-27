@@ -184,8 +184,8 @@ class ButtonGroupWish extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextLocalStyles.roboto500.copyWith(
-              fontWeight: isPressed ? FontWeight.w600 : FontWeight.w400,
-              fontSize: 12,
+              fontWeight: FontWeight.w300,
+              fontSize: 11,
               color: !context.read<ThemeBloc>().state.isDark
                   ? const Color.fromRGBO(22, 26, 29, 1)
                   : const Color.fromRGBO(233, 235, 237, 1),

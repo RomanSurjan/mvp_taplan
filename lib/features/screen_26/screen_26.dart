@@ -61,7 +61,7 @@ class Screen26State extends State<Screen26> {
         }
       }
     }
-    int length = 0;
+
     for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
       if (buttonGroupIsPressed[group] == true) {
         if (contacts['people'][k]['cat'] == (group+1)) {
@@ -77,6 +77,9 @@ class Screen26State extends State<Screen26> {
 
     visibleContacts.clear();
 
+    // visibleContacts[0] = userData;
+
+    int length = 0;
     buffContacts.forEach((key, value) {
       visibleContacts[length] = buffContacts[key];
       visibleContacts[length]['add'] = true;
@@ -87,8 +90,6 @@ class Screen26State extends State<Screen26> {
   }
 
   void getContacts() async {
-
-
     String url = 'https://qviz.fun/api/v1/peoplelist/';
     final dio = Dio();
     final response = await dio.post(url,
@@ -101,7 +102,6 @@ class Screen26State extends State<Screen26> {
       contacts = response.data;
     });
     updateContacts();
-
   }
 
   static const List<Color> buttonGroupColorMain = [
@@ -157,8 +157,10 @@ class Screen26State extends State<Screen26> {
 
   @override
   void initState() {
-    getContacts();
     super.initState();
+
+    getContacts();
+    getUserData();
   }
 
   @override
@@ -636,6 +638,7 @@ class Screen26State extends State<Screen26> {
   }
 
   Widget channel(BuildContext context, int index) {
+    //bool isContact = (visibleContacts[index]['phoneNumber'] == context.read<AuthorizationBloc>().state.phone);
     return Column(
       children: [
         SizedBox(

@@ -361,16 +361,9 @@ class _Screen12State extends State<Screen12> {
                                       const Duration(milliseconds: 700),
                                           () {
                                             if (context.read<AuthorizationBloc>().state.authToken != null) {
-                                              // context.read<AuthorizationBloc>().add(
-                                              //   GetDataEvent(),
-                                              // );
                                               isOk = false;
                                               textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
                                               textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-                                              //image = authState.photo;
-
-
-
                                               setState(() {});
                                               Timer(
                                                 const Duration(milliseconds: 400),

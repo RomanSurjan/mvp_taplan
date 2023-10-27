@@ -45,7 +45,7 @@ class CustomNavigationBar extends StatelessWidget {
             child: isTelegram
                 ? DecoratedBox(
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(255, 255, 255, 0.61),
+                      color: const Color.fromRGBO(255, 255, 250, 1),
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: Padding(

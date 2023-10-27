@@ -38,12 +38,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
       pickedImage.path,
     );
     setState(() {});
-    Timer(
-      const Duration(milliseconds: 100),
-      () {
-        _cropImage();
-      },
-    );
+    await _cropImage();
   }
 
   Future<void> _takePhoto() async {
@@ -56,12 +51,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
       pickedImage.path,
     );
     setState(() {});
-    Timer(
-      const Duration(milliseconds: 100),
-      () {
-        _cropImage();
-      },
-    );
+    await _cropImage();
   }
 
   Future<void> _cropImage() async {
@@ -123,9 +113,8 @@ class _PickImageScreenState extends State<PickImageScreen> {
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: state.isDark
-              ? AppTheme.backgroundColor
-              : const Color.fromRGBO(240, 247, 254, 1),
+          backgroundColor:
+              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
           appBar: const CustomAppBarRegistration(
             name: 'Сервис желанных подарков',
           ),
@@ -157,20 +146,18 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                       height: getHeight(context, 240),
                                       width: getHeight(context, 240),
                                       child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: const Color.fromRGBO(
-                                                  110, 210, 182, 1),
-                                            ),
-                                            color: const Color.fromRGBO(
-                                                110, 210, 182, 0.05),
-                                            shape: BoxShape.circle,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: const Color.fromRGBO(110, 210, 182, 1),
                                           ),
-                                          child: Image.memory(
-                                            pickedImageAsBytes,
-                                            fit: BoxFit.fill,
-                                          ) //Image.file(imageFile!),
-                                          ),
+                                          color: const Color.fromRGBO(110, 210, 182, 0.05),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Image.memory(
+                                          pickedImageAsBytes,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 )
@@ -188,10 +175,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                           child: DecoratedBox(
                                             decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color: const Color.fromRGBO(
-                                                      110, 210, 182, 1)),
-                                              color: const Color.fromRGBO(
-                                                  110, 210, 182, 0.05),
+                                                color: const Color.fromRGBO(110, 210, 182, 1),
+                                              ),
+                                              color: const Color.fromRGBO(110, 210, 182, 0.05),
                                               shape: BoxShape.circle,
                                             ),
                                           ),
@@ -204,10 +190,10 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                         opacity: 0.8,
                                         child: Image.memory(
                                           pickedImageAsBytes,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ), //Image.file(imageFile!),
+                                    ),
                                   ],
                                 ),
                         )
@@ -230,11 +216,9 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: const Color.fromRGBO(
-                                          110, 210, 182, 1),
+                                      color: const Color.fromRGBO(110, 210, 182, 1),
                                     ),
-                                    color: const Color.fromRGBO(
-                                        110, 210, 182, 0.05),
+                                    color: const Color.fromRGBO(110, 210, 182, 0.05),
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -265,7 +249,11 @@ class _PickImageScreenState extends State<PickImageScreen> {
                           title: 'Сохранить и\nпродолжить',
                           fontSize: 14,
                           onTap: () {
-                            Navigator.pop(context, pickedImageAsBytes);
+                            if (isCrop) {
+                              Navigator.pop(context, pickedImageAsBytes);
+                            } else {
+                              _cropImage();
+                            }
                           },
                         ),
                       ],

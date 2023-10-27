@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
-import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -108,30 +107,30 @@ class _Screen14State extends State<Screen14> {
     setState(() {});
   }
 
+  late Timer repeatCodeTimer;
+
   @override
   void initState() {
     super.initState();
 
+    //TODO Разобраться с кодом
+    Timer.periodic(
+      const Duration(milliseconds: 500),
+      (timer) {
+        if (code[0] == '_') {
+          code[0] = '';
+          setState(() {});
+          Timer(
+            const Duration(milliseconds: 500),
+            () {
+              if (code[0] == '') code[0] = '_';
+              setState(() {});
+            },
+          );
+        }
+      },
+    );
     Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (!mounted) {
-        timer.cancel();
-      }
-      if (code[0] == '_') {
-        code[0] = '';
-        setState(() {});
-        Timer(
-          const Duration(milliseconds: 500),
-          () {
-            if (code[0] == '') code[0] = '_';
-            setState(() {});
-          },
-        );
-      }
-    });
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (!mounted) {
-        timer.cancel();
-      }
       if (code[1] == '_') {
         code[1] = '';
         setState(() {});
@@ -176,8 +175,7 @@ class _Screen14State extends State<Screen14> {
         );
       }
     });
-
-    Timer(
+    repeatCodeTimer = Timer(
       const Duration(seconds: 30),
       () {
         repeatMessage = [
@@ -202,11 +200,8 @@ class _Screen14State extends State<Screen14> {
           resizeToAvoidBottomInset: false,
           backgroundColor:
               state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-          appBar: CustomAppBarRegistration(
+          appBar: const CustomAppBarRegistration(
             name: 'Сервис желанных подарков',
-            onTheme: () {
-              context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
-            },
           ),
           body: SafeArea(
             child: SizedBox(
@@ -298,40 +293,35 @@ class _Screen14State extends State<Screen14> {
                                       );
                                     }
                                   : null,
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  SizedBox.expand(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            repeatMessage[0],
-                                            repeatMessage[1],
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: const Color.fromRGBO(98, 198, 170, 1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: getHeight(context, 5),
-                                        ),
-                                        child: Text(
-                                          'Послать код\n повторно',
-                                          textAlign: TextAlign.center,
-                                          style: TextLocalStyles.roboto500.copyWith(
-                                            color: repeatMessage[2],
-                                            fontSize: getHeight(context, 14),
-                                          ),
-                                        ),
+                              child: SizedBox.expand(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        repeatMessage[0],
+                                        repeatMessage[1],
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(98, 198, 170, 1),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: getHeight(context, 5),
+                                    ),
+                                    child: Text(
+                                      'Послать код\n повторно',
+                                      textAlign: TextAlign.center,
+                                      style: TextLocalStyles.roboto500.copyWith(
+                                        color: repeatMessage[2],
+                                        fontSize: getHeight(context, 14),
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
@@ -344,21 +334,22 @@ class _Screen14State extends State<Screen14> {
                               splashColor: isActiveLogIn ? null : Colors.transparent,
                               highlightColor: isActiveLogIn ? null : Colors.transparent,
                               onTap: () {
+                                String codeStr = code.join();
                                 if (isActiveLogIn) {
-                                  if (code[0] == context.read<AuthorizationBloc>().state.code![0] &&
-                                      code[1] == context.read<AuthorizationBloc>().state.code![1] &&
-                                      code[2] == context.read<AuthorizationBloc>().state.code![2] &&
-                                      code[3] == context.read<AuthorizationBloc>().state.code![3]) {
+                                  if (codeStr == context.read<AuthorizationBloc>().state.code) {
                                     isStop = true;
                                     setState(() {});
-                                    Timer(const Duration(milliseconds: 500), () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const Screen30(),
-                                        ),
-                                      );
-                                    });
+                                    Timer(
+                                      const Duration(milliseconds: 500),
+                                      () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => const Screen30(),
+                                          ),
+                                        );
+                                      },
+                                    );
                                   } else {
                                     for (int i = 0; i < 4; i++) {
                                       changeCode('-1');
@@ -366,57 +357,55 @@ class _Screen14State extends State<Screen14> {
                                     borderColorField = Colors.red;
                                     setState(() {});
 
-                                    Timer(const Duration(milliseconds: 500), () {
-                                      borderColorField = context.read<ThemeBloc>().state.isDark
-                                          ? const Color.fromRGBO(124, 68, 121, 1)
-                                          : const Color.fromRGBO(238, 173, 235, 1);
-                                    });
+                                    Timer(
+                                      const Duration(milliseconds: 500),
+                                      () {
+                                        borderColorField = context.read<ThemeBloc>().state.isDark
+                                            ? const Color.fromRGBO(124, 68, 121, 1)
+                                            : const Color.fromRGBO(238, 173, 235, 1);
+                                      },
+                                    );
                                   }
                                 }
                               },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  SizedBox.expand(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            logIn[0],
-                                            logIn[1],
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: const Color.fromRGBO(98, 198, 170, 1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Войти',
-                                            textAlign: TextAlign.center,
-                                            style: TextLocalStyles.roboto500.copyWith(
-                                              color: logIn[2],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: getWidth(context, 10),
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svg/arrow.svg',
-                                            fit: BoxFit.scaleDown,
-                                            colorFilter:
-                                                ColorFilter.mode(logIn[2], BlendMode.srcIn),
-                                          ),
-                                        ],
-                                      ),
+                              child: SizedBox.expand(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        logIn[0],
+                                        logIn[1],
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: const Color.fromRGBO(98, 198, 170, 1),
+                                      width: 1,
                                     ),
                                   ),
-                                ],
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Войти',
+                                        textAlign: TextAlign.center,
+                                        style: TextLocalStyles.roboto500.copyWith(
+                                          color: logIn[2],
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: getWidth(context, 10),
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/svg/arrow.svg',
+                                        fit: BoxFit.scaleDown,
+                                        colorFilter:
+                                            ColorFilter.mode(logIn[2], BlendMode.srcIn),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -489,6 +478,12 @@ class _Screen14State extends State<Screen14> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    repeatCodeTimer.cancel();
+    super.dispose();
   }
 
   Widget buttonKeyboard(

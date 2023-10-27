@@ -93,274 +93,274 @@ class Screen30State extends State<Screen30> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<AuthorizationBloc, AuthState>(builder: (context, authState) {
-          return BlocBuilder<DateTimeBloc, DateTimeState>(
-            builder: (context, state) {
-              if (state.rangeToStream == null) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppTheme.mainGreenColor,
-                  ),
-                );
-              }
-
-              return BlocBuilder<CoverBloc, CoverState>(builder: (context, coverState) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          'https://qviz.fun${coverState.covers[coverState.currentCoverId][0]}'),
-                      fit: BoxFit.cover,
-                      alignment: const Alignment(0.5, -0.66),
+        child: BlocBuilder<AuthorizationBloc, AuthState>(
+          builder: (context, authState) {
+            return BlocBuilder<DateTimeBloc, DateTimeState>(
+              builder: (context, state) {
+                if (state.rangeToStream == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppTheme.mainGreenColor,
                     ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        child: Align(
-                          alignment: Alignment.topCenter,
-                          child: SizedBox(
-                            width: getWidth(context, 375),
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              fit: BoxFit.fitWidth,
+                  );
+                }
+
+                return BlocBuilder<CoverBloc, CoverState>(
+                  builder: (context, coverState) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://qviz.fun${coverState.covers[coverState.currentCoverId][0]}',
+                          ),
+                          fit: BoxFit.cover,
+                          alignment: const Alignment(0.5, -0.66),
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: SizedBox(
+                                width: getWidth(context, 375),
+                                child: Image.asset(
+                                  'assets/images/logo.png',
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        top: getHeight(context, 10),
-                        child: Align(
-                          alignment: Alignment.topRight,
-                          child: Image.network(
-                            'assets/images/sk_logo_main.png',
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][0][2],
-                        ),
-                        right: getWidth(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][0][1],
-                        ),
-                        child: Text(
-                          coverState.strWish,
-                          style: TextLocalStyles.mono400.copyWith(
-                            fontSize: getHeight(context, 31),
-                            height: 1,
-                            fontWeight: FontWeight.w200,
-                            color: coverState.covers[coverState.currentCoverId][1][0][0]
-                                        .toString()
-                                        .substring(2) ==
-                                    '1'
-                                ? const Color.fromRGBO(57, 57, 57, 1)
-                                : const Color.fromRGBO(240, 247, 254, 1),
-                          ),
-                          textAlign: (coverState.covers[coverState.currentCoverId][1][0][0]
-                                          .toString()
-                                          .substring(1, 2) ==
-                                      '1' ||
-                                  coverState.covers[coverState.currentCoverId][1][0][0]
-                                          .toString()
-                                          .substring(1, 2) ==
-                                      '3')
-                              ? TextAlign.left
-                              : coverState.covers[coverState.currentCoverId][1][0][0]
-                                          .toString()
-                                          .substring(1, 2) ==
-                                      '5'
-                                  ? TextAlign.center
-                                  : TextAlign.right,
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][4][1],
-                        ),
-                        left: getWidth(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][4][0],
-                        ),
-                        child: SizedBox(
-                          height: getHeight(context, 48),
-                          width: getWidth(context, 41),
-                          child: SvgPicture.asset('assets/svg/swipe.svg'),
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][2][2],
-                        ),
-                        left: getWidth(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][2][1] - 12,
-                        ),
-                        child: myDream(
-                          context,
-                          range,
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][3][2],
-                        ),
-                        left: getWidth(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][3][1] - 12,
-                        ),
-                        child: bouquetOfTheWeek(
-                          context,
-                          state.rangeToStream!,
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][1][2],
-                        ),
-                        left: getWidth(
-                          context,
-                          coverState.covers[coverState.currentCoverId][1][1][1],
-                        ),
-                        child: wishList(context),
-                      ),
-                      Positioned(
-                        bottom: getHeight(context, 94),
-                        left: getWidth(context, 0),
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Text(
-                            coverState.telegram,
-                            style: TextLocalStyles.roboto600.copyWith(
-                              height: 20 / 20,
-                              fontSize: 12,
-                              color: const Color.fromRGBO(0, 0, 0, 1),
-                              decoration: TextDecoration.underline,
+                          Positioned.fill(
+                            top: getHeight(context, 10),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: Image.network(
+                                'assets/images/sk_logo_main.png',
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: getHeight(context, 116),
-                        left: getWidth(context, 27),
-                        child: Text(
-                          coverState.username,
-                          style: const TextStyle(
-                            fontFamily: 'Abhaya',
-                            fontSize: 31,
-                            // fontWeight: FontWeight.normal,
-                            color: Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: getHeight(context, 85),
-                        left: getWidth(context, 28),
-                        child: Text(
-                          '${coverState.description}\n${coverState.region}',
-                          style: TextLocalStyles.roboto400.copyWith(
-                            fontSize: 14,
-                            color: const Color.fromRGBO(255, 255, 255, 1),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: getHeight(context, 91),
-                        left: getWidth(context, 226),
-                        child: Image.asset('assets/images/image 320.png'),
-                      ),
-                      Positioned(
-                        bottom: getHeight(context, 90),
-                        right: getWidth(context, 5),
-                        child: SizedBox(
-                          height: getHeight(context, 47),
-                          width: getWidth(context, 109),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(255, 255, 255, 0.5),
-                              borderRadius: BorderRadius.circular(3),
+                          Positioned(
+                            top: getHeight(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][0][2],
                             ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                  onTap: (){
-                                    if(coverState.currentCoverId != 0)
-                                      {
-                                        context
-                                            .read<CoverBloc>()
-                                            .add(PrevCoverEvent());
-                                      }
-                                  },
-                                  child: SizedBox(
-                                    height: getHeight(context, 45),
-                                    width: getWidth(context, 22),
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: AppTheme.mainGreenGradient,
-                                        borderRadius: BorderRadius.circular(2),
-                                      ),
-                                      child: coverState.currentCoverId != 0
-                                          ? SvgPicture.asset(
-                                              'assets/svg/arrow_back.svg',
-                                              colorFilter: const ColorFilter.mode(
-                                                Color.fromRGBO(193, 184, 237, 1),
-                                                BlendMode.srcIn,
-                                              ),
-                                            )
-                                          : RotatedBox(
-                                              quarterTurns: 3,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(right: 5, top: 2),
-                                                child: Text(
-                                                  'old',
-                                                  style: TextLocalStyles.mono400.copyWith(
-                                                    fontSize: 20,
-                                                    color: const Color.fromRGBO(57, 57, 57, 1),
+                            right: getWidth(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][0][1],
+                            ),
+                            child: Text(
+                              coverState.strWish,
+                              style: TextLocalStyles.mono400.copyWith(
+                                fontSize: getHeight(context, 31),
+                                height: 1,
+                                fontWeight: FontWeight.w200,
+                                color: coverState.covers[coverState.currentCoverId][1][0][0]
+                                            .toString()
+                                            .substring(2) ==
+                                        '1'
+                                    ? const Color.fromRGBO(57, 57, 57, 1)
+                                    : const Color.fromRGBO(240, 247, 254, 1),
+                              ),
+                              textAlign: (coverState.covers[coverState.currentCoverId][1][0][0]
+                                              .toString()
+                                              .substring(1, 2) ==
+                                          '1' ||
+                                      coverState.covers[coverState.currentCoverId][1][0][0]
+                                              .toString()
+                                              .substring(1, 2) ==
+                                          '3')
+                                  ? TextAlign.left
+                                  : coverState.covers[coverState.currentCoverId][1][0][0]
+                                              .toString()
+                                              .substring(1, 2) ==
+                                          '5'
+                                      ? TextAlign.center
+                                      : TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            top: getHeight(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][4][1],
+                            ),
+                            left: getWidth(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][4][0],
+                            ),
+                            child: SizedBox(
+                              height: getHeight(context, 48),
+                              width: getWidth(context, 41),
+                              child: SvgPicture.asset('assets/svg/swipe.svg'),
+                            ),
+                          ),
+                          Positioned(
+                            top: getHeight(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][2][2],
+                            ),
+                            left: getWidth(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][2][1] - 12,
+                            ),
+                            child: myDream(
+                              context,
+                              range,
+                            ),
+                          ),
+                          Positioned(
+                            top: getHeight(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][3][2],
+                            ),
+                            left: getWidth(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][3][1] - 12,
+                            ),
+                            child: bouquetOfTheWeek(
+                              context,
+                              state.rangeToStream!,
+                            ),
+                          ),
+                          Positioned(
+                            top: getHeight(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][1][2],
+                            ),
+                            left: getWidth(
+                              context,
+                              coverState.covers[coverState.currentCoverId][1][1][1],
+                            ),
+                            child: wishList(context),
+                          ),
+                          Positioned(
+                            bottom: getHeight(context, 94),
+                            left: getWidth(context, 0),
+                            child: RotatedBox(
+                              quarterTurns: 3,
+                              child: Text(
+                                coverState.telegram,
+                                style: TextLocalStyles.roboto600.copyWith(
+                                  height: 20 / 20,
+                                  fontSize: 12,
+                                  color: const Color.fromRGBO(0, 0, 0, 1),
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: getHeight(context, 116),
+                            left: getWidth(context, 27),
+                            child: Text(
+                              coverState.username,
+                              style: const TextStyle(
+                                fontFamily: 'Abhaya',
+                                fontSize: 31,
+                                // fontWeight: FontWeight.normal,
+                                color: Color.fromRGBO(255, 255, 255, 1),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: getHeight(context, 85),
+                            left: getWidth(context, 28),
+                            child: Text(
+                              '${coverState.description}\n${coverState.region}',
+                              style: TextLocalStyles.roboto400.copyWith(
+                                fontSize: 14,
+                                color: const Color.fromRGBO(255, 255, 255, 1),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: getHeight(context, 91),
+                            left: getWidth(context, 226),
+                            child: Image.asset('assets/images/image 320.png'),
+                          ),
+                          Positioned(
+                            bottom: getHeight(context, 90),
+                            right: getWidth(context, 5),
+                            child: SizedBox(
+                              height: getHeight(context, 47),
+                              width: getWidth(context, 109),
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(255, 255, 255, 0.5),
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        if (coverState.currentCoverId != 0) {
+                                          context.read<CoverBloc>().add(PrevCoverEvent());
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        height: getHeight(context, 45),
+                                        width: getWidth(context, 22),
+                                        child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            gradient: AppTheme.mainGreenGradient,
+                                            borderRadius: BorderRadius.circular(2),
+                                          ),
+                                          child: coverState.currentCoverId != 0
+                                              ? SvgPicture.asset(
+                                                  'assets/svg/arrow_back.svg',
+                                                  colorFilter: const ColorFilter.mode(
+                                                    Color.fromRGBO(193, 184, 237, 1),
+                                                    BlendMode.srcIn,
                                                   ),
-                                                  textAlign: TextAlign.center,
+                                                )
+                                              : RotatedBox(
+                                                  quarterTurns: 3,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(right: 5, top: 2),
+                                                    child: Text(
+                                                      'old',
+                                                      style: TextLocalStyles.mono400.copyWith(
+                                                        fontSize: 20,
+                                                        color: const Color.fromRGBO(57, 57, 57, 1),
+                                                      ),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                Text('${months[coverState.currentCoverId]}\n2023',
-                                style: TextLocalStyles.roboto400.copyWith(
-                                  color: const Color.fromRGBO(57, 57, 57, 1),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                InkWell(
-                                  onTap: (){
-                                    if(coverState.currentCoverId != (coverState.covers.length - 1))
-                                    {
-                                      context
-                                          .read<CoverBloc>()
-                                          .add(NextCoverEvent());
-                                    }
-                                  },
-                                  child: SizedBox(
-                                    height: getHeight(context, 45),
-                                    width: getWidth(context, 22),
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: AppTheme.mainGreenGradient,
-                                        borderRadius: BorderRadius.circular(2),
+                                        ),
                                       ),
-                                      child:
-                                          coverState.currentCoverId != (coverState.covers.length - 1)
+                                    ),
+                                    Text(
+                                      '${months[coverState.currentCoverId]}\n2023',
+                                      style: TextLocalStyles.roboto400.copyWith(
+                                        color: const Color.fromRGBO(57, 57, 57, 1),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        if (coverState.currentCoverId !=
+                                            (coverState.covers.length - 1)) {
+                                          context.read<CoverBloc>().add(NextCoverEvent());
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        height: getHeight(context, 45),
+                                        width: getWidth(context, 22),
+                                        child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            gradient: AppTheme.mainGreenGradient,
+                                            borderRadius: BorderRadius.circular(2),
+                                          ),
+                                          child: coverState.currentCoverId !=
+                                                  (coverState.covers.length - 1)
                                               ? RotatedBox(
                                                   quarterTurns: 2,
                                                   child: SvgPicture.asset(
@@ -374,7 +374,8 @@ class Screen30State extends State<Screen30> {
                                               : RotatedBox(
                                                   quarterTurns: 3,
                                                   child: Padding(
-                                                    padding: const EdgeInsets.only(right: 2, top: 2),
+                                                    padding:
+                                                        const EdgeInsets.only(right: 2, top: 2),
                                                     child: Text(
                                                       'new',
                                                       style: TextLocalStyles.mono400.copyWith(
@@ -385,166 +386,171 @@ class Screen30State extends State<Screen30> {
                                                     ),
                                                   ),
                                                 ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        top: getHeight(context, 669),
-                        left: getWidth(context, 0),
-                        child: SizedBox(
-                            width: getWidth(context, 375),
-                            child: CustomNavigationBar(
-                              onTapTelegram: () {
-                                isTelegram = true;
-                                setState(() {});
+                          Positioned(
+                            top: getHeight(context, 669),
+                            left: getWidth(context, 0),
+                            child: SizedBox(
+                              width: getWidth(context, 375),
+                              child: CustomNavigationBar(
+                                onTapTelegram: () {
+                                  isTelegram = true;
+                                  setState(() {});
 
-                                Timer(
-                                  const Duration(seconds: 3),
-                                  () {
-                                    isTelegram = false;
-                                    setState(() {});
-                                  },
-                                );
-                              },
-                              isTelegram: isTelegram,
-                            )),
+                                  Timer(
+                                    const Duration(seconds: 3),
+                                    () {
+                                      isTelegram = false;
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                                isTelegram: isTelegram,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 );
-              });
-            },
-          );
-        }),
+              },
+            );
+          },
+        ),
       ),
     );
   }
 }
 
 Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
-  return BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          'Букет\nнедели',
-          style: TextLocalStyles.mono400.copyWith(
-            fontSize: getHeight(context, 24),
-            height: 20.93 / 24,
-            color: context
+  return BlocBuilder<WishListBloc, WishListState>(
+    builder: (context, state) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'Букет\nнедели',
+            style: TextLocalStyles.mono400.copyWith(
+              fontSize: getHeight(context, 24),
+              height: 20.93 / 24,
+              color: context
+                          .read<CoverBloc>()
+                          .state
+                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
+                          .toString()
+                          .substring(2) ==
+                      '1'
+                  ? const Color.fromRGBO(57, 57, 57, 1)
+                  : const Color.fromRGBO(240, 247, 254, 1),
+            ),
+            textAlign: context
                         .read<CoverBloc>()
                         .state
                         .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
                         .toString()
-                        .substring(2) ==
+                        .substring(1, 2) ==
                     '1'
-                ? const Color.fromRGBO(57, 57, 57, 1)
-                : const Color.fromRGBO(240, 247, 254, 1),
+                ? TextAlign.left
+                : TextAlign.right,
           ),
-          textAlign: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
-              ? TextAlign.left
-              : TextAlign.right,
-        ),
-        const SizedBox(height: 1),
-        Text(
-          'Групповой\nподарок к',
-          style: TextLocalStyles.mono400.copyWith(
-            fontSize: 14,
-            height: 12.21 / 14,
-            color: context
+          const SizedBox(height: 1),
+          Text(
+            'Групповой\nподарок к',
+            style: TextLocalStyles.mono400.copyWith(
+              fontSize: 14,
+              height: 12.21 / 14,
+              color: context
+                          .read<CoverBloc>()
+                          .state
+                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
+                          .toString()
+                          .substring(2) ==
+                      '1'
+                  ? const Color.fromRGBO(57, 57, 57, 1)
+                  : const Color.fromRGBO(240, 247, 254, 1),
+            ),
+            textAlign: context
                         .read<CoverBloc>()
                         .state
                         .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
                         .toString()
-                        .substring(2) ==
+                        .substring(1, 2) ==
                     '1'
-                ? const Color.fromRGBO(57, 57, 57, 1)
-                : const Color.fromRGBO(240, 247, 254, 1),
+                ? TextAlign.left
+                : TextAlign.right,
           ),
-          textAlign: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
-              ? TextAlign.left
-              : TextAlign.right,
-        ),
-        Text(
-          'Еженедельному\nстриму ',
-          style: TextLocalStyles.mono400.copyWith(
-            fontSize: 16,
-            height: 13.95 / 16,
-            color: context
+          Text(
+            'Еженедельному\nстриму ',
+            style: TextLocalStyles.mono400.copyWith(
+              fontSize: 16,
+              height: 13.95 / 16,
+              color: context
+                          .read<CoverBloc>()
+                          .state
+                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
+                          .toString()
+                          .substring(2) ==
+                      '1'
+                  ? const Color.fromRGBO(57, 57, 57, 1)
+                  : const Color.fromRGBO(240, 247, 254, 1),
+            ),
+            textAlign: context
                         .read<CoverBloc>()
                         .state
                         .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
                         .toString()
-                        .substring(2) ==
+                        .substring(1, 2) ==
                     '1'
-                ? const Color.fromRGBO(57, 57, 57, 1)
-                : const Color.fromRGBO(240, 247, 254, 1),
+                ? TextAlign.left
+                : TextAlign.right,
           ),
-          textAlign: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
-              ? TextAlign.left
-              : TextAlign.right,
-        ),
-        const SizedBox(height: 3),
-        Row(
-          children: [
-            containerTimer(context, range.day, 'дни'),
-            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-            containerTimer(context, range.hour, 'час'),
-            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-            containerTimer(context, range.minute, 'мин'),
-            Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
-            containerTimer(context, range.second, 'сек'),
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: getHeight(context, 4)),
-        ),
-        RotatedBox(
-          quarterTurns: 2,
-          child: InkWell(
-            onTap: () {
-              final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
-              context
-                  .read<PostcardBloc>()
-                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => Screen215(
-                    currentModel: flowerModel,
+          const SizedBox(height: 3),
+          Row(
+            children: [
+              containerTimer(context, range.day, 'дни'),
+              Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+              containerTimer(context, range.hour, 'час'),
+              Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+              containerTimer(context, range.minute, 'мин'),
+              Padding(padding: EdgeInsets.only(left: getWidth(context, 2))),
+              containerTimer(context, range.second, 'сек'),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: getHeight(context, 4)),
+          ),
+          RotatedBox(
+            quarterTurns: 2,
+            child: InkWell(
+              onTap: () {
+                final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
+                context
+                    .read<PostcardBloc>()
+                    .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => Screen215(
+                      currentModel: flowerModel,
+                    ),
                   ),
-                ),
-              );
-            },
-            child: backSpaceButton(context, false),
+                );
+              },
+              child: backSpaceButton(context, false),
+            ),
           ),
-        ),
-      ],
-    );
-  });
+        ],
+      );
+    },
+  );
 }
 
 Widget myDream(BuildContext context, DateTime range) {
@@ -750,8 +756,11 @@ Widget myWishes(
         alignment: Alignment.topRight,
         child: Text(
           'Узнай\nбольше\nо моих\nжеланиях',
-          style: TextLocalStyles.mono400
-              .copyWith(fontSize: getHeight(context, 31), height: 1, fontWeight: FontWeight.w200),
+          style: TextLocalStyles.mono400.copyWith(
+            fontSize: getHeight(context, 31),
+            height: 1,
+            fontWeight: FontWeight.w200,
+          ),
           textAlign: TextAlign.right,
         ),
       ),
@@ -765,7 +774,11 @@ Widget myWishes(
         context,
         rangeToBirthday,
       ),
-      Padding(padding: EdgeInsets.only(top: getHeight(context, 26))),
+      Padding(
+        padding: EdgeInsets.only(
+          top: getHeight(context, 26),
+        ),
+      ),
       bouquetOfTheWeek(context, rangeToStream)
     ],
   );

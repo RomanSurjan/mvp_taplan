@@ -12,16 +12,44 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
     on<LoginEvent>(_onLogin);
     on<GetDataEvent>(_onGetData);
     on<RegisterEvent>(_onRegister);
+    on<GetCodeEvent>(_onGetCode);
   }
 
-  _onSwitchAuthorization(
-      SwitchAuthorizationEvent event, Emitter<AuthState> emitter) {
+  _onSwitchAuthorization(SwitchAuthorizationEvent event, Emitter<AuthState> emitter) {
     emitter(
       AuthorizationState().copyWith(
         authToken: event.authToken,
         code: event.code,
       ),
     );
+  }
+
+  _onGetCode(GetCodeEvent event, Emitter<AuthState> emitter) async {
+    if(state.phone != null) {
+      try {
+        final formData = FormData.fromMap({
+          'phoneNumber': state.phone!.substring(1,),
+        });
+        final response = await Dio().post(
+          'https://qviz.fun/api/v1/confirm/',
+          data: formData,
+          options: Options(
+            validateStatus: (status) {
+              if (status == null) return false;
+              return status < 500;
+            },
+          ),
+        );
+
+        emitter(
+          AuthorizationState().copyWith(
+            code: response.data['code'].toString(),
+          ),
+        );
+      } catch (e) {
+        rethrow;
+      }
+    }
   }
 
   _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) {
@@ -75,19 +103,16 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
-      final code = event.phone.substring(8);
+      print(response.data);
       emitter(
         AuthorizationState().copyWith(
-          code: code,
           sex: response.data['sex'],
-          phone: response.data['phoneNumber'].runtimeType ==
-                  (List<dynamic>)
+          phone: response.data['phoneNumber'].runtimeType == (List<dynamic>)
               ? response.data['phoneNumber'][0]
               : response.data['phoneNumber'],
           email: response.data['email'],
           username: response.data['username'],
-          telegram: response.data['telegram'].runtimeType ==
-              (List<dynamic>)
+          telegram: response.data['telegram'].runtimeType == (List<dynamic>)
               ? response.data['telegram'][0]
               : response.data['telegram'],
           photo: response.data['user_photo'],
@@ -114,12 +139,11 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
-      final code = event.phone.substring(8);
 
       emitter(
         AuthorizationState().copyWith(
-          code: code,
           authToken: response.data['auth_token'],
+          phone: event.phone,
         ),
       );
     } catch (e) {

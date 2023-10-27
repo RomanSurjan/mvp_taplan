@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -701,8 +702,9 @@ class _Screen12State extends State<Screen12> {
                                       isOk = false;
                                       setState(() {});
                                       Timer(
-                                        const Duration(milliseconds: 500),
+                                        const Duration(milliseconds: 600),
                                             () {
+                                          print('Ok');
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -722,6 +724,10 @@ class _Screen12State extends State<Screen12> {
                                         textFieldColor[2] = Colors.red;
                                         isPressed = true;
                                       }
+                                      if(context.read<AuthorizationBloc>().state.phone.isNull &&  context.read<AuthorizationBloc>().state.telegram.isNull)
+                                        {
+                                          textFieldColor[1] = Colors.red;
+                                        }
                                       isOk = false;
                                       setState(() {});
                                     }

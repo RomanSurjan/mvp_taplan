@@ -52,7 +52,6 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
   String code = '';
   bool isPressedBirthday = true;
 
-  //late Map contacts;
   List<String> groupName = ['Семья', 'Друзья', 'Близкие', 'Коллеги', 'Партнеры'];
   int idGroup = 0;
   String group = 'Семья';
@@ -61,6 +60,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
   Map visibleContacts = {};
 
   bool isPressed = true;
+  String imageContact = 'https://qviz.fun/media/avatars/default_avatar.png';
 
   int isPressedContactData = 0;
   int id = 0;
@@ -68,38 +68,33 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
   Uint8List? image;
 
   double getHeight(BuildContext context, double height) {
-    return height / 768 * MediaQuery
-        .of(context)
-        .size
-        .height;
+    return height / 768 * MediaQuery.of(context).size.height;
   }
 
   double getWidth(BuildContext context, double width) {
-    return width / 375 * MediaQuery
-        .of(context)
-        .size
-        .width;
+    return width / 375 * MediaQuery.of(context).size.width;
   }
 
-  void _saveChangeContact(int id,
-      String name,
-      String birthday,
-      bool sex,
-      Uint8List? image,
-      String personPhoto,
-      String phoneNumber,
-      String telegram,
-      String email,
-      String region,
-      bool admin,
-      int addedUser,
-      bool register,
-      int? registerUserId,
-      String username,
-      String timeCreate,
-      String status,
-      String cat,
-      String? userGroup,) async {
+  void _saveChangeContact(
+    int id,
+    String name,
+    String birthday,
+    bool sex,
+    Uint8List? image,
+    String phoneNumber,
+    String telegram,
+    String email,
+    String region,
+    bool admin,
+    int addedUser,
+    bool register,
+    int? registerUserId,
+    String? username,
+    String timeCreate,
+    String? status,
+    String cat,
+    String? userGroup,
+  ) async {
     try {
       FormData formData;
       if (image != null) {
@@ -147,31 +142,27 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           "status": status,
           "cat": cat,
           "user_group": userGroup,
-          "person_photo": personPhoto,
         });
       }
       final response = await Dio().put(
-        'https://qviz.fun/api/v1/people/',
+        'https://qviz.fun/api/v1/update/people/$id/',
         data: formData,
         options: Options(
           validateStatus: (status) {
             return status! < 500;
           },
           headers: {
-            'Authorization': "Token ${context
-                .read<AuthorizationBloc>()
-                .state
-                .authToken}",
+            'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
           },
         ),
       );
+
       if (response.data != null) {
         textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
         textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
         textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
         textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
         setState(() {});
-
         Future.delayed(const Duration(milliseconds: 400), () {
           Navigator.pop(context);
         });
@@ -181,14 +172,16 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     }
   }
 
-  void _saveContact(String name,
-      String phoneNumber,
-      String birthday,
-      String sex,
-      String telegram,
-      String region,
-      String cat,
-      Uint8List? image,) async {
+  void _saveContact(
+    String name,
+    String phoneNumber,
+    String birthday,
+    String sex,
+    String telegram,
+    String region,
+    String cat,
+    Uint8List? image,
+  ) async {
     FormData formData;
     if (image != null) {
       var photo = MultipartFile.fromBytes(
@@ -229,10 +222,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
             return status! < 500;
           },
           headers: {
-            'Authorization': "Token ${context
-                .read<AuthorizationBloc>()
-                .state
-                .authToken}",
+            'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
           },
         ),
       );
@@ -282,22 +272,10 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     }
 
     textFieldColor = [
-      context
-          .read<ThemeBloc>()
-          .state
-          .postcardContainerBorderColor,
-      context
-          .read<ThemeBloc>()
-          .state
-          .postcardContainerBorderColor,
-      context
-          .read<ThemeBloc>()
-          .state
-          .postcardContainerBorderColor,
-      context
-          .read<ThemeBloc>()
-          .state
-          .postcardContainerBorderColor,
+      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+      context.read<ThemeBloc>().state.postcardContainerBorderColor,
     ];
 
     telegram.addListener(() {
@@ -313,8 +291,6 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         );
       }
       for (var match in matches) {
-        // tagHandle = value.substring(match.start, match.end);
-        // _callToAction(tagHandle);
         tag = value.substring(match.start, match.end);
         telegram.value = telegram.value.copyWith(
           text: tag,
@@ -334,7 +310,8 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
           composing: TextRange.empty,
         );
-      } else if (regExpTaghandle.hasMatch(value)) {} else {
+      } else if (regExpTaghandle.hasMatch(value)) {
+      } else {
         String text = value.substring(0, value.length - 1);
         phone.value = phone.value.copyWith(
           text: text,
@@ -354,36 +331,22 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
             return Scaffold(
               resizeToAvoidBottomInset: false,
               backgroundColor:
-              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
+                  state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
                 name:
-                'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts.isNotEmpty
-                    ? visibleContacts.length
-                    : 0) + 1})',
+                    'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts.isNotEmpty ? visibleContacts.length : 0) + 1})',
                 onTheme: () {
                   context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
                   setState(() {});
 
                   Timer(
                     const Duration(),
-                        () {
+                    () {
                       textFieldColor = [
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
                       ];
                       setState(() {});
                     },
@@ -392,14 +355,8 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
               ),
               body: SafeArea(
                 child: SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                     child: Column(
@@ -438,17 +395,14 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                     email = TextEditingController(text: '');
                                     city = TextEditingController(text: '');
                                     country = TextEditingController(text: '');
+                                    imageContact =
+                                        'https://qviz.fun/media/avatars/default_avatar.png';
                                   } else {
                                     name = TextEditingController(text: visibleContacts[id]['name']);
                                     birthday = TextEditingController(
-                                        text: '${visibleContacts[id]['birthday']
-                                            .toString()
-                                            .substring(
-                                          8,
-                                        )}.${visibleContacts[id]['birthday'].toString().substring(
-                                            5, 7)}.${visibleContacts[id]['birthday']
-                                            .toString()
-                                            .substring(0, 4)}');
+                                        text: '${visibleContacts[id]['birthday'].toString().substring(
+                                              8,
+                                            )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
                                     phone = TextEditingController(
                                         text: visibleContacts[id]['phoneNumber']);
                                     telegram = TextEditingController(
@@ -457,23 +411,26 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         TextEditingController(text: visibleContacts[id]['email']);
                                     city = TextEditingController(
                                       text: visibleContacts[id]['region'].toString().substring(
-                                        !visibleContacts[id]['region'].toString().contains(',')
-                                            ? 0
-                                            : visibleContacts[id]['region']
-                                            .toString()
-                                            .indexOf(',') + 2,
-                                      ),
+                                            !visibleContacts[id]['region'].toString().contains(',')
+                                                ? 0
+                                                : visibleContacts[id]['region']
+                                                        .toString()
+                                                        .indexOf(',') +
+                                                    2,
+                                          ),
                                     );
                                     country = TextEditingController(
                                       text: visibleContacts[id]['region'].toString().substring(
-                                        0,
-                                        !visibleContacts[id]['region'].toString().contains(',')
-                                            ? visibleContacts[id]['region'].length
-                                            : visibleContacts[id]['region']
-                                            .toString()
-                                            .indexOf(','),
-                                      ),
+                                            0,
+                                            !visibleContacts[id]['region'].toString().contains(',')
+                                                ? visibleContacts[id]['region'].length
+                                                : visibleContacts[id]['region']
+                                                    .toString()
+                                                    .indexOf(','),
+                                          ),
                                     );
+                                    imageContact =
+                                        'https://qviz.fun${visibleContacts[id]['person_photo']}';
                                   }
                                   setState(() {});
                                 }
@@ -513,13 +470,17 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                     email = TextEditingController(text: '');
                                     city = TextEditingController(text: '');
                                     country = TextEditingController(text: '');
+                                    imageContact =
+                                        'https://qviz.fun/media/avatars/default_avatar.png';
                                   } else {
                                     if (id > visibleContacts.length) {
                                       id = 0;
                                     }
                                     name = TextEditingController(text: visibleContacts[id]['name']);
                                     birthday = TextEditingController(
-                                        text: visibleContacts[id]['birthday'].toString());
+                                        text: '${visibleContacts[id]['birthday'].toString().substring(
+                                          8,
+                                        )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
                                     phone = TextEditingController(
                                         text: visibleContacts[id]['phoneNumber']);
                                     telegram = TextEditingController(
@@ -528,23 +489,26 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         TextEditingController(text: visibleContacts[id]['email']);
                                     city = TextEditingController(
                                       text: visibleContacts[id]['region'].toString().substring(
-                                        !visibleContacts[id]['region'].toString().contains(',')
-                                            ? 0
-                                            : visibleContacts[id]['region']
-                                            .toString()
-                                            .indexOf(',') + 2,
-                                      ),
+                                            !visibleContacts[id]['region'].toString().contains(',')
+                                                ? 0
+                                                : visibleContacts[id]['region']
+                                                        .toString()
+                                                        .indexOf(',') +
+                                                    2,
+                                          ),
                                     );
                                     country = TextEditingController(
                                       text: visibleContacts[id]['region'].toString().substring(
-                                        0,
-                                        !visibleContacts[id]['region'].toString().contains(',')
-                                            ? visibleContacts[id]['region'].length
-                                            : visibleContacts[id]['region']
-                                            .toString()
-                                            .indexOf(','),
-                                      ),
+                                            0,
+                                            !visibleContacts[id]['region'].toString().contains(',')
+                                                ? visibleContacts[id]['region'].length
+                                                : visibleContacts[id]['region']
+                                                    .toString()
+                                                    .indexOf(','),
+                                          ),
                                     );
+                                    imageContact =
+                                        'https://qviz.fun${visibleContacts[id]['person_photo']}';
                                   }
                                   setState(() {});
                                 }
@@ -629,17 +593,11 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                     height: getHeight(context, 52),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
+                                        color: context.read<ThemeBloc>().state.isDark
                                             ? const Color.fromRGBO(52, 54, 62, 1)
                                             : const Color.fromRGBO(250, 255, 255, 1),
                                         border: Border.all(
-                                            color: context
-                                                .read<ThemeBloc>()
-                                                .state
-                                                .isDark
+                                            color: context.read<ThemeBloc>().state.isDark
                                                 ? const Color.fromRGBO(65, 67, 76, 1)
                                                 : const Color.fromRGBO(230, 241, 254, 1),
                                             width: 1.2),
@@ -727,13 +685,13 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                 isPressedContactData == 0
                                     ? 'Телефон'
                                     : isPressedContactData == 1
-                                    ? '@'
-                                    : 'example@mail.ru',
+                                        ? '@'
+                                        : 'example@mail.ru',
                                 isPressedContactData == 0
                                     ? phone
                                     : isPressedContactData == 1
-                                    ? telegram
-                                    : email,
+                                        ? telegram
+                                        : email,
                                 false,
                                 textFieldColor[2],
                               ),
@@ -865,17 +823,11 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                           height: getHeight(context, 52),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: context
-                                  .read<ThemeBloc>()
-                                  .state
-                                  .isDark
+                              color: context.read<ThemeBloc>().state.isDark
                                   ? const Color.fromRGBO(52, 54, 62, 1)
                                   : const Color.fromRGBO(250, 255, 255, 1),
                               border: Border.all(
-                                color: context
-                                    .read<ThemeBloc>()
-                                    .state
-                                    .isDark
+                                color: context.read<ThemeBloc>().state.isDark
                                     ? const Color.fromRGBO(65, 67, 76, 1)
                                     : const Color.fromRGBO(230, 241, 254, 1),
                               ),
@@ -890,10 +842,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                 Text(
                                   group,
                                   style: TextLocalStyles.roboto500.copyWith(
-                                    color: context
-                                        .read<ThemeBloc>()
-                                        .state
-                                        .isDark
+                                    color: context.read<ThemeBloc>().state.isDark
                                         ? Colors.white
                                         : const Color.fromRGBO(57, 57, 57, 1),
                                     fontSize: 16,
@@ -915,14 +864,14 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         int length = 0;
                                         buffContacts.clear();
                                         for (int k = 0;
-                                        k <
-                                            int.parse(
-                                                widget.contacts['people'].length.toString());
-                                        k++) {
+                                            k <
+                                                int.parse(
+                                                    widget.contacts['people'].length.toString());
+                                            k++) {
                                           if (widget.contacts['people'][k]['cat'] ==
                                               (idGroup + 1)) {
                                             buffContacts[widget.contacts['people'][k]['id']] =
-                                            widget.contacts['people'][k];
+                                                widget.contacts['people'][k];
                                           }
                                         }
 
@@ -973,14 +922,14 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         int length = 0;
                                         buffContacts.clear();
                                         for (int k = 0;
-                                        k <
-                                            int.parse(
-                                                widget.contacts['people'].length.toString());
-                                        k++) {
+                                            k <
+                                                int.parse(
+                                                    widget.contacts['people'].length.toString());
+                                            k++) {
                                           if (widget.contacts['people'][k]['cat'] ==
                                               (idGroup + 1)) {
                                             buffContacts[widget.contacts['people'][k]['id']] =
-                                            widget.contacts['people'][k];
+                                                widget.contacts['people'][k];
                                           }
                                         }
 
@@ -1036,18 +985,28 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                             SizedBox(
                               height: getHeight(context, 62),
                               width: getHeight(context, 62),
-                              child: image == null
-                                  ? CircleAvatar(
-                                backgroundImage:
-                                const AssetImage('assets/images/upload_image.png'),
-                                backgroundColor: state.isDark
-                                    ? AppTheme.backgroundColor
-                                    : const Color.fromRGBO(240, 247, 254, 1),
-                              )
-                                  : Image.memory(
-                                image!,
-                                fit: BoxFit.cover,
-                              ), //Image.file(imageFile!),),
+                              child: id != visibleContacts.length
+                                  ? DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(imageContact),
+                                          fit: BoxFit.fill,
+                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    )
+                                  : image == null
+                                      ? CircleAvatar(
+                                          backgroundImage:
+                                              const AssetImage('assets/images/upload_image.png'),
+                                          backgroundColor: state.isDark
+                                              ? AppTheme.backgroundColor
+                                              : const Color.fromRGBO(240, 247, 254, 1),
+                                        )
+                                      : Image.memory(
+                                          image!,
+                                          fit: BoxFit.cover,
+                                        ), //Image.file(imageFile!),),
                             ),
                             const Expanded(child: SizedBox()),
                             InkWell(
@@ -1132,14 +1091,8 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                         ),
                         Row(
                           children: [
-                            buttonGreen(
-                                context,
-                                52,
-                                166,
-                                'Календарь событий\nчлена группы',
-                                16,
-                                    () {},
-                                false),
+                            buttonGreen(context, 52, 166, 'Календарь событий\nчлена группы', 16,
+                                () {}, false),
                             const SizedBox(
                               width: 11,
                             ),
@@ -1149,7 +1102,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               166,
                               'Сохранить',
                               16,
-                                  () {
+                              () {
                                 isOk = true;
 
                                 String value = phone.text;
@@ -1233,16 +1186,24 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                   isOk = false;
                                   isPressed = false;
                                 }
-
+                                // print(visibleContacts[id]);
+                                // print(visibleContacts[id]['id']);
+                                // print(visibleContacts[id]['admin']);
+                                // print(visibleContacts[id]['added_user']);
+                                // print(visibleContacts[id]['register']);
+                                // print(visibleContacts[id]['register_user_id']);
+                                // print(visibleContacts[id]['username']);
+                                // print(visibleContacts[id]['time_create']);
+                                // print(visibleContacts[id]['status']);
+                                // print(visibleContacts[id]['user_group']);
                                 if (isOk) {
                                   if (id != visibleContacts.length) {
                                     _saveChangeContact(
                                       visibleContacts[id]['id'],
                                       name.text,
-                                      birthday.text,
+                                      birthdayDDMMYY,
                                       sex,
                                       image,
-                                      visibleContacts[id]['person_photo'],
                                       phone.text,
                                       telegram.text,
                                       email.text,
@@ -1255,24 +1216,24 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                       visibleContacts[id]['time_create'],
                                       visibleContacts[id]['status'],
                                       (idGroup + 1).toString(),
-                                      visibleContacts[id]['user_group'],);
+                                      visibleContacts[id]['user_group'],
+                                    );
+                                  } else {
+                                    _saveContact(
+                                        name.text,
+                                        phone.text,
+                                        birthdayDDMMYY,
+                                        sex.toString(),
+                                        telegram.text,
+                                        '${country.text}, ${city.text}',
+                                        (idGroup + 1).toString(),
+                                        image);
                                   }
-                                else {
-                                  _saveContact(
-                                      name.text,
-                                      phone.text,
-                                      birthdayDDMMYY,
-                                      sex.toString(),
-                                      telegram.text,
-                                      '${country.text}, ${city.text}',
-                                      (idGroup + 1).toString(),
-                                      image);
-                                }
-                              }else {
+                                } else {
                                   setState(() {});
                                   Timer(
                                     const Duration(seconds: 2),
-                                        () {
+                                    () {
                                       textColor = const Color.fromRGBO(188, 192, 200, 1);
                                       textColorDark = const Color.fromRGBO(98, 118, 132, 1);
                                       textFieldColor = [
@@ -1288,18 +1249,12 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                             .read<ThemeBloc>()
                                             .state
                                             .postcardContainerBorderColor,
-                                        context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .postcardContainerBorderColor
+                                        context.read<ThemeBloc>().state.postcardContainerBorderColor
                                       ];
                                       setState(() {});
                                     },
                                   );
                                 }
-
-
-
                               },
                               true,
                             ),
@@ -1325,63 +1280,54 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(
-            color: context
-                .read<ThemeBloc>()
-                .state
-                .postcardContainerBorderColor,
+            color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
             width: 1.2,
           ),
           //color: Color.fromRGBO(52, 54, 62, 1),
-          gradient: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+          gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-          boxShadow: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: SvgPicture.asset(
           icon,
@@ -1400,63 +1346,54 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(
-            color: context
-                .read<ThemeBloc>()
-                .state
-                .postcardContainerBorderColor,
+            color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
             width: 1.2,
           ),
           //color: Color.fromRGBO(52, 54, 62, 1),
-          gradient: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+          gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-          boxShadow: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -1486,62 +1423,53 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           border: Border.all(
-            color: context
-                .read<ThemeBloc>()
-                .state
-                .postcardContainerBorderColor,
+            color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
             width: 1.2,
           ),
-          gradient: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+          gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-          boxShadow: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: Image.asset(
           'assets/images/image 416.png',
@@ -1562,11 +1490,11 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           decoration: BoxDecoration(
             gradient: active
                 ? const LinearGradient(
-              colors: [
-                Color.fromRGBO(98, 198, 170, 0.3),
-                Color.fromRGBO(68, 168, 140, 0.3),
-              ],
-            )
+                    colors: [
+                      Color.fromRGBO(98, 198, 170, 0.3),
+                      Color.fromRGBO(68, 168, 140, 0.3),
+                    ],
+                  )
                 : null,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
@@ -1590,13 +1518,13 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     );
   }
 
-  Widget textFieldRegistration(BuildContext context, width, hintText, controller, isbirthday,
-      textFieldColor) {
+  Widget textFieldRegistration(
+      BuildContext context, width, hintText, controller, isbirthday, textFieldColor) {
     final OutlineInputBorder outlinedBorder = OutlineInputBorder(
         borderSide: BorderSide(
-          color: textFieldColor,
-          width: 1.2,
-        ));
+      color: textFieldColor,
+      width: 1.2,
+    ));
     return SizedBox(
       height: getHeight(context, 52),
       child: TextField(
@@ -1604,10 +1532,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         controller: controller,
         textAlignVertical: const TextAlignVertical(y: 0.5),
         style: TextLocalStyles.roboto400.copyWith(
-          color: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+          color: context.read<ThemeBloc>().state.isDark
               ? const Color.fromRGBO(244, 199, 217, 1)
               : const Color.fromRGBO(166, 173, 181, 1),
           fontSize: 16,
@@ -1620,18 +1545,12 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
           enabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
           hintText: hintText,
           hintStyle: TextLocalStyles.roboto400.copyWith(
-              color: context
-                  .read<ThemeBloc>()
-                  .state
-                  .isDark
+              color: context.read<ThemeBloc>().state.isDark
                   ? const Color.fromRGBO(105, 113, 119, 1)
                   : const Color.fromRGBO(166, 173, 181, 1),
               fontSize: getHeight(context, 14),
               height: 22 / 14),
-          fillColor: context
-              .read<ThemeBloc>()
-              .state
-              .isDark
+          fillColor: context.read<ThemeBloc>().state.isDark
               ? const Color.fromRGBO(52, 54, 62, 1)
               : const Color.fromRGBO(250, 255, 255, 1),
           filled: true,

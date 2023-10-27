@@ -65,3 +65,7 @@ class ChangeDataEvent extends AuthorizationEvent {
     required this.email,
   });
 }
+
+class GetCodeEvent extends AuthorizationEvent {
+  GetCodeEvent();
+}

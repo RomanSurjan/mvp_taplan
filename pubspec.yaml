@@ -104,6 +104,9 @@ flutter:
     - family: Digital
       fonts:
         - asset: assets/fonts/digitalicg.ttf
+    - family: Abhaya
+      fonts:
+        - asset: assets/fonts/AbhayaLibre.ttf
 
   #   - family: Trajan Pro
   #     fonts:

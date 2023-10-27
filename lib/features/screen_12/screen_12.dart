@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -361,16 +362,9 @@ class _Screen12State extends State<Screen12> {
                                       const Duration(milliseconds: 700),
                                           () {
                                             if (context.read<AuthorizationBloc>().state.authToken != null) {
-                                              // context.read<AuthorizationBloc>().add(
-                                              //   GetDataEvent(),
-                                              // );
                                               isOk = false;
                                               textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
                                               textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-                                              //image = authState.photo;
-
-
-
                                               setState(() {});
                                               Timer(
                                                 const Duration(milliseconds: 400),
@@ -708,8 +702,9 @@ class _Screen12State extends State<Screen12> {
                                       isOk = false;
                                       setState(() {});
                                       Timer(
-                                        const Duration(milliseconds: 500),
+                                        const Duration(milliseconds: 600),
                                             () {
+                                          print('Ok');
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -729,6 +724,10 @@ class _Screen12State extends State<Screen12> {
                                         textFieldColor[2] = Colors.red;
                                         isPressed = true;
                                       }
+                                      if(context.read<AuthorizationBloc>().state.phone.isNull &&  context.read<AuthorizationBloc>().state.telegram.isNull)
+                                        {
+                                          textFieldColor[1] = Colors.red;
+                                        }
                                       isOk = false;
                                       setState(() {});
                                     }

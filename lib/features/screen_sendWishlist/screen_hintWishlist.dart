@@ -27,7 +27,7 @@ class ScreenHintWishlist extends StatefulWidget {
 }
 
 class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
-  Color textColor = const Color.fromRGBO(255, 255, 255, 1);
+  Color textColor = const Color.fromRGBO(240, 247, 254, 1);
   Color textColorDark = const Color.fromRGBO(98, 118, 132, 1);
   TextEditingController name = TextEditingController(text: '');
   TextEditingController birthday = TextEditingController(text: '');
@@ -38,7 +38,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
   TextEditingController country = TextEditingController(text: '');
   late List<Color> textFieldColor;
   bool isOk = true;
-  final TextEditingController _textFieldScroll = TextEditingController(text: '');
+  final TextEditingController _textFieldScroll = TextEditingController(
+      text:
+          'Максим, привет,\nмечтаю получить этот подарок от тебя. Я испытываю радость, когда получаю такие подарки, потому что это удовлетворяет мою потребность в гармонии, внимании и заботе. Я буду искренне благодарен(а) за такой подарок.');
 
   bool isPressedBirthday = true;
 
@@ -50,9 +52,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
 
   Uint8List? image;
 
-
   bool isPicked = false;
-
 
   List<bool> buttonGroupIsPressed = [true, false, false, false, false];
 
@@ -63,7 +63,6 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
   double getWidth(BuildContext context, double width) {
     return width / 375 * MediaQuery.of(context).size.width;
   }
-
 
   @override
   void initState() {
@@ -84,8 +83,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
       if (matches.isEmpty) {
         telegram.value = telegram.value.copyWith(
           text: tag,
-          selection:
-          TextSelection(baseOffset: tag.length, extentOffset: tag.length),
+          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
           composing: TextRange.empty,
         );
       }
@@ -95,8 +93,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
         tag = value.substring(match.start, match.end);
         telegram.value = telegram.value.copyWith(
           text: tag,
-          selection:
-          TextSelection(baseOffset: tag.length, extentOffset: tag.length),
+          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
           composing: TextRange.empty,
         );
         break;
@@ -109,8 +106,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
       if (phone.text.isEmpty || phone.text == '+') {
         phone.value = phone.value.copyWith(
           text: tag,
-          selection:
-          TextSelection(baseOffset: tag.length, extentOffset: tag.length),
+          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
           composing: TextRange.empty,
         );
       } else if (regExpTaghandle.hasMatch(value)) {
@@ -119,8 +115,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
         String text = value.substring(0, value.length - 1);
         phone.value = phone.value.copyWith(
           text: text,
-          selection:
-          TextSelection(baseOffset: text.length, extentOffset: text.length),
+          selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
           composing: TextRange.empty,
         );
       }
@@ -135,37 +130,22 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
           builder: (context, state) {
             return Scaffold(
               resizeToAvoidBottomInset: false,
-              backgroundColor: state.isDark
-                  ? AppTheme.backgroundColor
-                  : const Color.fromRGBO(240, 247, 254, 1),
+              backgroundColor:
+                  state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
                 name: 'Намекнуть о\nжелаемом подарке',
                 onTheme: () {
-                  context
-                      .read<ThemeBloc>()
-                      .add(SwitchThemeEvent(isDark: !state.isDark));
+                  context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
                   setState(() {});
 
                   Timer(
                     const Duration(),
-                        () {
+                    () {
                       textFieldColor = [
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
-                        context
-                            .read<ThemeBloc>()
-                            .state
-                            .postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                        context.read<ThemeBloc>().state.postcardContainerBorderColor,
                       ];
                       setState(() {});
                     },
@@ -179,13 +159,24 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                   child: Column(
                     children: [
                       Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
+                        padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                         child: Column(
                           children: [
                             SizedBox(
-                              height: getHeight(context, 18),
+                              height: getHeight(context, 8),
                             ),
+                            Center(
+                              child: Text(
+                                'Вам понравился этот подарок и Вы хотели\nбы получить  его от Вашего близкого человека?\nЗаполните форму и он получит сообщение с намеком.',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  color: const Color.fromRGBO(157, 167, 176, 1),
+                                  fontSize: 13,
+                                  height: 15.23/13,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            SizedBox(height: getHeight(context, 6)),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -205,7 +196,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                   child: textFieldRegistration(
                                     context,
                                     343,
-                                    'Имя члена группы',
+                                    'Просто так',
                                     name,
                                     false,
                                     textFieldColor[0],
@@ -232,8 +223,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                             height: getHeight(context, 24),
                                             fit: BoxFit.scaleDown,
                                             colorFilter: const ColorFilter.mode(
-                                                Color.fromRGBO(175, 182, 189, 1),
-                                                BlendMode.srcIn),
+                                                Color.fromRGBO(175, 182, 189, 1), BlendMode.srcIn),
                                           ),
                                         ),
                                       ),
@@ -246,7 +236,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                               height: getHeight(context, 6),
                             ),
                             SizedBox(
-                              height: getHeight(context, 126),
+                              height: getHeight(context, 115),
                               width: getWidth(context, 343),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
@@ -258,7 +248,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                   color: const Color.fromRGBO(52, 54, 62, 1),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
                                   child: Align(
                                     alignment: Alignment.topLeft,
                                     child: RawScrollbar(
@@ -267,41 +257,27 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                       thickness: 5,
                                       trackVisibility: true,
                                       trackColor: const Color.fromRGBO(61, 63, 71, 1),
-                                      thumbColor:
-                                      const Color.fromRGBO(137, 137, 139, 1),
-                                      trackRadius:
-                                      Radius.circular(getWidth(context, 2)),
-                                      // here's the actual text box
+                                      thumbColor: const Color.fromRGBO(73, 75, 83, 1),
+                                      trackRadius: Radius.circular(getWidth(context, 2)),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 10),
+                                        padding:
+                                            const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                                         child: TextField(
                                           maxLines: null,
                                           controller: _textFieldScroll,
                                           style: TextLocalStyles.roboto400.copyWith(
-                                            color: context
-                                                .read<ThemeBloc>()
-                                                .state
-                                                .isDark
-                                                ? const Color.fromRGBO(
-                                                200, 210, 219, 1)
-                                                : const Color.fromRGBO(
-                                                166, 173, 181, 1),
+                                            color: context.read<ThemeBloc>().state.isDark
+                                                ? const Color.fromRGBO(200, 210, 219, 1)
+                                                : const Color.fromRGBO(166, 173, 181, 1),
                                             fontSize: 14,
                                             // height:
                                           ),
                                           decoration: InputDecoration.collapsed(
                                             hintText: 'Текст сообщения',
-                                            hintStyle: TextLocalStyles.roboto400
-                                                .copyWith(
-                                                color: context
-                                                    .read<ThemeBloc>()
-                                                    .state
-                                                    .isDark
-                                                    ? const Color.fromRGBO(
-                                                    105, 113, 119, 1)
-                                                    : const Color.fromRGBO(
-                                                    166, 173, 181, 1),
+                                            hintStyle: TextLocalStyles.roboto400.copyWith(
+                                                color: context.read<ThemeBloc>().state.isDark
+                                                    ? const Color.fromRGBO(105, 113, 119, 1)
+                                                    : const Color.fromRGBO(166, 173, 181, 1),
                                                 fontSize: 14,
                                                 height: 22 / 14),
                                           ),
@@ -322,7 +298,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                 'Введите контактные данные для пересылки',
                                 style: TextLocalStyles.roboto400.copyWith(
                                   color: state.isDark
-                                      ? Colors.white
+                                      ? const Color.fromRGBO(240, 247, 254, 1)
                                       : const Color.fromRGBO(22, 26, 29, 1),
                                   fontSize: 15,
                                   height: 17.58 / 15,
@@ -352,13 +328,13 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     isPressedContactData == 0
                                         ? 'Телефон'
                                         : isPressedContactData == 1
-                                        ? '@'
-                                        : 'example@mail.ru',
+                                            ? '@'
+                                            : 'example@mail.ru',
                                     isPressedContactData == 0
                                         ? phone
                                         : isPressedContactData == 1
-                                        ? telegram
-                                        : email,
+                                            ? telegram
+                                            : email,
                                     false,
                                     textFieldColor[2],
                                   ),
@@ -422,7 +398,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                 'Или данные tg-чата для пересылки',
                                 style: TextLocalStyles.roboto400.copyWith(
                                     color: state.isDark
-                                        ? Colors.white
+                                        ? const Color.fromRGBO(240, 247, 254, 1)
                                         : const Color.fromRGBO(22, 26, 29, 1),
                                     fontSize: 15,
                                     height: 16.41 / 14),
@@ -435,20 +411,16 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                               children: [
                                 SizedBox(
                                   width: getWidth(context, 284),
-                                  height: getHeight(context, 52),
+                                  height: getHeight(context, 48),
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       color: context.read<ThemeBloc>().state.isDark
                                           ? const Color.fromRGBO(52, 54, 62, 1)
                                           : const Color.fromRGBO(250, 255, 255, 1),
                                       border: Border.all(
-                                        color: context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
+                                        color: context.read<ThemeBloc>().state.isDark
                                             ? const Color.fromRGBO(65, 67, 76, 1)
-                                            : const Color.fromRGBO(
-                                            230, 241, 254, 1),
+                                            : const Color.fromRGBO(230, 241, 254, 1),
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -460,10 +432,8 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                             padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               'Ваши группы из списка контактов',
-                                              style: TextLocalStyles.roboto500
-                                                  .copyWith(
-                                                color: const Color.fromRGBO(
-                                                    105, 113, 119, 1),
+                                              style: TextLocalStyles.roboto500.copyWith(
+                                                color: const Color.fromRGBO(105, 113, 119, 1),
                                                 fontSize: 14,
                                               ),
                                               textAlign: TextAlign.justify,
@@ -500,12 +470,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     width: getHeight(context, 36),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: const Color.fromRGBO(
-                                            98, 198, 170, 0.25),
+                                        color: const Color.fromRGBO(98, 198, 170, 0.25),
                                         border: Border.all(
-                                            color: const Color.fromRGBO(
-                                                98, 198, 170, 1),
-                                            width: 1),
+                                            color: const Color.fromRGBO(98, 198, 170, 1), width: 1),
                                         shape: BoxShape.circle,
                                       ),
                                       child: SvgPicture.asset(
@@ -513,7 +480,8 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                         width: getWidth(context, 24),
                                         height: getHeight(context, 24),
                                         fit: BoxFit.scaleDown,
-                                        colorFilter: const ColorFilter.mode(Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
+                                        colorFilter: const ColorFilter.mode(
+                                            Color.fromRGBO(98, 198, 170, 1), BlendMode.srcIn),
                                       ),
                                     ),
                                   ),
@@ -529,7 +497,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                 'Дата и время пересылки сообщения',
                                 style: TextLocalStyles.roboto400.copyWith(
                                     color: state.isDark
-                                        ? Colors.white
+                                        ? const Color.fromRGBO(240, 247, 254, 1)
                                         : const Color.fromRGBO(22, 26, 29, 1),
                                     fontSize: 15,
                                     height: 16.41 / 14),
@@ -546,13 +514,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                           ? const Color.fromRGBO(52, 54, 62, 1)
                                           : const Color.fromRGBO(250, 255, 255, 1),
                                       border: Border.all(
-                                        color: context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
+                                        color: context.read<ThemeBloc>().state.isDark
                                             ? const Color.fromRGBO(65, 67, 76, 1)
-                                            : const Color.fromRGBO(
-                                            230, 241, 254, 1),
+                                            : const Color.fromRGBO(230, 241, 254, 1),
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -564,8 +528,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                             padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               '27 декабря 2022',
-                                              style: TextLocalStyles.roboto500
-                                                  .copyWith(
+                                              style: TextLocalStyles.roboto500.copyWith(
                                                 color: const Color.fromRGBO(200, 210, 219, 1),
                                                 fontSize: 14,
                                               ),
@@ -592,7 +555,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     ),
                                   ),
                                 ),
-                                const Expanded(child: SizedBox.shrink(),),
+                                const Expanded(
+                                  child: SizedBox.shrink(),
+                                ),
                                 SizedBox(
                                   width: getWidth(context, 126),
                                   height: getHeight(context, 48),
@@ -602,13 +567,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                           ? const Color.fromRGBO(52, 54, 62, 1)
                                           : const Color.fromRGBO(250, 255, 255, 1),
                                       border: Border.all(
-                                        color: context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
+                                        color: context.read<ThemeBloc>().state.isDark
                                             ? const Color.fromRGBO(65, 67, 76, 1)
-                                            : const Color.fromRGBO(
-                                            230, 241, 254, 1),
+                                            : const Color.fromRGBO(230, 241, 254, 1),
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
@@ -620,8 +581,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                             padding: const EdgeInsets.only(left: 12),
                                             child: Text(
                                               '20:00',
-                                              style: TextLocalStyles.roboto500
-                                                  .copyWith(
+                                              style: TextLocalStyles.roboto500.copyWith(
                                                 color: const Color.fromRGBO(200, 210, 219, 1),
                                                 fontSize: 14,
                                               ),
@@ -650,7 +610,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: getHeight(context, 12),),
+                            SizedBox(
+                              height: getHeight(context, 12),
+                            ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -686,24 +648,23 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                   width: getWidth(context, 10),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(top:2),
+                                  padding: const EdgeInsets.only(top: 2),
                                   child: SizedBox(
                                     width: getWidth(context, 307),
                                     child: Text(
-                                      'Добавить в сообщение ссылку на Wishlist',
+                                      "Добавить в сообщение ссылку на Wishlist's",
                                       textAlign: TextAlign.justify,
                                       style: TextLocalStyles.roboto400.copyWith(
                                         color: textColor,
-                                        fontSize: 15,
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-
                             SizedBox(
-                              height: getHeight(context, 19),
+                              height: getHeight(context, 10),
                             ),
                             Row(
                               children: [
@@ -721,8 +682,8 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             SizedBox(
-                                              height: getHeight(context, 36),
-                                              width: getHeight(context, 36),
+                                              height: getHeight(context, 24),
+                                              width: getHeight(context, 24),
                                               child: DecoratedBox(
                                                 decoration: const BoxDecoration(
                                                   color: Color.fromRGBO(98, 198, 170, 1),
@@ -730,8 +691,8 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                                 ),
                                                 child: Align(
                                                   child: SizedBox(
-                                                    height: getHeight(context, 20),
-                                                    width: getHeight(context, 20),
+                                                    height: getHeight(context, 24),
+                                                    width: getHeight(context, 24),
                                                     child: SvgPicture.asset(
                                                       'assets/svg/miniplus.svg',
                                                       colorFilter: const ColorFilter.mode(
@@ -750,7 +711,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                               style: TextLocalStyles.roboto400.copyWith(
                                                 color: const Color.fromRGBO(110, 210, 182, 1),
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.w400,
+                                                fontWeight: FontWeight.w200,
                                               ),
                                               textAlign: TextAlign.center,
                                             ),
@@ -784,14 +745,13 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                   166,
                                   'Отправить',
                                   16,
-                                      () {
+                                  () {
                                     isOk = true;
 
                                     String value = phone.text;
                                     RegExp regExp = RegExp(r"^\+{0,1}\d{11}$");
                                     if (regExp.hasMatch(value)) {
-                                      textFieldColor[2] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
                                     } else {
                                       textFieldColor[2] = Colors.red;
                                       isOk = false;
@@ -803,22 +763,18 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
 
                                     regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
                                     if (regExp.hasMatch(value)) {
-                                      textFieldColor[1] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
                                       String dmy = birthday.text;
-                                      int? day = int.tryParse(
-                                          dmy.substring(0, dmy.indexOf('.', 0)));
+                                      int? day =
+                                          int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
                                       dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                      int? month = int.tryParse(
-                                          dmy.substring(0, dmy.indexOf('.', 0)));
+                                      int? month =
+                                          int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
                                       dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
                                       // int? year = int.tryParse(dmy.substring(
                                       //   0,
                                       // ));
-                                      if (day! < 1 ||
-                                          day > 31 ||
-                                          month! < 1 ||
-                                          month > 12) {
+                                      if (day! < 1 || day > 31 || month! < 1 || month > 12) {
                                         textFieldColor[1] = Colors.red;
                                         isOk = false;
                                       } else {
@@ -833,8 +789,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     regExp = RegExp(
                                         r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
                                     if (regExp.hasMatch(value)) {
-                                      textFieldColor[2] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
                                     } else {
                                       textFieldColor[2] = Colors.red;
                                       isOk = false;
@@ -845,8 +800,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     regExp = RegExp(r"^@\w+$");
                                     if (regExp.hasMatch(value)) {
                                       if (textFieldColor[2] != Colors.red) {
-                                        textFieldColor[2] =
-                                        const Color.fromRGBO(66, 157, 132, 1);
+                                        textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
                                       }
                                     } else {
                                       textFieldColor[2] = Colors.red;
@@ -856,16 +810,14 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
 
                                     value = name.text;
                                     if (value.isNotEmpty) {
-                                      textFieldColor[0] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
                                     } else {
                                       textFieldColor[0] = Colors.red;
                                       isOk = false;
                                     }
                                     value = country.text;
                                     if (value.isNotEmpty) {
-                                      textFieldColor[3] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
                                     } else {
                                       textFieldColor[3] = Colors.red;
                                       isOk = false;
@@ -873,8 +825,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                     }
                                     value = city.text;
                                     if (value.isNotEmpty) {
-                                      textFieldColor[3] =
-                                      const Color.fromRGBO(66, 157, 132, 1);
+                                      textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
                                     } else {
                                       textFieldColor[3] = Colors.red;
                                       isOk = false;
@@ -886,11 +837,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                       setState(() {});
                                       Timer(
                                         const Duration(seconds: 2),
-                                            () {
-                                          textColor = const Color.fromRGBO(
-                                              188, 192, 200, 1);
-                                          textColorDark =
-                                          const Color.fromRGBO(98, 118, 132, 1);
+                                        () {
+                                          textColor = const Color.fromRGBO(188, 192, 200, 1);
+                                          textColorDark = const Color.fromRGBO(98, 118, 132, 1);
                                           textFieldColor = [
                                             context
                                                 .read<ThemeBloc>()
@@ -918,7 +867,6 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -995,8 +943,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
     );
   }
 
-  Widget iconTextFieldRegistration(
-      BuildContext context, icon, isPressed, color) {
+  Widget iconTextFieldRegistration(BuildContext context, icon, isPressed, color) {
     return SizedBox(
       height: getHeight(context, 52),
       width: getHeight(context, 52),
@@ -1010,48 +957,48 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
           //color: Color.fromRGBO(52, 54, 62, 1),
           gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: SvgPicture.asset(
           icon,
@@ -1076,48 +1023,48 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
           //color: Color.fromRGBO(52, 54, 62, 1),
           gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -1152,48 +1099,48 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
           ),
           gradient: context.read<ThemeBloc>().state.isDark
               ? isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(74, 79, 85, 1),
-            Color.fromRGBO(44, 49, 55, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight)
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(74, 79, 85, 1),
+                      Color.fromRGBO(44, 49, 55, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight)
               : isPressed
-              ? const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], end: Alignment.topLeft, begin: Alignment.bottomRight)
-              : const LinearGradient(colors: [
-            Color.fromRGBO(255, 255, 255, 1),
-            Color.fromRGBO(224, 236, 250, 1),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  ? const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], end: Alignment.topLeft, begin: Alignment.bottomRight)
+                  : const LinearGradient(colors: [
+                      Color.fromRGBO(255, 255, 255, 1),
+                      Color.fromRGBO(224, 236, 250, 1),
+                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           boxShadow: context.read<ThemeBloc>().state.isDark
               ? [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(27, 32, 38, 0.4),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(50, 55, 61, 1),
-            ),
-          ]
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(27, 32, 38, 0.4),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(50, 55, 61, 1),
+                  ),
+                ]
               : [
-            const BoxShadow(
-              offset: Offset(4, 4),
-              blurRadius: 10,
-              color: Color.fromRGBO(154, 189, 230, 0.25),
-            ),
-            const BoxShadow(
-              offset: Offset(-4, -4),
-              blurRadius: 10,
-              color: Color.fromRGBO(255, 255, 255, 1),
-            ),
-          ],
+                  const BoxShadow(
+                    offset: Offset(4, 4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(154, 189, 230, 0.25),
+                  ),
+                  const BoxShadow(
+                    offset: Offset(-4, -4),
+                    blurRadius: 10,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                ],
         ),
         child: Image.asset(
           'assets/images/image 416.png',
@@ -1203,8 +1150,7 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
     );
   }
 
-  Widget buttonGreen(
-      BuildContext context, height, width, title, fontSize, onTap, active) {
+  Widget buttonGreen(BuildContext context, height, width, title, fontSize, onTap, active) {
     return InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: onTap,
@@ -1215,11 +1161,11 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
           decoration: BoxDecoration(
             gradient: active
                 ? const LinearGradient(
-              colors: [
-                Color.fromRGBO(98, 198, 170, 0.1),
-                Color.fromRGBO(68, 168, 140, 0.1),
-              ],
-            )
+                    colors: [
+                      Color.fromRGBO(98, 198, 170, 0.1),
+                      Color.fromRGBO(68, 168, 140, 0.1),
+                    ],
+                  )
                 : null,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
@@ -1243,13 +1189,13 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
     );
   }
 
-  Widget textFieldRegistration(BuildContext context, width, hintText,
-      controller, isbirthday, textFieldColor) {
+  Widget textFieldRegistration(
+      BuildContext context, width, hintText, controller, isbirthday, textFieldColor) {
     final OutlineInputBorder outlinedBorder = OutlineInputBorder(
         borderSide: BorderSide(
-          color: textFieldColor,
-          width: 1.2,
-        ));
+      color: textFieldColor,
+      width: 1.2,
+    ));
     return SizedBox(
       height: getHeight(context, 48),
       child: TextField(
@@ -1265,12 +1211,9 @@ class _ScreenHintWishlistState extends State<ScreenHintWishlist> {
         ),
         obscureText: isbirthday,
         decoration: InputDecoration(
-          border:
-          outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
-          focusedBorder:
-          outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
-          enabledBorder:
-          outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
+          border: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
+          focusedBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
+          enabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
           hintText: hintText,
           hintStyle: TextLocalStyles.roboto400.copyWith(
               color: context.read<ThemeBloc>().state.isDark

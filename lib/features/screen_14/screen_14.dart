@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
-import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -108,30 +109,31 @@ class _Screen14State extends State<Screen14> {
     setState(() {});
   }
 
+  late Timer repeatCodeTimer;
+
   @override
   void initState() {
     super.initState();
 
+    context.read<AuthorizationBloc>().add(GetCodeEvent());
+    //TODO Разобраться с кодом
+    Timer.periodic(
+      const Duration(milliseconds: 500),
+      (timer) {
+        if (code[0] == '_') {
+          code[0] = '';
+          setState(() {});
+          Timer(
+            const Duration(milliseconds: 500),
+            () {
+              if (code[0] == '') code[0] = '_';
+              setState(() {});
+            },
+          );
+        }
+      },
+    );
     Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (!mounted) {
-        timer.cancel();
-      }
-      if (code[0] == '_') {
-        code[0] = '';
-        setState(() {});
-        Timer(
-          const Duration(milliseconds: 500),
-          () {
-            if (code[0] == '') code[0] = '_';
-            setState(() {});
-          },
-        );
-      }
-    });
-    Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if (!mounted) {
-        timer.cancel();
-      }
       if (code[1] == '_') {
         code[1] = '';
         setState(() {});
@@ -176,8 +178,7 @@ class _Screen14State extends State<Screen14> {
         );
       }
     });
-
-    Timer(
+    repeatCodeTimer = Timer(
       const Duration(seconds: 30),
       () {
         repeatMessage = [
@@ -193,115 +194,112 @@ class _Screen14State extends State<Screen14> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
-        borderColorField = state.isDark
-            ? const Color.fromRGBO(124, 68, 121, 1)
-            : const Color.fromRGBO(238, 173, 235, 1);
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor:
-              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-          appBar: CustomAppBarRegistration(
-            name: 'Сервис желанных подарков',
-            onTheme: () {
-              context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
-            },
-          ),
-          body: SafeArea(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: getWidth(context, 16),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: getHeight(context, 11),
+    return BlocBuilder<AuthorizationBloc, AuthState>(
+      builder: (context, authState) {
+        return BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            borderColorField = state.isDark
+                ? const Color.fromRGBO(124, 68, 121, 1)
+                : const Color.fromRGBO(238, 173, 235, 1);
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor:
+                  state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
+              appBar: const CustomAppBarRegistration(
+                name: 'Сервис желанных подарков',
+              ),
+              body: SafeArea(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getWidth(context, 16),
                     ),
-                    Stack(
+                    child: Column(
                       children: [
-                        Align(
-                          alignment: AlignmentDirectional.topEnd,
-                          child: Image.asset(
-                            'assets/images/image 304.png',
-                          ),
+                        SizedBox(
+                          height: getHeight(context, 11),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional.center,
-                          child: SvgPicture.asset(
-                            context.read<ThemeBloc>().state.isDark
-                                ? 'assets/svg/logo_light.svg'
-                                : 'assets/svg/logo.svg',
-                          ),
+                        Stack(
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional.topEnd,
+                              child: Image.asset(
+                                'assets/images/image 304.png',
+                              ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional.center,
+                              child: SvgPicture.asset(
+                                context.read<ThemeBloc>().state.isDark
+                                    ? 'assets/svg/logo_light.svg'
+                                    : 'assets/svg/logo.svg',
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 16),
-                    ),
-                    Text(
-                      'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
-                      style: TextLocalStyles.roboto400.copyWith(
-                        fontSize: 15.5,
-                        color: state.isDark
-                            ? const Color.fromRGBO(233, 235, 237, 1)
-                            : const Color.fromRGBO(22, 26, 29, 1),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 16),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (int i = 0; i < 4; i++) fieldCode(context, i),
-                      ],
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 10),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 44),
-                      width: getWidth(context, 344),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              splashColor: isActiveRepeatMessage ? null : Colors.transparent,
-                              highlightColor: isActiveRepeatMessage ? null : Colors.transparent,
-                              onTap: isActiveRepeatMessage
-                                  ? () {
-                                      repeatMessage = [
-                                        const Color.fromRGBO(98, 198, 170, 0.1),
-                                        const Color.fromRGBO(68, 168, 140, 0.1),
-                                        const Color.fromRGBO(82, 182, 154, 0.5),
-                                      ];
-                                      isActiveRepeatMessage = false;
-
-                                      setState(() {});
-                                      Timer(
-                                        const Duration(seconds: 30),
-                                        () {
+                        SizedBox(
+                          height: getHeight(context, 16),
+                        ),
+                        Text(
+                          'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
+                          style: TextLocalStyles.roboto400.copyWith(
+                            fontSize: 15.5,
+                            color: state.isDark
+                                ? const Color.fromRGBO(233, 235, 237, 1)
+                                : const Color.fromRGBO(22, 26, 29, 1),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 16),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            for (int i = 0; i < 4; i++) fieldCode(context, i),
+                          ],
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 10),
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 44),
+                          width: getWidth(context, 344),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  splashColor: isActiveRepeatMessage ? null : Colors.transparent,
+                                  highlightColor: isActiveRepeatMessage ? null : Colors.transparent,
+                                  onTap: isActiveRepeatMessage
+                                      ? () {
+                                    context.read<AuthorizationBloc>().add(GetCodeEvent());
                                           repeatMessage = [
-                                            const Color.fromRGBO(98, 198, 170, 0.3),
-                                            const Color.fromRGBO(68, 168, 140, 0.3),
-                                            const Color.fromRGBO(110, 210, 182, 1),
+                                            const Color.fromRGBO(98, 198, 170, 0.1),
+                                            const Color.fromRGBO(68, 168, 140, 0.1),
+                                            const Color.fromRGBO(82, 182, 154, 0.5),
                                           ];
-                                          isActiveRepeatMessage = true;
+                                          isActiveRepeatMessage = false;
+
                                           setState(() {});
-                                        },
-                                      );
-                                    }
-                                  : null,
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  SizedBox.expand(
+                                          Timer(
+                                            const Duration(seconds: 30),
+                                            () {
+                                              repeatMessage = [
+                                                const Color.fromRGBO(98, 198, 170, 0.3),
+                                                const Color.fromRGBO(68, 168, 140, 0.3),
+                                                const Color.fromRGBO(110, 210, 182, 1),
+                                              ];
+                                              isActiveRepeatMessage = true;
+                                              setState(() {});
+                                            },
+                                          );
+                                        }
+                                      : null,
+                                  child: SizedBox.expand(
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
@@ -331,53 +329,52 @@ class _Screen14State extends State<Screen14> {
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 6,
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              splashColor: isActiveLogIn ? null : Colors.transparent,
-                              highlightColor: isActiveLogIn ? null : Colors.transparent,
-                              onTap: () {
-                                if (isActiveLogIn) {
-                                  if (code[0] == context.read<AuthorizationBloc>().state.code![0] &&
-                                      code[1] == context.read<AuthorizationBloc>().state.code![1] &&
-                                      code[2] == context.read<AuthorizationBloc>().state.code![2] &&
-                                      code[3] == context.read<AuthorizationBloc>().state.code![3]) {
-                                    isStop = true;
-                                    setState(() {});
-                                    Timer(const Duration(milliseconds: 500), () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const Screen30(),
-                                        ),
-                                      );
-                                    });
-                                  } else {
-                                    for (int i = 0; i < 4; i++) {
-                                      changeCode('-1');
-                                    }
-                                    borderColorField = Colors.red;
-                                    setState(() {});
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  splashColor: isActiveLogIn ? null : Colors.transparent,
+                                  highlightColor: isActiveLogIn ? null : Colors.transparent,
+                                  onTap: () {
+                                    String codeStr = code.join();
+                                    if (isActiveLogIn) {
+                                      if (codeStr == authState.code) {
+                                        isStop = true;
+                                        setState(() {});
+                                        Timer(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => const Screen30(),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        for (int i = 0; i < 4; i++) {
+                                          changeCode('-1');
+                                        }
+                                        borderColorField = Colors.red;
+                                        setState(() {});
 
-                                    Timer(const Duration(milliseconds: 500), () {
-                                      borderColorField = context.read<ThemeBloc>().state.isDark
-                                          ? const Color.fromRGBO(124, 68, 121, 1)
-                                          : const Color.fromRGBO(238, 173, 235, 1);
-                                    });
-                                  }
-                                }
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  SizedBox.expand(
+                                        Timer(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                            borderColorField = context.read<ThemeBloc>().state.isDark
+                                                ? const Color.fromRGBO(124, 68, 121, 1)
+                                                : const Color.fromRGBO(238, 173, 235, 1);
+                                          },
+                                        );
+                                      }
+                                    }
+                                  },
+                                  child: SizedBox.expand(
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
@@ -416,79 +413,85 @@ class _Screen14State extends State<Screen14> {
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 56),
+                        ),
+                        for (int i = 0; i < 3; i++) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              for (int k = 0; k < 3; k++)
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: () {
+                                    changeCode(keyboardTitle[k + i * 3]);
+                                    setState(() {});
+                                  },
+                                  child: buttonKeyboard(
+                                    context,
+                                    title: keyboardTitle[k + i * 3],
+                                    subtitle: keyboardSubtitle[k + i * 3],
+                                  ),
+                                ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: getHeight(context, 8),
                           ),
                         ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: getHeight(context, 56),
-                    ),
-                    for (int i = 0; i < 3; i++) ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          for (int k = 0; k < 3; k++)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: getWidth(context, 106),
+                            ),
                             InkWell(
                               borderRadius: BorderRadius.circular(8),
                               onTap: () {
-                                changeCode(keyboardTitle[k + i * 3]);
+                                changeCode('0');
+
                                 setState(() {});
                               },
                               child: buttonKeyboard(
                                 context,
-                                title: keyboardTitle[k + i * 3],
-                                subtitle: keyboardSubtitle[k + i * 3],
+                                title: '0',
+                                subtitle: '',
                               ),
                             ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: getHeight(context, 8),
-                      ),
-                    ],
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: getWidth(context, 106),
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(8),
-                          onTap: () {
-                            changeCode('0');
-
-                            setState(() {});
-                          },
-                          child: buttonKeyboard(
-                            context,
-                            title: '0',
-                            subtitle: '',
-                          ),
-                        ),
-                        SizedBox(
-                          width: getWidth(context, 106),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {
-                              changeCode('-1');
-                              setState(() {});
-                            },
-                            child: SvgPicture.asset('assets/svg/erase.svg'),
-                          ),
+                            SizedBox(
+                              width: getWidth(context, 106),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: () {
+                                  changeCode('-1');
+                                  setState(() {});
+                                },
+                                child: SvgPicture.asset('assets/svg/erase.svg'),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
-      },
+      }
     );
+  }
+
+  @override
+  void dispose() {
+    repeatCodeTimer.cancel();
+    super.dispose();
   }
 
   Widget buttonKeyboard(

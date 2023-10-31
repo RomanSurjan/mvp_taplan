@@ -20,7 +20,6 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
         },
       );
 
-
       for (final el in response.data['present_info']) {
         wishList.add(
           MvpPresentModel(
@@ -40,7 +39,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
             gradeValueThird: el['grades']['grade_value_3'],
             gradePhotoFirst: el['grades']['grade_photo_1'],
             gradePhotoSecond: el['grades']['grade_photo_2'],
-            gradePhotoThird: el['grades']['grade_photo_3'] ,
+            gradePhotoThird: el['grades']['grade_photo_3'],
           ),
         );
       }
@@ -62,10 +61,12 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
     final additionalModel = listOfModels[0];
     listOfModels[0] = listOfModels[event.index];
     listOfModels[event.index] = additionalModel;
-    emitter(state.copyWith(
-      wishList: listOfModels,
-      currentModel: listOfModels[0],
-    ));
-  }
 
+    emitter(
+      state.copyWith(
+        wishList: listOfModels,
+        currentModel: listOfModels[0],
+      ),
+    );
+  }
 }

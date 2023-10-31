@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_state.dart';
+import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
 import 'package:mvp_taplan/features/screen_214/screen_214.dart';
+import 'package:mvp_taplan/features/screen_39/screen_39.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/models/sum_to_string.dart';
@@ -103,20 +106,64 @@ class _Screen215State extends State<Screen215> {
                         top: getHeight(context, 12),
                       ),
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        height: getHeight(context, 343),
-                        width: getWidth(context, 343),
-                        child: Image.network(
-                          (isPickedMoney[0]
-                                  ? widget.currentModel.gradePhotoThird
-                                  : isPickedMoney[1]
-                                      ? widget.currentModel.gradePhotoSecond
-                                      : widget.currentModel.gradePhotoFirst) ??
-                              widget.currentModel.smallImage,
-                          fit: BoxFit.cover,
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: getHeight(context, 343),
+                          width: getWidth(context, 343),
+                          child: Image.network(
+                            (isPickedMoney[0]
+                                    ? widget.currentModel.gradePhotoThird
+                                    : isPickedMoney[1]
+                                        ? widget.currentModel.gradePhotoSecond
+                                        : widget.currentModel.gradePhotoFirst) ??
+                                widget.currentModel.smallImage,
+                            fit: BoxFit.fill,
+                          ),
                         ),
-                      ),
+                        if (widget.currentModel.videoId != null)
+                          Positioned.fill(
+                            top: getHeight(context, 17),
+                            right: getWidth(context, 14),
+                            bottom: getHeight(context, 17),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      final contentList = context.read<JournalBloc>().state.contentList;
+                                      int currentVideoIndex = -1;
+                                      for(var el in contentList){
+
+                                        if(el.videos.contains(widget.currentModel.videoId)) {
+                                          currentVideoIndex = contentList.indexOf(el);
+                                        }
+                                      }
+                                      Navigator.push(context, MaterialPageRoute(builder: (_) =>Screen39(initialIndex: currentVideoIndex)));
+                                    },
+                                    child: Image.asset(
+                                      'assets/images/video_button.png',
+                                    ),
+                                  ),
+                                  buildControlButton(
+                                    context,
+                                    'assets/svg/share-alt.svg',
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  buildControlButton(
+                                    context,
+                                    'assets/svg/heart.svg',
+                                  ),
+                                  buildControlButton(
+                                    context,
+                                    'assets/svg/comment.svg',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -280,6 +327,28 @@ class _Screen215State extends State<Screen215> {
           );
         },
       ),
+    );
+  }
+
+  Widget buildControlButton(BuildContext context, String svgImage) {
+    return Column(
+      children: [
+        SvgPicture.asset(
+          svgImage,
+          colorFilter: const ColorFilter.mode(
+            Colors.white,
+            BlendMode.srcIn,
+          ),
+        ),
+        Text(
+          '8',
+          style: TextLocalStyles.roboto600.copyWith(
+            color: Colors.white,
+            fontSize: getHeight(context, 14),
+            height: 16.41 / 14,
+          ),
+        ),
+      ],
     );
   }
 }

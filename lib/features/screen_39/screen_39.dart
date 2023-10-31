@@ -26,6 +26,10 @@ class _Screen39State extends State<Screen39> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: PageView.builder(
+
+                onPageChanged: (index){
+
+                },
                 controller: controller,
                 itemBuilder: (context, index) {
                   return VideoPlayerItem(
@@ -43,4 +47,5 @@ class _Screen39State extends State<Screen39> {
       ),
     );
   }
+
 }

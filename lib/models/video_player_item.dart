@@ -127,6 +127,30 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
               ),
             ),
           ),
+          Positioned(
+            right: getWidth(context, 10),
+            top: getHeight(context, 10),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: InkWell(
+                child: SizedBox(
+                  height: getHeight(context, 40),
+                  width: getHeight(context, 40),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: Icon(
+                      Icons.arrow_back_outlined,
+                      size: getHeight(context, 40),
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

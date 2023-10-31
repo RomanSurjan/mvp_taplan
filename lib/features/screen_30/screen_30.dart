@@ -52,6 +52,7 @@ class Screen30State extends State<Screen30> {
   bool isTelegram = false;
   List<String> months = ['СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ'];
 
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +73,6 @@ class Screen30State extends State<Screen30> {
         int.parse(dateBorn.substring(8, 10)),
         int.parse(dateBorn.substring(11, 13)),
       );
-
       update = Timer.periodic(
         const Duration(seconds: 1),
         (timer) {
@@ -131,14 +131,12 @@ class Screen30State extends State<Screen30> {
                       child: Stack(
                         children: [
                           Positioned(
+                            top: getHeight(context, 10),
                             child: Align(
                               alignment: Alignment.topCenter,
                               child: SizedBox(
                                 width: getWidth(context, 375),
-                                child: Image.asset(
-                                  'assets/images/logo.png',
-                                  fit: BoxFit.fitWidth,
-                                ),
+                                child: SvgPicture.asset('assets/svg/logo2.svg'),
                               ),
                             ),
                           ),
@@ -146,8 +144,11 @@ class Screen30State extends State<Screen30> {
                             top: getHeight(context, 10),
                             child: Align(
                               alignment: Alignment.topRight,
-                              child: Image.network(
-                                'assets/images/sk_logo_main.png',
+                              child: SizedBox(
+                                height: getHeight(context, 21),
+                                child: Image.network(
+                                  'assets/images/sk_logo_light.png',
+                                ),
                               ),
                             ),
                           ),
@@ -212,7 +213,7 @@ class Screen30State extends State<Screen30> {
                             ),
                             left: getWidth(
                               context,
-                              coverState.covers[coverState.currentCoverId][1][2][1] - 12,
+                              coverState.covers[coverState.currentCoverId][1][2][1] > 100 ? coverState.covers[coverState.currentCoverId][1][2][1] - 13 : coverState.covers[coverState.currentCoverId][1][2][1],
                             ),
                             child: myDream(
                               context,
@@ -226,7 +227,7 @@ class Screen30State extends State<Screen30> {
                             ),
                             left: getWidth(
                               context,
-                              coverState.covers[coverState.currentCoverId][1][3][1] - 12,
+                              coverState.covers[coverState.currentCoverId][1][3][1] > 100 ? coverState.covers[coverState.currentCoverId][1][3][1] - 13 : coverState.covers[coverState.currentCoverId][1][3][1]
                             ),
                             child: bouquetOfTheWeek(
                               context,
@@ -264,7 +265,7 @@ class Screen30State extends State<Screen30> {
                             bottom: getHeight(context, 116),
                             left: getWidth(context, 27),
                             child: Text(
-                              coverState.username,
+                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username) ? '' : coverState.username,
                               style: const TextStyle(
                                 fontFamily: 'Abhaya',
                                 fontSize: 31,
@@ -286,7 +287,42 @@ class Screen30State extends State<Screen30> {
                           Positioned(
                             bottom: getHeight(context, 91),
                             left: getWidth(context, 226),
-                            child: Image.asset('assets/images/image 320.png'),
+                            child: InkWell(
+                              onTap: (){
+                                if(widget.bloggerId == 1) {
+                                  coverState = CoverState(
+                                    myDreamDate: '',
+                                    everyWeekStream: '',
+                                    dreamPresentId: 0,
+                                    weekFlowerId: 0,
+                                    currentCoverId: 0,
+                                    covers: [[]],
+                                    strWish: '',
+                                    telegram: '',
+                                    region: '',
+                                    username: '',
+                                    description: '',
+                                  );
+                                  Navigator.pushReplacementNamed(context, '/nb/journal_2/');
+                                } else {
+                                  coverState = CoverState(
+                                    myDreamDate: '',
+                                    everyWeekStream: '',
+                                    dreamPresentId: 0,
+                                    weekFlowerId: 0,
+                                    currentCoverId: 0,
+                                    covers: [[]],
+                                    strWish: '',
+                                    telegram: '',
+                                    region: '',
+                                    username: '',
+                                    description: '',
+                                  );
+                                  Navigator.pushReplacementNamed(context, '/nb/journal_1/');
+                                }
+                              },
+                              child: Image.asset('assets/images/image 320.png'),
+                            ),
                           ),
                           Positioned(
                             bottom: getHeight(context, 90),
@@ -303,43 +339,47 @@ class Screen30State extends State<Screen30> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    InkWell(
-                                      onTap: () {
-                                        if (coverState.currentCoverId != 0) {
-                                          context.read<CoverBloc>().add(PrevCoverEvent());
-                                        }
-                                      },
-                                      child: SizedBox(
-                                        height: getHeight(context, 45),
-                                        width: getWidth(context, 22),
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: AppTheme.mainGreenGradient,
-                                            borderRadius: BorderRadius.circular(2),
-                                          ),
-                                          child: coverState.currentCoverId != 0
-                                              ? SvgPicture.asset(
-                                                  'assets/svg/arrow_back.svg',
-                                                  colorFilter: const ColorFilter.mode(
-                                                    Color.fromRGBO(193, 184, 237, 1),
-                                                    BlendMode.srcIn,
-                                                  ),
-                                                )
-                                              : RotatedBox(
-                                                  quarterTurns: 3,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(right: 5, top: 2),
-                                                    child: Text(
-                                                      'old',
-                                                      style: TextLocalStyles.mono400.copyWith(
-                                                        fontSize: 20,
-                                                        color: const Color.fromRGBO(57, 57, 57, 1),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 1),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (coverState.currentCoverId != 0) {
+                                            context.read<CoverBloc>().add(PrevCoverEvent());
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          height: getHeight(context, 45),
+                                          width: getWidth(context, 22),
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              gradient: AppTheme.mainGreenGradient,
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
+                                            child: coverState.currentCoverId != 0
+                                                ? SvgPicture.asset(
+                                                    'assets/svg/arrow_back.svg',
+                                                    colorFilter: const ColorFilter.mode(
+                                                      Color.fromRGBO(193, 184, 237, 1),
+                                                      BlendMode.srcIn,
+                                                    ),
+                                                  )
+                                                : RotatedBox(
+                                                    quarterTurns: 3,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(right: 5, top: 2),
+                                                      child: Text(
+                                                        'old',
+                                                        style: TextLocalStyles.mono400.copyWith(
+                                                          fontSize: 20,
+                                                          color:
+                                                              const Color.fromRGBO(57, 57, 57, 1),
+                                                        ),
+                                                        textAlign: TextAlign.center,
                                                       ),
-                                                      textAlign: TextAlign.center,
                                                     ),
                                                   ),
-                                                ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -352,48 +392,52 @@ class Screen30State extends State<Screen30> {
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        if (coverState.currentCoverId !=
-                                            (coverState.covers.length - 1)) {
-                                          context.read<CoverBloc>().add(NextCoverEvent());
-                                        }
-                                      },
-                                      child: SizedBox(
-                                        height: getHeight(context, 45),
-                                        width: getWidth(context, 22),
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: AppTheme.mainGreenGradient,
-                                            borderRadius: BorderRadius.circular(2),
-                                          ),
-                                          child: coverState.currentCoverId !=
-                                                  (coverState.covers.length - 1)
-                                              ? RotatedBox(
-                                                  quarterTurns: 2,
-                                                  child: SvgPicture.asset(
-                                                    'assets/svg/arrow_back.svg',
-                                                    colorFilter: const ColorFilter.mode(
-                                                      Color.fromRGBO(193, 184, 237, 1),
-                                                      BlendMode.srcIn,
-                                                    ),
-                                                  ),
-                                                )
-                                              : RotatedBox(
-                                                  quarterTurns: 3,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(right: 2, top: 2),
-                                                    child: Text(
-                                                      'new',
-                                                      style: TextLocalStyles.mono400.copyWith(
-                                                        fontSize: 20,
-                                                        color: const Color.fromRGBO(57, 57, 57, 1),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 1),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (coverState.currentCoverId !=
+                                              (coverState.covers.length - 1)) {
+                                            context.read<CoverBloc>().add(NextCoverEvent());
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          height: getHeight(context, 45),
+                                          width: getWidth(context, 22),
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              gradient: AppTheme.mainGreenGradient,
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
+                                            child: coverState.currentCoverId !=
+                                                    (coverState.covers.length - 1)
+                                                ? RotatedBox(
+                                                    quarterTurns: 2,
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/arrow_back.svg',
+                                                      colorFilter: const ColorFilter.mode(
+                                                        Color.fromRGBO(193, 184, 237, 1),
+                                                        BlendMode.srcIn,
                                                       ),
-                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  )
+                                                : RotatedBox(
+                                                    quarterTurns: 3,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(right: 2, top: 2),
+                                                      child: Text(
+                                                        'new',
+                                                        style: TextLocalStyles.mono400.copyWith(
+                                                          fontSize: 20,
+                                                          color:
+                                                              const Color.fromRGBO(57, 57, 57, 1),
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -552,7 +596,15 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
                   ),
                 );
               },
-              child: backSpaceButton(context, false),
+              child: backSpaceButton(
+                  context,
+                  context
+                          .read<CoverBloc>()
+                          .state
+                          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
+                          .toString()
+                          .substring(1, 2) ==
+                      '2'),
             ),
           ),
         ],
@@ -565,7 +617,13 @@ Widget myDream(BuildContext context, DateTime range) {
   return Align(
     alignment: Alignment.topRight,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: context
+          .read<CoverBloc>()
+          .state
+          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
+          .toString()
+          .substring(1, 2) ==
+          '1' ? CrossAxisAlignment.start : CrossAxisAlignment.end ,
       children: [
         Text(
           'Моя мечта',
@@ -631,19 +689,39 @@ Widget myDream(BuildContext context, DateTime range) {
           ],
         ),
         Padding(padding: EdgeInsets.only(top: 0.0049 * MediaQuery.of(context).size.height)),
-        RotatedBox(
-          quarterTurns: 2,
-          child: InkWell(
-            onTap: () {
-              context
-                  .read<PostcardBloc>()
-                  .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
-              Navigator.push(
+        Align(
+          alignment: context
+                      .read<CoverBloc>()
+                      .state
+                      .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
+                      .toString()
+                      .substring(1, 2) ==
+                  '1'
+              ? Alignment.centerLeft
+              : Alignment.centerRight,
+          child: RotatedBox(
+            quarterTurns: 2,
+            child: InkWell(
+              onTap: () {
+                context
+                    .read<PostcardBloc>()
+                    .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            const PresentScreen(buyingOption: BuyingOption.buyTogether)));
+              },
+              child: backSpaceButton(
                   context,
-                  MaterialPageRoute(
-                      builder: (_) => const PresentScreen(buyingOption: BuyingOption.buyTogether)));
-            },
-            child: backSpaceButton(context, false),
+                  context
+                          .read<CoverBloc>()
+                          .state
+                          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
+                          .toString()
+                          .substring(1, 2) ==
+                      '2'),
+            ),
           ),
         )
       ],

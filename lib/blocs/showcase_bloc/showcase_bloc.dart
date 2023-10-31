@@ -28,6 +28,8 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
       },
     );
 
+    //print(response.data);
+
     final UserModel userModel = UserModel.fromJson(response.data);
 
     emitter(

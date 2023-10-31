@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 abstract class AuthState {
   final String? authToken;
@@ -7,7 +6,7 @@ abstract class AuthState {
   final String? birthday;
   final String? username;
   final String? region;
-  final Uint8List? photo;
+  final String? photo;
   final String? email;
   final bool? sex;
   final String? telegram;
@@ -50,7 +49,7 @@ class AuthorizationState extends AuthState {
     String? birthday,
     String? username,
     String? region,
-    Uint8List? photo,
+    String? photo,
     String? email,
     bool? sex,
     String? telegram,

@@ -55,11 +55,7 @@ class CustomNavigationBar extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: Text(
-                              context
-                                          .read<AuthorizationBloc>()
-                                          .state
-                                          .authToken ==
-                                      null
+                              context.read<AuthorizationBloc>().state.authToken == null
                                   ? 'Для запроса на подписку на канал\nпредлагаем Вам зарегестироваться'
                                   : 'Запрос отправлен',
                               textAlign: TextAlign.center,
@@ -80,8 +76,7 @@ class CustomNavigationBar extends StatelessWidget {
                               child: SvgPicture.asset(
                                 'assets/svg/arrow_down_long.svg',
                                 colorFilter: const ColorFilter.mode(
-                                    Color.fromRGBO(57, 57, 57, 1),
-                                    BlendMode.srcIn),
+                                    Color.fromRGBO(57, 57, 57, 1), BlendMode.srcIn),
                               ),
                             ),
                           ),
@@ -100,19 +95,18 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[0],
-                  onTap:
-                      context.read<AuthorizationBloc>().state.authToken == null
-                          ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const Screen12(
-                                    isPressed: false,
-                                  ),
-                                ),
-                              );
-                            }
-                          : () {},
+                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                      ? () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const Screen12(
+                                isPressed: false,
+                              ),
+                            ),
+                          );
+                        }
+                      : () {},
                   isActive: true,
                 ),
                 const SizedBox(
@@ -121,21 +115,18 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[1],
-                  onTap:
-                      context.read<AuthorizationBloc>().state.authToken == null
-                          ? () {}
-                          : () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const Screen26(),
-                                ),
-                              );
-                            },
+                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                      ? () {}
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const Screen26(),
+                            ),
+                          );
+                        },
                   isActive:
-                      context.read<AuthorizationBloc>().state.authToken == null
-                          ? false
-                          : true,
+                      context.read<AuthorizationBloc>().state.authToken == null ? false : true,
                 ),
                 const SizedBox(
                   width: 10,
@@ -147,25 +138,23 @@ class CustomNavigationBar extends StatelessWidget {
                 rectangleMainBarItem(
                   context,
                   svg: svgForBar[3],
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const ScreenSendWishlist(
-                        ),
-                      ),
-                    );
-                  },
+                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                      ? () {}
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ScreenSendWishlist(),
+                            ),
+                          );
+                        },
                   isActive:
-                      context.read<AuthorizationBloc>().state.authToken == null
-                          ? false
-                          : true,
+                      context.read<AuthorizationBloc>().state.authToken == null ? false : true,
                 ),
                 const SizedBox(
                   width: 9,
                 ),
-                rectangleMainBarItem(context,
-                    svg: svgForBar[4], onTap: () {}, isActive: true),
+                rectangleMainBarItem(context, svg: svgForBar[4], onTap: () {}, isActive: true),
               ],
             ),
           ),
@@ -175,9 +164,7 @@ class CustomNavigationBar extends StatelessWidget {
   }
 
   Widget rectangleMainBarItem(BuildContext context,
-      {required String svg,
-      required VoidCallback onTap,
-      required bool isActive}) {
+      {required String svg, required VoidCallback onTap, required bool isActive}) {
     return InkWell(
       onTap: onTap,
       child: SizedBox(

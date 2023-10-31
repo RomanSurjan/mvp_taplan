@@ -8,6 +8,7 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+import 'package:video_player/video_player.dart';
 
 part 'mvp_appbar.dart';
 
@@ -34,3 +35,5 @@ part 'content_model.dart';
 part 'text_field.dart';
 
 part 'button_green.dart';
+
+part 'video_player_item.dart';

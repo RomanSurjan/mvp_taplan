@@ -2,7 +2,7 @@ import 'package:mvp_taplan/models/models.dart';
 
 class JournalState {
   final List<MvpContentModel> contentList;
-  final List<int> videosList;
+  final List<String> videosList;
 
   JournalState({
     required this.contentList,
@@ -11,7 +11,7 @@ class JournalState {
 
   JournalState copyWith({
     List<MvpContentModel>? contentList,
-    List<int>? videosList,
+    List<String>? videosList,
   }) {
     return JournalState(
       contentList: contentList ?? this.contentList,

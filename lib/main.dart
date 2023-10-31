@@ -61,17 +61,18 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/nb/journal_1/',
         routes: {
-          '/nb/journal_1/': (context) => const MyHomePage(),
+          '/nb/journal_1/': (context) => const MyHomePage(bloggerId: 1),
+          '/nb/journal_2/': (context) =>  const MyHomePage(bloggerId: 45),
         },
         title: 'MVP',
-        home: const MyHomePage(),
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final int bloggerId;
+  const MyHomePage({super.key, required this.bloggerId});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -81,9 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return PageView(
-      children: const [
-        Screen30(),
-        Screen38(),
+      children: [
+        Screen30(bloggerId: widget.bloggerId),
+        const Screen38(),
       ],
     );
   }

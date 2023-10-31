@@ -65,7 +65,7 @@ class WishListScreenState extends State<WishListScreen> {
                           opacity: context.watch<ThemeBloc>().state.isDark ? 0.25 : 0.15,
                           onTap: () {
                             context.read<PostcardBloc>().add(
-                                ChangeHolidayTypeEvent(currentHolidayType: HolidayType.just));
+                                ChangeHolidayTypeEvent(currentHolidayType: HolidayType.birthday));
                             if (state.currentModel!.id == 4) {
                               Navigator.push(
                                 context,

@@ -44,6 +44,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         emitter(
           AuthorizationState().copyWith(
             code: response.data['code'].toString(),
+            authToken: state.authToken,
           ),
         );
       } catch (e) {
@@ -59,7 +60,8 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         birthday: event.birthday,
         username: event.username,
         region: event.region,
-        photo: event.photo,
+        //TODO Сделать фото String и UNIT8List
+        //photo: event.photo,
         email: event.email,
         sex: event.sex,
         telegram: event.telegram,
@@ -103,7 +105,6 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
-      print(response.data);
       emitter(
         AuthorizationState().copyWith(
           sex: response.data['sex'],

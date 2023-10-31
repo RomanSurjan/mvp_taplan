@@ -19,6 +19,7 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
     try {
       List<MvpContentModel> contentList = [];
       List<int> videos = [];
+      List<String> videosUrl = [];
 
       final response = await Dio().post(
         'https://qviz.fun/api/v1/content/',
@@ -28,6 +29,7 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
       );
 
       for (int i = 0; i < response.data.length; i++) {
+
         contentList.add(
           MvpContentModel(
             label: response.data[i]['paragraph'],
@@ -41,10 +43,25 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
         videos.addAll(contentList[i].videos.cast());
       }
 
+      for(int i = 0; i < videos.length; i++){
+        try{
+          final response = await Dio().post(
+            'https://qviz.fun/api/v1/get/video/',
+            data: {
+              'video_id': videos[i],
+            },
+          );
+
+          videosUrl.add(response.data['video']);
+        }catch(e){
+          rethrow;
+        }
+      }
+
       emitter(
         state.copyWith(
-          contentList: contentList.getRange(6, contentList.length - 1).toList(),
-          videosList: videos,
+          contentList: contentList,
+          videosList: videosUrl,
         ),
       );
     } catch (e) {

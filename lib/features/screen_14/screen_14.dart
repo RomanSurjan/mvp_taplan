@@ -116,6 +116,7 @@ class _Screen14State extends State<Screen14> {
     super.initState();
 
     context.read<AuthorizationBloc>().add(GetCodeEvent());
+
     //TODO Разобраться с кодом
     Timer.periodic(
       const Duration(milliseconds: 500),
@@ -351,7 +352,7 @@ class _Screen14State extends State<Screen14> {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (_) => const Screen30(),
+                                                builder: (_) => const Screen30(bloggerId: 1),
                                               ),
                                             );
                                           },

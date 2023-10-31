@@ -28,7 +28,12 @@ import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
 class Screen30 extends StatefulWidget {
-  const Screen30({super.key});
+  final int bloggerId;
+
+  const Screen30({
+    super.key,
+    required this.bloggerId,
+  });
 
   @override
   Screen30State createState() => Screen30State();
@@ -43,26 +48,27 @@ class Screen30State extends State<Screen30> {
   late Timer update;
   DateTime range = DateTime(2023);
   bool isTelegram = false;
-  int bloggerId = 1;
   List<String> months = ['СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ'];
 
   @override
   void initState() {
     super.initState();
 
+    //TODO вынести логику в COVERBLOC
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
     context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
     context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(1));
-    context.read<CoverBloc>().add(GetCoverEvent(bloggerId: bloggerId));
+    context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
 
     if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
       String dateBorn = context.read<CoverBloc>().state.myDreamDate;
       DateTime dateOfBorn = DateTime(
-          int.parse(dateBorn.substring(0, 4)),
-          int.parse(dateBorn.substring(5, 7)),
-          int.parse(dateBorn.substring(8, 10)),
-          int.parse(dateBorn.substring(11, 13)));
+        int.parse(dateBorn.substring(0, 4)),
+        int.parse(dateBorn.substring(5, 7)),
+        int.parse(dateBorn.substring(8, 10)),
+        int.parse(dateBorn.substring(11, 13)),
+      );
 
       update = Timer.periodic(
         const Duration(seconds: 1),
@@ -259,7 +265,6 @@ class Screen30State extends State<Screen30> {
                               style: const TextStyle(
                                 fontFamily: 'Abhaya',
                                 fontSize: 31,
-                                // fontWeight: FontWeight.normal,
                                 color: Color.fromRGBO(255, 255, 255, 1),
                               ),
                             ),

@@ -37,13 +37,13 @@ class Screen26State extends State<Screen26> {
       url,
       options: Options(
         headers: {
-          'Authorization':
-              "Token ${context.read<AuthorizationBloc>().state.authToken}",
+          'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
         },
       ),
     );
     userData = response.data;
   }
+
   int group = 0;
   Map contacts = {};
   List<int> count = [0, 0, 0, 0, 0];
@@ -53,9 +53,7 @@ class Screen26State extends State<Screen26> {
     visibleContacts.clear();
     count = [0, 0, 0, 0, 0];
     for (int i = 0; i < 5; i++) {
-      for (int k = 0;
-      k < int.parse(contacts['people'].length.toString());
-      k++) {
+      for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
         if (contacts['people'][k]['cat'] == (i + 1)) {
           count[i]++;
         }
@@ -64,12 +62,12 @@ class Screen26State extends State<Screen26> {
 
     for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
       if (buttonGroupIsPressed[group] == true) {
-        if (contacts['people'][k]['cat'] == (group+1)) {
+        if (contacts['people'][k]['cat'] == (group + 1)) {
           buffContacts[contacts['people'][k]['id']] = contacts['people'][k];
         }
       } else {
         if (buffContacts.containsKey(contacts['people'][k]['id']) &&
-            contacts['people'][k]['cat'] == (group+1)) {
+            contacts['people'][k]['cat'] == (group + 1)) {
           buffContacts.remove(contacts['people'][k]['id']);
         }
       }
@@ -77,9 +75,8 @@ class Screen26State extends State<Screen26> {
 
     visibleContacts.clear();
 
-    // visibleContacts[0] = userData;
-
     int length = 0;
+
     buffContacts.forEach((key, value) {
       visibleContacts[length] = buffContacts[key];
       visibleContacts[length]['add'] = true;
@@ -92,11 +89,14 @@ class Screen26State extends State<Screen26> {
   void getContacts() async {
     String url = 'https://qviz.fun/api/v1/peoplelist/';
     final dio = Dio();
-    final response = await dio.post(url,
-        options: Options(headers: {
-          'Authorization':
-              "Token ${context.read<AuthorizationBloc>().state.authToken}",
-        }));
+    final response = await dio.post(
+      url,
+      options: Options(
+        headers: {
+          'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
+        },
+      ),
+    );
     log(response.data.toString());
     setState(() {
       contacts = response.data;
@@ -169,15 +169,12 @@ class Screen26State extends State<Screen26> {
       builder: (context, state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: state.isDark
-              ? AppTheme.backgroundColor
-              : const Color.fromRGBO(240, 247, 254, 1),
+          backgroundColor:
+              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
           appBar: CustomAppBarRegistration(
             name: 'Мой список контактов',
             onTheme: () {
-              context
-                  .read<ThemeBloc>()
-                  .add(SwitchThemeEvent(isDark: !state.isDark));
+              context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
               setState(() {});
             },
           ),
@@ -234,8 +231,7 @@ class Screen26State extends State<Screen26> {
               height: getHeight(context, 54),
               width: getWidth(context, 54),
               child: CircleAvatar(
-                backgroundImage:
-                    const AssetImage('assets/images/upload_image.png'),
+                backgroundImage: const AssetImage('assets/images/upload_image.png'),
                 backgroundColor: context.read<ThemeBloc>().state.isDark
                     ? AppTheme.backgroundColor
                     : const Color.fromRGBO(240, 247, 254, 1),
@@ -408,13 +404,9 @@ class Screen26State extends State<Screen26> {
                                 Text(
                                   data,
                                   style: TextLocalStyles.roboto400.copyWith(
-                                    color: context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .isDark
+                                    color: context.read<ThemeBloc>().state.isDark
                                         ? const Color.fromRGBO(157, 167, 176, 1)
-                                        : const Color.fromRGBO(
-                                            244, 199, 217, 1),
+                                        : const Color.fromRGBO(244, 199, 217, 1),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -429,12 +421,9 @@ class Screen26State extends State<Screen26> {
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          context.read<ThemeBloc>().state.isDark
-                                              ? const Color.fromRGBO(
-                                                  237, 244, 251, 1)
-                                              : const Color.fromRGBO(
-                                                  87, 99, 107, 1),
+                                      color: context.read<ThemeBloc>().state.isDark
+                                          ? const Color.fromRGBO(237, 244, 251, 1)
+                                          : const Color.fromRGBO(87, 99, 107, 1),
                                     ),
                                     child: const InkWell(
                                       child: Icon(
@@ -493,12 +482,9 @@ class Screen26State extends State<Screen26> {
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          context.read<ThemeBloc>().state.isDark
-                                              ? const Color.fromRGBO(
-                                                  237, 244, 251, 1)
-                                              : const Color.fromRGBO(
-                                                  87, 99, 107, 1),
+                                      color: context.read<ThemeBloc>().state.isDark
+                                          ? const Color.fromRGBO(237, 244, 251, 1)
+                                          : const Color.fromRGBO(87, 99, 107, 1),
                                     ),
                                     child: const Icon(
                                       Icons.more_vert,
@@ -528,9 +514,7 @@ class Screen26State extends State<Screen26> {
                                 : const Color.fromRGBO(87, 99, 107, 1),
                           ),
                           child: Icon(
-                            isOk
-                                ? Icons.check_rounded
-                                : Icons.question_mark_rounded,
+                            isOk ? Icons.check_rounded : Icons.question_mark_rounded,
                             color: const Color.fromRGBO(157, 167, 176, 1),
                           ),
                         ),
@@ -599,8 +583,7 @@ class Screen26State extends State<Screen26> {
                 buttonGroupIsPressed[2] != false ||
                 buttonGroupIsPressed[3] != false ||
                 buttonGroupIsPressed[4] != false) ||
-            (buttonCelebrateIsPressed[0] != false ||
-                buttonCelebrateIsPressed[1] != false));
+            (buttonCelebrateIsPressed[0] != false || buttonCelebrateIsPressed[1] != false));
   }
 
   Widget listOfChannels(BuildContext context) {
@@ -760,16 +743,14 @@ class Screen26State extends State<Screen26> {
                       child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          border: Border.all(
-                              color: const Color.fromRGBO(98, 198, 170, 1)),
+                          border: Border.all(color: const Color.fromRGBO(98, 198, 170, 1)),
                           shape: BoxShape.circle,
                         ),
                         child: Align(
                           child: SvgPicture.asset(
                             'assets/svg/miniplus.svg',
                             colorFilter: const ColorFilter.mode(
-                                Color.fromRGBO(82, 182, 154, 1),
-                                BlendMode.srcIn),
+                                Color.fromRGBO(82, 182, 154, 1), BlendMode.srcIn),
                           ),
                         ),
                       ),
@@ -879,12 +860,11 @@ class Screen26State extends State<Screen26> {
                 isPressed: buttonNavIsPressed[3],
                 onTap: () {
                   buttonNavIsPressed[3] = !buttonNavIsPressed[3];
-                  if(buttonNavIsPressed[3]){
+                  if (buttonNavIsPressed[3]) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const ScreenSendWishlist(
-                        ),
+                        builder: (_) => const ScreenSendWishlist(),
                       ),
                     );
                   }
@@ -907,8 +887,7 @@ class Screen26State extends State<Screen26> {
   }
 
   Widget groupCelebration(BuildContext context) {
-    return (buttonCelebrateIsPressed[0] == false &&
-            buttonCelebrateIsPressed[1] == false)
+    return (buttonCelebrateIsPressed[0] == false && buttonCelebrateIsPressed[1] == false)
         ? SizedBox(
             child: Row(
               children: [

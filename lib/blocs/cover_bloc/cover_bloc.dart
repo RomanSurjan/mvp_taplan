@@ -13,7 +13,11 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
           weekFlowerId: 0,
           currentCoverId: 0,
           covers: [[]],
-          strWish: '', telegram: '', region: '', username: '', description: '',
+          strWish: '',
+          telegram: '',
+          region: '',
+          username: '',
+          description: '',
         )) {
     on<NextCoverEvent>(_onNextCover);
     on<PrevCoverEvent>(_onPrevCover);
@@ -29,7 +33,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
         },
       );
       String strWish = '';
-      switch (response.data['covers'][0][1][0][0].toString().substring(1,2)) {
+      switch (response.data['covers'][0][1][0][0].toString().substring(1, 2)) {
         case '1':
           strWish = 'Узнай\nбольше\nо моих\nжеланиях';
           break;
@@ -56,7 +60,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
           currentCoverId: 0,
           strWish: strWish,
           telegram: response.data['telegram'],
-          region:  response.data['region'],
+          region: response.data['region'],
           username: response.data['username'],
           description: response.data['description'],
         ),
@@ -70,7 +74,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
     int id = state.currentCoverId + 1;
 
     String strWish = '';
-    switch (state.covers[id][1][0][0].toString().substring(1,2)) {
+    switch (state.covers[id][1][0][0].toString().substring(1, 2)) {
       case '1':
         strWish = 'Узнай\nбольше\nо моих\nжеланиях';
         break;
@@ -99,7 +103,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
   _onPrevCover(PrevCoverEvent event, Emitter<CoverState> emitter) {
     int id = state.currentCoverId - 1;
     String strWish = '';
-    switch (state.covers[id][1][0][0].toString().substring(1,2)) {
+    switch (state.covers[id][1][0][0].toString().substring(1, 2)) {
       case '1':
         strWish = 'Узнай\nбольше\nо моих\nжеланиях';
         break;

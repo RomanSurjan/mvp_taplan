@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'dart:async';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
@@ -20,21 +20,16 @@ import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-class ScreenAddContact extends StatefulWidget {
-  final int groupId;
-  final Map contacts;
-
-  const ScreenAddContact({
+class ScreenAddInformation extends StatefulWidget {
+  const ScreenAddInformation({
     super.key,
-    required this.groupId,
-    required this.contacts,
   });
 
   @override
-  State<ScreenAddContact> createState() => _ScreenAddContactState();
+  State<ScreenAddInformation> createState() => _ScreenAddInformationState();
 }
 
-class _ScreenAddContactState extends State<ScreenAddContact> {
+class _ScreenAddInformationState extends State<ScreenAddInformation> {
   Color textColor = const Color.fromRGBO(188, 192, 200, 1);
   Color textColorDark = const Color.fromRGBO(98, 118, 132, 1);
   TextEditingController name = TextEditingController(text: '');
@@ -45,24 +40,18 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
   TextEditingController city = TextEditingController(text: '');
   TextEditingController country = TextEditingController(text: '');
   late List<Color> textFieldColor;
-  bool isOk = true;
+  bool isOk = false;
   bool sex = false;
+  String authToken = '';
+  bool isActive = false;
   String code = '';
 
-  List<String> groupName = ['Семья', 'Друзья', 'Близкие', 'Коллеги', 'Партнеры'];
-  int idGroup = 0;
-  String group = 'Семья';
-
-  Map buffContacts = {};
-  Map visibleContacts = {};
-
   bool isPressed = true;
-  String imageContact = 'https://qviz.fun/media/avatars/default_avatar.png';
+  late String imageContact;
 
   int isPressedContactData = 0;
-  int id = 0;
 
-  Uint8List? image;
+  String? image;
 
   double getHeight(BuildContext context, double height) {
     return height / 768 * MediaQuery.of(context).size.height;
@@ -169,104 +158,9 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     }
   }
 
-  void _saveContact(
-    String name,
-    String phoneNumber,
-    String birthday,
-    String sex,
-    String telegram,
-    String region,
-    String cat,
-    Uint8List? image,
-  ) async {
-    FormData formData;
-    if (image != null) {
-      var photo = MultipartFile.fromBytes(
-        image,
-        filename: 'image.png',
-        contentType: MediaType("image", "png"),
-      );
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-        'sex': sex,
-        'person_photo': photo,
-      });
-    } else {
-      formData = FormData.fromMap({
-        'name': name,
-        'birthday': birthday,
-        'phoneNumber': phoneNumber,
-        'telegram': telegram,
-        'email': email.text,
-        'region': region,
-        'cat': cat,
-        'sex': sex,
-      });
-    }
-
-    try {
-      final response = await Dio().post(
-        'https://qviz.fun/api/v1/people/',
-        data: formData,
-        options: Options(
-          validateStatus: (status) {
-            return status! < 500;
-          },
-          headers: {
-            'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
-          },
-        ),
-      );
-      if (response.data['id'] != null) {
-        textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-        setState(() {});
-
-        Future.delayed(const Duration(milliseconds: 400), () {
-          Navigator.pop(context);
-        });
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-
-    //log(widget.contacts['people'].length.toString());
-    if (widget.contacts['people'] != null) {
-      int length = 0;
-      for (int k = 0; k < int.parse(widget.contacts['people'].length.toString()); k++) {
-        if (widget.contacts['people'][k]['cat'] == (widget.groupId + 1)) {
-          buffContacts[widget.contacts['people'][k]['id']] = widget.contacts['people'][k];
-        }
-      }
-
-      visibleContacts.clear();
-
-      buffContacts.forEach((key, value) {
-        visibleContacts[length] = buffContacts[key];
-        visibleContacts[length]['add'] = true;
-        length++;
-      });
-      log(visibleContacts.length.toString());
-      log(visibleContacts.toString());
-
-      group = groupName[widget.groupId];
-      idGroup = widget.groupId;
-
-      id = visibleContacts.length;
-    }
 
     textFieldColor = [
       context.read<ThemeBloc>().state.postcardContainerBorderColor,
@@ -274,6 +168,12 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
       context.read<ThemeBloc>().state.postcardContainerBorderColor,
       context.read<ThemeBloc>().state.postcardContainerBorderColor,
     ];
+
+    context.read<AuthorizationBloc>().add(GetDataEvent());
+    phone = TextEditingController(text: context.read<AuthorizationBloc>().state.phone);
+    telegram = TextEditingController(text: context.read<AuthorizationBloc>().state.telegram);
+    image = context.read<AuthorizationBloc>().state.photo;
+
 
     telegram.addListener(() {
       String value = telegram.text;
@@ -330,8 +230,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
               backgroundColor:
                   state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
-                name:
-                    'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts.isNotEmpty ? visibleContacts.length : 0) + 1})',
+                name: 'Ввод личных данных\nнового пользователя',
                 onTheme: () {
                   context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
                   setState(() {});
@@ -357,179 +256,21 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: getWidth(context, 16)),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           height: getHeight(context, 41),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: getWidth(context, 235),
-                              child: textFieldRegistration(
-                                context,
-                                235,
-                                'Имя члена группы',
-                                name,
-                                false,
-                                textFieldColor[0],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 18,
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(18),
-                              onTap: () {
-                                if (widget.contacts['people'] != null) {
-                                  id--;
-                                  if (id < 0) {
-                                    id = visibleContacts.length;
-                                    name = TextEditingController(text: '');
-                                    birthday = TextEditingController(text: '');
-                                    phone = TextEditingController(text: '');
-                                    telegram = TextEditingController(text: '');
-                                    email = TextEditingController(text: '');
-                                    city = TextEditingController(text: '');
-                                    country = TextEditingController(text: '');
-                                    imageContact =
-                                        'https://qviz.fun/media/avatars/default_avatar.png';
-                                  } else {
-                                    name = TextEditingController(text: visibleContacts[id]['name']);
-                                    birthday = TextEditingController(
-                                        text: '${visibleContacts[id]['birthday'].toString().substring(
-                                              8,
-                                            )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
-                                    phone = TextEditingController(
-                                        text: visibleContacts[id]['phoneNumber']);
-                                    telegram = TextEditingController(
-                                        text: visibleContacts[id]['telegram']);
-                                    email =
-                                        TextEditingController(text: visibleContacts[id]['email']);
-                                    city = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? 0
-                                                : visibleContacts[id]['region']
-                                                        .toString()
-                                                        .indexOf(',') +
-                                                    2,
-                                          ),
-                                    );
-                                    country = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            0,
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? visibleContacts[id]['region'].length
-                                                : visibleContacts[id]['region']
-                                                    .toString()
-                                                    .indexOf(','),
-                                          ),
-                                    );
-                                    imageContact =
-                                        'https://qviz.fun${visibleContacts[id]['person_photo']}';
-                                  }
-                                  setState(() {});
-                                }
-                              },
-                              child: SizedBox(
-                                height: getHeight(context, 36),
-                                width: getHeight(context, 36),
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                    border: Border.all(
-                                        color: const Color.fromRGBO(98, 198, 170, 1), width: 1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/svg/arrow_left_mini.svg',
-                                    width: getWidth(context, 24),
-                                    height: getHeight(context, 24),
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 9,
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(18),
-                              onTap: () {
-                                if (widget.contacts['people'] != null) {
-                                  id++;
-                                  if (id == visibleContacts.length) {
-                                    name = TextEditingController(text: '');
-                                    birthday = TextEditingController(text: '');
-                                    phone = TextEditingController(text: '');
-                                    telegram = TextEditingController(text: '');
-                                    email = TextEditingController(text: '');
-                                    city = TextEditingController(text: '');
-                                    country = TextEditingController(text: '');
-                                    imageContact =
-                                        'https://qviz.fun/media/avatars/default_avatar.png';
-                                  } else {
-                                    if (id > visibleContacts.length) {
-                                      id = 0;
-                                    }
-                                    name = TextEditingController(text: visibleContacts[id]['name']);
-                                    birthday = TextEditingController(
-                                        text: '${visibleContacts[id]['birthday'].toString().substring(
-                                          8,
-                                        )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
-                                    phone = TextEditingController(
-                                        text: visibleContacts[id]['phoneNumber']);
-                                    telegram = TextEditingController(
-                                        text: visibleContacts[id]['telegram']);
-                                    email =
-                                        TextEditingController(text: visibleContacts[id]['email']);
-                                    city = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? 0
-                                                : visibleContacts[id]['region']
-                                                        .toString()
-                                                        .indexOf(',') +
-                                                    2,
-                                          ),
-                                    );
-                                    country = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            0,
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? visibleContacts[id]['region'].length
-                                                : visibleContacts[id]['region']
-                                                    .toString()
-                                                    .indexOf(','),
-                                          ),
-                                    );
-                                    imageContact =
-                                        'https://qviz.fun${visibleContacts[id]['person_photo']}';
-                                  }
-                                  setState(() {});
-                                }
-                              },
-                              child: SizedBox(
-                                height: getHeight(context, 36),
-                                width: getHeight(context, 36),
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                    border: Border.all(
-                                        color: const Color.fromRGBO(98, 198, 170, 1), width: 1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/svg/arrow_right_mini.svg',
-                                    width: getWidth(context, 24),
-                                    height: getHeight(context, 24),
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                        SizedBox(
+                          width: getWidth(context, 350),
+                          child: textFieldRegistration(
+                            context,
+                            350,
+                            'Имя',
+                            name,
+                            false,
+                            textFieldColor[0],
+                          ),
                         ),
                         SizedBox(
                           height: getHeight(context, 13),
@@ -801,180 +542,20 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                           ],
                         ),
                         SizedBox(
-                          height: getHeight(context, 10),
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Статус отношений',
-                            style: TextLocalStyles.roboto400.copyWith(
-                                color: state.isDark
-                                    ? Colors.white
-                                    : const Color.fromRGBO(22, 26, 29, 1),
-                                fontSize: 14,
-                                height: 16.41 / 14),
-                          ),
-                        ),
-                        SizedBox(
-                          width: getWidth(context, 343),
-                          height: getHeight(context, 52),
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: context.read<ThemeBloc>().state.isDark
-                                  ? const Color.fromRGBO(52, 54, 62, 1)
-                                  : const Color.fromRGBO(250, 255, 255, 1),
-                              border: Border.all(
-                                color: context.read<ThemeBloc>().state.isDark
-                                    ? const Color.fromRGBO(65, 67, 76, 1)
-                                    : const Color.fromRGBO(230, 241, 254, 1),
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  width: getWidth(context, 15),
-                                ),
-                                Text(
-                                  group,
-                                  style: TextLocalStyles.roboto500.copyWith(
-                                    color: context.read<ThemeBloc>().state.isDark
-                                        ? Colors.white
-                                        : const Color.fromRGBO(57, 57, 57, 1),
-                                    fontSize: 16,
-                                  ),
-                                  textAlign: TextAlign.justify,
-                                ),
-                                SizedBox(
-                                  width: getWidth(context, 70),
-                                ),
-                                Row(
-                                  children: [
-                                    InkWell(
-                                      borderRadius: BorderRadius.circular(18),
-                                      onTap: () {
-                                        idGroup--;
-                                        if (idGroup < 0) idGroup = 4;
-                                        group = groupName[idGroup];
-
-                                        int length = 0;
-                                        buffContacts.clear();
-                                        for (int k = 0;
-                                            k <
-                                                int.parse(
-                                                    widget.contacts['people'].length.toString());
-                                            k++) {
-                                          if (widget.contacts['people'][k]['cat'] ==
-                                              (idGroup + 1)) {
-                                            buffContacts[widget.contacts['people'][k]['id']] =
-                                                widget.contacts['people'][k];
-                                          }
-                                        }
-
-                                        visibleContacts.clear();
-
-                                        buffContacts.forEach((key, value) {
-                                          visibleContacts[length] = buffContacts[key];
-                                          visibleContacts[length]['add'] = true;
-                                          length++;
-                                        });
-                                        log(visibleContacts.length.toString());
-                                        log(visibleContacts.toString());
-
-                                        id = visibleContacts.length;
-
-                                        setState(() {});
-                                      },
-                                      child: SizedBox(
-                                        height: getHeight(context, 36),
-                                        width: getHeight(context, 36),
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                            border: Border.all(
-                                                color: const Color.fromRGBO(98, 198, 170, 1),
-                                                width: 1),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            'assets/svg/arrow_left_mini.svg',
-                                            width: getWidth(context, 24),
-                                            height: getHeight(context, 24),
-                                            fit: BoxFit.scaleDown,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 9,
-                                    ),
-                                    InkWell(
-                                      borderRadius: BorderRadius.circular(18),
-                                      onTap: () {
-                                        idGroup++;
-                                        if (idGroup > 4) idGroup = 0;
-                                        group = groupName[idGroup];
-
-                                        int length = 0;
-                                        buffContacts.clear();
-                                        for (int k = 0;
-                                            k <
-                                                int.parse(
-                                                    widget.contacts['people'].length.toString());
-                                            k++) {
-                                          if (widget.contacts['people'][k]['cat'] ==
-                                              (idGroup + 1)) {
-                                            buffContacts[widget.contacts['people'][k]['id']] =
-                                                widget.contacts['people'][k];
-                                          }
-                                        }
-
-                                        visibleContacts.clear();
-
-                                        buffContacts.forEach((key, value) {
-                                          visibleContacts[length] = buffContacts[key];
-                                          visibleContacts[length]['add'] = true;
-                                          length++;
-                                        });
-                                        log(visibleContacts.length.toString());
-                                        log(visibleContacts.toString());
-
-                                        id = visibleContacts.length;
-
-                                        setState(() {});
-                                      },
-                                      child: SizedBox(
-                                        height: getHeight(context, 36),
-                                        width: getHeight(context, 36),
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                            border: Border.all(
-                                                color: const Color.fromRGBO(98, 198, 170, 1),
-                                                width: 1),
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: SvgPicture.asset(
-                                            'assets/svg/arrow_right_mini.svg',
-                                            width: getWidth(context, 24),
-                                            height: getHeight(context, 24),
-                                            fit: BoxFit.scaleDown,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: getWidth(context, 8),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(
                           height: getHeight(context, 25),
+                        ),
+                        Text(
+                          'Редактировать данные при повторном входе\nможно будет в группе контактов “Семья”',
+                          style: TextLocalStyles.roboto400.copyWith(
+                            color: state.isDark
+                                ? const Color.fromRGBO(255, 255, 255, 1)
+                                : const Color.fromRGBO(57, 57, 57, 1),
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 32),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -982,28 +563,18 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                             SizedBox(
                               height: getHeight(context, 62),
                               width: getHeight(context, 62),
-                              child: id != visibleContacts.length
-                                  ? DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(imageContact),
-                                          fit: BoxFit.fill,
-                                        ),
-                                        shape: BoxShape.circle,
-                                      ),
+                              child: image == null
+                                  ? CircleAvatar(
+                                      backgroundImage:
+                                          const AssetImage('assets/images/upload_image.png'),
+                                      backgroundColor: state.isDark
+                                          ? AppTheme.backgroundColor
+                                          : const Color.fromRGBO(240, 247, 254, 1),
                                     )
-                                  : image == null
-                                      ? CircleAvatar(
-                                          backgroundImage:
-                                              const AssetImage('assets/images/upload_image.png'),
-                                          backgroundColor: state.isDark
-                                              ? AppTheme.backgroundColor
-                                              : const Color.fromRGBO(240, 247, 254, 1),
-                                        )
-                                      : Image.memory(
-                                          image!,
-                                          fit: BoxFit.cover,
-                                        ), //Image.file(imageFile!),),
+                                  : Image.network(
+                                      'https://qviz.fun$image',
+                                      fit: BoxFit.cover,
+                                    ), //Image.file(imageFile!),),
                             ),
                             const Expanded(child: SizedBox()),
                             InkWell(
@@ -1084,178 +655,121 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                           ],
                         ),
                         SizedBox(
-                          height: getHeight(context, 48),
+                          height: getHeight(context, 61),
                         ),
-                        Row(
-                          children: [
-                            buttonGreen(context, 52, 166, 'Календарь событий\nчлена группы', 16,
-                                () {}, false),
-                            const SizedBox(
-                              width: 11,
-                            ),
-                            buttonGreen(
-                              context,
-                              52,
-                              166,
-                              'Сохранить',
-                              16,
-                              () {
-                                isOk = true;
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: buttonGreen(
+                            context,
+                            height : 52,
+                            width : 166,
+                            title : 'Сохранить',
+                            fontSize: 16,
+                            onTap : () {
+                              isOk = true;
 
-                                String value = phone.text;
-                                RegExp regExp = RegExp(r"^\+{0,1}\d{11}$");
-                                if (regExp.hasMatch(value)) {
-                                  textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                                } else {
-                                  textFieldColor[2] = Colors.red;
-                                  isOk = false;
-                                  isPressedContactData = 0;
-                                }
+                              String value = phone.text;
+                              RegExp regExp = RegExp(r"^\+{0,1}\d{11}$");
+                              if (regExp.hasMatch(value)) {
+                                textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
+                              } else {
+                                textFieldColor[2] = Colors.red;
+                                isOk = false;
+                                isPressedContactData = 0;
+                              }
 
-                                value = birthday.text;
-                                String birthdayDDMMYY = '';
+                              value = birthday.text;
+                              String birthdayDDMMYY = '';
 
-                                regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
-                                if (regExp.hasMatch(value)) {
-                                  textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-                                  String dmy = birthday.text;
-                                  int? day = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
-                                  dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                  int? month = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
-                                  dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                  int? year = int.tryParse(dmy.substring(
-                                    0,
-                                  ));
-                                  if (day! < 1 || day > 31 || month! < 1 || month > 12) {
-                                    textFieldColor[1] = Colors.red;
-                                    isOk = false;
-                                  } else {
-                                    birthdayDDMMYY = '$year-$month-$day';
-                                  }
-                                } else {
+                              regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
+                              if (regExp.hasMatch(value)) {
+                                textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
+                                String dmy = birthday.text;
+                                int? day = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
+                                dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
+                                int? month = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
+                                dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
+                                int? year = int.tryParse(dmy.substring(
+                                  0,
+                                ));
+                                if (day! < 1 || day > 31 || month! < 1 || month > 12) {
                                   textFieldColor[1] = Colors.red;
                                   isOk = false;
+                                } else {
+                                  birthdayDDMMYY = '$year-$month-$day';
                                 }
+                              } else {
+                                textFieldColor[1] = Colors.red;
+                                isOk = false;
+                              }
 
-                                value = email.text;
-                                regExp =
-                                    RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
-                                if (regExp.hasMatch(value)) {
+                              value = email.text;
+                              regExp = RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
+                              if (regExp.hasMatch(value)) {
+                                textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
+                              } else {
+                                textFieldColor[2] = Colors.red;
+                                isOk = false;
+                                isPressedContactData = 2;
+                              }
+
+                              value = telegram.text;
+                              regExp = RegExp(r"^@\w+$");
+                              if (regExp.hasMatch(value)) {
+                                if (textFieldColor[2] != Colors.red) {
                                   textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                                } else {
-                                  textFieldColor[2] = Colors.red;
-                                  isOk = false;
-                                  isPressedContactData = 2;
                                 }
+                              } else {
+                                textFieldColor[2] = Colors.red;
+                                isOk = false;
+                                isPressedContactData = 1;
+                              }
 
-                                value = telegram.text;
-                                regExp = RegExp(r"^@\w+$");
-                                if (regExp.hasMatch(value)) {
-                                  if (textFieldColor[2] != Colors.red) {
-                                    textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                                  }
-                                } else {
-                                  textFieldColor[2] = Colors.red;
-                                  isOk = false;
-                                  isPressedContactData = 1;
-                                }
+                              value = name.text;
+                              if (value.isNotEmpty) {
+                                textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
+                              } else {
+                                textFieldColor[0] = Colors.red;
+                                isOk = false;
+                              }
+                              value = country.text;
+                              if (value.isNotEmpty) {
+                                textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
+                              } else {
+                                textFieldColor[3] = Colors.red;
+                                isOk = false;
+                                isPressed = true;
+                              }
+                              value = city.text;
+                              if (value.isNotEmpty) {
+                                textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
+                              } else {
+                                textFieldColor[3] = Colors.red;
+                                isOk = false;
+                                isPressed = false;
+                              }
 
-                                value = name.text;
-                                if (value.isNotEmpty) {
-                                  textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-                                } else {
-                                  textFieldColor[0] = Colors.red;
-                                  isOk = false;
-                                }
-                                value = country.text;
-                                if (value.isNotEmpty) {
-                                  textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-                                } else {
-                                  textFieldColor[3] = Colors.red;
-                                  isOk = false;
-                                  isPressed = true;
-                                }
-                                value = city.text;
-                                if (value.isNotEmpty) {
-                                  textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-                                } else {
-                                  textFieldColor[3] = Colors.red;
-                                  isOk = false;
-                                  isPressed = false;
-                                }
-                                // print(visibleContacts[id]);
-                                // print(visibleContacts[id]['id']);
-                                // print(visibleContacts[id]['admin']);
-                                // print(visibleContacts[id]['added_user']);
-                                // print(visibleContacts[id]['register']);
-                                // print(visibleContacts[id]['register_user_id']);
-                                // print(visibleContacts[id]['username']);
-                                // print(visibleContacts[id]['time_create']);
-                                // print(visibleContacts[id]['status']);
-                                // print(visibleContacts[id]['user_group']);
-                                if (isOk) {
-                                  if (id != visibleContacts.length) {
-                                    _saveChangeContact(
-                                      visibleContacts[id]['id'],
-                                      name.text,
-                                      birthdayDDMMYY,
-                                      sex,
-                                      image,
-                                      phone.text,
-                                      telegram.text,
-                                      email.text,
-                                      '${country.text}, ${city.text}',
-                                      visibleContacts[id]['admin'],
-                                      visibleContacts[id]['added_user'],
-                                      visibleContacts[id]['register'],
-                                      visibleContacts[id]['register_user_id'],
-                                      visibleContacts[id]['username'],
-                                      visibleContacts[id]['time_create'],
-                                      visibleContacts[id]['status'],
-                                      (idGroup + 1).toString(),
-                                      visibleContacts[id]['user_group'],
-                                    );
-                                  } else {
-                                    _saveContact(
-                                        name.text,
-                                        phone.text,
-                                        birthdayDDMMYY,
-                                        sex.toString(),
-                                        telegram.text,
-                                        '${country.text}, ${city.text}',
-                                        (idGroup + 1).toString(),
-                                        image);
-                                  }
-                                } else {
-                                  setState(() {});
-                                  Timer(
-                                    const Duration(seconds: 2),
-                                    () {
-                                      textColor = const Color.fromRGBO(188, 192, 200, 1);
-                                      textColorDark = const Color.fromRGBO(98, 118, 132, 1);
-                                      textFieldColor = [
-                                        context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .postcardContainerBorderColor,
-                                        context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .postcardContainerBorderColor,
-                                        context
-                                            .read<ThemeBloc>()
-                                            .state
-                                            .postcardContainerBorderColor,
-                                        context.read<ThemeBloc>().state.postcardContainerBorderColor
-                                      ];
-                                      setState(() {});
-                                    },
-                                  );
-                                }
-                              },
-                              true,
-                            ),
-                          ],
+                              if (isOk) {
+                              } else {
+                                setState(() {});
+                                Timer(
+                                  const Duration(seconds: 2),
+                                  () {
+                                    textColor = const Color.fromRGBO(188, 192, 200, 1);
+                                    textColorDark = const Color.fromRGBO(98, 118, 132, 1);
+                                    textFieldColor = [
+                                      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                                      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                                      context.read<ThemeBloc>().state.postcardContainerBorderColor,
+                                      context.read<ThemeBloc>().state.postcardContainerBorderColor
+                                    ];
+                                    setState(() {});
+                                  },
+                                );
+                              }
+                            },
+                            isActive: isOk,
+                          ),
                         ),
                       ],
                     ),
@@ -1476,44 +990,6 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     );
   }
 
-  Widget buttonGreen(BuildContext context, height, width, title, fontSize, onTap, active) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: onTap,
-      child: SizedBox(
-        width: getWidth(context, width),
-        height: getHeight(context, height),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: active
-                ? const LinearGradient(
-                    colors: [
-                      Color.fromRGBO(98, 198, 170, 0.3),
-                      Color.fromRGBO(68, 168, 140, 0.3),
-                    ],
-                  )
-                : null,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: const Color.fromRGBO(98, 198, 170, 1),
-              width: 1,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: TextLocalStyles.roboto500.copyWith(
-                color: const Color.fromRGBO(110, 210, 182, 1),
-                fontSize: fontSize,
-                height: 16.41 / 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget textFieldRegistration(
       BuildContext context, width, hintText, controller, isbirthday, textFieldColor) {

@@ -37,6 +37,7 @@ class CoverState {
     String? region,
     String? username,
     String? description,
+
   }) {
     return CoverState(
       myDreamDate: myDreamDate ?? this.myDreamDate,

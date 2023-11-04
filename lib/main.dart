@@ -10,6 +10,7 @@ import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
+import 'package:mvp_taplan/features/load_screen/load_screen.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
 
@@ -59,10 +60,11 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        initialRoute: '/nb/journal_1/',
+        initialRoute: '/load_app/',
         routes: {
           '/nb/journal_1/': (context) => const MyHomePage(bloggerId: 1),
           '/nb/journal_2/': (context) =>  const MyHomePage(bloggerId: 45),
+          '/load_app/': (context) => const LoadScreen(),
         },
         title: 'MVP',
       ),

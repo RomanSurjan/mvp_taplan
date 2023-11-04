@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_bloc.dart';
+import 'package:mvp_taplan/blocs/showcase_bloc/showcase_event.dart';
 import 'package:mvp_taplan/blocs/showcase_bloc/showcase_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
@@ -34,7 +35,7 @@ class _Screen35State extends State<Screen35> {
     'Скульптура\nи декор',
   ];
 
-  int catNumber = 1;
+  int catNumber = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -149,23 +150,26 @@ class _Screen35State extends State<Screen35> {
                                     ),
                                   ),
                                   child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Намекнуть\nо желании',
-                                          style: TextLocalStyles.roboto500.copyWith(
-                                            color: const Color.fromRGBO(82, 182, 154, 1),
-                                            fontSize: 10,
-                                          ),
-                                          textAlign: TextAlign.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Намекнуть\nо желании',
+                                        style: TextLocalStyles.roboto500.copyWith(
+                                          color: const Color.fromRGBO(82, 182, 154, 1),
+                                          fontSize: 10,
                                         ),
-                                        SizedBox(
-                                            child: SvgPicture.asset('assets/svg/share.svg',
-                                                colorFilter: const ColorFilter.mode(
-                                                    Color.fromRGBO(82, 182, 154, 1),
-                                                    BlendMode.srcIn),
-                                                fit: BoxFit.fitHeight))
-                                      ]),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        child: SvgPicture.asset(
+                                          'assets/svg/share.svg',
+                                          colorFilter: const ColorFilter.mode(
+                                              Color.fromRGBO(82, 182, 154, 1), BlendMode.srcIn),
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -181,7 +185,15 @@ class _Screen35State extends State<Screen35> {
                                 children: [
                                   for (int j = 0; j < 3; j++) ...[
                                     ShowcasePresentWidget(
-                                      callback: () {},
+                                      callback: () {
+                                        context.read<ShowcaseBloc>().add(
+                                              GetShowcasePresentInfoEvent(
+                                                id: int.tryParse(
+                                                    state.userModel.presents[i * 3 + j].id)!,
+                                                context: context,
+                                              ),
+                                            );
+                                      },
                                       id: state.userModel.presents[i * 3 + j].id,
                                       photo: state.userModel.presents[i * 3 + j].photo,
                                       invested: state.userModel.presents[i * 3 + j].invested,
@@ -200,16 +212,19 @@ class _Screen35State extends State<Screen35> {
                             ]
                           ],
                         ),
-                        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                          Text(
-                            "Итого собрано $investedSum (${investedSumPercentage.toStringAsFixed(0)}%)",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFFA399D2),
-                              fontSize: 12,
-                            ),
-                          )
-                        ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Итого собрано $investedSum (${investedSumPercentage.toStringAsFixed(0)}%)",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFFA399D2),
+                                fontSize: 12,
+                              ),
+                            )
+                          ],
+                        ),
                         const Expanded(child: SizedBox()),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

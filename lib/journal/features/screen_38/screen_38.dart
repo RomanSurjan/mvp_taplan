@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
-import 'package:mvp_taplan/blocs/journal_bloc/journal_event.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/features/screen_39/screen_39.dart';
@@ -17,12 +16,6 @@ class Screen38 extends StatefulWidget {
 }
 
 class _Screen38State extends State<Screen38> {
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<JournalBloc>().add(GetJournalContentEvent());
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -11,6 +11,8 @@ import 'package:mvp_taplan/blocs/cover_bloc/cover_state.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_event.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
+import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
+import 'package:mvp_taplan/blocs/journal_bloc/journal_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
@@ -59,8 +61,9 @@ class Screen30State extends State<Screen30> {
     context.read<PostcardBloc>().add(GetPostcardsEvent());
     context.read<WishListBloc>().add(GetWishListEvent());
     context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
-    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(1));
+    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(5));
     context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
+    context.read<JournalBloc>().add(GetJournalContentEvent());
 
     if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
       String dateBorn = context.read<CoverBloc>().state.myDreamDate;

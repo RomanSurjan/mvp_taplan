@@ -3,12 +3,11 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
@@ -19,6 +18,8 @@ import 'package:mvp_taplan/features/screen_12/screen_pickImage.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+
+import '../screen_30/screen_30.dart';
 
 class ScreenAddInformation extends StatefulWidget {
   const ScreenAddInformation({
@@ -42,16 +43,13 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
   late List<Color> textFieldColor;
   bool isOk = false;
   bool sex = false;
-  String authToken = '';
-  bool isActive = false;
-  String code = '';
 
   bool isPressed = true;
   late String imageContact;
 
   int isPressedContactData = 0;
 
-  String? image;
+  Uint8List? image;
 
   double getHeight(BuildContext context, double height) {
     return height / 768 * MediaQuery.of(context).size.height;
@@ -61,101 +59,23 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
     return width / 375 * MediaQuery.of(context).size.width;
   }
 
-  void _saveChangeContact(
-    int id,
-    String name,
-    String birthday,
-    bool sex,
-    Uint8List? image,
-    String phoneNumber,
-    String telegram,
-    String email,
-    String region,
-    bool admin,
-    int addedUser,
-    bool register,
-    int? registerUserId,
-    String? username,
-    String timeCreate,
-    String? status,
-    String cat,
-    String? userGroup,
-  ) async {
-    try {
-      FormData formData;
-      if (image != null) {
-        var photo = MultipartFile.fromBytes(
-          image,
-          filename: 'image.png',
-          contentType: MediaType("image", "png"),
-        );
-        formData = FormData.fromMap({
-          "id": id,
-          "name": name,
-          "birthday": birthday,
-          "sex": sex,
-          "phoneNumber": phoneNumber,
-          "telegram": telegram,
-          "email": email,
-          "region": region,
-          "admin": admin,
-          "added_user": addedUser,
-          "register": register,
-          "register_user_id": registerUserId,
-          "username": username,
-          "time_create": timeCreate,
-          "status": status,
-          "cat": cat,
-          "user_group": userGroup,
-          "person_photo": photo,
-        });
-      } else {
-        formData = FormData.fromMap({
-          "id": id,
-          "name": name,
-          "birthday": birthday,
-          "sex": sex,
-          "phoneNumber": phoneNumber,
-          "telegram": telegram,
-          "email": email,
-          "region": region,
-          "admin": admin,
-          "added_user": addedUser,
-          "register": register,
-          "register_user_id": registerUserId,
-          "username": username,
-          "time_create": timeCreate,
-          "status": status,
-          "cat": cat,
-          "user_group": userGroup,
-        });
-      }
-      final response = await Dio().put(
-        'https://qviz.fun/api/v1/update/people/$id/',
-        data: formData,
-        options: Options(
-          validateStatus: (status) {
-            return status! < 500;
-          },
-          headers: {
-            'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
-          },
-        ),
-      );
-
-      if (response.data != null) {
-        textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-        textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-        setState(() {});
-        Future.delayed(const Duration(milliseconds: 400), () {
-          Navigator.pop(context);
-        });
-      }
-    } catch (e) {
-      rethrow;
+  void _checkData() {
+    isOk = true;
+    String value = email.text;
+    RegExp regExp = RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
+    if (!regExp.hasMatch(value)) {
+      isOk = false;
     }
+    if (city.text.isEmpty) {
+      isOk = false;
+    }
+    if (country.text.isEmpty) {
+      isOk = false;
+    }
+    if (name.text.isEmpty) {
+      isOk = false;
+    }
+    setState(() {});
   }
 
   @override
@@ -169,53 +89,21 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
       context.read<ThemeBloc>().state.postcardContainerBorderColor,
     ];
 
-    context.read<AuthorizationBloc>().add(GetDataEvent());
+    //context.read<AuthorizationBloc>().add(GetDataEvent());
     phone = TextEditingController(text: context.read<AuthorizationBloc>().state.phone);
     telegram = TextEditingController(text: context.read<AuthorizationBloc>().state.telegram);
-    image = context.read<AuthorizationBloc>().state.photo;
 
-
-    telegram.addListener(() {
-      String value = telegram.text;
-      RegExp regExpTaghandle = RegExp(r"@\w+");
-      String tag = '@';
-      Iterable matches = regExpTaghandle.allMatches(value);
-      if (matches.isEmpty) {
-        telegram.value = telegram.value.copyWith(
-          text: tag,
-          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
-          composing: TextRange.empty,
-        );
-      }
-      for (var match in matches) {
-        tag = value.substring(match.start, match.end);
-        telegram.value = telegram.value.copyWith(
-          text: tag,
-          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
-          composing: TextRange.empty,
-        );
-        break;
-      }
+    name.addListener(() {
+      _checkData();
     });
-    phone.addListener(() {
-      String value = phone.text;
-      RegExp regExpTaghandle = RegExp(r"^\+\d{0,11}$");
-      String tag = '+7';
-      if (phone.text.isEmpty || phone.text == '+') {
-        phone.value = phone.value.copyWith(
-          text: tag,
-          selection: TextSelection(baseOffset: tag.length, extentOffset: tag.length),
-          composing: TextRange.empty,
-        );
-      } else if (regExpTaghandle.hasMatch(value)) {
-      } else {
-        String text = value.substring(0, value.length - 1);
-        phone.value = phone.value.copyWith(
-          text: text,
-          selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
-          composing: TextRange.empty,
-        );
-      }
+    email.addListener(() {
+      _checkData();
+    });
+    city.addListener(() {
+      _checkData();
+    });
+    country.addListener(() {
+      _checkData();
     });
   }
 
@@ -264,13 +152,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                         SizedBox(
                           width: getWidth(context, 350),
                           child: textFieldRegistration(
-                            context,
-                            350,
-                            'Имя',
-                            name,
-                            false,
-                            textFieldColor[0],
-                          ),
+                              context, 350, 'Имя', name, false, textFieldColor[0], true),
                         ),
                         SizedBox(
                           height: getHeight(context, 13),
@@ -297,14 +179,8 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                                     const SizedBox(
                                       height: 3,
                                     ),
-                                    textFieldRegistration(
-                                      context,
-                                      235,
-                                      'ДД.ММ.ГГГГ',
-                                      birthday,
-                                      false,
-                                      textFieldColor[1],
-                                    ),
+                                    textFieldRegistration(context, 235, 'ДД.ММ.ГГГГ', birthday,
+                                        false, textFieldColor[1], true),
                                   ],
                                 ),
                               ),
@@ -432,6 +308,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                                         : email,
                                 false,
                                 textFieldColor[2],
+                                isPressedContactData == 2 ? true : false,
                               ),
                             ),
                             const SizedBox(
@@ -503,13 +380,13 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                           children: [
                             Expanded(
                               child: textFieldRegistration(
-                                context,
-                                343,
-                                isPressed ? 'Россия' : 'Москва',
-                                isPressed ? country : city,
-                                false,
-                                textFieldColor[3],
-                              ),
+                                  context,
+                                  343,
+                                  isPressed ? 'Россия' : 'Москва',
+                                  isPressed ? country : city,
+                                  false,
+                                  textFieldColor[3],
+                                  true),
                             ),
                             const SizedBox(
                               width: 5,
@@ -571,10 +448,10 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                                           ? AppTheme.backgroundColor
                                           : const Color.fromRGBO(240, 247, 254, 1),
                                     )
-                                  : Image.network(
-                                      'https://qviz.fun$image',
+                                  : Image.memory(
+                                      image!,
                                       fit: BoxFit.cover,
-                                    ), //Image.file(imageFile!),),
+                                    ),
                             ),
                             const Expanded(child: SizedBox()),
                             InkWell(
@@ -661,95 +538,54 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                           alignment: Alignment.centerRight,
                           child: buttonGreen(
                             context,
-                            height : 52,
-                            width : 166,
-                            title : 'Сохранить',
+                            height: 52,
+                            width: 166,
+                            title: 'Сохранить',
                             fontSize: 16,
-                            onTap : () {
-                              isOk = true;
-
-                              String value = phone.text;
-                              RegExp regExp = RegExp(r"^\+{0,1}\d{11}$");
-                              if (regExp.hasMatch(value)) {
-                                textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                              } else {
-                                textFieldColor[2] = Colors.red;
-                                isOk = false;
-                                isPressedContactData = 0;
-                              }
-
-                              value = birthday.text;
+                            onTap: () {
                               String birthdayDDMMYY = '';
 
-                              regExp = RegExp(r"^\d{1,2}\.\d{1,2}.\d{4}");
-                              if (regExp.hasMatch(value)) {
-                                textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-                                String dmy = birthday.text;
-                                int? day = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
-                                dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                int? month = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
-                                dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
-                                int? year = int.tryParse(dmy.substring(
-                                  0,
-                                ));
-                                if (day! < 1 || day > 31 || month! < 1 || month > 12) {
-                                  textFieldColor[1] = Colors.red;
-                                  isOk = false;
-                                } else {
-                                  birthdayDDMMYY = '$year-$month-$day';
-                                }
-                              } else {
+                              textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
+                              String dmy = birthday.text;
+                              int? day = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
+                              dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
+                              int? month = int.tryParse(dmy.substring(0, dmy.indexOf('.', 0)));
+                              dmy = dmy.substring(dmy.indexOf('.', 0) + 1);
+                              int? year = int.tryParse(dmy.substring(
+                                0,
+                              ));
+                              if (day! < 1 || day > 31 || month! < 1 || month > 12) {
                                 textFieldColor[1] = Colors.red;
                                 isOk = false;
+                              } else {
+                                birthdayDDMMYY = '$year-$month-$day';
                               }
 
-                              value = email.text;
-                              regExp = RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
-                              if (regExp.hasMatch(value)) {
-                                textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                              } else {
-                                textFieldColor[2] = Colors.red;
-                                isOk = false;
-                                isPressedContactData = 2;
-                              }
+                              print(isOk);
 
-                              value = telegram.text;
-                              regExp = RegExp(r"^@\w+$");
-                              if (regExp.hasMatch(value)) {
-                                if (textFieldColor[2] != Colors.red) {
-                                  textFieldColor[2] = const Color.fromRGBO(66, 157, 132, 1);
-                                }
-                              } else {
-                                textFieldColor[2] = Colors.red;
-                                isOk = false;
-                                isPressedContactData = 1;
-                              }
-
-                              value = name.text;
-                              if (value.isNotEmpty) {
-                                textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-                              } else {
-                                textFieldColor[0] = Colors.red;
-                                isOk = false;
-                              }
-                              value = country.text;
-                              if (value.isNotEmpty) {
-                                textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-                              } else {
-                                textFieldColor[3] = Colors.red;
-                                isOk = false;
-                                isPressed = true;
-                              }
-                              value = city.text;
-                              if (value.isNotEmpty) {
-                                textFieldColor[3] = const Color.fromRGBO(66, 157, 132, 1);
-                              } else {
-                                textFieldColor[3] = Colors.red;
-                                isOk = false;
-                                isPressed = false;
-                              }
-
+                              print(birthdayDDMMYY);
                               if (isOk) {
+                                context.read<AuthorizationBloc>().add(
+                                      ChangeDataEvent(
+                                        username: name.text,
+                                        photo: image,
+                                        region: '${country.text}, ${city.text}',
+                                        birthday: birthdayDDMMYY,
+                                        sex: sex,
+                                        email: email.text,
+                                      ),
+                                    );
+                                Timer(
+                                  const Duration(milliseconds: 500),
+                                      () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const Screen30(bloggerId: 45),
+                                        ),
+                                      );
+                                  },
+                                );
                               } else {
                                 setState(() {});
                                 Timer(
@@ -990,9 +826,8 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
     );
   }
 
-
   Widget textFieldRegistration(
-      BuildContext context, width, hintText, controller, isbirthday, textFieldColor) {
+      BuildContext context, width, hintText, controller, isbirthday, textFieldColor, isActive) {
     final OutlineInputBorder outlinedBorder = OutlineInputBorder(
         borderSide: BorderSide(
       color: textFieldColor,
@@ -1003,6 +838,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
       child: TextField(
         textInputAction: TextInputAction.done,
         controller: controller,
+        enabled: isActive,
         textAlignVertical: const TextAlignVertical(y: 0.5),
         style: TextLocalStyles.roboto400.copyWith(
           color: context.read<ThemeBloc>().state.isDark
@@ -1016,6 +852,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
           border: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
           focusedBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
           enabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
+          disabledBorder: outlinedBorder.copyWith(borderRadius: BorderRadius.circular(6)),
           hintText: hintText,
           hintStyle: TextLocalStyles.roboto400.copyWith(
               color: context.read<ThemeBloc>().state.isDark

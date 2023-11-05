@@ -43,12 +43,9 @@ class RegisterEvent extends AuthorizationEvent {
 }
 
 class ChangeDataEvent extends AuthorizationEvent {
-  final String phone;
-  final String password;
-  final String telegram;
   final String email;
   final String username;
-  final Uint8List photo;
+  final Uint8List? photo;
   final String region;
   final String birthday;
   final bool sex;
@@ -59,9 +56,6 @@ class ChangeDataEvent extends AuthorizationEvent {
     required this.region,
     required this.birthday,
     required this.sex,
-    required this.phone,
-    required this.password,
-    required this.telegram,
     required this.email,
   });
 }

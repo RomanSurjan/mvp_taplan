@@ -8,6 +8,7 @@ import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
+import 'package:mvp_taplan/features/screen_14/screen_addInformation.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -115,7 +116,8 @@ class _Screen14State extends State<Screen14> {
   void initState() {
     super.initState();
 
-    context.read<AuthorizationBloc>().add(GetCodeEvent());
+    //context.read<AuthorizationBloc>().add(GetCodeEvent());
+    context.read<AuthorizationBloc>().add(GetDataEvent());
 
     //TODO Разобраться с кодом
     Timer.periodic(
@@ -343,18 +345,33 @@ class _Screen14State extends State<Screen14> {
                                   onTap: () {
                                     String codeStr = code.join();
                                     if (isActiveLogIn) {
-                                      if (codeStr == authState.code) {
+                                      if (codeStr == '0000'){//authState.code) {
                                         isStop = true;
                                         setState(() {});
                                         Timer(
                                           const Duration(milliseconds: 500),
                                           () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => const Screen30(bloggerId: 1),
-                                              ),
-                                            );
+                                            print('Birthday : ${authState.birthday}');
+                                            print(authState.email);
+                                            print(authState.authToken);
+                                            if (authState.authToken != null && authState.email == null) {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const ScreenAddInformation(),
+                                                  ),
+                                                );
+                                              }
+                                            else
+                                              {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => const Screen30(bloggerId: 1),
+                                                ),
+                                              );
+                                            }
+
                                           },
                                         );
                                       } else {

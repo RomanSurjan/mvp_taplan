@@ -15,7 +15,7 @@ class _LoadScreenState extends State<LoadScreen> {
     Future.delayed(
       const Duration(milliseconds: 8500),
       () {
-        Navigator.pushReplacementNamed(context, '/nb/journal_1/');
+        Navigator.pushReplacementNamed(context, '/nb/journal_2/');
       },
     );
   }

@@ -82,7 +82,8 @@ class Screen26State extends State<Screen26> {
       visibleContacts[length]['add'] = true;
       length++;
     });
-    log(visibleContacts.length.toString());
+    //log(visibleContacts[0]);
+
     setState(() {});
   }
 

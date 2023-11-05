@@ -1003,7 +1003,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                       : Image.memory(
                                           image!,
                                           fit: BoxFit.cover,
-                                        ), //Image.file(imageFile!),),
+                                        ),
                             ),
                             const Expanded(child: SizedBox()),
                             InkWell(

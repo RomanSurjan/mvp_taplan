@@ -53,20 +53,48 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
     }
   }
 
-  _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) {
-    emitter(
-      AuthorizationState().copyWith(
-        phone: event.phone,
-        birthday: event.birthday,
-        username: event.username,
-        region: event.region,
-        //TODO Сделать фото String и UNIT8List
-        //photo: event.photo,
-        email: event.email,
-        sex: event.sex,
-        telegram: event.telegram,
-      ),
-    );
+  _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) async {
+    late FormData formData;
+    if (event.photo != null) {
+      final photo = MultipartFile.fromBytes(
+        event.photo!,
+        filename: 'image.png',
+        contentType: MediaType("image", "png"),
+      );
+      formData = FormData.fromMap({
+        'username': event.username,
+        'region': event.region,
+        'email': event.email,
+        'user_photo': photo,
+        'birthday' : event.birthday,
+        'sex' : event.sex ? 'True' : 'False',
+      });
+    } else {
+      formData = FormData.fromMap({
+        'username': event.username,
+        'region': event.region,
+        'email': event.email,
+        'birthday' : event.birthday,
+        'sex' : event.sex ? 'True' : 'False',
+      });
+    }
+    try {
+      await Dio().post(
+        'https://qviz.fun/api/v1/change/user/data/',
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            if (status == null) return false;
+            return status < 500;
+          },
+          headers: {
+            'Authorization': "Token ${state.authToken}",
+          },
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   _onRegister(RegisterEvent event, Emitter<AuthState> emitter) async {
@@ -165,13 +193,14 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
     emitter(
       AuthorizationState().copyWith(
         phone: response.data['phoneNumber'],
-        birthday: response.data['phoneNumber'],
+        birthday: response.data['birthday'],
         username: response.data['username'],
         region: response.data['region'],
         photo: response.data['photo'],
         email: response.data['email'],
         sex: response.data['sex'],
         telegram: response.data['telegram'],
+        authToken: state.authToken,
       ),
     );
   }

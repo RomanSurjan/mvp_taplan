@@ -277,7 +277,7 @@ class Screen30State extends State<Screen30> {
                             bottom: getHeight(context, 85),
                             left: getWidth(context, 28),
                             child: Text(
-                              '${coverState.description}\n${coverState.region}',
+                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username) ? '' : '${coverState.description}\n${coverState.region}',
                               style: TextLocalStyles.roboto400.copyWith(
                                 fontSize: 14,
                                 color: const Color.fromRGBO(255, 255, 255, 1),

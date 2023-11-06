@@ -75,7 +75,17 @@ class Screen26State extends State<Screen26> {
 
     visibleContacts.clear();
 
-    int length = 0;
+    int length = 1;
+    visibleContacts[0] = {
+      'name': context.read<AuthorizationBloc>().state.username,
+      'birthday' : context.read<AuthorizationBloc>().state.birthday,
+      'sex' : context.read<AuthorizationBloc>().state.sex,
+      'person_photo' : context.read<AuthorizationBloc>().state.photo,
+      'phoneNumber' : context.read<AuthorizationBloc>().state.phone,
+      'telegram' : context.read<AuthorizationBloc>().state.telegram,
+      'email' : context.read<AuthorizationBloc>().state.email,
+      'region' : context.read<AuthorizationBloc>().state.region,
+    };
 
     buffContacts.forEach((key, value) {
       visibleContacts[length] = buffContacts[key];
@@ -83,6 +93,7 @@ class Screen26State extends State<Screen26> {
       length++;
     });
     //log(visibleContacts[0]);
+
 
     setState(() {});
   }

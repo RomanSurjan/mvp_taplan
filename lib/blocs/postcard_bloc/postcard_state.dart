@@ -12,6 +12,7 @@ class PostcardState {
   final List<String> streamPostcards;
   final List<String> justPostcards;
   final List<String> hbPostcards;
+  final String? postcardSign;
 
   PostcardState({
     required this.nameOfEvents,
@@ -21,6 +22,7 @@ class PostcardState {
     required this.streamPostcards,
     required this.justPostcards,
     required this.hbPostcards,
+    this.postcardSign,
   });
 
   PostcardState copyWith({
@@ -32,6 +34,7 @@ class PostcardState {
     List<String>? streamPostcards,
     List<String>? justPostcards,
     List<String>? hbPostcards,
+    String? postcardSign,
   }) {
     return PostcardState(
       postcards: postcards ?? this.postcards,
@@ -41,6 +44,7 @@ class PostcardState {
       streamPostcards: streamPostcards ?? this.streamPostcards,
       justPostcards: justPostcards ?? this.justPostcards,
       hbPostcards: hbPostcards ?? this.hbPostcards,
+      postcardSign: postcardSign ?? this.postcardSign,
     );
   }
 }

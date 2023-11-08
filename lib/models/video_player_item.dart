@@ -4,12 +4,14 @@ class VideoPlayerItem extends StatefulWidget {
   final String videoUrl;
   final String label;
   final int pageIndex;
+  final bool fromShowcase;
 
   const VideoPlayerItem({
     super.key,
     required this.videoUrl,
     required this.label,
     required this.pageIndex,
+    required this.fromShowcase,
   });
 
   @override
@@ -23,15 +25,19 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.network(
-      widget.videoUrl,
-    )..initialize().then(
-        (_) {
-          if (mounted) {
-            setState(() {});
-          }
-        },
-      );
+
+    _initPlayer();
+  }
+
+  void _initPlayer() async {
+    videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+
+    await videoPlayerController.initialize().then(
+      (_) {
+        setState(() {});
+      },
+    );
+
     videoPlayerController.play();
     videoPlayerController.setLooping(true);
     videoPlayerController.setVolume(0.5);
@@ -110,9 +116,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                       RotatedBox(
                         quarterTurns: 3,
                         child: Text(
-                          widget.pageIndex + 1 >= 10
-                              ? '${widget.pageIndex + 1}'
-                              : '0${widget.pageIndex + 1}',
+                          widget.pageIndex >= 10 ? '${widget.pageIndex}' : '0${widget.pageIndex}',
                           style: TextLocalStyles.gputeks500.copyWith(
                             fontWeight: FontWeight.w700,
                             color: const Color.fromRGBO(193, 184, 237, 1),

@@ -18,13 +18,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
 
   _onInit(InitPaymentEvent event, Emitter<PaymentState> emitter) async {
     final amount = event.amount * 100;
-    final orderId = getPaymentId();
+    final orderId = await getPaymentId(event.presentId, amount, event.postcardSign);
     final token = getToken(amount, password, orderId, terminalKey);
 
     final map = {
       "TerminalKey": terminalKey,
       "Amount": amount,
-      "OrderId": "$orderId",
+      "OrderId": orderId,
       "Token": "$token",
     };
 
@@ -41,11 +41,28 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     }
   }
 
-  int getPaymentId() {
-    return (99 + Random(DateTime.now().millisecondsSinceEpoch).nextInt(100000));
+  Future<String> getPaymentId(int presentId, int amount, String? postcardSign) async {
+    final response = await Dio().post(
+      'https://qviz.fun/api/v1/create/order/',
+      data: {
+        'present': presentId,
+        'amount': amount,
+        'postcard_sign': postcardSign,
+      },
+      options: Options(
+        headers: {
+          'Authorization': 'Token 69f8e37d2d234198b8d45b0d1f7073386c026173',
+        },
+      ),
+    );
+
+
+    print(response.data);
+
+    return response.data['id'];
   }
 
-  Digest getToken(int amount, String password, int paymentId, String terminalKey) {
+  Digest getToken(int amount, String password, String paymentId, String terminalKey) {
     return sha256.convert(utf8.encode('$amount$password$paymentId$terminalKey'));
   }
 }

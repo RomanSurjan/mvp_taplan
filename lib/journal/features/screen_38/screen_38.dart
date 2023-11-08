@@ -21,6 +21,9 @@ class _Screen38State extends State<Screen38> {
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
       appBarLabel: 'Содержание номера',
+      onBack: (){
+
+      },
       child: BlocBuilder<JournalBloc, JournalState>(
         builder: (context, state) {
           return Stack(

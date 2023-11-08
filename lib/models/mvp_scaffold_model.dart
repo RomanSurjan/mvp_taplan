@@ -4,12 +4,16 @@ class MvpScaffoldModel extends StatelessWidget {
   final Widget? child;
   final String appBarLabel;
   final double? fontSize;
+  final VoidCallback? onBack;
+  final VoidCallback? onTheme;
 
   const MvpScaffoldModel({
     super.key,
     this.child,
     required this.appBarLabel,
     this.fontSize,
+    this.onBack,
+    this.onTheme,
   });
 
   @override
@@ -21,6 +25,8 @@ class MvpScaffoldModel extends StatelessWidget {
         appBar: CustomAppBar(
           fontSize: fontSize,
           name: appBarLabel,
+          onBack: onBack,
+          onTheme: onTheme,
         ),
         body: SafeArea(
           child: SizedBox(

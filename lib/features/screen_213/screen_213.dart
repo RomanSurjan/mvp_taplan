@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_state.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
@@ -244,6 +245,7 @@ class _Screen213State extends State<Screen213> {
                         fontHeight: 17.58 / 15,
                         isActive: isMainButtonActive,
                         onTap: () {
+
                           isVisible = true;
                           Future.delayed(const Duration(milliseconds: 900), () {
                             isVisible = false;
@@ -252,6 +254,7 @@ class _Screen213State extends State<Screen213> {
                           setState(() {});
                           if (isMainButtonActive) {
                             Future.delayed(const Duration(milliseconds: 1100), () {
+                              context.read<PostcardBloc>().add(SetPostcardSignEvent(postcardSign:controller.text));
                               Navigator.pop(context);
                             });
                           }

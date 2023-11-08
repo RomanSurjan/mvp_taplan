@@ -16,3 +16,8 @@ class ChangeHolidayTypeEvent extends PostcardEvent {
   ChangeHolidayTypeEvent({required this.currentHolidayType});
 }
 
+class SetPostcardSignEvent extends PostcardEvent{
+  final String postcardSign;
+
+  SetPostcardSignEvent({required this.postcardSign});
+}

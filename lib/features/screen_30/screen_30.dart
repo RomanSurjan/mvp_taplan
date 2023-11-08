@@ -52,7 +52,6 @@ class Screen30State extends State<Screen30> {
   bool isTelegram = false;
   List<String> months = ['СЕНТЯБРЬ', 'ОКТЯБРЬ', 'НОЯБРЬ'];
 
-
   @override
   void initState() {
     super.initState();
@@ -65,30 +64,7 @@ class Screen30State extends State<Screen30> {
     context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
     context.read<JournalBloc>().add(GetJournalContentEvent());
 
-    if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
-      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
-      DateTime dateOfBorn = DateTime(
-        int.parse(dateBorn.substring(0, 4)),
-        int.parse(dateBorn.substring(5, 7)),
-        int.parse(dateBorn.substring(8, 10)),
-        int.parse(dateBorn.substring(11, 13)),
-      );
-      update = Timer.periodic(
-        const Duration(seconds: 1),
-        (timer) {
-          DateTime nowDate = DateTime.now();
-          range = DateTime(
-            dateOfBorn.year - nowDate.year,
-            dateOfBorn.month - nowDate.month,
-            dateOfBorn.day - nowDate.day,
-            dateOfBorn.hour - nowDate.hour,
-            dateOfBorn.minute - nowDate.minute,
-            dateOfBorn.second - nowDate.second,
-          );
-          setState(() {});
-        },
-      );
-    }
+
   }
 
   @override
@@ -116,6 +92,32 @@ class Screen30State extends State<Screen30> {
 
                 return BlocBuilder<CoverBloc, CoverState>(
                   builder: (context, coverState) {
+                    if (coverState.myDreamDate.isNotEmpty) {
+                      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
+                      DateTime dateOfBorn = DateTime(
+                        int.parse(dateBorn.substring(0, 4)),
+                        int.parse(dateBorn.substring(5, 7)),
+                        int.parse(dateBorn.substring(8, 10)),
+                        int.parse(dateBorn.substring(11, 13)),
+                      );
+                      update = Timer.periodic(
+                        const Duration(seconds: 1),
+                            (timer) {
+                          DateTime nowDate = DateTime.now();
+                          range = DateTime(
+                            dateOfBorn.year - nowDate.year,
+                            dateOfBorn.month - nowDate.month,
+                            dateOfBorn.day - nowDate.day,
+                            dateOfBorn.hour - nowDate.hour,
+                            dateOfBorn.minute - nowDate.minute,
+                            dateOfBorn.second - nowDate.second,
+                          );
+                          if(mounted) {
+                            setState(() {});
+                          }
+                        },
+                      );
+                    }
                     return Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
@@ -213,7 +215,9 @@ class Screen30State extends State<Screen30> {
                             ),
                             left: getWidth(
                               context,
-                              coverState.covers[coverState.currentCoverId][1][2][1] > 100 ? coverState.covers[coverState.currentCoverId][1][2][1] - 13 : coverState.covers[coverState.currentCoverId][1][2][1],
+                              coverState.covers[coverState.currentCoverId][1][2][1] > 100
+                                  ? coverState.covers[coverState.currentCoverId][1][2][1] - 13
+                                  : coverState.covers[coverState.currentCoverId][1][2][1],
                             ),
                             child: myDream(
                               context,
@@ -226,9 +230,10 @@ class Screen30State extends State<Screen30> {
                               coverState.covers[coverState.currentCoverId][1][3][2],
                             ),
                             left: getWidth(
-                              context,
-                              coverState.covers[coverState.currentCoverId][1][3][1] > 100 ? coverState.covers[coverState.currentCoverId][1][3][1] - 13 : coverState.covers[coverState.currentCoverId][1][3][1]
-                            ),
+                                context,
+                                coverState.covers[coverState.currentCoverId][1][3][1] > 100
+                                    ? coverState.covers[coverState.currentCoverId][1][3][1] - 13
+                                    : coverState.covers[coverState.currentCoverId][1][3][1]),
                             child: bouquetOfTheWeek(
                               context,
                               state.rangeToStream!,
@@ -265,7 +270,9 @@ class Screen30State extends State<Screen30> {
                             bottom: getHeight(context, 116),
                             left: getWidth(context, 27),
                             child: Text(
-                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username) ? '' : coverState.username,
+                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username)
+                                  ? ''
+                                  : coverState.username,
                               style: const TextStyle(
                                 fontFamily: 'Abhaya',
                                 fontSize: 31,
@@ -277,7 +284,9 @@ class Screen30State extends State<Screen30> {
                             bottom: getHeight(context, 85),
                             left: getWidth(context, 28),
                             child: Text(
-                              '${coverState.description}\n${coverState.region}',
+                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username)
+                                  ? ''
+                                  : '${coverState.description}\n${coverState.region}',
                               style: TextLocalStyles.roboto400.copyWith(
                                 fontSize: 14,
                                 color: const Color.fromRGBO(255, 255, 255, 1),
@@ -288,8 +297,8 @@ class Screen30State extends State<Screen30> {
                             bottom: getHeight(context, 91),
                             left: getWidth(context, 226),
                             child: InkWell(
-                              onTap: (){
-                                if(widget.bloggerId == 1) {
+                              onTap: () {
+                                if (widget.bloggerId == 1) {
                                   coverState = CoverState(
                                     myDreamDate: '',
                                     everyWeekStream: '',
@@ -618,12 +627,14 @@ Widget myDream(BuildContext context, DateTime range) {
     alignment: Alignment.topRight,
     child: Column(
       crossAxisAlignment: context
-          .read<CoverBloc>()
-          .state
-          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-          .toString()
-          .substring(1, 2) ==
-          '1' ? CrossAxisAlignment.start : CrossAxisAlignment.end ,
+                  .read<CoverBloc>()
+                  .state
+                  .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
+                  .toString()
+                  .substring(1, 2) ==
+              '1'
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
       children: [
         Text(
           'Моя мечта',

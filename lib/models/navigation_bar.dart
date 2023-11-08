@@ -168,8 +168,8 @@ class CustomNavigationBar extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: getWidth(context, 62),
-        width: getWidth(context, 62),
+        height: getWidth(context, 57),
+        width: getWidth(context, 57),
         child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -212,8 +212,8 @@ class CustomNavigationBar extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: onTapTelegram,
       child: SizedBox(
-        height: getWidth(context, 72),
-        width: getWidth(context, 72),
+        height: getWidth(context, 67),
+        width: getWidth(context, 67),
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(

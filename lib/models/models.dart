@@ -9,6 +9,7 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_player_web/video_player_web.dart';
 
 part 'mvp_appbar.dart';
 

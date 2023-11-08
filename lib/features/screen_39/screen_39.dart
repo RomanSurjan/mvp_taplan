@@ -6,7 +6,13 @@ import 'package:mvp_taplan/models/models.dart';
 
 class Screen39 extends StatefulWidget {
   final int initialIndex;
-  const Screen39({super.key, required this.initialIndex});
+  final bool fromShowcase;
+
+  const Screen39({
+    super.key,
+    required this.initialIndex,
+    this.fromShowcase = false,
+  });
 
   @override
   State<Screen39> createState() => _Screen39State();
@@ -19,23 +25,19 @@ class _Screen39State extends State<Screen39> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<JournalBloc, JournalState>(
-        builder: (context,state) {
-
+        builder: (context, state) {
           return SafeArea(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: PageView.builder(
-
-                onPageChanged: (index){
-
-                },
                 controller: controller,
                 itemBuilder: (context, index) {
                   return VideoPlayerItem(
                     videoUrl: state.videosList[index],
                     label: state.contentList[index].label,
-                    pageIndex: index,
+                    pageIndex: state.contentList[index].page,
+                    fromShowcase: widget.fromShowcase,
                   );
                 },
                 itemCount: state.videosList.length,
@@ -47,5 +49,4 @@ class _Screen39State extends State<Screen39> {
       ),
     );
   }
-
 }

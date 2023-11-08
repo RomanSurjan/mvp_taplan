@@ -131,16 +131,24 @@ class _Screen215State extends State<Screen215> {
                               child: Column(
                                 children: [
                                   InkWell(
-                                    onTap: (){
-                                      final contentList = context.read<JournalBloc>().state.contentList;
+                                    onTap: () {
+                                      final contentList =
+                                          context.read<JournalBloc>().state.contentList;
                                       int currentVideoIndex = -1;
-                                      for(var el in contentList){
-
-                                        if(el.videos.contains(widget.currentModel.videoId)) {
+                                      for (var el in contentList) {
+                                        if (el.videos.contains(widget.currentModel.videoId)) {
                                           currentVideoIndex = contentList.indexOf(el);
                                         }
                                       }
-                                      Navigator.push(context, MaterialPageRoute(builder: (_) =>Screen39(initialIndex: currentVideoIndex)));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => Screen39(
+                                            initialIndex: currentVideoIndex,
+                                            fromShowcase: true,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Image.asset(
                                       'assets/images/video_button.png',

@@ -455,28 +455,28 @@ class Screen30State extends State<Screen30> {
                               ),
                             ),
                           ),
-                          Positioned(
-                            top: getHeight(context, 669),
-                            left: getWidth(context, 0),
-                            child: SizedBox(
-                              width: getWidth(context, 375),
-                              child: CustomNavigationBar(
-                                onTapTelegram: () {
-                                  isTelegram = true;
-                                  setState(() {});
-
-                                  Timer(
-                                    const Duration(seconds: 3),
-                                    () {
-                                      isTelegram = false;
-                                      setState(() {});
-                                    },
-                                  );
-                                },
-                                isTelegram: isTelegram,
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   top: getHeight(context, 669),
+                          //   left: getWidth(context, 0),
+                          //   child: SizedBox(
+                          //     width: getWidth(context, 375),
+                          //     child: CustomNavigationBar(
+                          //       onTapTelegram: () {
+                          //         isTelegram = true;
+                          //         setState(() {});
+                          //
+                          //         Timer(
+                          //           const Duration(seconds: 3),
+                          //           () {
+                          //             isTelegram = false;
+                          //             setState(() {});
+                          //           },
+                          //         );
+                          //       },
+                          //       isTelegram: isTelegram,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     );

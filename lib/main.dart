@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
@@ -61,14 +63,26 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        initialRoute: '/',
+        initialRoute: '/nb/journal_1/',
         routes: {
           '/nb/journal_1/': (context) => const MyHomePage(bloggerId: 1),
-          '/nb/journal_2/': (context) =>  const MyHomePage(bloggerId: 45),
-          '/': (context) => const LoadScreen(),
+          '/nb/journal_2/': (context) => const MyHomePage(bloggerId: 45),
+          '/load_screen/': (context) => const LoadScreen(),
           '/successful_payment/': (context) => const Screen228(),
         },
         title: 'MVP',
+        onUnknownRoute: (settings) {
+          final path = Uri.base.toString().split('&')[7];
+          return MaterialPageRoute(
+            builder: (context) {
+              return Screen228(
+                a: path.substring(
+                  path.indexOf('=') + 1,
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -76,6 +90,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   final int bloggerId;
+
   const MyHomePage({super.key, required this.bloggerId});
 
   @override

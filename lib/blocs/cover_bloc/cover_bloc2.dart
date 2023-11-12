@@ -4,22 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cover_event.dart';
 import 'cover_state.dart';
 
-class CoverBloc extends Bloc<CoverEvent, CoverState> {
-  CoverBloc()
+class CoverBloc2 extends Bloc<CoverEvent, CoverState> {
+  CoverBloc2()
       : super(CoverState(
-          myDreamDate: '',
-          everyWeekStream: '',
-          dreamPresentId: 0,
-          weekFlowerId: 0,
-          currentCoverId: 0,
-          covers: [[]],
-          strWish: '',
-          telegram: '',
-          region: '',
-          username: '',
-          description: '',
-          bloggerId: 1,
-        )) {
+    myDreamDate: '',
+    everyWeekStream: '',
+    dreamPresentId: 0,
+    weekFlowerId: 0,
+    currentCoverId: 0,
+    covers: [[]],
+    strWish: '',
+    telegram: '',
+    region: '',
+    username: '',
+    description: '',
+    bloggerId: 1,
+  )) {
     on<NextCoverEvent>(_onNextCover);
     on<PrevCoverEvent>(_onPrevCover);
     on<GetCoverEvent>(_onGetCover);

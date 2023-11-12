@@ -146,6 +146,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
               : response.data['telegram'],
           photo: response.data['user_photo'],
           id: response.data['id'],
+          passwordErr: response.data['password'],
         ),
       );
     } catch (e) {
@@ -196,7 +197,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         birthday: response.data['birthday'],
         username: response.data['username'],
         region: response.data['region'],
-        photo: response.data['photo'],
+        photo: response.data['user_photo'],
         email: response.data['email'],
         sex: response.data['sex'],
         telegram: response.data['telegram'],

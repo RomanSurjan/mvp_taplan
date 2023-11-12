@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +40,7 @@ class DateTimeBloc extends Bloc<DateTimeEvent, DateTimeState> {
       final response = await Dio().post(
         'https://qviz.fun/api/v1/get/taplink/',
         data: {
-          'blogger_id': '45',
+          'blogger_id': event.bloggerId,
         },
       );
       final dateOfStreamString = response.data['every_week_stream'] as String;

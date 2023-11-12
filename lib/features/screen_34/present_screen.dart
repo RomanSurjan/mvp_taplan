@@ -143,7 +143,7 @@ class PresentScreenState extends State<PresentScreen> {
       appBarLabel: "Покупка подарка",
       child: BlocBuilder<WishListBloc, WishListState>(
         builder: (context, state) {
-          final carModel = state.wishList.where((element) => element.id == 4).toList()[0];
+          final carModel = state.wishList.where((element) => element.position == 1).toList()[0];
 
           return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {
             return Padding(

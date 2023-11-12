@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc.dart';
+import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc2.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_event.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_state.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
@@ -29,19 +30,19 @@ import 'package:mvp_taplan/models/navigation_bar.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-class Screen30 extends StatefulWidget {
+class Screen3002 extends StatefulWidget {
   final int bloggerId;
 
-  const Screen30({
+  const Screen3002({
     super.key,
     required this.bloggerId,
   });
 
   @override
-  Screen30State createState() => Screen30State();
+  Screen3002State createState() => Screen3002State();
 }
 
-class Screen30State extends State<Screen30> {
+class Screen3002State extends State<Screen3002> {
   var flagForTip = false;
 
   var isFirst = false;
@@ -55,18 +56,19 @@ class Screen30State extends State<Screen30> {
   @override
   void initState() {
     super.initState();
-
-    if(widget.bloggerId != context.read<CoverBloc>().state.bloggerId || context.read<CoverBloc>().state.myDreamDate.isEmpty) {
-      //TODO вынести логику в COVERBLOC
-      context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
+    print(widget.bloggerId );
+    print(context.read<CoverBloc2>().state.bloggerId);
+    if(widget.bloggerId != context.read<CoverBloc2>().state.bloggerId) {
+      //TODO вынести логику в CoverBloc2
+      context.read<CoverBloc2>().add(GetCoverEvent(bloggerId: widget.bloggerId));
       context.read<DateTimeBloc>().add(SetTimeToStreamEvent(bloggerId: widget.bloggerId));
     }
     context.read<PostcardBloc>().add(GetPostcardsEvent(bloggerId: widget.bloggerId));
     context.read<WishListBloc>().add(GetWishListEvent(bloggerId: widget.bloggerId));
     context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(bloggerId: widget.bloggerId, cat: 5));
     context.read<JournalBloc>().add(GetJournalContentEvent(bloggerId: widget.bloggerId));
-    if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
-      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
+    if (context.read<CoverBloc2>().state.myDreamDate.isNotEmpty) {
+      String dateBorn = context.read<CoverBloc2>().state.myDreamDate;
       DateTime dateOfBorn = DateTime(
         int.parse(dateBorn.substring(0, 4)),
         int.parse(dateBorn.substring(5, 7)),
@@ -117,7 +119,7 @@ class Screen30State extends State<Screen30> {
                   );
                 }
 
-                return BlocBuilder<CoverBloc, CoverState>(
+                return BlocBuilder<CoverBloc2, CoverState>(
                   builder: (context, coverState) {
 
                     return Container(
@@ -169,27 +171,27 @@ class Screen30State extends State<Screen30> {
                                 height: 1,
                                 fontWeight: FontWeight.w200,
                                 color: coverState.covers[coverState.currentCoverId][1][0][0]
-                                            .toString()
-                                            .substring(2) ==
-                                        '1'
+                                    .toString()
+                                    .substring(2) ==
+                                    '1'
                                     ? const Color.fromRGBO(57, 57, 57, 1)
                                     : const Color.fromRGBO(240, 247, 254, 1),
                               ),
                               textAlign: (coverState.covers[coverState.currentCoverId][1][0][0]
-                                              .toString()
-                                              .substring(1, 2) ==
-                                          '1' ||
-                                      coverState.covers[coverState.currentCoverId][1][0][0]
-                                              .toString()
-                                              .substring(1, 2) ==
-                                          '3')
+                                  .toString()
+                                  .substring(1, 2) ==
+                                  '1' ||
+                                  coverState.covers[coverState.currentCoverId][1][0][0]
+                                      .toString()
+                                      .substring(1, 2) ==
+                                      '3')
                                   ? TextAlign.left
                                   : coverState.covers[coverState.currentCoverId][1][0][0]
-                                              .toString()
-                                              .substring(1, 2) ==
-                                          '5'
-                                      ? TextAlign.center
-                                      : TextAlign.right,
+                                  .toString()
+                                  .substring(1, 2) ==
+                                  '5'
+                                  ? TextAlign.center
+                                  : TextAlign.right,
                             ),
                           ),
                           Positioned(
@@ -207,6 +209,7 @@ class Screen30State extends State<Screen30> {
                               child: SvgPicture.asset('assets/svg/openmoji_swipe.svg'),
                             ),
                           ),
+
                           Positioned(
                             top: getHeight(
                               context,
@@ -255,8 +258,8 @@ class Screen30State extends State<Screen30> {
                                 140
                             ),
                             left: getWidth(
-                              context,
-                              85
+                                context,
+                                85
                             ),
                             child: SvgPicture.asset('assets/svg/openmoji_swipe2.svg'),
                           ),
@@ -342,7 +345,7 @@ class Screen30State extends State<Screen30> {
                                       child: InkWell(
                                         onTap: () {
                                           if (coverState.currentCoverId != 0) {
-                                            context.read<CoverBloc>().add(PrevCoverEvent());
+                                            context.read<CoverBloc2>().add(PrevCoverEvent());
                                           }
                                         },
                                         child: SizedBox(
@@ -355,28 +358,28 @@ class Screen30State extends State<Screen30> {
                                             ),
                                             child: coverState.currentCoverId != 0
                                                 ? SvgPicture.asset(
-                                                    'assets/svg/arrow_back.svg',
-                                                    colorFilter: const ColorFilter.mode(
-                                                      Color.fromRGBO(193, 184, 237, 1),
-                                                      BlendMode.srcIn,
-                                                    ),
-                                                  )
+                                              'assets/svg/arrow_back.svg',
+                                              colorFilter: const ColorFilter.mode(
+                                                Color.fromRGBO(193, 184, 237, 1),
+                                                BlendMode.srcIn,
+                                              ),
+                                            )
                                                 : RotatedBox(
-                                                    quarterTurns: 3,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(right: 5, top: 2),
-                                                      child: Text(
-                                                        'old',
-                                                        style: TextLocalStyles.mono400.copyWith(
-                                                          fontSize: 20,
-                                                          color:
-                                                              const Color.fromRGBO(57, 57, 57, 1),
-                                                        ),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
+                                              quarterTurns: 3,
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.only(right: 5, top: 2),
+                                                child: Text(
+                                                  'old',
+                                                  style: TextLocalStyles.mono400.copyWith(
+                                                    fontSize: 20,
+                                                    color:
+                                                    const Color.fromRGBO(57, 57, 57, 1),
                                                   ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -396,7 +399,7 @@ class Screen30State extends State<Screen30> {
                                         onTap: () {
                                           if (coverState.currentCoverId !=
                                               (coverState.covers.length - 1)) {
-                                            context.read<CoverBloc>().add(NextCoverEvent());
+                                            context.read<CoverBloc2>().add(NextCoverEvent());
                                           }
                                         },
                                         child: SizedBox(
@@ -408,33 +411,33 @@ class Screen30State extends State<Screen30> {
                                               borderRadius: BorderRadius.circular(2),
                                             ),
                                             child: coverState.currentCoverId !=
-                                                    (coverState.covers.length - 1)
+                                                (coverState.covers.length - 1)
                                                 ? RotatedBox(
-                                                    quarterTurns: 2,
-                                                    child: SvgPicture.asset(
-                                                      'assets/svg/arrow_back.svg',
-                                                      colorFilter: const ColorFilter.mode(
-                                                        Color.fromRGBO(193, 184, 237, 1),
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                    ),
-                                                  )
+                                              quarterTurns: 2,
+                                              child: SvgPicture.asset(
+                                                'assets/svg/arrow_back.svg',
+                                                colorFilter: const ColorFilter.mode(
+                                                  Color.fromRGBO(193, 184, 237, 1),
+                                                  BlendMode.srcIn,
+                                                ),
+                                              ),
+                                            )
                                                 : RotatedBox(
-                                                    quarterTurns: 3,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(right: 2, top: 2),
-                                                      child: Text(
-                                                        'new',
-                                                        style: TextLocalStyles.mono400.copyWith(
-                                                          fontSize: 20,
-                                                          color:
-                                                              const Color.fromRGBO(57, 57, 57, 1),
-                                                        ),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
+                                              quarterTurns: 3,
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.only(right: 2, top: 2),
+                                                child: Text(
+                                                  'new',
+                                                  style: TextLocalStyles.mono400.copyWith(
+                                                    fontSize: 20,
+                                                    color:
+                                                    const Color.fromRGBO(57, 57, 57, 1),
                                                   ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -456,7 +459,7 @@ class Screen30State extends State<Screen30> {
 
                                   Timer(
                                     const Duration(seconds: 3),
-                                    () {
+                                        () {
                                       isTelegram = false;
                                       setState(() {});
                                     },
@@ -492,22 +495,22 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
               fontSize: getHeight(context, 24),
               height: 20.93 / 24,
               color: context
-                          .read<CoverBloc>()
-                          .state
-                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                          .toString()
-                          .substring(2) ==
-                      '1'
+                  .read<CoverBloc2>()
+                  .state
+                  .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                  .toString()
+                  .substring(2) ==
+                  '1'
                   ? const Color.fromRGBO(57, 57, 57, 1)
                   : const Color.fromRGBO(240, 247, 254, 1),
             ),
             textAlign: context
-                        .read<CoverBloc>()
-                        .state
-                        .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                        .toString()
-                        .substring(1, 2) ==
-                    '1'
+                .read<CoverBloc2>()
+                .state
+                .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                .toString()
+                .substring(1, 2) ==
+                '1'
                 ? TextAlign.left
                 : TextAlign.right,
           ),
@@ -518,22 +521,22 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
               fontSize: 14,
               height: 12.21 / 14,
               color: context
-                          .read<CoverBloc>()
-                          .state
-                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                          .toString()
-                          .substring(2) ==
-                      '1'
+                  .read<CoverBloc2>()
+                  .state
+                  .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                  .toString()
+                  .substring(2) ==
+                  '1'
                   ? const Color.fromRGBO(57, 57, 57, 1)
                   : const Color.fromRGBO(240, 247, 254, 1),
             ),
             textAlign: context
-                        .read<CoverBloc>()
-                        .state
-                        .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                        .toString()
-                        .substring(1, 2) ==
-                    '1'
+                .read<CoverBloc2>()
+                .state
+                .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                .toString()
+                .substring(1, 2) ==
+                '1'
                 ? TextAlign.left
                 : TextAlign.right,
           ),
@@ -543,22 +546,22 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
               fontSize: 16,
               height: 13.95 / 16,
               color: context
-                          .read<CoverBloc>()
-                          .state
-                          .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                          .toString()
-                          .substring(2) ==
-                      '1'
+                  .read<CoverBloc2>()
+                  .state
+                  .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                  .toString()
+                  .substring(2) ==
+                  '1'
                   ? const Color.fromRGBO(57, 57, 57, 1)
                   : const Color.fromRGBO(240, 247, 254, 1),
             ),
             textAlign: context
-                        .read<CoverBloc>()
-                        .state
-                        .covers[context.read<CoverBloc>().state.currentCoverId][1][3][0]
-                        .toString()
-                        .substring(1, 2) ==
-                    '1'
+                .read<CoverBloc2>()
+                .state
+                .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
+                .toString()
+                .substring(1, 2) ==
+                '1'
                 ? TextAlign.left
                 : TextAlign.right,
           ),
@@ -597,11 +600,11 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
               child: backSpaceButton(
                   context,
                   context
-                          .read<CoverBloc>()
-                          .state
-                          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                          .toString()
-                          .substring(1, 2) ==
+                      .read<CoverBloc2>()
+                      .state
+                      .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+                      .toString()
+                      .substring(1, 2) ==
                       '2'),
             ),
           ),
@@ -616,12 +619,12 @@ Widget myDream(BuildContext context, DateTime range) {
     alignment: Alignment.topRight,
     child: Column(
       crossAxisAlignment: context
-                  .read<CoverBloc>()
-                  .state
-                  .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                  .toString()
-                  .substring(1, 2) ==
-              '1'
+          .read<CoverBloc2>()
+          .state
+          .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+          .toString()
+          .substring(1, 2) ==
+          '1'
           ? CrossAxisAlignment.start
           : CrossAxisAlignment.end,
       children: [
@@ -631,22 +634,22 @@ Widget myDream(BuildContext context, DateTime range) {
             fontSize: getHeight(context, 24),
             height: 20.93 / 24,
             color: context
-                        .read<CoverBloc>()
-                        .state
-                        .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                        .toString()
-                        .substring(2) ==
-                    '1'
+                .read<CoverBloc2>()
+                .state
+                .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+                .toString()
+                .substring(2) ==
+                '1'
                 ? const Color.fromRGBO(57, 57, 57, 1)
                 : const Color.fromRGBO(240, 247, 254, 1),
           ),
           textAlign: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
+              .read<CoverBloc2>()
+              .state
+              .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+              .toString()
+              .substring(1, 2) ==
+              '1'
               ? TextAlign.left
               : TextAlign.right,
         ),
@@ -656,22 +659,22 @@ Widget myDream(BuildContext context, DateTime range) {
             fontSize: getHeight(context, 16),
             height: 13.95 / 14,
             color: context
-                        .read<CoverBloc>()
-                        .state
-                        .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                        .toString()
-                        .substring(2) ==
-                    '1'
+                .read<CoverBloc2>()
+                .state
+                .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+                .toString()
+                .substring(2) ==
+                '1'
                 ? const Color.fromRGBO(57, 57, 57, 1)
                 : const Color.fromRGBO(240, 247, 254, 1),
           ),
           textAlign: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
+              .read<CoverBloc2>()
+              .state
+              .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+              .toString()
+              .substring(1, 2) ==
+              '1'
               ? TextAlign.left
               : TextAlign.right,
         ),
@@ -691,12 +694,12 @@ Widget myDream(BuildContext context, DateTime range) {
         Padding(padding: EdgeInsets.only(top: 0.0049 * MediaQuery.of(context).size.height)),
         Align(
           alignment: context
-                      .read<CoverBloc>()
-                      .state
-                      .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                      .toString()
-                      .substring(1, 2) ==
-                  '1'
+              .read<CoverBloc2>()
+              .state
+              .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+              .toString()
+              .substring(1, 2) ==
+              '1'
               ? Alignment.centerLeft
               : Alignment.centerRight,
           child: RotatedBox(
@@ -710,16 +713,16 @@ Widget myDream(BuildContext context, DateTime range) {
                     context,
                     MaterialPageRoute(
                         builder: (_) =>
-                            const PresentScreen(buyingOption: BuyingOption.buyTogether)));
+                        const PresentScreen(buyingOption: BuyingOption.buyTogether)));
               },
               child: backSpaceButton(
                   context,
                   context
-                          .read<CoverBloc>()
-                          .state
-                          .covers[context.read<CoverBloc>().state.currentCoverId][1][2][0]
-                          .toString()
-                          .substring(1, 2) ==
+                      .read<CoverBloc2>()
+                      .state
+                      .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+                      .toString()
+                      .substring(1, 2) ==
                       '2'),
             ),
           ),
@@ -792,7 +795,7 @@ Widget backSpaceButton(BuildContext context, bool isLeft) {
 }
 
 Widget wishList(BuildContext context) {
-  final coverState = context.read<CoverBloc>().state;
+  final coverState = context.read<CoverBloc2>().state;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -804,9 +807,9 @@ Widget wishList(BuildContext context) {
             height: 20 / 20,
             fontSize: 20,
             color:
-                coverState.covers[coverState.currentCoverId][1][1][0].toString().substring(2) == '1'
-                    ? const Color.fromRGBO(57, 57, 57, 1)
-                    : const Color.fromRGBO(240, 247, 254, 1),
+            coverState.covers[coverState.currentCoverId][1][1][0].toString().substring(2) == '1'
+                ? const Color.fromRGBO(57, 57, 57, 1)
+                : const Color.fromRGBO(240, 247, 254, 1),
           ),
         ),
       ),
@@ -831,10 +834,10 @@ Widget wishList(BuildContext context) {
 }
 
 Widget myWishes(
-  BuildContext context, {
-  required DateTime rangeToStream,
-  required DateTime rangeToBirthday,
-}) {
+    BuildContext context, {
+      required DateTime rangeToStream,
+      required DateTime rangeToBirthday,
+    }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [

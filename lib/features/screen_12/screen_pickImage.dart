@@ -28,6 +28,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
   late Uint8List pickedImageAsBytes;
   bool isCrop = false;
   late File image;
+  bool isPickedImage = false;
 
   Future<void> _pickImage() async {
     final pickedImage = await ImagePickerPlugin().pickImage(
@@ -42,6 +43,8 @@ class _PickImageScreenState extends State<PickImageScreen> {
   }
 
   Future<void> _takePhoto() async {
+    isPickedImage = true;
+    setState(() {});
     final pickedImage = await ImagePickerPlugin().pickImage(
       source: ImageSource.camera,
     );
@@ -50,6 +53,7 @@ class _PickImageScreenState extends State<PickImageScreen> {
     imageFile = File(
       pickedImage.path,
     );
+    isPickedImage = false;
     setState(() {});
     await _cropImage();
   }
@@ -127,43 +131,22 @@ class _PickImageScreenState extends State<PickImageScreen> {
                 SizedBox(
                   height: getHeight(context, 497),
                   width: getWidth(context, 250),
-                  child: imageFile != null
-                      ? DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: const Color.fromRGBO(110, 210, 182, 1),
-                            ),
-                            color: const Color.fromRGBO(110, 210, 182, 0.05),
+                  child: isPickedImage
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppTheme.mainGreenColor,
                           ),
-                          child: isCrop
-                              ? Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      top: getHeight(context, 50),
-                                    ),
-                                    child: SizedBox(
-                                      height: getHeight(context, 240),
-                                      width: getHeight(context, 240),
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromRGBO(110, 210, 182, 1),
-                                          ),
-                                          color: const Color.fromRGBO(110, 210, 182, 0.05),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Image.memory(
-                                          pickedImageAsBytes,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Stack(
-                                  children: [
-                                    Align(
+                        )
+                      : imageFile != null
+                          ? DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromRGBO(110, 210, 182, 1),
+                                ),
+                                color: const Color.fromRGBO(110, 210, 182, 0.05),
+                              ),
+                              child: isCrop
+                                  ? Align(
                                       alignment: Alignment.topCenter,
                                       child: Padding(
                                         padding: EdgeInsets.only(
@@ -180,52 +163,79 @@ class _PickImageScreenState extends State<PickImageScreen> {
                                               color: const Color.fromRGBO(110, 210, 182, 0.05),
                                               shape: BoxShape.circle,
                                             ),
+                                            child: Image.memory(
+                                              pickedImageAsBytes,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Opacity(
-                                        opacity: 0.8,
-                                        child: Image.memory(
-                                          pickedImageAsBytes,
-                                          fit: BoxFit.cover,
+                                    )
+                                  : Stack(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                              top: getHeight(context, 50),
+                                            ),
+                                            child: SizedBox(
+                                              height: getHeight(context, 240),
+                                              width: getHeight(context, 240),
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: const Color.fromRGBO(110, 210, 182, 1),
+                                                  ),
+                                                  color: const Color.fromRGBO(110, 210, 182, 0.05),
+                                                  shape: BoxShape.circle,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
                                         ),
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Opacity(
+                                            opacity: 0.8,
+                                            child: Image.memory(
+                                              pickedImageAsBytes,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            )
+                          : DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromRGBO(110, 210, 182, 1),
+                                ),
+                                color: const Color.fromRGBO(110, 210, 182, 0.05),
+                              ),
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: getHeight(context, 50),
+                                  ),
+                                  child: SizedBox(
+                                    height: getHeight(context, 240),
+                                    width: getHeight(context, 240),
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color.fromRGBO(110, 210, 182, 1),
+                                        ),
+                                        color: const Color.fromRGBO(110, 210, 182, 0.05),
+                                        shape: BoxShape.circle,
                                       ),
                                     ),
-                                  ],
-                                ),
-                        )
-                      : DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: const Color.fromRGBO(110, 210, 182, 1),
-                            ),
-                            color: const Color.fromRGBO(110, 210, 182, 0.05),
-                          ),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: getHeight(context, 50),
-                              ),
-                              child: SizedBox(
-                                height: getHeight(context, 240),
-                                width: getHeight(context, 240),
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: const Color.fromRGBO(110, 210, 182, 1),
-                                    ),
-                                    color: const Color.fromRGBO(110, 210, 182, 0.05),
-                                    shape: BoxShape.circle,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
                 ),
                 Expanded(
                   child: Center(

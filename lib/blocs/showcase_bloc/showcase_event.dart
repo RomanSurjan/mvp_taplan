@@ -5,9 +5,10 @@ abstract class ShowcaseEvent{
 }
 
 class GetShowcaseCardsEvent extends ShowcaseEvent{
+  final int bloggerId;
   final int cat;
 
-  GetShowcaseCardsEvent(this.cat);
+  GetShowcaseCardsEvent({required this.bloggerId, required this.cat});
 
 }
 

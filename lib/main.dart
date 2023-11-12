@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc.dart';
+import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc2.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
 import 'package:mvp_taplan/blocs/paymennt_bloc/payment_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/load_screen/load_screen.dart';
 import 'package:mvp_taplan/features/screen_228/screen_228.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
+import 'package:mvp_taplan/features/screen_30/screen_30vremenniy.dart';
 import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
 
 void main() {
@@ -61,9 +63,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CoverBloc(),
         ),
+        BlocProvider(
+          create: (context) => CoverBloc2(),
+        ),
       ],
       child: MaterialApp(
-        initialRoute: '/nb/journal_1/',
+        initialRoute: '/load_screen/',
         routes: {
           '/nb/journal_1/': (context) => const MyHomePage(bloggerId: 1),
           '/nb/journal_2/': (context) => const MyHomePage(bloggerId: 45),
@@ -101,9 +106,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return PageView(
+      scrollDirection: Axis.vertical,
       children: [
-        Screen30(bloggerId: widget.bloggerId),
-        const Screen38(),
+        PageView(
+          children: const [
+            Screen30(bloggerId: 1),
+            Screen38(),
+          ],
+        ),
+        PageView(
+          children: const [
+            Screen3002(bloggerId: 45),
+            Screen38(),
+          ],
+        )
       ],
     );
   }

@@ -208,7 +208,12 @@ class _Screen14State extends State<Screen14> {
               resizeToAvoidBottomInset: false,
               backgroundColor:
                   state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-              appBar: const CustomAppBarRegistration(
+              appBar: CustomAppBarRegistration(
+                onBack: () {
+                  authState = UnAuthorizationState();
+                  print(authState.authToken);
+                  Navigator.pop(context);
+                },
                 name: 'Сервис желанных подарков',
               ),
               body: SafeArea(
@@ -354,7 +359,7 @@ class _Screen14State extends State<Screen14> {
                                             print('Birthday : ${authState.birthday}');
                                             print(authState.email);
                                             print(authState.authToken);
-                                            if (authState.authToken != null && authState.email == null) {
+                                            if (authState.authToken != null && authState.region == null) {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -364,12 +369,10 @@ class _Screen14State extends State<Screen14> {
                                               }
                                             else
                                               {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => const Screen30(bloggerId: 1),
-                                                ),
-                                              );
+
+                                                    Navigator.pushReplacementNamed(context, '/nb/journal_1/');
+
+
                                             }
 
                                           },

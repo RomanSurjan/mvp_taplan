@@ -9,9 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
+import 'package:mvp_taplan/features/screen_215/screen_215.dart';
+import 'package:mvp_taplan/features/screen_26/screen_26.dart';
 import 'package:mvp_taplan/models/buttons.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -43,7 +49,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
   bool isPressedBirthday = true;
 
   bool isPressed = true;
-  List<bool> buttonNavIsPressed = [false, false, false, false, false];
+  List<bool> buttonNavIsPressed = [false, false, false, true, false];
 
   int isPressedContactData = 0;
   late int id;
@@ -845,6 +851,12 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                   onTap: () {
                     buttonNavIsPressed[2] = !buttonNavIsPressed[2];
                     setState(() {});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const Screen26(),
+                      ),
+                    );
                   }),
               BottomNavButton(
                 picture: 'assets/svg/sharenav.svg',
@@ -858,8 +870,19 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                 picture: 'assets/svg/stars.svg',
                 isPressed: buttonNavIsPressed[4],
                 onTap: () {
-                  buttonNavIsPressed[4] = !buttonNavIsPressed[4];
-                  setState(() {});
+                  final flowerModel = context.read<WishListBloc>().state.wishList.where((element) => element.position == 3).toList()[0];
+                  context
+                      .read<PostcardBloc>()
+                      .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => Screen215(
+                        currentModel: flowerModel,
+                      ),
+                    ),
+                  );
+
                 },
               ),
             ],

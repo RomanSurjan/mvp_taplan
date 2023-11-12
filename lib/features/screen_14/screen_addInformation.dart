@@ -367,7 +367,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Контактные данные',
+                            'Страна, город',
                             style: TextLocalStyles.roboto400.copyWith(
                                 color: state.isDark
                                     ? Colors.white
@@ -578,12 +578,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                                 Timer(
                                   const Duration(milliseconds: 500),
                                       () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const Screen30(bloggerId: 45),
-                                        ),
-                                      );
+                                        Navigator.pushReplacementNamed(context, '/nb/journal_1/');
                                   },
                                 );
                               } else {

@@ -10,11 +10,15 @@ class ShowcasePresentWidget extends StatelessWidget {
   final VoidCallback? callback;
   final String id;
   final String photo;
+  final int video;
   final int invested;
   final int total;
   final bool boughtEarly;
   final bool groupPurchase;
   final bool deliver;
+  final int likes;
+  final bool liked;
+  final int comments;
   final double height;
   final double width;
 
@@ -23,13 +27,17 @@ class ShowcasePresentWidget extends StatelessWidget {
     required this.callback,
     required this.id,
     required this.photo,
+    required this.video,
     required this.invested,
     required this.total,
     required this.boughtEarly,
     required this.groupPurchase,
     required this.deliver,
+    required this.likes,
+    required this.liked,
+    required this.comments,
     required this.height,
-    required this.width,
+    required this.width
   });
 
   @override
@@ -53,131 +61,186 @@ class ShowcasePresentWidget extends StatelessWidget {
               SizedBox(
                 width: width,
                 height: height,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Column(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 2, bottom: 2),
-                      child: Container(
-                        height: 11,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFFFFF).withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: Text(
-                          " ${investedPercentage.toStringAsFixed(1)}%  ",
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 9,
-                            fontFamily: 'Roboto',
-                            height: 0.9,
-                          ),
-                          strutStyle: const StrutStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 9,
-                            height: 0.7,
-                            leading: 1.0,
-                          ),
-                        ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 1, bottom: 2),
+                          child: Container(
+                            height: 9,
+                            width: 33,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFFFFF).withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(1.0),
+                            ),
+                            child: Text(
+                              " ${investedPercentage.toStringAsFixed(1)}%  ",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Color(0xFFFFFFFF),
+                                fontSize: 9,
+                                fontFamily: 'Roboto',
+                                // height: 0.9,
+                              ),
+                              // strutStyle: const StrutStyle(
+                              //   fontFamily: 'Roboto',
+                              //   fontSize: 9,
+                              //   height: 0.5,
+                              // leading: 1.0,
+                              // ),
+                            ),
                       ),
+                        ),
+                        const Expanded(child: SizedBox(height: 1)),
+                        Container(
+                          margin: const EdgeInsets.only(right: 3, bottom: 0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(height: height / 161 * 3),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 18,
+                                      width: 18,
+                                      child: Image.asset(
+                                        'assets/images/video_button.png',//avatarImagePath = usersList[userNumber].avatarImagePath,
+                                        fit:BoxFit.scaleDown,
+                                      )
+                                    ),
+                                    const Text(
+                                      '0',
+                                      style: TextStyle(
+                                        color: Color(0xFFFFFFFF),
+                                        fontSize: 9,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                                SizedBox(height: height / 161 * 5),
+                                const SocialIcon(
+                                  icon: 'assets/svg/share-alt.svg',
+                                  color: Color(0xFFFFFFFF),
+                                  count: 0,
+                                ),
+                                SizedBox(height: height / 161 * 23),
+                                SocialIcon(
+                                  icon: 'assets/svg/comment.svg',
+                                  color: const Color(0xFFFFFFFF),
+                                  count: comments,
+                                ),
+                                SizedBox(height: height / 161 * 4),
+                                SocialIcon(
+                                  icon: 'assets/svg/heart.svg',
+                                  color: liked
+                                      ? const Color(0xFFFF0000)
+                                      : const Color(0xFFFFFFFF),
+                                  count: likes,
+                                ),
+                                SizedBox(height: height / 161 * 4)
+                              ],
+                            ),
+                        ),
+                      ],
                     ),
-                    const Expanded(child: SizedBox(height: 1)),
-                    Container(
-                      margin: const EdgeInsets.only(right: 2, bottom: 0),
-                      child: const Column(
-                        mainAxisSize: MainAxisSize.min,
+                    SizedBox(
+                      width: width,
+                      height: 11,
+                      child: Stack(
+                        alignment: Alignment.center,
                         children: [
-                          SocialIcon(
-                            icon: 'assets/svg/share-alt.svg',
-                            color: Color(0xFFFFFFFF),
-                            count: 0,
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: invested,
+                                    child: Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 11,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [
+                                            AppTheme.wishListScaleLeftColor.withOpacity(0.3),
+                                            AppTheme.wishListScaleLeftColor.withOpacity(0.6),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: total - invested,
+                                    child: Container(
+                                      alignment: Alignment.centerRight,
+                                      height: 11,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [
+                                          AppTheme.wishListScaleRightColor.withOpacity(0.3),
+                                          AppTheme.wishListScaleRightColor.withOpacity(0.6),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ],
+                              ),
+                            ]
                           ),
-                          SocialIcon(
-                            icon: 'assets/svg/comment.svg',
-                            color: Color(0xFFFFFFFF),
-                            count: 0,
-                          ),
-                          SocialIcon(
-                            icon: 'assets/svg/heart.svg',
-                            color: Color(0xFFFF0000),
-                            count: 0,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                " ${sumToString(invested)}",
+                                style: const TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: 9,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                strutStyle: const StrutStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 9,
+                                  height: 0.9,
+                                  leading: 0.5,
+                                )
+                              ),
+                              Text(
+                                "${sumToString(total)} ",
+                                style: const TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: 9,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                  strutStyle: const StrutStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 9,
+                                    height: 0.9,
+                                    leading: 0.5,
+                                  )
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ]
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 1),
-          SizedBox(
-            width: width,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      flex: invested,
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        height: getHeight(context, 20),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              AppTheme.wishListScaleLeftColor.withOpacity(0.3),
-                              AppTheme.wishListScaleLeftColor.withOpacity(0.6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: total - invested,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        height: getHeight(context, 20),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              AppTheme.wishListScaleRightColor.withOpacity(0.3),
-                              AppTheme.wishListScaleRightColor.withOpacity(0.6),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      " ${sumToString(invested)}",
-                      style: TextLocalStyles.roboto600.copyWith(
-                        color: Colors.white,
-                        fontSize: getHeight(context, 12),
-                      ),
-                    ),
-                    Text(
-                      "${sumToString(total)} ",
-                      style: TextLocalStyles.roboto600.copyWith(
-                        color: Colors.white,
-                        fontSize: getHeight(context, 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          const SizedBox(height: 1)
         ],
       ),
     );
@@ -201,8 +264,8 @@ class SocialIcon extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 14,
-          width: 14,
+          height: 18,
+          width: 18,
           child: SvgPicture.asset(
             icon,
             colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
@@ -213,9 +276,9 @@ class SocialIcon extends StatelessWidget {
           "$count",
           style: const TextStyle(
             color: Color(0xFFFFFFFF),
-            fontSize: 10,
+            fontSize: 9,
             fontFamily: 'Roboto',
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],

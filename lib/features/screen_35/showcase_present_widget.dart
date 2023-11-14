@@ -42,7 +42,9 @@ class ShowcasePresentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double investedPercentage = (invested / total * 100);
+    const double iconPadding = 5;
+    final double investedPercentage = (invested / total * 100);
+    final double tensilePart = height - 4 * (32 + iconPadding) - 2;
     return InkWell(
       onDoubleTap: () {
         callback?.call();
@@ -83,6 +85,7 @@ class ShowcasePresentWidget extends StatelessWidget {
                                 color: Color(0xFFFFFFFF),
                                 fontSize: 9,
                                 fontFamily: 'Roboto',
+                                fontWeight: FontWeight.w400
                                 // height: 0.9,
                               ),
                               // strutStyle: const StrutStyle(
@@ -92,60 +95,61 @@ class ShowcasePresentWidget extends StatelessWidget {
                               // leading: 1.0,
                               // ),
                             ),
-                      ),
+                          ),
                         ),
                         const Expanded(child: SizedBox(height: 1)),
                         Container(
                           margin: const EdgeInsets.only(right: 3, bottom: 0),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(height: height / 161 * 3),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SizedBox(
-                                      height: 18,
-                                      width: 18,
-                                      child: Image.asset(
-                                        'assets/images/video_button.png',//avatarImagePath = usersList[userNumber].avatarImagePath,
-                                        fit:BoxFit.scaleDown,
-                                      )
+                            children: [
+                              const SizedBox(height: iconPadding),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    height: 18,
+                                    width: 18,
+                                    child: Image.asset(
+                                      'assets/images/video.png',
+                                      fit:BoxFit.scaleDown,
+                                    )
+                                  ),
+                                  const SizedBox(height: 2),
+                                  const Text(
+                                    '0',
+                                    style: TextStyle(
+                                      color: Color(0xFFFFFFFF),
+                                      fontSize: 9,
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                    const Text(
-                                      '0',
-                                      style: TextStyle(
-                                        color: Color(0xFFFFFFFF),
-                                        fontSize: 9,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ]
-                                ),
-                                SizedBox(height: height / 161 * 5),
-                                const SocialIcon(
-                                  icon: 'assets/svg/share-alt.svg',
-                                  color: Color(0xFFFFFFFF),
-                                  count: 0,
-                                ),
-                                SizedBox(height: height / 161 * 23),
-                                SocialIcon(
-                                  icon: 'assets/svg/comment.svg',
-                                  color: const Color(0xFFFFFFFF),
-                                  count: comments,
-                                ),
-                                SizedBox(height: height / 161 * 4),
-                                SocialIcon(
-                                  icon: 'assets/svg/heart.svg',
-                                  color: liked
-                                      ? const Color(0xFFFF0000)
-                                      : const Color(0xFFFFFFFF),
-                                  count: likes,
-                                ),
-                                SizedBox(height: height / 161 * 4)
-                              ],
-                            ),
+                                  ),
+                                ]
+                              ),
+                              const SizedBox(height: iconPadding),
+                              const SocialIcon(
+                                icon: 'assets/svg/share-alt.svg',
+                                color: Color(0xFFFFFFFF),
+                                count: 0,
+                              ),
+                              SizedBox(height: tensilePart),
+                              SocialIcon(
+                                icon: 'assets/svg/comment.svg',
+                                color: const Color(0xFFFFFFFF),
+                                count: comments,
+                              ),
+                              const SizedBox(height: iconPadding),
+                              SocialIcon(
+                                icon: 'assets/svg/heart.svg',
+                                color: liked
+                                    ? const Color(0xFFFF0000)
+                                    : const Color(0xFFFFFFFF),
+                                count: likes,
+                              ),
+                              const SizedBox(height: iconPadding)
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -206,7 +210,7 @@ class ShowcasePresentWidget extends StatelessWidget {
                                   color: Color(0xFFFFFFFF),
                                   fontSize: 9,
                                   fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                 strutStyle: const StrutStyle(
                                   fontFamily: 'Roboto',
@@ -221,7 +225,7 @@ class ShowcasePresentWidget extends StatelessWidget {
                                   color: Color(0xFFFFFFFF),
                                   fontSize: 9,
                                   fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w400,
                                 ),
                                   strutStyle: const StrutStyle(
                                     fontFamily: 'Roboto',
@@ -278,7 +282,7 @@ class SocialIcon extends StatelessWidget {
             color: Color(0xFFFFFFFF),
             fontSize: 9,
             fontFamily: 'Roboto',
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

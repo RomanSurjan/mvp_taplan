@@ -40,7 +40,7 @@ class _Screen35State extends State<Screen35> {
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
-      appBarLabel: 'Список желанных подарков',
+      appBarLabel: 'Мой список\nжеланных подарков',
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {
           return BlocBuilder<ShowcaseBloc, ShowcaseState>(
@@ -60,7 +60,7 @@ class _Screen35State extends State<Screen35> {
                   ? MediaQuery.of(context).size.width
                   : (MediaQuery.of(context).size.height / 2.056);
               final double investedSumPercentage = (investedSum / totalSum * 100);
-              final double cardWight = (columnWidth - 24) / 3;
+              final double cardWight = (columnWidth - 16) / 3;
               final double cardHeight = cardWight / 114 * 161;
               final buttonSize = columnWidth / 375 * 62;
               return Row(
@@ -68,14 +68,14 @@ class _Screen35State extends State<Screen35> {
                 children: [
                   Container(
                     width: columnWidth,
-                    padding: const EdgeInsets.symmetric(horizontal: 11),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Column(
                       children: [
                         Row(
                           children: [
                             const SizedBox(
-                              height: 54,
-                              width: 54,
+                              height: 62,
+                              width: 62,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
@@ -103,10 +103,10 @@ class _Screen35State extends State<Screen35> {
                                 Text(
                                   'Ближайший праздник',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: themeState.birthdayLabelShowcase,//Color(0xFF7FA4EA),
-                                      fontSize: 13.5,
-                                      // decoration: TextDecoration.underline
+                                    fontWeight: FontWeight.w500,
+                                    color: themeState.birthdayLabelShowcase,//Color(0xFF7FA4EA),
+                                    fontSize: 13.5,
+                                    // decoration: TextDecoration.underline
                                   ),
                                 ),
                                 Text(
@@ -119,8 +119,9 @@ class _Screen35State extends State<Screen35> {
                                 Text(
                                   '${state.userModel.celebrate.day}.'
                                       '${state.userModel.celebrate.month} '
-                                      '(${state.userModel.celebrate.countDaysTo}'
-                                      '+ дней)',
+                                      '(дней до события - '
+                                      '${state.userModel.celebrate.countDaysTo}'
+                                      ')',
                                   style: TextLocalStyles.roboto400.copyWith(
                                     color: themeState.secondaryTextColorShowcase,
                                     fontSize: 12,

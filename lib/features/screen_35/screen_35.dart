@@ -40,7 +40,7 @@ class _Screen35State extends State<Screen35> {
   @override
   Widget build(BuildContext context) {
     return MvpScaffoldModel(
-      appBarLabel: 'Список желанных подарков',
+      appBarLabel: 'Мой список\nжеланных подарков',
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {
           return BlocBuilder<ShowcaseBloc, ShowcaseState>(
@@ -54,33 +54,32 @@ class _Screen35State extends State<Screen35> {
 
               final bool isPortraitOrientation =
                   ((MediaQuery.of(context).size.height / MediaQuery.of(context).size.width) >
-                      1.784);
+                      2.056);
 
               final double columnWidth = (isPortraitOrientation)
                   ? MediaQuery.of(context).size.width
-                  : (MediaQuery.of(context).size.height / 1.792);
+                  : (MediaQuery.of(context).size.height / 2.056);
               final double investedSumPercentage = (investedSum / totalSum * 100);
-              final double cardWight = (columnWidth - 38) / 3;
-              final double cardHeight = cardWight / 113 * 128;
+              final double cardWight = (columnWidth - 16) / 3;
+              final double cardHeight = cardWight / 114 * 161;
               final buttonSize = columnWidth / 375 * 62;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     width: columnWidth,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: Column(
                       children: [
-                        const Expanded(flex: 1, child: SizedBox()),
                         Row(
                           children: [
                             const SizedBox(
-                              height: 54,
-                              width: 54,
+                              height: 62,
+                              width: 62,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage('assets/images/img.png'),
+                                    image: AssetImage('assets/images/avatar.png'),
                                   ),
                                   shape: BoxShape.circle,
                                 ),
@@ -101,13 +100,14 @@ class _Screen35State extends State<Screen35> {
                                     fontSize: 13.8,
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'Ближайший праздник',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF7FA4EA),
-                                      fontSize: 13.5,
-                                      decoration: TextDecoration.underline),
+                                    fontWeight: FontWeight.w500,
+                                    color: themeState.birthdayLabelShowcase,//Color(0xFF7FA4EA),
+                                    fontSize: 13.5,
+                                    // decoration: TextDecoration.underline
+                                  ),
                                 ),
                                 Text(
                                   state.userModel.celebrate.name,
@@ -117,7 +117,11 @@ class _Screen35State extends State<Screen35> {
                                   ),
                                 ),
                                 Text(
-                                  state.userModel.celebrate.date,
+                                  '${state.userModel.celebrate.day}.'
+                                      '${state.userModel.celebrate.month} '
+                                      '(дней до события - '
+                                      '${state.userModel.celebrate.countDaysTo}'
+                                      ')',
                                   style: TextLocalStyles.roboto400.copyWith(
                                     color: themeState.secondaryTextColorShowcase,
                                     fontSize: 12,
@@ -187,28 +191,33 @@ class _Screen35State extends State<Screen35> {
                                     ShowcasePresentWidget(
                                       callback: () {
                                         context.read<ShowcaseBloc>().add(
-                                              GetShowcasePresentInfoEvent(
-                                                id: int.tryParse(
-                                                    state.userModel.presents[i * 3 + j].id)!,
-                                                context: context,
-                                              ),
-                                            );
+                                          GetShowcasePresentInfoEvent(
+                                            id: int.tryParse(
+                                              state.userModel.presents[i * 3 + j].id
+                                            )!,
+                                            context: context,
+                                          ),
+                                        );
                                       },
                                       id: state.userModel.presents[i * 3 + j].id,
                                       photo: state.userModel.presents[i * 3 + j].photo,
+                                      video: state.userModel.presents[i * 3 + j].video,
                                       invested: state.userModel.presents[i * 3 + j].invested,
                                       total: state.userModel.presents[i * 3 + j].total,
                                       boughtEarly: state.userModel.presents[i * 3 + j].boughtEarly,
                                       groupPurchase:
                                           state.userModel.presents[i * 3 + j].groupPurchase,
                                       deliver: state.userModel.presents[i * 3 + j].deliver,
+                                      likes: state.userModel.presents[i * 3 + j].likes,
+                                      liked: state.userModel.presents[i * 3 + j].liked,
+                                      comments: state.userModel.presents[i * 3 + j].comments,
                                       height: cardHeight,
                                       width: cardWight,
                                     ),
                                   ],
                                 ],
                               ),
-                              const SizedBox(height: 4),
+                              // const SizedBox(height: 1),
                             ]
                           ],
                         ),
@@ -243,7 +252,7 @@ class _Screen35State extends State<Screen35> {
                           ],
                         ),
                         const SizedBox(height: 3),
-                        const Expanded(child: SizedBox()),
+                        // const Expanded(child: SizedBox()),
                       ],
                     ),
                   )

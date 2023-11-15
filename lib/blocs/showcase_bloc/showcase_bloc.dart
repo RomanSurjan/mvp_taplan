@@ -14,6 +14,9 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
               id: 0,
               name: '',
               date: '',
+              day: 0,
+              month: 0,
+              countDaysTo: 0
             ),
             name: '',
             presents: [],
@@ -23,7 +26,10 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
     on<GetShowcasePresentInfoEvent>(_onGetPresentInfo);
   }
 
-  _onGetShowcase(GetShowcaseCardsEvent event, Emitter<ShowcaseState> emitter) async {
+  _onGetShowcase(
+    GetShowcaseCardsEvent event,
+    Emitter<ShowcaseState> emitter
+  ) async {
     final response = await Dio().post(
       'https://qviz.fun/api/v1/get/wishlist/',
       data: {
@@ -49,7 +55,6 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
           'present_id': event.id,
         },
       );
-
       final currentPresentModel = MvpPresentModel(
         bigImage: response.data['present_info']['present_photo_2'],
         smallImage: response.data['present_info']['present_photo_1'],
@@ -75,9 +80,11 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
           currentPresentModel: currentPresentModel,
         ),
       );
-
-
-      Navigator.push(event.context,MaterialPageRoute(builder: (_)=> Screen215(currentModel: currentPresentModel)));
+      Navigator.push(
+        event.context, MaterialPageRoute(
+          builder: (_)=> Screen215(currentModel: currentPresentModel)
+        )
+      );
     } catch (e) {
       rethrow;
     }

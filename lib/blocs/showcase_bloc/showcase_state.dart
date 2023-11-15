@@ -20,7 +20,6 @@ class ShowcaseState {
   }
 }
 
-
 class UserModel {
   final Celebrate celebrate;
   final String name;
@@ -44,46 +43,80 @@ class Celebrate {
   final int id;
   final String name;
   final String date;
-
-  Celebrate({required this.id, required this.name, required this.date});
+  final int day;
+  final int month;
+  final int countDaysTo;
+  Celebrate({
+    required this.id,
+    required this.name,
+    required this.date,
+    required this.day,
+    required this.month,
+    required this.countDaysTo
+  });
 
   factory Celebrate.fromJson(List<dynamic> json) {
+    final DateTime celebrateTime = DateTime.parse("${json[2] as String} 00:00:00.000");
+    final DateTime carrentTime = DateTime.now();
+    int temp = (celebrateTime.difference(carrentTime).inHours / 24).round();
+    int daysBetween = (temp < 0)? 0 : temp;
     return Celebrate(
       id: json[0] as int,
       name: json[1] as String,
       date: json[2] as String,
+      day: celebrateTime.day,
+      month: celebrateTime.month,
+      countDaysTo: daysBetween
     );
+  }
+
+  int nearestCelebrationDaysCount (String date){
+    int result = 0;
+    // int days = int.tryParse()
+    return result;
   }
 }
 
 class ShowcaseCard {
   final String id;
   final String photo;
+  final int video;
   final int invested;
   final int total;
   final bool boughtEarly;
   final bool groupPurchase;
   final bool deliver;
+  final int likes;
+  final bool liked;
+  final int comments;
 
   ShowcaseCard({
     required this.id,
     required this.photo,
+    required this.video,
     required this.invested,
     required this.total,
     required this.boughtEarly,
     required this.groupPurchase,
     required this.deliver,
+    required this.likes,
+    required this.liked,
+    required this.comments
   });
 
   factory ShowcaseCard.fromJson(Map<String, dynamic> json) {
     return ShowcaseCard(
       id: json['id'] as String,
-      photo: json["photo"] as String,
-      invested: json["invested"] as int,
-      total: json["total"] as int,
-      boughtEarly: json["bought_early"] != 0,
-      groupPurchase: json["group_purchase"] as bool,
-      deliver: json["deliver"] != 0,
+      photo: json['photo'] as String,
+      video: json['video'] as int,
+      invested: json['invested'] as int,
+      total: json['total'] as int,
+      boughtEarly: json['bought_early'] != 0,
+      groupPurchase: json['group_purchase'] as bool,
+      deliver: json['deliver'] != 0,
+      likes: json['likes'] as int,
+      liked: json['liked'] != 0,
+      comments: json['comments'] as int
     );
   }
 }

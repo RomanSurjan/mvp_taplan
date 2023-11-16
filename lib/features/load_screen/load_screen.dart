@@ -33,7 +33,6 @@ class _LoadScreenState extends State<LoadScreen> {
     super.initState();
     //TODO вынести логику в COVERBLOC
     context.read<CoverBloc>().add(GetCoverEvent(bloggerId: 1));
-    context.read<CoverBloc2>().add(GetCoverEvent(bloggerId: 45));
     context.read<PostcardBloc>().add(GetPostcardsEvent(bloggerId: 1));
     context.read<WishListBloc>().add(GetWishListEvent(bloggerId: 1));
     context.read<DateTimeBloc>().add(SetTimeToStreamEvent(bloggerId: 1));
@@ -41,7 +40,7 @@ class _LoadScreenState extends State<LoadScreen> {
     context.read<JournalBloc>().add(GetJournalContentEvent(bloggerId: 1));
 
     Future.delayed(
-      const Duration(milliseconds: 6000),
+      const Duration(milliseconds: 8000),
       () {
         Navigator.pushReplacementNamed(context, '/nb/journal_1/');
       },

@@ -142,7 +142,7 @@ class CustomNavigationBar extends StatelessWidget {
                   svg: svgForBar[3],
                   onTap: context.read<AuthorizationBloc>().state.authToken == null
                       ? () {
-                    Share.share(Uri.base.toString());
+                    Share.share(Uri.base.toString(),subject: Uri.base.toString());
                   }
                       : () {
                           Navigator.push(

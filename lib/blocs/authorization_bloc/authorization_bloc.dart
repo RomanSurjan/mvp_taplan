@@ -99,6 +99,12 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
 
   _onRegister(RegisterEvent event, Emitter<AuthState> emitter) async {
     late FormData formData;
+    String phone = event.phone;
+    if(!event.phone.contains('+'))
+      {
+        phone = '+$phone';
+      }
+    print(phone);
     if (event.image != null) {
       final photo = MultipartFile.fromBytes(
         event.image!,
@@ -108,7 +114,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       formData = FormData.fromMap({
         'username': 'User',
         'password': event.password,
-        'phoneNumber': event.phone,
+        'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
         'user_photo': photo,
@@ -117,7 +123,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       formData = FormData.fromMap({
         'username': 'User',
         'password': event.password,
-        'phoneNumber': event.phone,
+        'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
       });
@@ -133,6 +139,8 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
+
+
       emitter(
         AuthorizationState().copyWith(
           sex: response.data['sex'],
@@ -156,10 +164,16 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
 
   _onLogin(LoginEvent event, Emitter<AuthState> emitter) async {
     try {
+      String phone = event.phone;
+      if(!event.phone.contains('+'))
+      {
+        phone = '+$phone';
+      }
+      print(phone);
       final response = await Dio().post(
         'https://qviz.fun/auth/token/login/',
         data: {
-          'phoneNumber': event.phone,
+          'phoneNumber': phone,
           'password': event.password,
         },
         options: Options(

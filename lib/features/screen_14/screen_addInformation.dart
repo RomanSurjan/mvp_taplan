@@ -92,6 +92,7 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
     //context.read<AuthorizationBloc>().add(GetDataEvent());
     phone = TextEditingController(text: context.read<AuthorizationBloc>().state.phone);
     telegram = TextEditingController(text: context.read<AuthorizationBloc>().state.telegram);
+    email = TextEditingController(text: context.read<AuthorizationBloc>().state.email);
 
     name.addListener(() {
       _checkData();

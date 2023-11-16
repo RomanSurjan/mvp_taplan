@@ -602,7 +602,7 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
                   context
                       .read<CoverBloc2>()
                       .state
-                      .covers[context.read<CoverBloc2>().state.currentCoverId][1][2][0]
+                      .covers[context.read<CoverBloc2>().state.currentCoverId][1][3][0]
                       .toString()
                       .substring(1, 2) ==
                       '2'),

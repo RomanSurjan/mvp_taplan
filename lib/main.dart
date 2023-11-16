@@ -63,9 +63,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => CoverBloc(),
         ),
-        BlocProvider(
-          create: (context) => CoverBloc2(),
-        ),
       ],
       child: MaterialApp(
         initialRoute: '/load_screen/',
@@ -105,22 +102,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      scrollDirection: Axis.vertical,
-      children: [
+    return
         PageView(
           children: const [
             Screen30(bloggerId: 1),
             Screen38(),
-          ],
-        ),
-        PageView(
-          children: const [
-            Screen3002(bloggerId: 45),
-            Screen38(),
-          ],
-        )
-      ],
-    );
+          ]
+        );
   }
 }

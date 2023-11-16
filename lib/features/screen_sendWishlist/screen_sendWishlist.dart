@@ -18,6 +18,7 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_26/screen_26.dart';
+import 'package:mvp_taplan/features/screen_35/screen_35.dart';
 import 'package:mvp_taplan/models/buttons.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -64,11 +65,11 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
     "Скульптура\nи декор",
   ];
   static const List<String> buttonGroupPicture = [
-    "assets/svg/flowers.svg",
-    "assets/svg/jewelry.svg",
-    "assets/svg/paint.svg",
-    "assets/svg/photo.svg",
-    "assets/svg/vase.svg",
+    "assets/images/icon60-1.png",
+    "assets/images/icon61-1.png",
+    "assets/images/icon64-1.png",
+    "assets/images/icon65-1.png",
+    "assets/images/icon62-1.png",
   ];
 
   List<bool> buttonGroupIsPressed = [true, false, false, false, false];
@@ -147,7 +148,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthorizationBloc, AuthState>(
-      builder: (context, state) {
+      builder: (context, authState) {
         return BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
             return Scaffold(
@@ -240,8 +241,8 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         height: getHeight(context, 36),
                                         width: getHeight(context, 36),
                                         child: DecoratedBox(
-                                          decoration: const BoxDecoration(
-                                            color: Color.fromRGBO(62, 64, 72, 1),
+                                          decoration: BoxDecoration(
+                                            color: state.isDark ? Color.fromRGBO(62, 64, 72, 1) : Color.fromRGBO(219,233,244,1),
                                             shape: BoxShape.circle,
                                           ),
                                           child: SvgPicture.asset(
@@ -269,11 +270,11 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: const Color.fromRGBO(59, 61, 69, 1),
+                                    color: context.read<ThemeBloc>().state.postcardContainerBorderColor,
                                     width: 2,
                                   ),
                                   borderRadius: BorderRadius.circular(6),
-                                  color: const Color.fromRGBO(52, 54, 62, 1),
+                                  color: state.isDark ? const Color.fromRGBO(52, 54, 62, 1) : const Color.fromRGBO(250,255,255,1),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
@@ -284,9 +285,9 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                       radius: Radius.circular(getWidth(context, 8)),
                                       thickness: 5,
                                       trackVisibility: true,
-                                      trackColor: const Color.fromRGBO(61, 63, 71, 1),
+                                      trackColor: state.isDark ? const Color.fromRGBO(61, 63, 71, 1) : Colors.transparent,
                                       thumbColor:
-                                          const Color.fromRGBO(73, 75, 83, 1),
+                                          state.isDark ? const Color.fromRGBO(73, 75, 83, 1) : const Color.fromRGBO(137,137,139, 1),
                                       trackRadius:
                                           Radius.circular(getWidth(context, 2)),
                                       // here's the actual text box
@@ -497,7 +498,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                             child: InkWell(
                                               onTap: () {},
                                               child: SvgPicture.asset(
-                                                'assets/svg/more_button.svg',
+                                                state.isDark ? 'assets/svg/more_button.svg' : 'assets/svg/more_button_light.svg',
                                                 width: getWidth(context, 24),
                                                 height: getHeight(context, 24),
                                                 fit: BoxFit.scaleDown,
@@ -572,10 +573,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                       text: buttonGroupText[i],
                                       isPressed: buttonGroupIsPressed[i],
                                       onTap: () {
-                                        for (int j = 0; j < 5; j++) {
-                                          buttonGroupIsPressed[j] = false;
-                                        }
-                                        buttonGroupIsPressed[i] = true;
+                                        buttonGroupIsPressed[i] = !buttonGroupIsPressed[i];
                                         setState(() {});
                                       },
                                     ),
@@ -862,7 +860,6 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                 picture: 'assets/svg/sharenav.svg',
                 isPressed: buttonNavIsPressed[3],
                 onTap: () {
-                  buttonNavIsPressed[3] = !buttonNavIsPressed[3];
                   setState(() {});
                 },
               ),
@@ -870,19 +867,12 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                 picture: 'assets/svg/stars.svg',
                 isPressed: buttonNavIsPressed[4],
                 onTap: () {
-                  final flowerModel = context.read<WishListBloc>().state.wishList.where((element) => element.position == 3).toList()[0];
-                  context
-                      .read<PostcardBloc>()
-                      .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => Screen215(
-                        currentModel: flowerModel,
-                      ),
+                      builder: (_) => const Screen35(),
                     ),
                   );
-
                 },
               ),
             ],
@@ -1184,3 +1174,5 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
     );
   }
 }
+
+

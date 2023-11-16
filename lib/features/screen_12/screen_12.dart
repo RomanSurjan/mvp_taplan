@@ -103,18 +103,8 @@ class _Screen12State extends State<Screen12> {
 
   void phoneListener() {
     String value = phone.text;
-    RegExp regExp = RegExp(r"^\+\d{0,11}$");
-    String tag = '+7';
-    // if (phone.text.isEmpty || phone.text == '+') {
-    //   phone.value = phone.value.copyWith(
-    //     text: tag,
-    //     selection: TextSelection(
-    //       baseOffset: tag.length,
-    //       extentOffset: tag.length,
-    //     ),
-    //     composing: TextRange.empty,
-    //   );
-    // } else
+    RegExp regExp = RegExp(r"^\+{0,1}\d{0,11}$");
+    //String tag = '+7';
       if (!regExp.hasMatch(value)) {
       String text = value.substring(0, value.length - 1);
       phone.value = phone.value.copyWith(
@@ -211,7 +201,7 @@ class _Screen12State extends State<Screen12> {
                             ),
                           ],
                         ),
-                        SizedBox(height: getHeight(context, 11)),
+                        SizedBox(height: getHeight(context, 6)),
                         Text(
                           'Данные для входа или регистрации:',
                           style: TextLocalStyles.roboto400.copyWith(
@@ -220,14 +210,14 @@ class _Screen12State extends State<Screen12> {
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: getHeight(context, 6)),
+                        SizedBox(height: getHeight(context, 4)),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: textFieldRegistration(
                                 context,
-                                hintText: 'Телефон(должен начинается с +)',
+                                hintText: 'Телефон',
                                 controller: phone,
                                 isPassword: false,
                                 textFieldBorderColor:
@@ -239,10 +229,15 @@ class _Screen12State extends State<Screen12> {
                               borderRadius: BorderRadius.circular(8),
                               onTap: !isPressedPhone ? () async {
                                 isPressedPhone = true;
+                                String phoneCheck = phone.text;
+                                if(!phone.text.contains('+'))
+                                {
+                                  phoneCheck  = '+$phoneCheck';
+                                }
                                 final response = await Dio().post(
                                   'https://qviz.fun/api/v1/check/phone/number/',
                                   data: {
-                                    'phoneNumber': phone.text,
+                                    'phoneNumber': phoneCheck,
                                   },
                                   options: Options(
                                     validateStatus: (status) {
@@ -253,7 +248,6 @@ class _Screen12State extends State<Screen12> {
                                 );
                                 textFieldColor = List.generate(
                                     3, (index) => state.postcardContainerBorderColor);
-                                textFieldColor[0] = const Color.fromRGBO(231, 231, 97, 1);
                                 isOk = false;
                                 setState(() {
 
@@ -272,7 +266,7 @@ class _Screen12State extends State<Screen12> {
                                     else
                                     {
                                       textError = 'Номер не зарегистрирован';
-                                      textFieldColor[0] = Colors.red;
+                                      textFieldColor[0] = const Color.fromRGBO(231, 231, 97, 1);
                                       setState(() {
 
                                       });
@@ -322,8 +316,8 @@ class _Screen12State extends State<Screen12> {
                               },
                               borderRadius: BorderRadius.circular(8),
                               child: SizedBox(
-                                height: getHeight(context, 52),
-                                width: getHeight(context, 52),
+                                height: getHeight(context, 50),
+                                width: getHeight(context, 50),
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -406,17 +400,14 @@ class _Screen12State extends State<Screen12> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            if(textError != '') ...[
                             SizedBox(
                               height: getHeight(context, 48),
                               width: getWidth(context, 169),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: const Color.fromRGBO(188, 223, 213, 0.35),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                    width: 1,
-                                  ),
+                                  color: const Color.fromRGBO(255, 255, 255, 0.7),
+                                  borderRadius: BorderRadius.circular(3),
                                 ),
                                 child: Align(
                                   alignment: Alignment.center,
@@ -426,8 +417,8 @@ class _Screen12State extends State<Screen12> {
                                       textError,
                                       textAlign: TextAlign.center,
                                       style: TextLocalStyles.roboto500.copyWith(
-                                        color: const Color.fromRGBO(110, 210, 182, 1),
-                                        fontSize: 13,
+                                        color: const Color.fromRGBO(218, 80, 80, 1),
+                                        fontSize: getHeight(context, 14),
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -435,12 +426,14 @@ class _Screen12State extends State<Screen12> {
                                 ),
                               ),
                             ),
+                            ] else
+                              ...[const SizedBox.shrink()],
                             InkWell(
                               borderRadius: BorderRadius.circular(8),
                               splashColor: isActiveLogin ? null : Colors.transparent,
                               highlightColor: isActiveLogin ? null : Colors.transparent,
                               onTap: isActiveLogin
-                                  ? () {
+                                  ? () async {
                                       context.read<AuthorizationBloc>().add(
                                             LoginEvent(
                                               phone: phone.text,
@@ -448,6 +441,23 @@ class _Screen12State extends State<Screen12> {
                                             ),
                                           );
                                       textFieldColor[2] = state.postcardContainerBorderColor;
+                                      String phoneCheck = phone.text;
+                                      if(!phone.text.contains('+'))
+                                      {
+                                        phoneCheck  = '+$phoneCheck';
+                                      }
+                                      final response = await Dio().post(
+                                        'https://qviz.fun/api/v1/check/phone/number/',
+                                        data: {
+                                          'phoneNumber': phoneCheck,
+                                        },
+                                        options: Options(
+                                          validateStatus: (status) {
+                                            if (status == null) return false;
+                                            return status < 500;
+                                          },
+                                        ),
+                                      );
                                       //TODO
                                       Timer(
                                         const Duration(milliseconds: 1000),
@@ -470,9 +480,17 @@ class _Screen12State extends State<Screen12> {
                                               },
                                             );
                                           } else {
-                                            textError = 'Невозможно войти с предоставленными учетными данными.';
-                                            textFieldColor[0] = Colors.red;
-                                            textFieldColor[1] = Colors.red;
+                                            if(response.data['status'] == 200)
+                                              {
+                                                textError = 'Неправильный пароль';
+                                                textFieldColor[1] = Colors.red;
+                                              }
+                                            else {
+                                              textError =
+                                              'Невозможно войти с предоставленными учетными данными.';
+                                              textFieldColor[0] = Colors.red;
+                                              textFieldColor[1] = Colors.red;
+                                            }
                                             isOk = false;
                                             setState(() {});
                                           }
@@ -544,7 +562,7 @@ class _Screen12State extends State<Screen12> {
                             ),
                           ],
                         ),
-                        SizedBox(height: getHeight(context, 9)),
+                        SizedBox(height: getHeight(context, 4)),
                         Text(
                           'Введите ваши данные для регистрации:',
                           style: TextLocalStyles.roboto400.copyWith(
@@ -601,8 +619,8 @@ class _Screen12State extends State<Screen12> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: getHeight(context, 48),
-                              width: getHeight(context, 48),
+                              height: getHeight(context, 62),
+                              width: getHeight(context, 62),
                               child: image == null
                                   ? CircleAvatar(
                                       backgroundImage:
@@ -632,8 +650,8 @@ class _Screen12State extends State<Screen12> {
                                 //TODO
                                 children: [
                                   SizedBox(
-                                    height: getHeight(context, 44),
-                                    width: getWidth(context, 283),
+                                    height: getHeight(context, 48),
+                                    width: getWidth(context, 272),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         color: state.isDark
@@ -678,13 +696,13 @@ class _Screen12State extends State<Screen12> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: getHeight(context, 44),
-                                    width: getWidth(context, 283),
+                                    height: getHeight(context, 48),
+                                    width: getWidth(context, 272),
                                     child: DottedBorder(
                                       borderType: BorderType.RRect,
                                       radius: const Radius.circular(4),
                                       color: const Color.fromRGBO(98, 198, 170, 1),
-                                      dashPattern: const [6, 6],
+                                      dashPattern: const [12, 12],
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -815,7 +833,7 @@ class _Screen12State extends State<Screen12> {
                                       } else {
                                         if (context.read<AuthorizationBloc>().state.phone != phone.text  && context.read<AuthorizationBloc>().state.phone != null) {
                                           textFieldColor[0] = Colors.red;
-                                          textError = context.read<AuthorizationBloc>().state.phone!;
+                                          textError = 'Телефон уже зарегистрирован';
                                         }
                                         if (context.read<AuthorizationBloc>().state.passwordErr != null) {
                                           textFieldColor[1] = Colors.red;
@@ -824,7 +842,7 @@ class _Screen12State extends State<Screen12> {
                                         if (context.read<AuthorizationBloc>().state.telegram != telegram.text  && context.read<AuthorizationBloc>().state.telegram != null) {
                                           textFieldColor[2] = Colors.red;
                                           isPressed = true;
-                                          textError = context.read<AuthorizationBloc>().state.telegram!;
+                                          textError = 'Телеграм уже зарегистрирован';
                                         }
                                         if (context.read<AuthorizationBloc>().state.email != email.text && context.read<AuthorizationBloc>().state.email != null) {
                                           textFieldColor[2] = Colors.red;

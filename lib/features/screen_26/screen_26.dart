@@ -18,6 +18,7 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/screen_215/screen_215.dart';
+import 'package:mvp_taplan/features/screen_35/screen_35.dart';
 import 'package:mvp_taplan/features/screen_addContact/screen_addContact.dart';
 import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
 import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
@@ -88,6 +89,7 @@ class Screen26State extends State<Screen26> {
       visibleContacts[length]['add'] = true;
       length++;
     });
+    
 
     setState(() {});
   }
@@ -241,12 +243,12 @@ class Screen26State extends State<Screen26> {
         children: [
           SizedBox(
               height: getHeight(context, 54),
-              width: getWidth(context, 54),
+              width: getHeight(context, 54),
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(
-                        'https://qviz.fun${context.read<AuthorizationBloc>().state.photo}'),
+                        'https://qviz.fun/${context.read<AuthorizationBloc>().state.photo}'),
                     fit: BoxFit.fill,
                   ),
                   shape: BoxShape.circle,
@@ -554,16 +556,6 @@ class Screen26State extends State<Screen26> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              'Показывать события в группах контакта',
-              style: TextLocalStyles.roboto500.copyWith(
-                color: const Color.fromRGBO(98, 198, 170, 1),
-                fontSize: 16,
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -572,6 +564,7 @@ class Screen26State extends State<Screen26> {
                   count: count[i],
                   colorMain: const Color.fromRGBO(110, 210, 182, 1),
                   picture: buttonGroupPicture[i],
+                  // colorCount: context.read<ThemeBloc>().state.isDark ? Color.fromRGBO(65, 101, 97, 1) : const Color.fromRGBO(198, 237, 226, 1),
                   colorCount: const Color.fromRGBO(198, 237, 226, 1),
                   text: buttonGroupText[i],
                   isPressed: buttonGroupIsPressed[i],
@@ -626,11 +619,13 @@ class Screen26State extends State<Screen26> {
                 padding: EdgeInsets.symmetric(
                   horizontal: getWidth(context, 16),
                 ),
-                child: channel(context, index),
+                child: visibleContacts.length > 5 ? channel(context, index) :
+                index < visibleContacts.length ?
+                channel(context, index) : SizedBox(height: getHeight(context, 66),),
               ),
             );
           },
-          itemCount: visibleContacts.length,
+          itemCount: visibleContacts.length > 5 ? visibleContacts.length : 5,
         ),
       ),
     );
@@ -859,9 +854,8 @@ class Screen26State extends State<Screen26> {
               ),
               BottomNavButton(
                 picture: 'assets/svg/book_heart.svg',
-                isPressed: buttonNavIsPressed[1],
+                isPressed: true,
                 onTap: () {
-                  buttonNavIsPressed[1] = !buttonNavIsPressed[1];
                   setState(() {});
                 },
               ),
@@ -875,15 +869,12 @@ class Screen26State extends State<Screen26> {
                 picture: 'assets/svg/sharenav.svg',
                 isPressed: buttonNavIsPressed[3],
                 onTap: () {
-                  buttonNavIsPressed[3] = !buttonNavIsPressed[3];
-                  if (buttonNavIsPressed[3]) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const ScreenSendWishlist(),
                       ),
                     );
-                  }
                   setState(() {});
                 },
               ),
@@ -891,16 +882,10 @@ class Screen26State extends State<Screen26> {
                 picture: 'assets/svg/stars.svg',
                 isPressed: buttonNavIsPressed[4],
                 onTap: () {
-                  final flowerModel = context.read<WishListBloc>().state.wishList.where((element) => element.position == 3).toList()[0];
-                  context
-                      .read<PostcardBloc>()
-                      .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => Screen215(
-                        currentModel: flowerModel,
-                      ),
+                      builder: (_) => const Screen35(),
                     ),
                   );
 

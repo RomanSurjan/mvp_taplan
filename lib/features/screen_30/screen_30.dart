@@ -146,7 +146,7 @@ class Screen30State extends State<Screen30> {
                             child: Align(
                               alignment: Alignment.topLeft,
                               child: SizedBox(
-                                height: getHeight(context, 21),
+                                height: 20,
                                 child: Image.network(
                                   'assets/images/sk_logo_light.png',
                                 ),
@@ -250,38 +250,42 @@ class Screen30State extends State<Screen30> {
                             child: wishList(context),
                           ),
                           Positioned(
-                            bottom: getHeight(
-                                context,
-                                140
-                            ),
-                            left: getWidth(
-                              context,
-                              85
-                            ),
-                            child: SvgPicture.asset('assets/svg/openmoji_swipe2.svg'),
-                          ),
-                          Positioned(
-                            bottom: getHeight(context, 119),
+                            bottom: getHeight(context, 100),
                             left: getWidth(context, 27),
-                            child: Text(
-                              coverState.username,
-                              style: TextLocalStyles.roboto400.copyWith(
-                                fontSize: 20,
-                                color: const Color.fromRGBO(255, 255, 255, 1),
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  coverState.username,
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    fontSize: 20,
+                                    color: const Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  '${coverState.description}\n${coverState.region}',
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    fontSize: 15,
+                                    color: const Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            bottom: getHeight(context, 85),
-                            left: getWidth(context, 28),
-                            child: Text(
-                              '${coverState.description}\n${coverState.region}',
-                              style: TextLocalStyles.roboto400.copyWith(
-                                fontSize: 15,
-                                color: const Color.fromRGBO(255, 255, 255, 1),
-                              ),
-                            ),
-                          ),
+                          // Positioned(
+                          //   bottom: getHeight(context, 85),
+                          //   left: getWidth(context, 28),
+                          //   child: Text(
+                          //     '${coverState.description}\n${coverState.region}',
+                          //     style: TextLocalStyles.roboto400.copyWith(
+                          //       fontSize: 15,
+                          //       color: const Color.fromRGBO(255, 255, 255, 1),
+                          //     ),
+                          //   ),
+                          // ),
                           // Positioned(
                           //   bottom: getHeight(context, 91),
                           //   left: getWidth(context, 226),

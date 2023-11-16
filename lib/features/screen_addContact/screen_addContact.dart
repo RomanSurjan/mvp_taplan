@@ -44,7 +44,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
   TextEditingController telegram = TextEditingController(text: '');
   TextEditingController email = TextEditingController(text: '');
   TextEditingController city = TextEditingController(text: '');
-  TextEditingController country = TextEditingController(text: '');
+  TextEditingController country = TextEditingController(text: 'Россия');
   late List<Color> textFieldColor;
   bool isOk = true;
   bool sex = false;
@@ -244,6 +244,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
     }
   }
 
+  late int maxId;
   @override
   void initState() {
     super.initState();
@@ -336,6 +337,12 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
         );
       }
     });
+    maxId = (visibleContacts.isNotEmpty ? visibleContacts.length : 0);
+    print(visibleContacts[0]['name']);
+    if(maxId == 1 && visibleContacts[0]['name'] == '')
+      {
+        maxId = 0;
+      }
   }
 
   @override
@@ -350,7 +357,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                   state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
                 name:
-                    'Данные члена группы\n“$group” (${id + 1}/${(visibleContacts.isNotEmpty ? visibleContacts.length : 0) + 1})',
+                    'Данные члена группы\n“$group” (${id + 1}/${maxId})',
                 onTheme: () {
                   context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
                   setState(() {});
@@ -381,6 +388,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                           height: getHeight(context, 41),
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
@@ -405,7 +413,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                     telegram = TextEditingController(text: '');
                                     email = TextEditingController(text: '');
                                     city = TextEditingController(text: '');
-                                    country = TextEditingController(text: '');
+                                    country = TextEditingController(text: 'Россия');
                                     imageContact =
                                         'https://qviz.fun/media/avatars/default_avatar.png';
                                   } else {
@@ -468,78 +476,81 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                             const SizedBox(
                               width: 9,
                             ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(18),
-                              onTap: () {
-                                image = null;
-                                if (widget.contacts['people'] != null) {
-                                  id++;
-                                  if (id == visibleContacts.length) {
-                                    name = TextEditingController(text: '');
-                                    birthday = TextEditingController(text: '');
-                                    phone = TextEditingController(text: '');
-                                    telegram = TextEditingController(text: '');
-                                    email = TextEditingController(text: '');
-                                    city = TextEditingController(text: '');
-                                    country = TextEditingController(text: '');
-                                    imageContact =
-                                        'https://qviz.fun/media/avatars/default_avatar.png';
-                                  } else {
-                                    if (id > visibleContacts.length) {
-                                      id = 0;
+                            Padding(
+                              padding: EdgeInsets.only(right: getHeight(context, 6)),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(18),
+                                onTap: () {
+                                  image = null;
+                                  if (widget.contacts['people'] != null) {
+                                    id++;
+                                    if (id == visibleContacts.length) {
+                                      name = TextEditingController(text: '');
+                                      birthday = TextEditingController(text: '');
+                                      phone = TextEditingController(text: '');
+                                      telegram = TextEditingController(text: '');
+                                      email = TextEditingController(text: '');
+                                      city = TextEditingController(text: '');
+                                      country = TextEditingController(text: 'Россия');
+                                      imageContact =
+                                          'https://qviz.fun/media/avatars/default_avatar.png';
+                                    } else {
+                                      if (id > visibleContacts.length) {
+                                        id = 0;
+                                      }
+                                      name = TextEditingController(text: visibleContacts[id]['name']);
+                                      birthday = TextEditingController(
+                                          text: '${visibleContacts[id]['birthday'].toString().substring(
+                                                8,
+                                              )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
+                                      phone = TextEditingController(
+                                          text: visibleContacts[id]['phoneNumber']);
+                                      telegram = TextEditingController(
+                                          text: visibleContacts[id]['telegram']);
+                                      email =
+                                          TextEditingController(text: visibleContacts[id]['email']);
+                                      city = TextEditingController(
+                                        text: visibleContacts[id]['region'].toString().substring(
+                                              !visibleContacts[id]['region'].toString().contains(',')
+                                                  ? 0
+                                                  : visibleContacts[id]['region']
+                                                          .toString()
+                                                          .indexOf(',') +
+                                                      2,
+                                            ),
+                                      );
+                                      country = TextEditingController(
+                                        text: visibleContacts[id]['region'].toString().substring(
+                                              0,
+                                              !visibleContacts[id]['region'].toString().contains(',')
+                                                  ? visibleContacts[id]['region'].length
+                                                  : visibleContacts[id]['region']
+                                                      .toString()
+                                                      .indexOf(','),
+                                            ),
+                                      );
+                                      imageContact =
+                                          'https://qviz.fun${visibleContacts[id]['person_photo']}';
                                     }
-                                    name = TextEditingController(text: visibleContacts[id]['name']);
-                                    birthday = TextEditingController(
-                                        text: '${visibleContacts[id]['birthday'].toString().substring(
-                                              8,
-                                            )}.${visibleContacts[id]['birthday'].toString().substring(5, 7)}.${visibleContacts[id]['birthday'].toString().substring(0, 4)}');
-                                    phone = TextEditingController(
-                                        text: visibleContacts[id]['phoneNumber']);
-                                    telegram = TextEditingController(
-                                        text: visibleContacts[id]['telegram']);
-                                    email =
-                                        TextEditingController(text: visibleContacts[id]['email']);
-                                    city = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? 0
-                                                : visibleContacts[id]['region']
-                                                        .toString()
-                                                        .indexOf(',') +
-                                                    2,
-                                          ),
-                                    );
-                                    country = TextEditingController(
-                                      text: visibleContacts[id]['region'].toString().substring(
-                                            0,
-                                            !visibleContacts[id]['region'].toString().contains(',')
-                                                ? visibleContacts[id]['region'].length
-                                                : visibleContacts[id]['region']
-                                                    .toString()
-                                                    .indexOf(','),
-                                          ),
-                                    );
-                                    imageContact =
-                                        'https://qviz.fun${visibleContacts[id]['person_photo']}';
+                                    setState(() {});
                                   }
-                                  setState(() {});
-                                }
-                              },
-                              child: SizedBox(
-                                height: getHeight(context, 36),
-                                width: getHeight(context, 36),
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                    border: Border.all(
-                                        color: const Color.fromRGBO(98, 198, 170, 1), width: 1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/svg/arrow_right_mini.svg',
-                                    width: getWidth(context, 24),
-                                    height: getHeight(context, 24),
-                                    fit: BoxFit.scaleDown,
+                                },
+                                child: SizedBox(
+                                  height: getHeight(context, 36),
+                                  width: getHeight(context, 36),
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(98, 198, 170, 0.25),
+                                      border: Border.all(
+                                          color: const Color.fromRGBO(98, 198, 170, 1), width: 1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/svg/arrow_right_mini.svg',
+                                      width: getWidth(context, 24),
+                                      height: getHeight(context, 24),
+                                      fit: BoxFit.scaleDown,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -550,7 +561,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                           height: getHeight(context, 13),
                         ),
                         SizedBox(
-                          height: getHeight(context, 71),
+                          height: getHeight(context, 73),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -559,25 +570,36 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Дата рождения',
-                                      style: TextLocalStyles.roboto400.copyWith(
-                                        color: state.isDark
-                                            ? Colors.white
-                                            : const Color.fromRGBO(22, 26, 29, 1),
-                                        fontSize: 14,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Дата рождения',
+                                          style: TextLocalStyles.roboto400.copyWith(
+                                            color: state.isDark
+                                                ? Colors.white
+                                                : const Color.fromRGBO(22, 26, 29, 1),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          '*',
+                                          style: TextLocalStyles.roboto400.copyWith(
+                                            color: Color.fromRGBO(236, 87, 87, 1),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      height: 3,
+                                    SizedBox(
+                                      height: getHeight(context, 3),
                                     ),
                                     textFieldRegistration(context, 235, 'ДД.ММ.ГГГГ', birthday,
                                         false, textFieldColor[1], true),
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                width: 12,
+                              SizedBox(
+                                width: 3,
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -595,7 +617,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                     height: 3,
                                   ),
                                   SizedBox(
-                                    width: getWidth(context, 94),
+                                    width: getWidth(context, 104),
                                     height: getHeight(context, 52),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
@@ -610,6 +632,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
                                             width: getWidth(context, 20),
@@ -628,31 +651,34 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                           SizedBox(
                                             width: getWidth(context, 17),
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              sex = !sex;
-                                              setState(() {});
-                                            },
-                                            child: SizedBox(
-                                              height: getHeight(context, 36),
-                                              width: getHeight(context, 36),
-                                              child: DecoratedBox(
-                                                decoration: BoxDecoration(
-                                                  color: const Color.fromRGBO(98, 198, 170, 0.25),
-                                                  border: Border.all(
-                                                      color: const Color.fromRGBO(98, 198, 170, 1),
-                                                      width: 1),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Center(
-                                                  child: SvgPicture.asset(
-                                                    'assets/svg/arrow_down.svg',
-                                                    width: getWidth(context, 24),
-                                                    height: getHeight(context, 24),
-                                                    colorFilter: const ColorFilter.mode(
-                                                        Color.fromRGBO(82, 182, 154, 1),
-                                                        BlendMode.srcIn),
-                                                    // fit: BoxFit.scaleDown,
+                                          Padding(
+                                            padding: EdgeInsets.only(right: getHeight(context, 5)),
+                                            child: InkWell(
+                                              onTap: () {
+                                                sex = !sex;
+                                                setState(() {});
+                                              },
+                                              child: SizedBox(
+                                                height: getHeight(context, 36),
+                                                width: getHeight(context, 36),
+                                                child: DecoratedBox(
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromRGBO(98, 198, 170, 0.25),
+                                                    border: Border.all(
+                                                        color: const Color.fromRGBO(98, 198, 170, 1),
+                                                        width: 1),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Center(
+                                                    child: SvgPicture.asset(
+                                                      'assets/svg/arrow_down.svg',
+                                                      width: getWidth(context, 24),
+                                                      height: getHeight(context, 24),
+                                                      colorFilter: const ColorFilter.mode(
+                                                          Color.fromRGBO(82, 182, 154, 1),
+                                                          BlendMode.srcIn),
+                                                      // fit: BoxFit.scaleDown,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -672,15 +698,27 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Контактные данные',
-                            style: TextLocalStyles.roboto400.copyWith(
-                                color: state.isDark
-                                    ? Colors.white
-                                    : const Color.fromRGBO(22, 26, 29, 1),
-                                fontSize: 14,
-                                height: 16.41 / 14),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Контактные данные',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                    color: state.isDark
+                                        ? Colors.white
+                                        : const Color.fromRGBO(22, 26, 29, 1),
+                                    fontSize: 14,
+                                    height: 16.41 / 14),
+                              ),
+                              Text(
+                                '*',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  color: Color.fromRGBO(235, 87, 87, 1),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
+
                         ),
                         Row(
                           children: [
@@ -703,7 +741,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                   (isPressedContactData != 2 && id == 0) ? false : true),
                             ),
                             const SizedBox(
-                              width: 1,
+                              width: 3,
                             ),
                             InkWell(
                               onTap: () {
@@ -719,7 +757,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               ),
                             ),
                             const SizedBox(
-                              width: 1,
+                              width: 3,
                             ),
                             InkWell(
                               onTap: () {
@@ -735,7 +773,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               ),
                             ),
                             const SizedBox(
-                              width: 1,
+                              width: 3,
                             ),
                             InkWell(
                               onTap: () {
@@ -757,14 +795,25 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Страна, город',
-                            style: TextLocalStyles.roboto400.copyWith(
-                                color: state.isDark
-                                    ? Colors.white
-                                    : const Color.fromRGBO(22, 26, 29, 1),
-                                fontSize: 14,
-                                height: 16.41 / 14),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Страна, город',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                    color: state.isDark
+                                        ? Colors.white
+                                        : const Color.fromRGBO(22, 26, 29, 1),
+                                    fontSize: 14,
+                                    height: 16.41 / 14),
+                              ),
+                              Text(
+                                '*',
+                                style: TextLocalStyles.roboto400.copyWith(
+                                  color: Color.fromRGBO(235, 87, 87, 1),
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Row(
@@ -780,7 +829,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                   true),
                             ),
                             const SizedBox(
-                              width: 5,
+                              width: 3,
                             ),
                             InkWell(
                               onTap: () {
@@ -794,7 +843,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               ),
                             ),
                             const SizedBox(
-                              width: 6,
+                              width: 3,
                             ),
                             InkWell(
                               onTap: () {
@@ -812,7 +861,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                         SizedBox(
                           height: getHeight(context, 10),
                         ),
-                        if (id != 0) ...[
+                        if (!(id == 0 && idGroup == 0)) ...[
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -915,6 +964,12 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                           log(visibleContacts.toString());
 
                                           id = visibleContacts.length;
+                                          maxId = (visibleContacts.isNotEmpty ? visibleContacts.length : 0);
+
+                                          // if(maxId == 1 && visibleContacts[0]['name'] == '')
+                                          // {
+                                          //   maxId = 0;
+                                          // }
 
                                           setState(() {});
                                         },
@@ -995,6 +1050,13 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                           log(visibleContacts.toString());
 
                                           id = visibleContacts.length;
+
+                                          maxId = (visibleContacts.isNotEmpty ? visibleContacts.length : 0);
+
+                                          // if(maxId == 1 && visibleContacts[0]['name'] == '')
+                                          // {
+                                          //   maxId = 0;
+                                          // }
 
                                           setState(() {});
                                         },
@@ -1146,7 +1208,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                         SizedBox(
                           height: getHeight(context, 8),
                         ),
-                        if (id != 0) ...[
+                        if (!(id == 0 && idGroup == 0)) ...[
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1184,7 +1246,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               Text(
                                 'Показывать события этого члена\nгруппы “Семья” в моём календаре',
                                 style: TextLocalStyles.roboto400.copyWith(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   height: 14.06 / 12,
                                   color: textColor,
                                 ),
@@ -1662,7 +1724,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
               : isActive
                   ? const Color.fromRGBO(166, 173, 181, 1)
                   : const Color.fromRGBO(166, 173, 181, 1),
-          fontSize: 16,
+          fontSize: getHeight(context, 20),
           // height:
         ),
         obscureText: isbirthday,
@@ -1676,7 +1738,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
               color: context.read<ThemeBloc>().state.isDark
                   ? const Color.fromRGBO(105, 113, 119, 1)
                   : const Color.fromRGBO(166, 173, 181, 1),
-              fontSize: getHeight(context, 14),
+              fontSize: getHeight(context, 20),
               height: 22 / 14),
           fillColor: context.read<ThemeBloc>().state.isDark
               ? const Color.fromRGBO(52, 54, 62, 1)

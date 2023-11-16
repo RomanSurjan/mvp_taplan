@@ -273,7 +273,7 @@ class _Screen14State extends State<Screen14> {
                           height: getHeight(context, 10),
                         ),
                         SizedBox(
-                          height: getHeight(context, 44),
+                          height: 44,
                           width: getWidth(context, 344),
                           child: Row(
                             children: [
@@ -331,7 +331,7 @@ class _Screen14State extends State<Screen14> {
                                           textAlign: TextAlign.center,
                                           style: TextLocalStyles.roboto500.copyWith(
                                             color: repeatMessage[2],
-                                            fontSize: getHeight(context, 14),
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
@@ -521,8 +521,8 @@ class _Screen14State extends State<Screen14> {
     required String subtitle,
   }) {
     return SizedBox(
-      height: getHeight(context, 54),
-      width: getWidth(context, 106),
+      height: 54,
+      width: 106,
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -538,9 +538,9 @@ class _Screen14State extends State<Screen14> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.only(
-            top: getHeight(context, 5.5),
-            bottom: getHeight(context, 5.5),
+          padding: const EdgeInsets.only(
+            top: 5,
+            bottom: 5,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -572,8 +572,8 @@ class _Screen14State extends State<Screen14> {
 
   Widget fieldCode(BuildContext context, int index) {
     return SizedBox(
-      width: getWidth(context, 76),
-      height: getHeight(context, 86),
+      width: 76,
+      height: 86,
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

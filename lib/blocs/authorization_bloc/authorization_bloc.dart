@@ -104,7 +104,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       {
         phone = '+$phone';
       }
-    print(phone);
+
     if (event.image != null) {
       final photo = MultipartFile.fromBytes(
         event.image!,
@@ -171,7 +171,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       {
         phone = '+$phone';
       }
-      print(phone);
+
       final response = await Dio().post(
         'https://qviz.fun/auth/token/login/',
         data: {

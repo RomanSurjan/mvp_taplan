@@ -62,8 +62,6 @@ class _Screen115State extends State<Screen115> {
           return BlocBuilder<ThemeBloc, ThemeState>(
             builder: (context, themeState) {
 
-              print('нужный экран');
-
               final bool isPortraitOrientation =
                   ((MediaQuery.of(context).size.width / MediaQuery.of(context).size.height) < 0.6);
 

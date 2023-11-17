@@ -9,14 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
-import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
-import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
-import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
-import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
-import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_26/screen_26.dart';
 import 'package:mvp_taplan/features/screen_35/screen_35.dart';
 import 'package:mvp_taplan/models/buttons.dart';
@@ -242,7 +237,7 @@ class _ScreenSendWishlistState extends State<ScreenSendWishlist> {
                                         width: getHeight(context, 36),
                                         child: DecoratedBox(
                                           decoration: BoxDecoration(
-                                            color: state.isDark ? Color.fromRGBO(62, 64, 72, 1) : Color.fromRGBO(219,233,244,1),
+                                            color: state.isDark ? const Color.fromRGBO(62, 64, 72, 1) : const Color.fromRGBO(219,233,244,1),
                                             shape: BoxShape.circle,
                                           ),
                                           child: SvgPicture.asset(

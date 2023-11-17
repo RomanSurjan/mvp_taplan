@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -56,8 +55,6 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       ),
     );
 
-
-    print(response.data);
 
     return response.data['id'];
   }

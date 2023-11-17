@@ -10,14 +10,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
   ShowcaseBloc()
       : super(ShowcaseState(
           userModel: UserModel(
-            celebrate: Celebrate(
-              id: 0,
-              name: '',
-              date: '',
-              day: 0,
-              month: 0,
-              countDaysTo: 0
-            ),
+            celebrate: Celebrate(id: 0, name: '', date: '', day: 0, month: 0, countDaysTo: 0),
             name: '',
             presents: [],
           ),
@@ -26,10 +19,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
     on<GetShowcasePresentInfoEvent>(_onGetPresentInfo);
   }
 
-  _onGetShowcase(
-    GetShowcaseCardsEvent event,
-    Emitter<ShowcaseState> emitter
-  ) async {
+  _onGetShowcase(GetShowcaseCardsEvent event, Emitter<ShowcaseState> emitter) async {
     final response = await Dio().post(
       'https://qviz.fun/api/v1/get/wishlist/',
       data: {
@@ -75,18 +65,24 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
         gradePhotoThird: response.data['small_grades']['grade_photo_3'],
         videoId: response.data['present_info']['present_video'],
       );
+
+      navigationToScreen215(event.context, currentPresentModel);
       emitter(
         state.copyWith(
           currentPresentModel: currentPresentModel,
         ),
       );
-      Navigator.push(
-        event.context, MaterialPageRoute(
-          builder: (_)=> Screen215(currentModel: currentPresentModel)
-        )
-      );
     } catch (e) {
       rethrow;
     }
+  }
+
+  void navigationToScreen215(BuildContext context, currentPresentModel) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Screen215(currentModel: currentPresentModel),
+      ),
+    );
   }
 }

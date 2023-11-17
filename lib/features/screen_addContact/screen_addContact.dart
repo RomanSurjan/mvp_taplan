@@ -338,7 +338,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
       }
     });
     maxId = (visibleContacts.isNotEmpty ? visibleContacts.length : 0);
-    print(visibleContacts[0]['name']);
+
     if(maxId == 1 && visibleContacts[0]['name'] == '')
       {
         maxId = 0;
@@ -357,7 +357,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                   state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
               appBar: CustomAppBarRegistration(
                 name:
-                    'Данные члена группы\n“$group” (${id + 1}/${maxId})',
+                    'Данные члена группы\n“$group” (${id + 1}/$maxId)',
                 onTheme: () {
                   context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
                   setState(() {});
@@ -584,7 +584,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                         Text(
                                           '*',
                                           style: TextLocalStyles.roboto400.copyWith(
-                                            color: Color.fromRGBO(236, 87, 87, 1),
+                                            color: const Color.fromRGBO(236, 87, 87, 1),
                                             fontSize: 14,
                                           ),
                                         ),
@@ -598,7 +598,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                   ],
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 3,
                               ),
                               Column(
@@ -712,7 +712,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               Text(
                                 '*',
                                 style: TextLocalStyles.roboto400.copyWith(
-                                  color: Color.fromRGBO(235, 87, 87, 1),
+                                  color: const Color.fromRGBO(235, 87, 87, 1),
                                   fontSize: 14,
                                 ),
                               ),
@@ -809,7 +809,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                               Text(
                                 '*',
                                 style: TextLocalStyles.roboto400.copyWith(
-                                  color: Color.fromRGBO(235, 87, 87, 1),
+                                  color: const Color.fromRGBO(235, 87, 87, 1),
                                   fontSize: 14,
                                 ),
                               ),
@@ -1356,12 +1356,6 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                 }
                                 if (isOk) {
                                   if (id == 0) {
-                                    print('\n\n\n\n\n\n\nid =0\n\n\n\n\n\n\n\n');
-                                    print(name.text);
-                                    print(birthdayDDMMYY);
-                                    print(sex);
-                                    print(email.text);
-                                    print('${country.text}, ${city.text}');
                                     context.read<AuthorizationBloc>().add(
                                           ChangeDataEvent(
                                             username: name.text,

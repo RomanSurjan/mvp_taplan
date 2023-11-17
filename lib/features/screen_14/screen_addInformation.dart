@@ -19,7 +19,6 @@ import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
-import '../screen_30/screen_30.dart';
 
 class ScreenAddInformation extends StatefulWidget {
   const ScreenAddInformation({
@@ -562,9 +561,6 @@ class _ScreenAddInformationState extends State<ScreenAddInformation> {
                                 birthdayDDMMYY = '$year-$month-$day';
                               }
 
-                              print(isOk);
-
-                              print(birthdayDDMMYY);
                               if (isOk) {
                                 context.read<AuthorizationBloc>().add(
                                       ChangeDataEvent(

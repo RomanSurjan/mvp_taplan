@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/models/sum_to_string.dart';
 
 import 'package:mvp_taplan/theme/colors.dart';
-import 'package:mvp_taplan/theme/text_styles.dart';
 
 class ShowcasePresentWidget extends StatelessWidget {
   final VoidCallback? callback;
@@ -88,12 +86,6 @@ class ShowcasePresentWidget extends StatelessWidget {
                                 fontWeight: FontWeight.w400
                                 // height: 0.9,
                               ),
-                              // strutStyle: const StrutStyle(
-                              //   fontFamily: 'Roboto',
-                              //   fontSize: 9,
-                              //   height: 0.5,
-                              // leading: 1.0,
-                              // ),
                             ),
                           ),
                         ),

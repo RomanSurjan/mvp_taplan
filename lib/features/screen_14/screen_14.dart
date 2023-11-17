@@ -9,7 +9,6 @@ import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_14/screen_addInformation.dart';
-import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
@@ -211,7 +210,7 @@ class _Screen14State extends State<Screen14> {
               appBar: CustomAppBarRegistration(
                 onBack: () {
                   authState = UnAuthorizationState();
-                  print(authState.authToken);
+
                   Navigator.pop(context);
                 },
                 name: 'Сервис желанных подарков',
@@ -356,9 +355,7 @@ class _Screen14State extends State<Screen14> {
                                         Timer(
                                           const Duration(milliseconds: 500),
                                           () {
-                                            print('Birthday : ${authState.birthday}');
-                                            print(authState.email);
-                                            print(authState.authToken);
+
                                             if (authState.authToken != null && authState.region == null) {
                                                 Navigator.push(
                                                   context,

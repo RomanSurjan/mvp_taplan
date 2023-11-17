@@ -42,7 +42,7 @@ class ButtonGroup extends StatelessWidget {
             alignment: AlignmentDirectional.topEnd,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 3, top: 3),
+                padding: const EdgeInsets.only(right: 3, top: 3),
                 child: Container(
                   width: 62,
                   height: 62,

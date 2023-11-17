@@ -118,6 +118,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         'telegram': event.telegram,
         'email': event.email,
         'user_photo': photo,
+        'agreement' : true,
       });
     } else {
       formData = FormData.fromMap({
@@ -126,6 +127,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
+        'agreement' : true,
       });
     }
     try {

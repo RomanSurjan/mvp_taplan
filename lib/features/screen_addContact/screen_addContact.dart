@@ -738,7 +738,7 @@ class _ScreenAddContactState extends State<ScreenAddContact> {
                                           : email,
                                   false,
                                   textFieldColor[2],
-                                  (isPressedContactData != 2 && id == 0) ? false : true),
+                                  (isPressedContactData != 2 && id == 0 && idGroup == 0) ? false : true),
                             ),
                             const SizedBox(
                               width: 3,

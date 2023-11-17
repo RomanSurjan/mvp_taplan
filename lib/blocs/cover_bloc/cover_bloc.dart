@@ -35,7 +35,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
       );
 
       String strWish = '';
-      switch (response.data['covers'][0][1][0][0].toString().substring(1, 2)) {
+      switch (response.data['covers'][2][1][0][0].toString().substring(1, 2)) {
         case '1':
           strWish = 'Узнай\nбольше\nо моих\nжеланиях';
           break;
@@ -59,7 +59,7 @@ class CoverBloc extends Bloc<CoverEvent, CoverState> {
           dreamPresentId: response.data['dream_present_id'],
           covers: response.data['covers'],
           weekFlowerId: response.data['week_flower_id'],
-          currentCoverId: 0,
+          currentCoverId: 2,
           strWish: strWish,
           telegram: response.data['telegram'],
           region: response.data['region'],

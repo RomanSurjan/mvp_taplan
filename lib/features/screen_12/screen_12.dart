@@ -301,7 +301,7 @@ class _Screen12State extends State<Screen12> {
                             Expanded(
                               child: textFieldRegistration(
                                 context,
-                                hintText: 'Пароль(>8-ми символов)',
+                                hintText: 'Пароль(>7-ми символов)',
                                 controller: password,
                                 isPassword: isPressedPassword,
                                 textFieldBorderColor:

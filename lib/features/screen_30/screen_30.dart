@@ -542,7 +542,7 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
                 : TextAlign.right,
           ),
           Text(
-            'Еженедельному\nстриму ',
+            'Периодическому\nстриму ',
             style: TextLocalStyles.mono400.copyWith(
               fontSize: 16,
               height: 13.95 / 16,

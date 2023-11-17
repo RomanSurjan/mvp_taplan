@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc.dart';
-import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc2.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_event.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_state.dart';
 import 'package:mvp_taplan/blocs/date_time_bloc/date_time_bloc.dart';

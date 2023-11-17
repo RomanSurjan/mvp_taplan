@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        initialRoute: '/nb/journal_1/',
+        initialRoute: '/load_screen/',
         routes: {
           '/nb/journal_1/': (context) => const MyHomePage(bloggerId: 1),
           '/nb/journal_2/': (context) => const MyHomePage(bloggerId: 45),
@@ -100,11 +100,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return PageView(
-      children: [
-        Screen30(bloggerId: widget.bloggerId),
-        const Screen38(),
-      ],
-    );
+    return
+        PageView(
+          children: const [
+            Screen30(bloggerId: 1),
+            Screen38(),
+          ]
+        );
   }
 }

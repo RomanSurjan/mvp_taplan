@@ -17,7 +17,8 @@ class ChangeTimeEvent extends DateTimeEvent {
 }
 
 class SetTimeToStreamEvent extends DateTimeEvent{
-  SetTimeToStreamEvent();
+  final int bloggerId;
+  SetTimeToStreamEvent({required this.bloggerId});
 }
 
 class CalculateRangeToStreamEvent extends DateTimeEvent{

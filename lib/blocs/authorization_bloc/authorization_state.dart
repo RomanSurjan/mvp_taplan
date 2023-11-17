@@ -11,6 +11,7 @@ abstract class AuthState {
   final bool? sex;
   final String? telegram;
   final int? id;
+  final dynamic passwordErr;
 
   AuthState({
     this.authToken,
@@ -24,6 +25,7 @@ abstract class AuthState {
     this.sex,
     this.telegram,
     this.id,
+    this.passwordErr,
   });
 }
 
@@ -40,6 +42,7 @@ class AuthorizationState extends AuthState {
     super.sex,
     super.telegram,
     super.id,
+    super.passwordErr,
   });
 
   AuthorizationState copyWith({
@@ -54,6 +57,7 @@ class AuthorizationState extends AuthState {
     bool? sex,
     String? telegram,
     int? id,
+    dynamic passwordErr,
   }) {
     return AuthorizationState(
       authToken: authToken ?? this.authToken,
@@ -67,6 +71,7 @@ class AuthorizationState extends AuthState {
       sex: sex ?? this.sex,
       telegram: telegram ?? this.telegram,
       id: id ?? this.id,
+      passwordErr: passwordErr ?? this.passwordErr,
     );
   }
 }

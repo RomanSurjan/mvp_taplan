@@ -9,11 +9,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_bloc.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
+import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
+import 'package:mvp_taplan/features/screen_215/screen_215.dart';
+import 'package:mvp_taplan/features/screen_35/screen_35.dart';
 import 'package:mvp_taplan/features/screen_addContact/screen_addContact.dart';
 import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
+import 'package:mvp_taplan/blocs/postcard_bloc/postcard_state.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
@@ -28,21 +36,6 @@ class Screen26 extends StatefulWidget {
 }
 
 class Screen26State extends State<Screen26> {
-  Map userData = {};
-
-  void getUserData() async {
-    String url = 'https://qviz.fun/api/v1/get/user/data/';
-    final dio = Dio();
-    final response = await dio.post(
-      url,
-      options: Options(
-        headers: {
-          'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
-        },
-      ),
-    );
-    userData = response.data;
-  }
 
   int group = 0;
   Map contacts = {};
@@ -59,6 +52,7 @@ class Screen26State extends State<Screen26> {
         }
       }
     }
+    count[0]++;
 
     for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
       if (buttonGroupIsPressed[group] == true) {
@@ -76,17 +70,32 @@ class Screen26State extends State<Screen26> {
     visibleContacts.clear();
 
     int length = 0;
+    if (group == 0) {
+      visibleContacts[0] = {
+        'name': context.read<AuthorizationBloc>().state.username,
+        'birthday': context.read<AuthorizationBloc>().state.birthday,
+        'sex': context.read<AuthorizationBloc>().state.sex,
+        'person_photo': context.read<AuthorizationBloc>().state.photo,
+        'phoneNumber': context.read<AuthorizationBloc>().state.phone,
+        'telegram': context.read<AuthorizationBloc>().state.telegram,
+        'email': context.read<AuthorizationBloc>().state.email,
+        'region': context.read<AuthorizationBloc>().state.region,
+      };
+      length = 1;
+    }
 
     buffContacts.forEach((key, value) {
       visibleContacts[length] = buffContacts[key];
       visibleContacts[length]['add'] = true;
       length++;
     });
-    log(visibleContacts.length.toString());
+    
+
     setState(() {});
   }
 
   void getContacts() async {
+    context.read<AuthorizationBloc>().add(GetDataEvent());
     String url = 'https://qviz.fun/api/v1/peoplelist/';
     final dio = Dio();
     final response = await dio.post(
@@ -151,7 +160,7 @@ class Screen26State extends State<Screen26> {
 
   bool isOk = false;
   List<String> strGroup = ['С', 'Д', 'Б', 'К', 'П'];
-  List<bool> buttonNavIsPressed = [false, false, false, false, false];
+  List<bool> buttonNavIsPressed = [false, true, false, false, false];
   List<bool> buttonGroupIsPressed = [true, false, false, false, false];
   List<bool> buttonCelebrateIsPressed = [false, false];
 
@@ -159,62 +168,67 @@ class Screen26State extends State<Screen26> {
   void initState() {
     super.initState();
 
+    context.read<AuthorizationBloc>().add(GetDataEvent());
+
     getContacts();
-    getUserData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor:
-              state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-          appBar: CustomAppBarRegistration(
-            name: 'Мой список контактов',
-            onTheme: () {
-              context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
-              setState(() {});
-            },
-          ),
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 18),
-                  ),
+    return BlocBuilder<AuthorizationBloc, AuthState>(
+      builder: (context, authState) {
+        return BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor:
+                  state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
+              appBar: CustomAppBarRegistration(
+                name: 'Мой список контактов',
+                onTheme: () {
+                  context.read<ThemeBloc>().add(SwitchThemeEvent(isDark: !state.isDark));
+                  setState(() {});
+                },
+              ),
+              body: SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 18),
+                      ),
+                    ),
+                    createEvent(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 9),
+                      ),
+                    ),
+                    groupButtons(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 24),
+                      ),
+                    ),
+                    listOfChannels(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 18),
+                      ),
+                    ),
+                    addContact(context),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: getHeight(context, 18),
+                      ),
+                    ),
+                    bottomNavBar(context),
+                  ],
                 ),
-                createEvent(context),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 9),
-                  ),
-                ),
-                groupButtons(context),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 24),
-                  ),
-                ),
-                listOfChannels(context),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 18),
-                  ),
-                ),
-                addContact(context),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: getHeight(context, 18),
-                  ),
-                ),
-                bottomNavBar(context),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -229,20 +243,24 @@ class Screen26State extends State<Screen26> {
         children: [
           SizedBox(
               height: getHeight(context, 54),
-              width: getWidth(context, 54),
-              child: CircleAvatar(
-                backgroundImage: const AssetImage('assets/images/upload_image.png'),
-                backgroundColor: context.read<ThemeBloc>().state.isDark
-                    ? AppTheme.backgroundColor
-                    : const Color.fromRGBO(240, 247, 254, 1),
-              )),
+              width: getHeight(context, 54),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        'https://qviz.fun/${context.read<AuthorizationBloc>().state.photo}'),
+                    fit: BoxFit.fill,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+              ),),
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  userData['username'] ?? '',
+                  context.read<AuthorizationBloc>().state.username ?? '',
                   style: TextLocalStyles.roboto500.copyWith(
                     color: context.read<ThemeBloc>().state.isDark
                         ? Colors.white
@@ -252,7 +270,7 @@ class Screen26State extends State<Screen26> {
                   ),
                 ),
                 Text(
-                  userData['region'] ?? '',
+                  context.read<AuthorizationBloc>().state.region ?? '',
                   style: TextLocalStyles.roboto400.copyWith(
                     color: context.read<ThemeBloc>().state.isDark
                         ? const Color.fromRGBO(188, 192, 200, 1)
@@ -538,16 +556,6 @@ class Screen26State extends State<Screen26> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              'Показывать события в группах контакта',
-              style: TextLocalStyles.roboto500.copyWith(
-                color: const Color.fromRGBO(98, 198, 170, 1),
-                fontSize: 16,
-              ),
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -556,6 +564,7 @@ class Screen26State extends State<Screen26> {
                   count: count[i],
                   colorMain: const Color.fromRGBO(110, 210, 182, 1),
                   picture: buttonGroupPicture[i],
+                  // colorCount: context.read<ThemeBloc>().state.isDark ? Color.fromRGBO(65, 101, 97, 1) : const Color.fromRGBO(198, 237, 226, 1),
                   colorCount: const Color.fromRGBO(198, 237, 226, 1),
                   text: buttonGroupText[i],
                   isPressed: buttonGroupIsPressed[i],
@@ -610,18 +619,19 @@ class Screen26State extends State<Screen26> {
                 padding: EdgeInsets.symmetric(
                   horizontal: getWidth(context, 16),
                 ),
-                child: channel(context, index),
+                child: visibleContacts.length > 5 ? channel(context, index) :
+                index < visibleContacts.length ?
+                channel(context, index) : SizedBox(height: getHeight(context, 66),),
               ),
             );
           },
-          itemCount: visibleContacts.length,
+          itemCount: visibleContacts.length > 5 ? visibleContacts.length : 5,
         ),
       ),
     );
   }
 
   Widget channel(BuildContext context, int index) {
-    //bool isContact = (visibleContacts[index]['phoneNumber'] == context.read<AuthorizationBloc>().state.phone);
     return Column(
       children: [
         SizedBox(
@@ -722,6 +732,7 @@ class Screen26State extends State<Screen26> {
             ).then(
               (_) => {getContacts()},
             );
+            setState(() {});
           });
         },
         child: Stack(
@@ -843,9 +854,8 @@ class Screen26State extends State<Screen26> {
               ),
               BottomNavButton(
                 picture: 'assets/svg/book_heart.svg',
-                isPressed: buttonNavIsPressed[1],
+                isPressed: true,
                 onTap: () {
-                  buttonNavIsPressed[1] = !buttonNavIsPressed[1];
                   setState(() {});
                 },
               ),
@@ -859,15 +869,12 @@ class Screen26State extends State<Screen26> {
                 picture: 'assets/svg/sharenav.svg',
                 isPressed: buttonNavIsPressed[3],
                 onTap: () {
-                  buttonNavIsPressed[3] = !buttonNavIsPressed[3];
-                  if (buttonNavIsPressed[3]) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const ScreenSendWishlist(),
                       ),
                     );
-                  }
                   setState(() {});
                 },
               ),
@@ -875,8 +882,13 @@ class Screen26State extends State<Screen26> {
                 picture: 'assets/svg/stars.svg',
                 isPressed: buttonNavIsPressed[4],
                 onTap: () {
-                  buttonNavIsPressed[4] = !buttonNavIsPressed[4];
-                  setState(() {});
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const Screen35(),
+                    ),
+                  );
+
                 },
               ),
             ],

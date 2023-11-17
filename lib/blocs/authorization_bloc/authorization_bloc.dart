@@ -53,24 +53,58 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
     }
   }
 
-  _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) {
-    emitter(
-      AuthorizationState().copyWith(
-        phone: event.phone,
-        birthday: event.birthday,
-        username: event.username,
-        region: event.region,
-        //TODO Сделать фото String и UNIT8List
-        //photo: event.photo,
-        email: event.email,
-        sex: event.sex,
-        telegram: event.telegram,
-      ),
-    );
+  _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) async {
+    late FormData formData;
+    if (event.photo != null) {
+      final photo = MultipartFile.fromBytes(
+        event.photo!,
+        filename: 'image.png',
+        contentType: MediaType("image", "png"),
+      );
+      formData = FormData.fromMap({
+        'username': event.username,
+        'region': event.region,
+        'email': event.email,
+        'user_photo': photo,
+        'birthday' : event.birthday,
+        'sex' : event.sex ? 'True' : 'False',
+      });
+    } else {
+      formData = FormData.fromMap({
+        'username': event.username,
+        'region': event.region,
+        'email': event.email,
+        'birthday' : event.birthday,
+        'sex' : event.sex ? 'True' : 'False',
+      });
+    }
+    try {
+      await Dio().post(
+        'https://qviz.fun/api/v1/change/user/data/',
+        data: formData,
+        options: Options(
+          validateStatus: (status) {
+            if (status == null) return false;
+            return status < 500;
+          },
+          headers: {
+            'Authorization': "Token ${state.authToken}",
+          },
+        ),
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   _onRegister(RegisterEvent event, Emitter<AuthState> emitter) async {
     late FormData formData;
+    String phone = event.phone;
+    if(!event.phone.contains('+'))
+      {
+        phone = '+$phone';
+      }
+    print(phone);
     if (event.image != null) {
       final photo = MultipartFile.fromBytes(
         event.image!,
@@ -80,18 +114,20 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       formData = FormData.fromMap({
         'username': 'User',
         'password': event.password,
-        'phoneNumber': event.phone,
+        'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
         'user_photo': photo,
+        'agreement' : true,
       });
     } else {
       formData = FormData.fromMap({
         'username': 'User',
         'password': event.password,
-        'phoneNumber': event.phone,
+        'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
+        'agreement' : true,
       });
     }
     try {
@@ -105,6 +141,8 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
+
+
       emitter(
         AuthorizationState().copyWith(
           sex: response.data['sex'],
@@ -118,6 +156,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
               : response.data['telegram'],
           photo: response.data['user_photo'],
           id: response.data['id'],
+          passwordErr: response.data['password'],
         ),
       );
     } catch (e) {
@@ -127,10 +166,16 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
 
   _onLogin(LoginEvent event, Emitter<AuthState> emitter) async {
     try {
+      String phone = event.phone;
+      if(!event.phone.contains('+'))
+      {
+        phone = '+$phone';
+      }
+      print(phone);
       final response = await Dio().post(
         'https://qviz.fun/auth/token/login/',
         data: {
-          'phoneNumber': event.phone,
+          'phoneNumber': phone,
           'password': event.password,
         },
         options: Options(
@@ -165,13 +210,14 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
     emitter(
       AuthorizationState().copyWith(
         phone: response.data['phoneNumber'],
-        birthday: response.data['phoneNumber'],
+        birthday: response.data['birthday'],
         username: response.data['username'],
         region: response.data['region'],
-        photo: response.data['photo'],
+        photo: response.data['user_photo'],
         email: response.data['email'],
         sex: response.data['sex'],
         telegram: response.data['telegram'],
+        authToken: state.authToken,
       ),
     );
   }

@@ -20,12 +20,12 @@ Widget textFieldRegistration(
           false,
       textInputAction: TextInputAction.done,
       controller: controller,
-      textAlignVertical: const TextAlignVertical(y: 0.5),
+      textAlignVertical: const TextAlignVertical(y: 1),
       style: TextLocalStyles.roboto400.copyWith(
         color: context.read<ThemeBloc>().state.isDark
             ? const Color.fromRGBO(244, 199, 217, 1)
             : const Color.fromRGBO(166, 173, 181, 1),
-        fontSize: 16,
+        fontSize: getHeight(context, 20),
       ),
       obscureText: isPassword,
       decoration: InputDecoration(
@@ -37,8 +37,9 @@ Widget textFieldRegistration(
           color: context.read<ThemeBloc>().state.isDark
               ? const Color.fromRGBO(105, 113, 119, 1)
               : const Color.fromRGBO(166, 173, 181, 1),
-          fontSize: getHeight(context, 14),
+          fontSize: getHeight(context, 20),
           height: 22 / 14,
+
         ),
         fillColor: context.read<ThemeBloc>().state.isDark
             ? const Color.fromRGBO(52, 54, 62, 1)

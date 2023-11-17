@@ -10,6 +10,7 @@ class CoverState {
   String region;
   String username;
   String description;
+  int bloggerId;
 
   CoverState({
     required this.myDreamDate,
@@ -23,6 +24,7 @@ class CoverState {
     required this.region,
     required this.username,
     required this.description,
+    required this.bloggerId,
   });
 
   CoverState copyWith({
@@ -37,6 +39,7 @@ class CoverState {
     String? region,
     String? username,
     String? description,
+    int? bloggerId
 
   }) {
     return CoverState(
@@ -51,6 +54,7 @@ class CoverState {
       region: region ?? this.region,
       username: username ?? this.username,
       description: description ?? this.description,
+      bloggerId: bloggerId ?? this.bloggerId,
     );
   }
 }

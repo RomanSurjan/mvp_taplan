@@ -33,7 +33,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
     final response = await Dio().post(
       'https://qviz.fun/api/v1/get/wishlist/',
       data: {
-        'blogger_id': "1",
+        'blogger_id': event.bloggerId,
         'cat': '${event.cat}',
       },
     );

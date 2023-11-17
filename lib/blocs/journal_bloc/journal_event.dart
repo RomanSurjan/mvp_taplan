@@ -3,6 +3,8 @@ abstract class JournalEvent{
 }
 
 class GetJournalContentEvent extends JournalEvent{
+  final int bloggerId;
+  GetJournalContentEvent({required this.bloggerId});
 
 }
 

@@ -16,7 +16,7 @@ class WishListBloc extends Bloc<WishListEvent, WishListState> {
       var response = await Dio().post(
         'https://qviz.fun/api/v1/presentinfo/',
         data: {
-          'blogger_id': '1',
+          'blogger_id': event.bloggerId,
         },
       );
 

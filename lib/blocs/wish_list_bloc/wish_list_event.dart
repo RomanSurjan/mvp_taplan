@@ -3,7 +3,8 @@ import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 abstract class WishListEvent {}
 
 class GetWishListEvent extends WishListEvent {
-  GetWishListEvent();
+  final int bloggerId;
+  GetWishListEvent({required this.bloggerId});
 }
 
 class SwapModelsEvent extends WishListEvent {

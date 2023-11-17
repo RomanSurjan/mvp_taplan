@@ -6,8 +6,8 @@ abstract class PostcardEvent{
 
 
 class GetPostcardsEvent extends PostcardEvent{
-
-  GetPostcardsEvent();
+  final int bloggerId;
+  GetPostcardsEvent({required this.bloggerId});
 }
 
 class ChangeHolidayTypeEvent extends PostcardEvent {

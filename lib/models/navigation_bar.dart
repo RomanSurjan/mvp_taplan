@@ -6,9 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/features/screen_12/screen_12.dart';
 import 'package:mvp_taplan/features/screen_26/screen_26.dart';
+import 'package:mvp_taplan/features/screen_35/screen_35.dart';
 import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   static const svgForBar = [
@@ -87,7 +89,7 @@ class CustomNavigationBar extends StatelessWidget {
                 : null,
           ),
           SizedBox(
-            height: getHeight(context, 100),
+            height: getHeight(context, 80),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -107,7 +109,7 @@ class CustomNavigationBar extends StatelessWidget {
                           );
                         }
                       : () {},
-                  isActive: true,
+                  isActive: context.read<AuthorizationBloc>().state.authToken == null,
                 ),
                 const SizedBox(
                   width: 9,
@@ -139,7 +141,10 @@ class CustomNavigationBar extends StatelessWidget {
                   context,
                   svg: svgForBar[3],
                   onTap: context.read<AuthorizationBloc>().state.authToken == null
-                      ? () {}
+                      ? () {
+                    //Share.share(Uri.base.toString(),subject: Uri.base.toString());
+                    Share.shareUri(Uri.base);
+                  }
                       : () {
                           Navigator.push(
                             context,
@@ -148,13 +153,19 @@ class CustomNavigationBar extends StatelessWidget {
                             ),
                           );
                         },
-                  isActive:
-                      context.read<AuthorizationBloc>().state.authToken == null ? false : true,
+                  isActive: true,
                 ),
                 const SizedBox(
                   width: 9,
                 ),
-                rectangleMainBarItem(context, svg: svgForBar[4], onTap: () {}, isActive: true),
+                rectangleMainBarItem(context, svg: svgForBar[4], onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const Screen35(),
+                    ),
+                  );
+                }, isActive: true),
               ],
             ),
           ),
@@ -168,8 +179,8 @@ class CustomNavigationBar extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
-        height: getWidth(context, 57),
-        width: getWidth(context, 57),
+        height: getWidth(context, 55),
+        width: getWidth(context, 55),
         child: DecoratedBox(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -212,8 +223,8 @@ class CustomNavigationBar extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: onTapTelegram,
       child: SizedBox(
-        height: getWidth(context, 67),
-        width: getWidth(context, 67),
+        height: getWidth(context, 65),
+        width: getWidth(context, 65),
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(
@@ -260,7 +271,7 @@ class CustomNavigationBar extends StatelessWidget {
                   ],
           ),
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(12),
             child: SvgPicture.asset(
               svg,
             ),

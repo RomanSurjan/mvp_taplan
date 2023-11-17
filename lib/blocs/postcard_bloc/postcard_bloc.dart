@@ -33,7 +33,7 @@ class PostcardBloc extends Bloc<PostcardEvent, PostcardState> {
       var response = await Dio().post(
         'https://qviz.fun/api/v1/get/postcard/data/',
         data: {
-          'blogger_id': '1',
+          'blogger_id': event.bloggerId,
         },
       );
 

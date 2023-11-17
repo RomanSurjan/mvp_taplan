@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,10 +38,13 @@ class _Screen12State extends State<Screen12> {
   TextEditingController email = TextEditingController(text: '');
   TextEditingController city = TextEditingController(text: '');
   List<Color> textFieldColor = List.generate(3, (index) => const Color.fromRGBO(66, 157, 132, 1));
+  Color textColor = const Color.fromRGBO(124, 127, 136, 1);
   bool isOk = true;
   bool isActiveLogin = false;
   bool isActiveReg = false;
   bool isPressedPassword = true;
+  String textError = '';
+  bool isPressedPhone = false;
 
   bool isPressed = true;
 
@@ -99,18 +103,9 @@ class _Screen12State extends State<Screen12> {
 
   void phoneListener() {
     String value = phone.text;
-    RegExp regExp = RegExp(r"^\+\d{0,11}$");
-    String tag = '+7';
-    if (phone.text.isEmpty || phone.text == '+') {
-      phone.value = phone.value.copyWith(
-        text: tag,
-        selection: TextSelection(
-          baseOffset: tag.length,
-          extentOffset: tag.length,
-        ),
-        composing: TextRange.empty,
-      );
-    } else if (!regExp.hasMatch(value)) {
+    RegExp regExp = RegExp(r"^\+{0,1}\d{0,11}$");
+    //String tag = '+7';
+      if (!regExp.hasMatch(value)) {
       String text = value.substring(0, value.length - 1);
       phone.value = phone.value.copyWith(
         text: text,
@@ -206,7 +201,7 @@ class _Screen12State extends State<Screen12> {
                             ),
                           ],
                         ),
-                        SizedBox(height: getHeight(context, 11)),
+                        SizedBox(height: getHeight(context, 6)),
                         Text(
                           'Данные для входа или регистрации:',
                           style: TextLocalStyles.roboto400.copyWith(
@@ -215,7 +210,7 @@ class _Screen12State extends State<Screen12> {
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: getHeight(context, 6)),
+                        SizedBox(height: getHeight(context, 4)),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -230,11 +225,72 @@ class _Screen12State extends State<Screen12> {
                               ),
                             ),
                             const SizedBox(width: 9),
-                            iconTextFieldRegistration(
-                              context,
-                              icon: 'assets/svg/registration_phone.svg',
-                              isPressed: false,
-                              color: const Color.fromRGBO(110, 210, 182, 1),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: !isPressedPhone ? () async {
+                                isPressedPhone = true;
+                                String phoneCheck = phone.text;
+                                if(!phone.text.contains('+'))
+                                {
+                                  phoneCheck  = '+$phoneCheck';
+                                }
+                                final response = await Dio().post(
+                                  'https://qviz.fun/api/v1/check/phone/number/',
+                                  data: {
+                                    'phoneNumber': phoneCheck,
+                                  },
+                                  options: Options(
+                                    validateStatus: (status) {
+                                      if (status == null) return false;
+                                      return status < 500;
+                                    },
+                                  ),
+                                );
+                                textFieldColor = List.generate(
+                                    3, (index) => state.postcardContainerBorderColor);
+                                isOk = false;
+                                setState(() {
+
+                                });
+                                Timer(
+                                  const Duration(milliseconds: 1200),
+                                      () {
+                                    if(response.data['status'] == 200)
+                                      {
+                                        textError = 'Номер зарегистрирован';
+                                        textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
+                                        setState(() {
+
+                                        });
+                                      }
+                                    else
+                                    {
+                                      textError = 'Номер не зарегистрирован';
+                                      textFieldColor[0] = const Color.fromRGBO(231, 231, 97, 1);
+                                      setState(() {
+
+                                      });
+                                    }
+                                        Timer(
+                                          const Duration(milliseconds: 2500),
+                                              () {
+                                                textError = '';
+                                                isPressedPhone = false;
+                                                isOk = true;
+                                                setState(() {
+
+                                                });
+                                          },
+                                        );
+                                  },
+                                );
+                              } : (){},
+                              child: iconTextFieldRegistration(
+                                context,
+                                icon: 'assets/svg/registration_phone.svg',
+                                isPressed: isPressedPhone,
+                                color: const Color.fromRGBO(110, 210, 182, 1),
+                              ),
                             ),
                           ],
                         ),
@@ -245,7 +301,7 @@ class _Screen12State extends State<Screen12> {
                             Expanded(
                               child: textFieldRegistration(
                                 context,
-                                hintText: 'Пароль(не менее 8-ми символов)',
+                                hintText: 'Пароль(>7-ми символов)',
                                 controller: password,
                                 isPassword: isPressedPassword,
                                 textFieldBorderColor:
@@ -260,8 +316,8 @@ class _Screen12State extends State<Screen12> {
                               },
                               borderRadius: BorderRadius.circular(8),
                               child: SizedBox(
-                                height: getHeight(context, 52),
-                                width: getHeight(context, 52),
+                                height: getHeight(context, 50),
+                                width: getHeight(context, 50),
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -341,115 +397,172 @@ class _Screen12State extends State<Screen12> {
                           ],
                         ),
                         SizedBox(height: getHeight(context, 7)),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            splashColor: isActiveLogin ? null : Colors.transparent,
-                            highlightColor: isActiveLogin ? null : Colors.transparent,
-                            onTap: isActiveLogin
-                                ? () {
-                                    context.read<AuthorizationBloc>().add(
-                                          LoginEvent(
-                                            phone: phone.text,
-                                            password: password.text,
-                                          ),
-                                        );
-                                    textFieldColor[2] = state.postcardContainerBorderColor;
-                                    //TODO
-                                    Timer(
-                                      const Duration(milliseconds: 1000),
-                                          () {
-                                            if (context.read<AuthorizationBloc>().state.authToken != null) {
-                                              isOk = false;
-                                              textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
-                                              textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
-                                              setState(() {});
-                                              Timer(
-                                                const Duration(milliseconds: 400),
-                                                    () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (_) => const Screen14(),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            } else {
-                                              textFieldColor[0] = Colors.red;
-                                              textFieldColor[1] = Colors.red;
-                                              isOk = false;
-                                              setState(() {});
-                                            }
-                                            Timer(
-                                              const Duration(seconds: 2),
-                                                  () {
-                                                isOk = true;
-                                                setState(() {});
-                                              },
-                                            );
-                                      },
-                                    );
-
-                                  }
-                                : null,
-                            child: SizedBox(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if(textError != '') ...[
+                            SizedBox(
                               height: getHeight(context, 48),
-                              width: getWidth(context, 160),
+                              width: getWidth(context, 169),
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: isActiveLogin
-                                        ? [
-                                            const Color.fromRGBO(98, 198, 170, 0.3),
-                                            const Color.fromRGBO(68, 168, 140, 0.3),
-                                          ]
-                                        : [
-                                            const Color.fromRGBO(98, 198, 170, 0.1),
-                                            const Color.fromRGBO(68, 168, 140, 0.1),
-                                          ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: isActiveLogin
-                                        ? const Color.fromRGBO(98, 198, 170, 1)
-                                        : const Color.fromRGBO(98, 198, 170, 0.5),
-                                    width: 1,
-                                  ),
+                                  color: const Color.fromRGBO(255, 255, 255, 0.7),
+                                  borderRadius: BorderRadius.circular(3),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Войти',
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Text(
+                                      textError,
                                       textAlign: TextAlign.center,
                                       style: TextLocalStyles.roboto500.copyWith(
-                                        color: isActiveLogin
-                                            ? const Color.fromRGBO(110, 210, 182, 1)
-                                            : const Color.fromRGBO(110, 210, 182, 0.5),
-                                        fontSize: 16,
+                                        color: const Color.fromRGBO(218, 80, 80, 1),
+                                        fontSize: getHeight(context, 14),
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    SizedBox(width: getWidth(context, 5)),
-                                    SvgPicture.asset(
-                                      'assets/svg/arrow.svg',
-                                      fit: BoxFit.scaleDown,
-                                      colorFilter: ColorFilter.mode(
-                                        isActiveLogin
-                                            ? const Color.fromRGBO(110, 210, 182, 1)
-                                            : const Color.fromRGBO(110, 210, 182, 0.5),
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            ] else
+                              ...[const SizedBox.shrink()],
+                            InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              splashColor: isActiveLogin ? null : Colors.transparent,
+                              highlightColor: isActiveLogin ? null : Colors.transparent,
+                              onTap: isActiveLogin
+                                  ? () async {
+                                      context.read<AuthorizationBloc>().add(
+                                            LoginEvent(
+                                              phone: phone.text,
+                                              password: password.text,
+                                            ),
+                                          );
+                                      textFieldColor[2] = state.postcardContainerBorderColor;
+                                      String phoneCheck = phone.text;
+                                      if(!phone.text.contains('+'))
+                                      {
+                                        phoneCheck  = '+$phoneCheck';
+                                      }
+                                      final response = await Dio().post(
+                                        'https://qviz.fun/api/v1/check/phone/number/',
+                                        data: {
+                                          'phoneNumber': phoneCheck,
+                                        },
+                                        options: Options(
+                                          validateStatus: (status) {
+                                            if (status == null) return false;
+                                            return status < 500;
+                                          },
+                                        ),
+                                      );
+                                      //TODO
+                                      Timer(
+                                        const Duration(milliseconds: 1000),
+                                        () {
+                                          if (context.read<AuthorizationBloc>().state.authToken !=
+                                              null) {
+                                            isOk = false;
+                                            textFieldColor[0] = const Color.fromRGBO(66, 157, 132, 1);
+                                            textFieldColor[1] = const Color.fromRGBO(66, 157, 132, 1);
+                                            setState(() {});
+                                            Timer(
+                                              const Duration(milliseconds: 400),
+                                              () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const Screen14(),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            if(response.data['status'] == 200)
+                                              {
+                                                textError = 'Неправильный пароль';
+                                                textFieldColor[1] = Colors.red;
+                                              }
+                                            else {
+                                              textError =
+                                              'Невозможно войти с предоставленными учетными данными.';
+                                              textFieldColor[0] = Colors.red;
+                                              textFieldColor[1] = Colors.red;
+                                            }
+                                            isOk = false;
+                                            setState(() {});
+                                          }
+                                          Timer(
+                                            const Duration(seconds: 2),
+                                            () {
+                                              textError = '';
+                                              isOk = true;
+                                              setState(() {});
+                                            },
+                                          );
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: SizedBox(
+                                height: getHeight(context, 48),
+                                width: getWidth(context, 169),
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: isActiveLogin
+                                          ? [
+                                              const Color.fromRGBO(98, 198, 170, 0.3),
+                                              const Color.fromRGBO(68, 168, 140, 0.3),
+                                            ]
+                                          : [
+                                              const Color.fromRGBO(98, 198, 170, 0.1),
+                                              const Color.fromRGBO(68, 168, 140, 0.1),
+                                            ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: isActiveLogin
+                                          ? const Color.fromRGBO(98, 198, 170, 1)
+                                          : const Color.fromRGBO(98, 198, 170, 0.5),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Войти',
+                                        textAlign: TextAlign.center,
+                                        style: TextLocalStyles.roboto500.copyWith(
+                                          color: isActiveLogin
+                                              ? const Color.fromRGBO(110, 210, 182, 1)
+                                              : const Color.fromRGBO(110, 210, 182, 0.5),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      SizedBox(width: getWidth(context, 5)),
+                                      SvgPicture.asset(
+                                        'assets/svg/arrow.svg',
+                                        fit: BoxFit.scaleDown,
+                                        colorFilter: ColorFilter.mode(
+                                          isActiveLogin
+                                              ? const Color.fromRGBO(110, 210, 182, 1)
+                                              : const Color.fromRGBO(110, 210, 182, 0.5),
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(height: getHeight(context, 9)),
+                        SizedBox(height: getHeight(context, 4)),
                         Text(
                           'Введите ваши данные для регистрации:',
                           style: TextLocalStyles.roboto400.copyWith(
@@ -506,8 +619,8 @@ class _Screen12State extends State<Screen12> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: getHeight(context, 48),
-                              width: getHeight(context, 48),
+                              height: getHeight(context, 62),
+                              width: getHeight(context, 62),
                               child: image == null
                                   ? CircleAvatar(
                                       backgroundImage:
@@ -537,8 +650,8 @@ class _Screen12State extends State<Screen12> {
                                 //TODO
                                 children: [
                                   SizedBox(
-                                    height: getHeight(context, 44),
-                                    width: getWidth(context, 283),
+                                    height: getHeight(context, 48),
+                                    width: getWidth(context, 272),
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
                                         color: state.isDark
@@ -583,13 +696,13 @@ class _Screen12State extends State<Screen12> {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: getHeight(context, 44),
-                                    width: getWidth(context, 283),
+                                    height: getHeight(context, 48),
+                                    width: getWidth(context, 272),
                                     child: DottedBorder(
                                       borderType: BorderType.RRect,
                                       radius: const Radius.circular(4),
                                       color: const Color.fromRGBO(98, 198, 170, 1),
-                                      dashPattern: const [6, 6],
+                                      dashPattern: const [12, 12],
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                       ),
@@ -610,6 +723,11 @@ class _Screen12State extends State<Screen12> {
                                 borderRadius: BorderRadius.circular(8),
                                 onTap: () {
                                   isPicked = !isPicked;
+                                  if (isPicked) {
+                                    textColor = const Color.fromRGBO(98, 198, 170, 1);
+                                  } else {
+                                    textColor = const Color.fromRGBO(124, 127, 136, 1);
+                                  }
                                   _checkData();
                                   setState(() {});
                                 },
@@ -638,9 +756,7 @@ class _Screen12State extends State<Screen12> {
                                 child: Text(
                                   'Подтверждаю, что мною полностью прочитаны, поняты и приняты условия Договора оферты и Политика кондифенциальности',
                                   style: TextLocalStyles.roboto400.copyWith(
-                                    color: isPicked
-                                        ? const Color.fromRGBO(98, 198, 170, 1)
-                                        : const Color.fromRGBO(124, 127, 136, 1),
+                                    color: textColor,
                                     fontSize: getHeight(context, 13),
                                   ),
                                 ),
@@ -674,70 +790,125 @@ class _Screen12State extends State<Screen12> {
                             ),
                           ),
                         ),
+
                         const Expanded(child: SizedBox()),
                         buttonGreen(
                           context,
                           height: 48,
                           width: 343,
                           title: 'Зарегистрироваться',
-                          isActive: isActiveReg,
+                          isActive: true,
+                          //isActiveReg,
                           fontSize: 16,
-                          onTap: () {
-                            context.read<AuthorizationBloc>().add(
-                                  RegisterEvent(
-                                    phone: phone.text,
-                                    password: password.text,
-                                    telegram: telegram.text,
-                                    email: email.text,
-                                    image: image,
-                                  ),
-                                );
-                            Timer(
-                              const Duration(milliseconds: 1000),
-                                  () {
-                                    textFieldColor = List.generate(3, (index) => const Color.fromRGBO(66, 157, 132, 1));
-                                    if (context.read<AuthorizationBloc>().state.id != null) {
-                                      isOk = false;
-                                      setState(() {});
-                                      Timer(
-                                        const Duration(milliseconds: 600),
-                                            () {
+                          onTap: isActiveReg
+                              ? () {
+                                  context.read<AuthorizationBloc>().add(
+                                        RegisterEvent(
+                                          phone: phone.text,
+                                          password: password.text,
+                                          telegram: telegram.text,
+                                          email: email.text,
+                                          image: image,
+                                        ),
+                                      );
+                                  Timer(
+                                    const Duration(milliseconds: 1000),
+                                    () {
+                                      textFieldColor = List.generate(
+                                          3, (index) => const Color.fromRGBO(66, 157, 132, 1));
+                                      if (context.read<AuthorizationBloc>().state.id != null) {
+                                        isOk = false;
+                                        setState(() {});
+                                        Timer(
+                                          const Duration(milliseconds: 600),
+                                          () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => const Screen14(),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        if (context.read<AuthorizationBloc>().state.phone != phone.text  && context.read<AuthorizationBloc>().state.phone != null) {
+                                          textFieldColor[0] = Colors.red;
+                                          textError = 'Телефон уже зарегистрирован';
+                                        }
+                                        if (context.read<AuthorizationBloc>().state.passwordErr != null) {
+                                          textFieldColor[1] = Colors.red;
+                                          textError = context.read<AuthorizationBloc>().state.passwordErr[0]!;
+                                        }
+                                        if (context.read<AuthorizationBloc>().state.telegram != telegram.text  && context.read<AuthorizationBloc>().state.telegram != null) {
+                                          textFieldColor[2] = Colors.red;
+                                          isPressed = true;
+                                          textError = 'Телеграм уже зарегистрирован';
+                                        }
+                                        if (context.read<AuthorizationBloc>().state.email != email.text && context.read<AuthorizationBloc>().state.email != null) {
+                                          textFieldColor[2] = Colors.red;
+                                          isPressed = false;
+                                          textError = context.read<AuthorizationBloc>().state.email!;
+                                        }
+                                        isOk = false;
+                                        setState(() {});
+                                      }
 
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => const Screen14(),
-                                            ),
-                                          );
+                                      Timer(
+                                        const Duration(seconds: 2),
+                                        () {
+                                          isOk = true;
+                                          setState(() {});
+                                          textError = '';
                                         },
                                       );
-                                    } else {
-                                      if (context.read<AuthorizationBloc>().state.phone ==
-                                          "пользователь с таким phoneNumber уже существует." ||
-                                          context.read<AuthorizationBloc>().state.phone == "Введен некорректный номер телефона.") {
-                                        textFieldColor[0] = Colors.red;
+                                    },
+                                  );
+                                }
+                              : () {
+                                  textFieldColor = List.generate(
+                                      3, (index) => const Color.fromRGBO(66, 157, 132, 1));
+                                  String value = phone.text;
+                                  RegExp regExp = RegExp(r"^\+{0,1}\d{11}$");
+                                  if (!regExp.hasMatch(value)) {
+                                    textFieldColor[0] = Colors.red;
+                                  }
+                                  value = password.text;
+                                  if (!(value.length > 7)) {
+                                    textFieldColor[1] = Colors.red;
+                                  }
+                                  value = telegram.text;
+                                  regExp = RegExp(r"^@\w{1,}$");
+                                  if (!regExp.hasMatch(value)) {
+                                    textFieldColor[2] = Colors.red;
+                                    isPressed = true;
+                                  }
+                                  value = email.text;
+                                  regExp =
+                                      RegExp(r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$");
+                                  if (!regExp.hasMatch(value)) {
+                                    textFieldColor[2] = Colors.red;
+                                    isPressed = false;
+                                  }
+                                  if (!isPicked) {
+                                    textColor = Colors.red;
+                                  }
+                                  isOk = false;
+                                  textError = 'Введите недостаюшие данные';
+                                  setState(() {});
+                                  Timer(
+                                    const Duration(seconds: 2),
+                                    () {
+                                      isOk = true;
+                                      textError = '';
+                                      if (isPicked) {
+                                        textColor = const Color.fromRGBO(98, 198, 170, 1);
+                                      } else {
+                                        textColor = const Color.fromRGBO(124, 127, 136, 1);
                                       }
-                                      if (context.read<AuthorizationBloc>().state.telegram ==
-                                          "пользователь с таким telegram уже существует.") {
-                                        textFieldColor[2] = Colors.red;
-                                        isPressed = true;
-                                      }
-                                      isOk = false;
                                       setState(() {});
-                                    }
-
-                                    Timer(
-                                      const Duration(seconds: 2),
-                                          () {
-                                        isOk = true;
-                                        setState(() {});
-                                      },
-                                    );
-
-                              },
-                            );
-
-                          },
+                                    },
+                                  );
+                                },
                         ),
                         SizedBox(height: getHeight(context, 20)),
                       ],

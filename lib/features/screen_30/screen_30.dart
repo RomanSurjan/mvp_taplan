@@ -56,14 +56,41 @@ class Screen30State extends State<Screen30> {
   void initState() {
     super.initState();
 
-    //TODO вынести логику в COVERBLOC
-    context.read<PostcardBloc>().add(GetPostcardsEvent());
-    context.read<WishListBloc>().add(GetWishListEvent());
-    context.read<DateTimeBloc>().add(SetTimeToStreamEvent());
-    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(5));
-    context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
-    context.read<JournalBloc>().add(GetJournalContentEvent());
-
+    if(widget.bloggerId != context.read<CoverBloc>().state.bloggerId || context.read<CoverBloc>().state.myDreamDate.isEmpty) {
+      //TODO вынести логику в COVERBLOC
+      context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
+      context.read<DateTimeBloc>().add(SetTimeToStreamEvent(bloggerId: widget.bloggerId));
+    }
+    context.read<PostcardBloc>().add(GetPostcardsEvent(bloggerId: widget.bloggerId));
+    context.read<WishListBloc>().add(GetWishListEvent(bloggerId: widget.bloggerId));
+    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(bloggerId: widget.bloggerId, cat: 5));
+    context.read<JournalBloc>().add(GetJournalContentEvent(bloggerId: widget.bloggerId));
+    if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
+      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
+      DateTime dateOfBorn = DateTime(
+        int.parse(dateBorn.substring(0, 4)),
+        int.parse(dateBorn.substring(5, 7)),
+        int.parse(dateBorn.substring(8, 10)),
+        int.parse(dateBorn.substring(11, 13)),
+      );
+      update = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          DateTime nowDate = DateTime.now();
+          range = DateTime(
+            dateOfBorn.year - nowDate.year,
+            dateOfBorn.month - nowDate.month,
+            dateOfBorn.day - nowDate.day,
+            dateOfBorn.hour - nowDate.hour,
+            dateOfBorn.minute - nowDate.minute,
+            dateOfBorn.second - nowDate.second,
+          );
+          if(mounted) {
+            setState(() {});
+          }
+        },
+      );
+    }
 
   }
 
@@ -92,32 +119,7 @@ class Screen30State extends State<Screen30> {
 
                 return BlocBuilder<CoverBloc, CoverState>(
                   builder: (context, coverState) {
-                    if (coverState.myDreamDate.isNotEmpty) {
-                      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
-                      DateTime dateOfBorn = DateTime(
-                        int.parse(dateBorn.substring(0, 4)),
-                        int.parse(dateBorn.substring(5, 7)),
-                        int.parse(dateBorn.substring(8, 10)),
-                        int.parse(dateBorn.substring(11, 13)),
-                      );
-                      update = Timer.periodic(
-                        const Duration(seconds: 1),
-                            (timer) {
-                          DateTime nowDate = DateTime.now();
-                          range = DateTime(
-                            dateOfBorn.year - nowDate.year,
-                            dateOfBorn.month - nowDate.month,
-                            dateOfBorn.day - nowDate.day,
-                            dateOfBorn.hour - nowDate.hour,
-                            dateOfBorn.minute - nowDate.minute,
-                            dateOfBorn.second - nowDate.second,
-                          );
-                          if(mounted) {
-                            setState(() {});
-                          }
-                        },
-                      );
-                    }
+
                     return Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
@@ -132,22 +134,19 @@ class Screen30State extends State<Screen30> {
                       ),
                       child: Stack(
                         children: [
-                          Positioned(
-                            top: getHeight(context, 10),
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: SizedBox(
-                                width: getWidth(context, 375),
-                                child: SvgPicture.asset('assets/svg/logo2.svg'),
-                              ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: SvgPicture.asset('assets/svg/logo_cover.svg', width: getWidth(context, 340),),
                             ),
                           ),
                           Positioned.fill(
                             top: getHeight(context, 10),
                             child: Align(
-                              alignment: Alignment.topRight,
+                              alignment: Alignment.topLeft,
                               child: SizedBox(
-                                height: getHeight(context, 21),
+                                height: 20,
                                 child: Image.network(
                                   'assets/images/sk_logo_light.png',
                                 ),
@@ -205,7 +204,7 @@ class Screen30State extends State<Screen30> {
                             child: SizedBox(
                               height: getHeight(context, 48),
                               width: getWidth(context, 41),
-                              child: SvgPicture.asset('assets/svg/swipe.svg'),
+                              child: SvgPicture.asset('assets/svg/openmoji_swipe.svg'),
                             ),
                           ),
                           Positioned(
@@ -251,88 +250,82 @@ class Screen30State extends State<Screen30> {
                             child: wishList(context),
                           ),
                           Positioned(
-                            bottom: getHeight(context, 94),
-                            left: getWidth(context, 0),
-                            child: RotatedBox(
-                              quarterTurns: 3,
-                              child: Text(
-                                coverState.telegram,
-                                style: TextLocalStyles.roboto600.copyWith(
-                                  height: 20 / 20,
-                                  fontSize: 12,
-                                  color: const Color.fromRGBO(0, 0, 0, 1),
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: getHeight(context, 116),
+                            bottom: getHeight(context, 100),
                             left: getWidth(context, 27),
-                            child: Text(
-                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username)
-                                  ? ''
-                                  : coverState.username,
-                              style: const TextStyle(
-                                fontFamily: 'Abhaya',
-                                fontSize: 31,
-                                color: Color.fromRGBO(255, 255, 255, 1),
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  coverState.username,
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    fontSize: 20,
+                                    color: const Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  '${coverState.description}\n${coverState.region}',
+                                  style: TextLocalStyles.roboto400.copyWith(
+                                    fontSize: 15,
+                                    color: const Color.fromRGBO(255, 255, 255, 1),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            bottom: getHeight(context, 85),
-                            left: getWidth(context, 28),
-                            child: Text(
-                              RegExp(r"[^a-zA-Z]+").hasMatch(coverState.username)
-                                  ? ''
-                                  : '${coverState.description}\n${coverState.region}',
-                              style: TextLocalStyles.roboto400.copyWith(
-                                fontSize: 14,
-                                color: const Color.fromRGBO(255, 255, 255, 1),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: getHeight(context, 91),
-                            left: getWidth(context, 226),
-                            child: InkWell(
-                              onTap: () {
-                                if (widget.bloggerId == 1) {
-                                  coverState = CoverState(
-                                    myDreamDate: '',
-                                    everyWeekStream: '',
-                                    dreamPresentId: 0,
-                                    weekFlowerId: 0,
-                                    currentCoverId: 0,
-                                    covers: [[]],
-                                    strWish: '',
-                                    telegram: '',
-                                    region: '',
-                                    username: '',
-                                    description: '',
-                                  );
-                                  Navigator.pushReplacementNamed(context, '/nb/journal_2/');
-                                } else {
-                                  coverState = CoverState(
-                                    myDreamDate: '',
-                                    everyWeekStream: '',
-                                    dreamPresentId: 0,
-                                    weekFlowerId: 0,
-                                    currentCoverId: 0,
-                                    covers: [[]],
-                                    strWish: '',
-                                    telegram: '',
-                                    region: '',
-                                    username: '',
-                                    description: '',
-                                  );
-                                  Navigator.pushReplacementNamed(context, '/nb/journal_1/');
-                                }
-                              },
-                              child: Image.asset('assets/images/image 320.png'),
-                            ),
-                          ),
+                          // Positioned(
+                          //   bottom: getHeight(context, 85),
+                          //   left: getWidth(context, 28),
+                          //   child: Text(
+                          //     '${coverState.description}\n${coverState.region}',
+                          //     style: TextLocalStyles.roboto400.copyWith(
+                          //       fontSize: 15,
+                          //       color: const Color.fromRGBO(255, 255, 255, 1),
+                          //     ),
+                          //   ),
+                          // ),
+                          // Positioned(
+                          //   bottom: getHeight(context, 91),
+                          //   left: getWidth(context, 226),
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       if (widget.bloggerId == 1) {
+                          //         coverState = CoverState(
+                          //           myDreamDate: '',
+                          //           everyWeekStream: '',
+                          //           dreamPresentId: 0,
+                          //           weekFlowerId: 0,
+                          //           currentCoverId: 0,
+                          //           covers: [[]],
+                          //           strWish: '',
+                          //           telegram: '',
+                          //           region: '',
+                          //           username: '',
+                          //           description: '', bloggerId: 1,
+                          //         );
+                          //         Navigator.pushReplacementNamed(context, '/nb/journal_2/');
+                          //       } else {
+                          //         coverState = CoverState(
+                          //           myDreamDate: '',
+                          //           everyWeekStream: '',
+                          //           dreamPresentId: 0,
+                          //           weekFlowerId: 0,
+                          //           currentCoverId: 0,
+                          //           covers: [[]],
+                          //           strWish: '',
+                          //           telegram: '',
+                          //           region: '',
+                          //           username: '',
+                          //           description: '', bloggerId: 45,
+                          //         );
+                          //         Navigator.pushReplacementNamed(context, '/nb/journal_1/');
+                          //       }
+                          //     },
+                          //     child: Image.asset('assets/images/image 320.png'),
+                          //   ),
+                          // ),
                           Positioned(
                             bottom: getHeight(context, 90),
                             right: getWidth(context, 5),
@@ -455,28 +448,28 @@ class Screen30State extends State<Screen30> {
                               ),
                             ),
                           ),
-                          // Positioned(
-                          //   top: getHeight(context, 669),
-                          //   left: getWidth(context, 0),
-                          //   child: SizedBox(
-                          //     width: getWidth(context, 375),
-                          //     child: CustomNavigationBar(
-                          //       onTapTelegram: () {
-                          //         isTelegram = true;
-                          //         setState(() {});
-                          //
-                          //         Timer(
-                          //           const Duration(seconds: 3),
-                          //           () {
-                          //             isTelegram = false;
-                          //             setState(() {});
-                          //           },
-                          //         );
-                          //       },
-                          //       isTelegram: isTelegram,
-                          //     ),
-                          //   ),
-                          // ),
+                          Positioned(
+                            bottom: 0,
+                            left: getWidth(context, 0),
+                            child: SizedBox(
+                              width: getWidth(context, 375),
+                              child: CustomNavigationBar(
+                                onTapTelegram: () {
+                                  isTelegram = true;
+                                  setState(() {});
+
+                                  Timer(
+                                    const Duration(seconds: 3),
+                                    () {
+                                      isTelegram = false;
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                                isTelegram: isTelegram,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     );
@@ -549,7 +542,7 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
                 : TextAlign.right,
           ),
           Text(
-            'Еженедельному\nстриму ',
+            'Периодическому\nстриму ',
             style: TextLocalStyles.mono400.copyWith(
               fontSize: 16,
               height: 13.95 / 16,
@@ -592,7 +585,7 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
             quarterTurns: 2,
             child: InkWell(
               onTap: () {
-                final flowerModel = state.wishList.where((element) => element.id == 6).toList()[0];
+                final flowerModel = state.wishList.where((element) => element.position == 3).toList()[0];
                 context
                     .read<PostcardBloc>()
                     .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));

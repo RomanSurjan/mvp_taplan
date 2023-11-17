@@ -8,6 +8,7 @@ import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
+import 'package:mvp_taplan/features/screen_14/screen_addInformation.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
@@ -115,7 +116,8 @@ class _Screen14State extends State<Screen14> {
   void initState() {
     super.initState();
 
-    context.read<AuthorizationBloc>().add(GetCodeEvent());
+    //context.read<AuthorizationBloc>().add(GetCodeEvent());
+    context.read<AuthorizationBloc>().add(GetDataEvent());
 
     //TODO Разобраться с кодом
     Timer.periodic(
@@ -206,7 +208,12 @@ class _Screen14State extends State<Screen14> {
               resizeToAvoidBottomInset: false,
               backgroundColor:
                   state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-              appBar: const CustomAppBarRegistration(
+              appBar: CustomAppBarRegistration(
+                onBack: () {
+                  authState = UnAuthorizationState();
+                  print(authState.authToken);
+                  Navigator.pop(context);
+                },
                 name: 'Сервис желанных подарков',
               ),
               body: SafeArea(
@@ -266,7 +273,7 @@ class _Screen14State extends State<Screen14> {
                           height: getHeight(context, 10),
                         ),
                         SizedBox(
-                          height: getHeight(context, 44),
+                          height: 44,
                           width: getWidth(context, 344),
                           child: Row(
                             children: [
@@ -324,7 +331,7 @@ class _Screen14State extends State<Screen14> {
                                           textAlign: TextAlign.center,
                                           style: TextLocalStyles.roboto500.copyWith(
                                             color: repeatMessage[2],
-                                            fontSize: getHeight(context, 14),
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
@@ -343,18 +350,31 @@ class _Screen14State extends State<Screen14> {
                                   onTap: () {
                                     String codeStr = code.join();
                                     if (isActiveLogIn) {
-                                      if (codeStr == authState.code) {
+                                      if (codeStr == '0000'){//authState.code) {
                                         isStop = true;
                                         setState(() {});
                                         Timer(
                                           const Duration(milliseconds: 500),
                                           () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => const Screen30(bloggerId: 1),
-                                              ),
-                                            );
+                                            print('Birthday : ${authState.birthday}');
+                                            print(authState.email);
+                                            print(authState.authToken);
+                                            if (authState.authToken != null && authState.region == null) {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => const ScreenAddInformation(),
+                                                  ),
+                                                );
+                                              }
+                                            else
+                                              {
+
+                                                    Navigator.pushReplacementNamed(context, '/nb/journal_1/');
+
+
+                                            }
+
                                           },
                                         );
                                       } else {
@@ -501,8 +521,8 @@ class _Screen14State extends State<Screen14> {
     required String subtitle,
   }) {
     return SizedBox(
-      height: getHeight(context, 54),
-      width: getWidth(context, 106),
+      height: 54,
+      width: 106,
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
@@ -518,9 +538,9 @@ class _Screen14State extends State<Screen14> {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.only(
-            top: getHeight(context, 5.5),
-            bottom: getHeight(context, 5.5),
+          padding: const EdgeInsets.only(
+            top: 5,
+            bottom: 5,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -552,8 +572,8 @@ class _Screen14State extends State<Screen14> {
 
   Widget fieldCode(BuildContext context, int index) {
     return SizedBox(
-      width: getWidth(context, 76),
-      height: getHeight(context, 86),
+      width: 76,
+      height: 86,
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),

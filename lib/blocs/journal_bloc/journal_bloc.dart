@@ -24,7 +24,7 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
       final response = await Dio().post(
         'https://qviz.fun/api/v1/content/',
         data: {
-          'blogger_id': '1',
+          'blogger_id': event.bloggerId,
         },
       );
 

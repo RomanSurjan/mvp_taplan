@@ -41,35 +41,23 @@ class ButtonGroup extends StatelessWidget {
           Stack(
             alignment: AlignmentDirectional.topEnd,
             children: [
-              Container(
-                width: 62,
-                height: 62,
-                decoration: BoxDecoration(
-                  color: colorMain,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 2, color: colorMain),
-                  boxShadow: [
-                    BoxShadow(
-                      offset:
-                          isPressed ? const Offset(5, 5) : const Offset(-5, -5),
-                      blurRadius: blur,
-                      color: const Color.fromRGBO(0, 0, 0, 0.3),
-                      inset: true,
-                    ),
-                    BoxShadow(
-                      offset:
-                          isPressed ? const Offset(-5, -5) : const Offset(5, 5),
-                      blurRadius: blur,
-                      color: const Color.fromRGBO(255, 255, 255, 0.4),
-                      inset: true,
-                    ),
-                  ],
-                ),
-                child: SvgPicture.asset(
-                  picture,
-                  height: 40,
-                  width: 44,
-                  fit: BoxFit.scaleDown,
+              Padding(
+                padding: EdgeInsets.only(right: 3, top: 3),
+                child: Container(
+                  width: 62,
+                  height: 62,
+                  decoration: BoxDecoration(
+                    color: isPressed ? const Color.fromRGBO(98, 198, 170, 1) : const Color.fromRGBO(98, 198, 170, 0.35),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1, color: colorMain),
+                  ),
+                  child: SvgPicture.asset(
+                    picture,
+                    height: 40,
+                    width: 44,
+                    fit: BoxFit.scaleDown,
+                    colorFilter: ColorFilter.mode(isPressed ? const Color.fromRGBO(255, 255, 255, 1) : const Color.fromRGBO(66, 157, 132, 1), BlendMode.srcIn),
+                  ),
                 ),
               ),
               Container(
@@ -168,12 +156,13 @@ class ButtonGroupWish extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: SvgPicture.asset(
-                  picture,
-                  height: 40,
-                  width: 44,
-                  fit: BoxFit.scaleDown,
-                ),
+                child: Image.asset(picture, height: 40, width: 44,),
+                // child: SvgPicture.asset(
+                //   picture,
+                //   height: 40,
+                //   width: 44,
+                //   fit: BoxFit.scaleDown,
+                // ),
               ),
             ],
           ),
@@ -276,6 +265,7 @@ class BottomNavButton extends StatelessWidget {
       onTap: () {
         onTap.call();
       },
+      borderRadius: BorderRadius.circular(8),
       child: !context.read<ThemeBloc>().state.isDark
           ? Stack(
               alignment: AlignmentDirectional.center,

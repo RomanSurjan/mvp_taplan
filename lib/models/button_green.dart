@@ -18,7 +18,7 @@ Widget buttonGreen(
     },
     child: SizedBox(
       width: getWidth(context, width),
-      height: getHeight(context, height),
+      height: height,
       child: DecoratedBox(
         decoration: BoxDecoration(
           //TODO

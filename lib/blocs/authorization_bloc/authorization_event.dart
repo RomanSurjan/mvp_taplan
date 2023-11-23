@@ -49,6 +49,7 @@ class ChangeDataEvent extends AuthorizationEvent {
   final String region;
   final String birthday;
   final bool sex;
+  final String telegram;
 
   ChangeDataEvent({
     required this.username,
@@ -57,6 +58,7 @@ class ChangeDataEvent extends AuthorizationEvent {
     required this.birthday,
     required this.sex,
     required this.email,
+    required this.telegram,
   });
 }
 

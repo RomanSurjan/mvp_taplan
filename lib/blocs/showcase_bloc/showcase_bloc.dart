@@ -80,6 +80,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
           currentPresentModel: currentPresentModel,
         ),
       );
+      // ignore: use_build_context_synchronously
       Navigator.push(
         event.context, MaterialPageRoute(
           builder: (_)=> Screen215(currentModel: currentPresentModel)

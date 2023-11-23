@@ -15,6 +15,7 @@ class ButtonGroup extends StatelessWidget {
   final bool isPressed;
   final VoidCallback onTap;
   final int count;
+  final String date;
 
   const ButtonGroup({
     super.key,
@@ -24,7 +25,7 @@ class ButtonGroup extends StatelessWidget {
     required this.text,
     required this.isPressed,
     required this.onTap,
-    required this.count,
+    required this.count, required this.date,
   });
 
   @override
@@ -42,7 +43,7 @@ class ButtonGroup extends StatelessWidget {
             alignment: AlignmentDirectional.topEnd,
             children: [
               Padding(
-                padding: EdgeInsets.only(right: 3, top: 3),
+                padding: const EdgeInsets.only(right: 3, top: 3),
                 child: Container(
                   width: 62,
                   height: 62,
@@ -66,7 +67,7 @@ class ButtonGroup extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: colorCount,
                   borderRadius: BorderRadius.circular(19),
-                  border: Border.all(width: 2, color: colorMain),
+                  border: Border.all(width: 1, color: colorMain),
                 ),
                 child: Text(
                   count.toString(),
@@ -86,6 +87,19 @@ class ButtonGroup extends StatelessWidget {
             text,
             style: TextLocalStyles.roboto500.copyWith(
               fontWeight: isPressed ? FontWeight.w600 : FontWeight.w400,
+              fontSize: 12,
+              color: !context.read<ThemeBloc>().state.isDark
+                  ? const Color.fromRGBO(22, 26, 29, 1)
+                  : const Color.fromRGBO(233, 235, 237, 1),
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            date,
+            style: TextLocalStyles.roboto500.copyWith(
+              fontWeight: FontWeight.w400,
               fontSize: 12,
               color: !context.read<ThemeBloc>().state.isDark
                   ? const Color.fromRGBO(22, 26, 29, 1)

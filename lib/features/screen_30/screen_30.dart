@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_event.dart';
@@ -65,6 +66,7 @@ class Screen30State extends State<Screen30> {
     context.read<WishListBloc>().add(GetWishListEvent(bloggerId: widget.bloggerId));
     context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(bloggerId: widget.bloggerId, cat: 5));
     context.read<JournalBloc>().add(GetJournalContentEvent(bloggerId: widget.bloggerId));
+    context.read<AuthorizationBloc>().add(GetDataEvent());
     if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
       String dateBorn = context.read<CoverBloc>().state.myDreamDate;
       DateTime dateOfBorn = DateTime(

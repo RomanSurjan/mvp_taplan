@@ -55,29 +55,40 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
 
   _onChangeData(ChangeDataEvent event, Emitter<AuthState> emitter) async {
     late FormData formData;
+    Map<String, dynamic> data;
     if (event.photo != null) {
       final photo = MultipartFile.fromBytes(
         event.photo!,
         filename: 'image.png',
         contentType: MediaType("image", "png"),
       );
-      formData = FormData.fromMap({
+      data = {
         'username': event.username,
         'region': event.region,
         'email': event.email,
         'user_photo': photo,
         'birthday' : event.birthday,
         'sex' : event.sex ? 'True' : 'False',
-      });
+        'telegram' : event.telegram,
+      };
     } else {
-      formData = FormData.fromMap({
+      data = {
         'username': event.username,
         'region': event.region,
         'email': event.email,
         'birthday' : event.birthday,
         'sex' : event.sex ? 'True' : 'False',
-      });
+        'telegram' : event.telegram,
+      };
     }
+    if(event.telegram.isEmpty) {
+      data.remove('telegram');
+    }
+    if(event.email.isEmpty)
+    {
+      data.remove('email');
+    }
+    formData = FormData.fromMap(data);
     try {
       await Dio().post(
         'https://qviz.fun/api/v1/change/user/data/',
@@ -104,14 +115,14 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       {
         phone = '+$phone';
       }
-    print(phone);
+    Map<String, dynamic> data;
     if (event.image != null) {
       final photo = MultipartFile.fromBytes(
         event.image!,
         filename: 'image.png',
         contentType: MediaType("image", "png"),
       );
-      formData = FormData.fromMap({
+      data = {
         'username': 'User',
         'password': event.password,
         'phoneNumber': phone,
@@ -119,17 +130,26 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         'email': event.email,
         'user_photo': photo,
         'agreement' : true,
-      });
+      };
     } else {
-      formData = FormData.fromMap({
+      data = {
         'username': 'User',
         'password': event.password,
         'phoneNumber': phone,
         'telegram': event.telegram,
         'email': event.email,
         'agreement' : true,
-      });
+      };
     }
+    if(event.telegram.isEmpty) {
+      data.remove('telegram');
+    }
+    if(event.email.isEmpty)
+      {
+        data.remove('email');
+      }
+    formData = FormData.fromMap(data);
+
     try {
       final response = await Dio().post(
         'https://qviz.fun/api/v1/auth/users/',
@@ -171,7 +191,6 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
       {
         phone = '+$phone';
       }
-      print(phone);
       final response = await Dio().post(
         'https://qviz.fun/auth/token/login/',
         data: {
@@ -216,7 +235,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
         photo: response.data['user_photo'],
         email: response.data['email'],
         sex: response.data['sex'],
-        telegram: response.data['telegram'],
+        telegram: response.data['telegram'].runtimeType == Null ? '' : response.data['telegram'],
         authToken: state.authToken,
       ),
     );

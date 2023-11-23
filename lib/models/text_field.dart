@@ -101,31 +101,31 @@ Widget iconTextFieldRegistration(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-        boxShadow: context.read<ThemeBloc>().state.isDark
-            ? [
-                const BoxShadow(
-                  offset: Offset(4, 4),
-                  blurRadius: 10,
-                  color: Color.fromRGBO(27, 32, 38, 0.4),
-                ),
-                const BoxShadow(
-                  offset: Offset(-4, -4),
-                  blurRadius: 10,
-                  color: Color.fromRGBO(50, 55, 61, 1),
-                ),
-              ]
-            : [
-                const BoxShadow(
-                  offset: Offset(4, 4),
-                  blurRadius: 10,
-                  color: Color.fromRGBO(154, 189, 230, 0.25),
-                ),
-                const BoxShadow(
-                  offset: Offset(-4, -4),
-                  blurRadius: 10,
-                  color: Color.fromRGBO(255, 255, 255, 1),
-                ),
-              ],
+        // boxShadow: context.read<ThemeBloc>().state.isDark
+        //     ? [
+        //         const BoxShadow(
+        //           offset: Offset(4, 4),
+        //           blurRadius: 10,
+        //           color: Color.fromRGBO(27, 32, 38, 0.4),
+        //         ),
+        //         const BoxShadow(
+        //           offset: Offset(-4, -4),
+        //           blurRadius: 10,
+        //           color: Color.fromRGBO(50, 55, 61, 1),
+        //         ),
+        //       ]
+        //     : [
+        //         const BoxShadow(
+        //           offset: Offset(4, 4),
+        //           blurRadius: 10,
+        //           color: Color.fromRGBO(154, 189, 230, 0.25),
+        //         ),
+        //         const BoxShadow(
+        //           offset: Offset(-4, -4),
+        //           blurRadius: 10,
+        //           color: Color.fromRGBO(255, 255, 255, 1),
+        //         ),
+        //       ],
       ),
       child: SvgPicture.asset(
         icon,

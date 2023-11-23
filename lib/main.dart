@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,6 +70,10 @@ class MyApp extends StatelessWidget {
           '/successful_payment/': (context) => const Screen228(),
         },
         title: 'MVP',
+        // supportedLocales: const <Locale>[
+        //   Locale("en", "US"),
+        //   Locale("ru", "RU"),
+        // ],
         onUnknownRoute: (settings) {
           final path = Uri.base.toString().split('&')[7];
           return MaterialPageRoute(

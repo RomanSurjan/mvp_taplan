@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/models/sum_to_string.dart';
 
 import 'package:mvp_taplan/theme/colors.dart';

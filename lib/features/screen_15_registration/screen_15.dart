@@ -185,7 +185,7 @@ class _Screen15RegState extends State<Screen15Reg> {
                       const Expanded(child: SizedBox()),
                       buttonGreen(
                         context,
-                        height: 44,
+                        height: 48,
                         width: 342,
                         title: 'Скачать\nв Pdf формате',
                         fontSize: 14,

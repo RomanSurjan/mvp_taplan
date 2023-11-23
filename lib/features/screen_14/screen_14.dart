@@ -196,314 +196,307 @@ class _Screen14State extends State<Screen14> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthorizationBloc, AuthState>(
-      builder: (context, authState) {
-        return BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, state) {
-            borderColorField = state.isDark
-                ? const Color.fromRGBO(124, 68, 121, 1)
-                : const Color.fromRGBO(238, 173, 235, 1);
-            return Scaffold(
-              resizeToAvoidBottomInset: false,
-              backgroundColor:
-                  state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
-              appBar: CustomAppBarRegistration(
-                onBack: () {
-                  authState = UnAuthorizationState();
-
-                  Navigator.pop(context);
-                },
-                name: 'Сервис желанных подарков',
-              ),
-              body: SafeArea(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: getWidth(context, 16),
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: getHeight(context, 11),
-                        ),
-                        Stack(
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional.topEnd,
-                              child: Image.asset(
-                                'assets/images/image 304.png',
-                              ),
+    return BlocBuilder<AuthorizationBloc, AuthState>(builder: (context, authState) {
+      return BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          borderColorField = state.isDark
+              ? const Color.fromRGBO(124, 68, 121, 1)
+              : const Color.fromRGBO(238, 173, 235, 1);
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor:
+                state.isDark ? AppTheme.backgroundColor : const Color.fromRGBO(240, 247, 254, 1),
+            appBar: CustomAppBarRegistration(
+              onBack: () {
+                authState = UnAuthorizationState();
+                Navigator.pop(context);
+              },
+              name: 'Сервис желанных подарков',
+            ),
+            body: SafeArea(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: getWidth(context, 16),
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: getHeight(context, 11),
+                      ),
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional.topEnd,
+                            child: Image.asset(
+                              'assets/images/image 304.png',
                             ),
-                            Align(
-                              alignment: AlignmentDirectional.center,
-                              child: SvgPicture.asset(
-                                context.read<ThemeBloc>().state.isDark
-                                    ? 'assets/svg/logo_light.svg'
-                                    : 'assets/svg/logo.svg',
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: getHeight(context, 16),
-                        ),
-                        Text(
-                          'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
-                          style: TextLocalStyles.roboto400.copyWith(
-                            fontSize: 15.5,
-                            color: state.isDark
-                                ? const Color.fromRGBO(233, 235, 237, 1)
-                                : const Color.fromRGBO(22, 26, 29, 1),
                           ),
-                          textAlign: TextAlign.center,
+                          Align(
+                            alignment: AlignmentDirectional.center,
+                            child: SizedBox(
+                              height: getHeight(context, 80),
+                              child: SvgPicture.asset(
+                                state.isDark ? 'assets/svg/logo_light.svg' : 'assets/svg/logo.svg',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 16),
+                      ),
+                      Text(
+                        'В течение 30 секунд код придет на телефон,\nтелеграмм или почту, предоставленные Вами',
+                        style: TextLocalStyles.roboto400.copyWith(
+                          fontSize: 15.5,
+                          color: state.isDark
+                              ? const Color.fromRGBO(233, 235, 237, 1)
+                              : const Color.fromRGBO(22, 26, 29, 1),
                         ),
-                        SizedBox(
-                          height: getHeight(context, 16),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 16),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int i = 0; i < 4; i++) fieldCode(context, i),
+                        ],
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 10),
+                      ),
+                      SizedBox(
+                        height: 44,
+                        width: getWidth(context, 344),
+                        child: Row(
                           children: [
-                            for (int i = 0; i < 4; i++) fieldCode(context, i),
-                          ],
-                        ),
-                        SizedBox(
-                          height: getHeight(context, 10),
-                        ),
-                        SizedBox(
-                          height: 44,
-                          width: getWidth(context, 344),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(8),
-                                  splashColor: isActiveRepeatMessage ? null : Colors.transparent,
-                                  highlightColor: isActiveRepeatMessage ? null : Colors.transparent,
-                                  onTap: isActiveRepeatMessage
-                                      ? () {
-                                    context.read<AuthorizationBloc>().add(GetCodeEvent());
-                                          repeatMessage = [
-                                            const Color.fromRGBO(98, 198, 170, 0.1),
-                                            const Color.fromRGBO(68, 168, 140, 0.1),
-                                            const Color.fromRGBO(82, 182, 154, 0.5),
-                                          ];
-                                          isActiveRepeatMessage = false;
+                            Expanded(
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                splashColor: isActiveRepeatMessage ? null : Colors.transparent,
+                                highlightColor: isActiveRepeatMessage ? null : Colors.transparent,
+                                onTap: isActiveRepeatMessage
+                                    ? () {
+                                        context.read<AuthorizationBloc>().add(GetCodeEvent());
+                                        repeatMessage = [
+                                          const Color.fromRGBO(98, 198, 170, 0.1),
+                                          const Color.fromRGBO(68, 168, 140, 0.1),
+                                          const Color.fromRGBO(82, 182, 154, 0.5),
+                                        ];
+                                        isActiveRepeatMessage = false;
 
-                                          setState(() {});
-                                          Timer(
-                                            const Duration(seconds: 30),
-                                            () {
-                                              repeatMessage = [
-                                                const Color.fromRGBO(98, 198, 170, 0.3),
-                                                const Color.fromRGBO(68, 168, 140, 0.3),
-                                                const Color.fromRGBO(110, 210, 182, 1),
-                                              ];
-                                              isActiveRepeatMessage = true;
-                                              setState(() {});
-                                            },
-                                          );
-                                        }
-                                      : null,
-                                  child: SizedBox.expand(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            repeatMessage[0],
-                                            repeatMessage[1],
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: const Color.fromRGBO(98, 198, 170, 1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: getHeight(context, 5),
-                                        ),
-                                        child: Text(
-                                          'Послать код\n повторно',
-                                          textAlign: TextAlign.center,
-                                          style: TextLocalStyles.roboto500.copyWith(
-                                            color: repeatMessage[2],
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(8),
-                                  splashColor: isActiveLogIn ? null : Colors.transparent,
-                                  highlightColor: isActiveLogIn ? null : Colors.transparent,
-                                  onTap: () {
-                                    String codeStr = code.join();
-                                    if (isActiveLogIn) {
-                                      if (codeStr == '0000'){//authState.code) {
-                                        isStop = true;
                                         setState(() {});
                                         Timer(
-                                          const Duration(milliseconds: 500),
+                                          const Duration(seconds: 30),
                                           () {
-
-                                            if (authState.authToken != null && authState.region == null) {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (_) => const ScreenAddInformation(),
-                                                  ),
-                                                );
-                                              }
-                                            else
-                                              {
-
-                                                    Navigator.pushReplacementNamed(context, '/nb/journal_1/');
-
-
-                                            }
-
-                                          },
-                                        );
-                                      } else {
-                                        for (int i = 0; i < 4; i++) {
-                                          changeCode('-1');
-                                        }
-                                        borderColorField = Colors.red;
-                                        setState(() {});
-
-                                        Timer(
-                                          const Duration(milliseconds: 500),
-                                          () {
-                                            borderColorField = context.read<ThemeBloc>().state.isDark
-                                                ? const Color.fromRGBO(124, 68, 121, 1)
-                                                : const Color.fromRGBO(238, 173, 235, 1);
+                                            repeatMessage = [
+                                              const Color.fromRGBO(98, 198, 170, 0.3),
+                                              const Color.fromRGBO(68, 168, 140, 0.3),
+                                              const Color.fromRGBO(110, 210, 182, 1),
+                                            ];
+                                            isActiveRepeatMessage = true;
+                                            setState(() {});
                                           },
                                         );
                                       }
-                                    }
-                                  },
-                                  child: SizedBox.expand(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [
-                                            logIn[0],
-                                            logIn[1],
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color: const Color.fromRGBO(98, 198, 170, 1),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Войти',
-                                            textAlign: TextAlign.center,
-                                            style: TextLocalStyles.roboto500.copyWith(
-                                              color: logIn[2],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: getWidth(context, 10),
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svg/arrow.svg',
-                                            fit: BoxFit.scaleDown,
-                                            colorFilter:
-                                                ColorFilter.mode(logIn[2], BlendMode.srcIn),
-                                          ),
+                                    : null,
+                                child: SizedBox.expand(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          repeatMessage[0],
+                                          repeatMessage[1],
                                         ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: const Color.fromRGBO(98, 198, 170, 1),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: getHeight(context, 5),
+                                      ),
+                                      child: Text(
+                                        'Послать код\n повторно',
+                                        textAlign: TextAlign.center,
+                                        style: TextLocalStyles.roboto500.copyWith(
+                                          color: repeatMessage[2],
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: getHeight(context, 56),
-                        ),
-                        for (int i = 0; i < 3; i++) ...[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              for (int k = 0; k < 3; k++)
-                                InkWell(
-                                  borderRadius: BorderRadius.circular(8),
-                                  onTap: () {
-                                    changeCode(keyboardTitle[k + i * 3]);
-                                    setState(() {});
-                                  },
-                                  child: buttonKeyboard(
-                                    context,
-                                    title: keyboardTitle[k + i * 3],
-                                    subtitle: keyboardSubtitle[k + i * 3],
-                                  ),
-                                ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: getHeight(context, 8),
-                          ),
-                        ],
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: getWidth(context, 106),
                             ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(8),
-                              onTap: () {
-                                changeCode('0');
-
-                                setState(() {});
-                              },
-                              child: buttonKeyboard(
-                                context,
-                                title: '0',
-                                subtitle: '',
-                              ),
+                            const SizedBox(
+                              width: 6,
                             ),
-                            SizedBox(
-                              width: getWidth(context, 106),
+                            Expanded(
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(8),
+                                splashColor: isActiveLogIn ? null : Colors.transparent,
+                                highlightColor: isActiveLogIn ? null : Colors.transparent,
                                 onTap: () {
-                                  changeCode('-1');
-                                  setState(() {});
+                                  String codeStr = code.join();
+                                  if (isActiveLogIn) {
+                                    if (codeStr == '0000') {
+                                      //authState.code) {
+                                      isStop = true;
+                                      setState(() {});
+                                      Timer(
+                                        const Duration(milliseconds: 500),
+                                        () {
+                                          if (authState.authToken != null &&
+                                              authState.region == null) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => const ScreenAddInformation(),
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/nb/journal_1/');
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      for (int i = 0; i < 4; i++) {
+                                        changeCode('-1');
+                                      }
+                                      borderColorField = Colors.red;
+                                      setState(() {});
+
+                                      Timer(
+                                        const Duration(milliseconds: 500),
+                                        () {
+                                          borderColorField = context.read<ThemeBloc>().state.isDark
+                                              ? const Color.fromRGBO(124, 68, 121, 1)
+                                              : const Color.fromRGBO(238, 173, 235, 1);
+                                        },
+                                      );
+                                    }
+                                  }
                                 },
-                                child: SvgPicture.asset('assets/svg/erase.svg'),
+                                child: SizedBox.expand(
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          logIn[0],
+                                          logIn[1],
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: const Color.fromRGBO(98, 198, 170, 1),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Войти',
+                                          textAlign: TextAlign.center,
+                                          style: TextLocalStyles.roboto500.copyWith(
+                                            color: logIn[2],
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: getWidth(context, 10),
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/svg/arrow.svg',
+                                          fit: BoxFit.scaleDown,
+                                          colorFilter: ColorFilter.mode(logIn[2], BlendMode.srcIn),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
+                      ),
+                      SizedBox(
+                        height: getHeight(context, 56),
+                      ),
+                      for (int i = 0; i < 3; i++) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            for (int k = 0; k < 3; k++)
+                              InkWell(
+                                borderRadius: BorderRadius.circular(8),
+                                onTap: () {
+                                  changeCode(keyboardTitle[k + i * 3]);
+                                  setState(() {});
+                                },
+                                child: buttonKeyboard(
+                                  context,
+                                  title: keyboardTitle[k + i * 3],
+                                  subtitle: keyboardSubtitle[k + i * 3],
+                                ),
+                              ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: getHeight(context, 8),
+                        ),
                       ],
-                    ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: getWidth(context, 106),
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () {
+                              changeCode('0');
+
+                              setState(() {});
+                            },
+                            child: buttonKeyboard(
+                              context,
+                              title: '0',
+                              subtitle: '',
+                            ),
+                          ),
+                          SizedBox(
+                            width: getWidth(context, 106),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                changeCode('-1');
+                                setState(() {});
+                              },
+                              child: SvgPicture.asset('assets/svg/erase.svg'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-            );
-          },
-        );
-      }
-    );
+            ),
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -585,8 +578,8 @@ class _Screen14State extends State<Screen14> {
         child: Align(
           alignment: AlignmentDirectional.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.only(
-              bottom: getHeight(context, 16),
+            padding: const EdgeInsets.only(
+              bottom: 16,
             ),
             child: Text(
               code[index],
@@ -594,7 +587,7 @@ class _Screen14State extends State<Screen14> {
                 color: context.read<ThemeBloc>().state.isDark
                     ? const Color.fromRGBO(255, 255, 255, 1)
                     : const Color.fromRGBO(88, 88, 88, 1),
-                fontSize: code[index] == '_' ? getHeight(context, 34) : getHeight(context, 40),
+                fontSize: code[index] == '_' ? 34 : 40,
                 fontFamily: 'Digital',
                 fontWeight: FontWeight.w500,
               ),

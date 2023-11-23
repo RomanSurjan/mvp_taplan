@@ -35,8 +35,11 @@ class Screen26State extends State<Screen26> {
   int group = 0;
   Map contacts = {};
   List<int> count = [0, 0, 0, 0, 0];
+  List<String> dateStr = List.generate(5, (index) => '31.12.9999');
+  List<DateTime> dateBirthday = List.generate(5, (index) => DateTime(9999));
 
   void updateContacts() {
+
     buffContacts.clear();
     visibleContacts.clear();
     count = [0, 0, 0, 0, 0];
@@ -44,6 +47,18 @@ class Screen26State extends State<Screen26> {
       for (int k = 0; k < int.parse(contacts['people'].length.toString()); k++) {
         if (contacts['people'][k]['cat'] == (i + 1)) {
           count[i]++;
+          if(int.parse(dateStr[i].substring(6,)) > int.parse(contacts['people'][k]['birthday'].substring(0,4)))
+            {
+              dateStr[i] = contacts['people'][k]['birthday'].substring(8,) + '.' + contacts['people'][k]['birthday'].substring(5,7) + '.' + contacts['people'][k]['birthday'].substring(0,4);
+            }
+          else if (int.parse(dateStr[i].substring(3,5)) > int.parse(contacts['people'][k]['birthday'].substring(5,7)))
+            {
+              dateStr[i] = contacts['people'][k]['birthday'].substring(8,) + '.' + contacts['people'][k]['birthday'].substring(5,7) + '.' + contacts['people'][k]['birthday'].substring(0,4);
+            }
+          else if (int.parse(dateStr[i].substring(0,2)) > int.parse(contacts['people'][k]['birthday'].substring(8,)))
+            {
+              dateStr[i] = contacts['people'][k]['birthday'].substring(8,) + '.' + contacts['people'][k]['birthday'].substring(5,7) + '.' + contacts['people'][k]['birthday'].substring(0,4);
+            }
         }
       }
     }
@@ -72,10 +87,22 @@ class Screen26State extends State<Screen26> {
         'sex': context.read<AuthorizationBloc>().state.sex,
         'person_photo': context.read<AuthorizationBloc>().state.photo,
         'phoneNumber': context.read<AuthorizationBloc>().state.phone,
-        'telegram': context.read<AuthorizationBloc>().state.telegram,
-        'email': context.read<AuthorizationBloc>().state.email,
+        'telegram': context.read<AuthorizationBloc>().state.telegram ?? '',
+        'email': context.read<AuthorizationBloc>().state.email ?? '',
         'region': context.read<AuthorizationBloc>().state.region,
       };
+      if(int.parse(dateStr[0].substring(6,)) > int.parse(visibleContacts[0]['birthday'].substring(0,4)))
+      {
+        dateStr[0] = visibleContacts[0]['birthday'].substring(8,) + '.' + visibleContacts[0]['birthday'].substring(5,7) + '.' + visibleContacts[0]['birthday'].substring(0,4);
+      }
+      else if (int.parse(dateStr[0].substring(3,5)) > int.parse(visibleContacts[0]['birthday'].substring(5,7)))
+      {
+        dateStr[0] = visibleContacts[0]['birthday'].substring(8,) + '.' + visibleContacts[0]['birthday'].substring(5,7) + '.' + visibleContacts[0]['birthday'].substring(0,4);
+      }
+      else if (int.parse(dateStr[0].substring(0,2)) > int.parse(visibleContacts[0]['birthday'].substring(8,)))
+      {
+        dateStr[0] = visibleContacts[0]['birthday'].substring(8,) + '.' + visibleContacts[0]['birthday'].substring(5,7) + '.' + visibleContacts[0]['birthday'].substring(0,4);
+      }
       length = 1;
     }
 
@@ -218,7 +245,7 @@ class Screen26State extends State<Screen26> {
                         top: getHeight(context, 18),
                       ),
                     ),
-                    bottomNavBar(context),
+                    // bottomNavBar(context),
                   ],
                 ),
               ),
@@ -571,7 +598,7 @@ class Screen26State extends State<Screen26> {
                     buttonGroupIsPressed[i] = true;
                     updateContacts();
                     setState(() {});
-                  },
+                  }, date: dateStr[i]=='31.12.9999' ? '**.**.****' : dateStr[i],
                 ),
             ],
           ),
@@ -721,7 +748,7 @@ class Screen26State extends State<Screen26> {
               MaterialPageRoute(
                 builder: (_) => ScreenAddContact(
                   groupId: groupId,
-                  contacts: contacts,
+                  contacts: contacts, idButton: -1,
                 ),
               ),
             ).then(
@@ -733,7 +760,7 @@ class Screen26State extends State<Screen26> {
         child: Stack(
           children: [
             SizedBox(
-              height: getHeight(context, 50),
+              height: 52,
               width: getWidth(context, 348),
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -778,7 +805,7 @@ class Screen26State extends State<Screen26> {
               ),
             ),
             SizedBox(
-              height: getHeight(context, 50),
+              height: 52,
               width: getWidth(context, 348),
               child: DottedBorder(
                 borderType: BorderType.RRect,
@@ -800,7 +827,27 @@ class Screen26State extends State<Screen26> {
 
   Widget buttonContact(BuildContext context, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        int groupId = 0;
+        for (int i = 0; i < 5; i++) {
+          if (buttonGroupIsPressed[i] == true) {
+            groupId = i;
+            break;
+          }
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ScreenAddContact(
+              groupId: groupId,
+              contacts: contacts, idButton: index,
+            ),
+          ),
+        ).then(
+              (_) => {getContacts()},
+        );
+        setState(() {});
+      },
       child: SizedBox(
         height: getHeight(context, 36),
         width: getWidth(context, 36),

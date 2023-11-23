@@ -34,14 +34,14 @@ class _Screen39State extends State<Screen39> {
                 controller: controller,
                 itemBuilder: (context, index) {
                   return VideoPlayerItem(
-                    videoUrl: state.videosList[index],
+                    videoModel: state.videosList[index],
                     label: state.contentList[index].label,
                     pageIndex: state.contentList[index].page,
                     fromShowcase: widget.fromShowcase,
                   );
                 },
                 itemCount: state.videosList.length,
-                scrollDirection: Axis.vertical,
+                scrollDirection: Axis.vertical
               ),
             ),
           );

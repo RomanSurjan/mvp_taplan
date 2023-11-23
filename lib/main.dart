@@ -13,7 +13,7 @@ import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_bloc.dart';
 import 'package:mvp_taplan/features/load_screen/load_screen.dart';
 import 'package:mvp_taplan/features/screen_228/screen_228.dart';
 import 'package:mvp_taplan/features/screen_30/screen_30.dart';
-import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
+import 'package:mvp_taplan/features/screen_38/screen_38.dart';
 
 void main() {
   runApp(const MyApp());
@@ -96,14 +96,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  PageController pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    return
-        PageView(
-          children: const [
-            Screen30(bloggerId: 1),
-            Screen38(),
-          ]
-        );
+    return PageView(
+      controller: pageController,
+      children: [
+        const Screen30(bloggerId: 1),
+        Screen38(
+          onBack: () {
+            pageController.animateToPage(
+              0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.linear,
+            );
+          },
+        ),
+      ],
+    );
   }
 }

@@ -60,6 +60,9 @@ class _Screen215State extends State<Screen215> {
     true,
   ];
 
+  bool isLiked = false;
+  late int? likes = widget.currentModel.likes;
+
   void setLabelsAndPrices() {
     labels = [
       'до ${widget.currentModel.gradeNameThird}',
@@ -111,17 +114,25 @@ class _Screen215State extends State<Screen215> {
                         SizedBox(
                           height: getHeight(context, 343),
                           width: getWidth(context, 343),
-                          child: Image.network(
-                            (isPickedMoney[0]
-                                    ? widget.currentModel.gradePhotoThird
-                                    : isPickedMoney[1]
-                                        ? widget.currentModel.gradePhotoSecond
-                                        : widget.currentModel.gradePhotoFirst) ??
-                                widget.currentModel.smallImage,
-                            fit: BoxFit.fill,
+                          child: ColoredBox(
+                            color: const Color.fromRGBO(234, 216, 222, 1),
+                            child: Image.network(
+                              (isPickedMoney[0]
+                                      ? widget.currentModel.gradePhotoThird
+                                      : isPickedMoney[1]
+                                          ? widget.currentModel.gradePhotoSecond
+                                          : widget.currentModel.gradePhotoFirst) ??
+                                  widget.currentModel.smallImage,
+                              fit: widget.currentModel.videoId != null
+                                  ? BoxFit.fitHeight
+                                  : BoxFit.cover,
+                              width: widget.currentModel.videoId != null
+                                  ? getWidth(context, 193)
+                                  : null,
+                            ),
                           ),
                         ),
-                        if (widget.currentModel.videoId != null)
+                        if (widget.currentModel.videoId != null) ...[
                           Positioned.fill(
                             top: getHeight(context, 17),
                             right: getWidth(context, 14),
@@ -156,21 +167,52 @@ class _Screen215State extends State<Screen215> {
                                   ),
                                   buildControlButton(
                                     context,
-                                    'assets/svg/share-alt.svg',
+                                     svgImage: 'assets/svg/share-alt.svg',
+                                     value: null,
                                   ),
                                   const Expanded(child: SizedBox()),
                                   buildControlButton(
                                     context,
-                                    'assets/svg/heart.svg',
+                                    svgImage:'assets/svg/heart.svg',
+                                    value: likes,
+                                    callback: (){
+                                      isLiked = !isLiked;
+                                      if(isLiked){
+                                        likes = likes! + 1;
+                                      }else{
+                                        likes = likes! - 1;
+                                      }
+                                      setState(() {});
+                                    },
+                                    iconColor: isLiked? Colors.red : Colors.white,
                                   ),
                                   buildControlButton(
                                     context,
-                                    'assets/svg/comment.svg',
+                                    svgImage: 'assets/svg/comment.svg',
+                                    value: widget.currentModel.comments,
                                   ),
                                 ],
                               ),
                             ),
                           ),
+                          Positioned(
+                            left: getWidth(context, 5),
+                            top: getHeight(context, 12),
+                            child: Row(
+                              children: [
+                                buildSmallIcon(context, 'assets/images/inst.png'),
+                                buildSmallIcon(context, 'assets/images/youtube.png'),
+                                buildSmallIcon(context, 'assets/images/vk.png'),
+                                buildSmallIcon(context, 'assets/images/tiktok.png'),
+                              ],
+                            ),
+                          ),
+                          Positioned(
+                            left: getWidth(context, 13),
+                            top: getHeight(context, 280),
+                            child: buyYourSelf(context, 'assets/svg/buy_yourself.svg'),
+                          ),
+                        ],
                       ],
                     ),
                     Padding(
@@ -338,24 +380,61 @@ class _Screen215State extends State<Screen215> {
     );
   }
 
-  Widget buildControlButton(BuildContext context, String svgImage) {
+  Widget buildControlButton(
+    BuildContext context, {
+    required String svgImage,
+    int? value,
+    VoidCallback? callback,
+    Color? iconColor,
+  }) {
+    return InkWell(
+      onTap: (){
+        callback?.call();
+      },
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            svgImage,
+            colorFilter: ColorFilter.mode(
+              iconColor ?? Colors.white,
+              BlendMode.srcIn,
+            ),
+          ),
+          Text(
+            value.toString(),
+            style: TextLocalStyles.roboto600.copyWith(
+              color: Colors.white,
+              fontSize: getHeight(context, 14),
+              height: 16.41 / 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildSmallIcon(BuildContext context, String image) {
+    return Image.asset(
+      image,
+      height: getHeight(context, 18),
+      width: getHeight(context, 18),
+      fit: BoxFit.fitHeight,
+    );
+  }
+
+  Widget buyYourSelf(BuildContext context, String svgImage) {
     return Column(
       children: [
-        SvgPicture.asset(
-          svgImage,
-          colorFilter: const ColorFilter.mode(
-            Colors.white,
-            BlendMode.srcIn,
-          ),
-        ),
+        SvgPicture.asset('assets/svg/buy_yourself.svg'),
         Text(
-          '8',
+          'Купить себе',
           style: TextLocalStyles.roboto600.copyWith(
-            color: Colors.white,
-            fontSize: getHeight(context, 14),
-            height: 16.41 / 14,
+            fontSize: getHeight(context, 10),
+            height: 11.72 / 10,
+            color: const Color.fromRGBO(236, 55, 77, 1),
+            fontWeight: FontWeight.w600,
           ),
-        ),
+        )
       ],
     );
   }

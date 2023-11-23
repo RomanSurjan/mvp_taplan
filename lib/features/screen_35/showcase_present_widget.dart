@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/models/sum_to_string.dart';
 
 import 'package:mvp_taplan/theme/colors.dart';
@@ -47,197 +48,200 @@ class ShowcasePresentWidget extends StatelessWidget {
       onDoubleTap: () {
         callback?.call();
       },
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Image.network(
-                photo,
-                fit: BoxFit.cover,
-                width: width,
-                height: height,
-              ),
-              SizedBox(
-                width: width,
-                height: height,
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 1, bottom: 2),
-                          child: Container(
-                            height: 9,
-                            width: 33,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF).withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(1.0),
-                            ),
-                            child: Text(
-                              " ${investedPercentage.toStringAsFixed(1)}%  ",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Color(0xFFFFFFFF),
-                                fontSize: 9,
-                                fontFamily: 'Roboto',
-                                fontWeight: FontWeight.w400
-                                // height: 0.9,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Expanded(child: SizedBox(height: 1)),
-                        Container(
-                          margin: const EdgeInsets.only(right: 3, bottom: 0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(height: iconPadding),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 18,
-                                    width: 18,
-                                    child: Image.asset(
-                                      'assets/images/video.png',
-                                      fit:BoxFit.scaleDown,
-                                    )
-                                  ),
-                                  const SizedBox(height: 2),
-                                  const Text(
-                                    '0',
-                                    style: TextStyle(
-                                      color: Color(0xFFFFFFFF),
-                                      fontSize: 9,
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ]
-                              ),
-                              const SizedBox(height: iconPadding),
-                              const SocialIcon(
-                                icon: 'assets/svg/share-alt.svg',
-                                color: Color(0xFFFFFFFF),
-                                count: 0,
-                              ),
-                              SizedBox(height: tensilePart),
-                              SocialIcon(
-                                icon: 'assets/svg/comment.svg',
-                                color: const Color(0xFFFFFFFF),
-                                count: comments,
-                              ),
-                              const SizedBox(height: iconPadding),
-                              SocialIcon(
-                                icon: 'assets/svg/heart.svg',
-                                color: liked
-                                    ? const Color(0xFFFF0000)
-                                    : const Color(0xFFFFFFFF),
-                                count: likes,
-                              ),
-                              const SizedBox(height: iconPadding)
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width,
-                      height: 11,
-                      child: Stack(
-                        alignment: Alignment.center,
+      child: ColoredBox(
+        color: const Color.fromRGBO(234, 216, 222, 1),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.topLeft,
+              children: [
+                Image.network(
+                  photo,
+                  fit: BoxFit.cover,
+                  width: width - getWidth(context, 24),
+                  height: height,
+                ),
+                SizedBox(
+                  width: width,
+                  height: height,
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: invested,
-                                    child: Container(
-                                      alignment: Alignment.centerLeft,
-                                      height: 11,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
+                          Container(
+                            margin: const EdgeInsets.only(left: 1, bottom: 2),
+                            child: Container(
+                              height: 9,
+                              width: 33,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF).withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(1.0),
+                              ),
+                              child: Text(
+                                " ${investedPercentage.toStringAsFixed(1)}%  ",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: 9,
+                                  fontFamily: 'Roboto',
+                                  fontWeight: FontWeight.w400
+                                  // height: 0.9,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Expanded(child: SizedBox(height: 1)),
+                          Container(
+                            margin: const EdgeInsets.only(right: 3, bottom: 0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(height: iconPadding),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 18,
+                                      width: 18,
+                                      child: Image.asset(
+                                        'assets/images/video.png',
+                                        fit:BoxFit.scaleDown,
+                                      )
+                                    ),
+                                    const SizedBox(height: 2),
+                                    const Text(
+                                      '0',
+                                      style: TextStyle(
+                                        color: Color(0xFFFFFFFF),
+                                        fontSize: 9,
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                                const SizedBox(height: iconPadding),
+                                const SocialIcon(
+                                  icon: 'assets/svg/share-alt.svg',
+                                  color: Color(0xFFFFFFFF),
+                                  count: 0,
+                                ),
+                                SizedBox(height: tensilePart),
+                                SocialIcon(
+                                  icon: 'assets/svg/comment.svg',
+                                  color: const Color(0xFFFFFFFF),
+                                  count: comments,
+                                ),
+                                const SizedBox(height: iconPadding),
+                                SocialIcon(
+                                  icon: 'assets/svg/heart.svg',
+                                  color: liked
+                                      ? const Color(0xFFFF0000)
+                                      : const Color(0xFFFFFFFF),
+                                  count: likes,
+                                ),
+                                const SizedBox(height: iconPadding)
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: width,
+                        height: 11,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: invested,
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 11,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            colors: [
+                                              AppTheme.wishListScaleLeftColor.withOpacity(0.3),
+                                              AppTheme.wishListScaleLeftColor.withOpacity(0.6),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: total - invested,
+                                      child: Container(
+                                        alignment: Alignment.centerRight,
+                                        height: 11,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
                                           begin: Alignment.centerLeft,
                                           end: Alignment.centerRight,
                                           colors: [
-                                            AppTheme.wishListScaleLeftColor.withOpacity(0.3),
-                                            AppTheme.wishListScaleLeftColor.withOpacity(0.6),
+                                            AppTheme.wishListScaleRightColor.withOpacity(0.3),
+                                            AppTheme.wishListScaleRightColor.withOpacity(0.6),
                                           ],
                                         ),
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: total - invested,
-                                    child: Container(
-                                      alignment: Alignment.centerRight,
-                                      height: 11,
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          AppTheme.wishListScaleRightColor.withOpacity(0.3),
-                                          AppTheme.wishListScaleRightColor.withOpacity(0.6),
-                                        ],
-                                      ),
-                                    ),
+                                  ],
+                                ),
+                              ]
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  " ${sumToString(invested)}",
+                                  style: const TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontSize: 9,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ),
-                                ],
-                              ),
-                            ]
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                " ${sumToString(invested)}",
-                                style: const TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 9,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                strutStyle: const StrutStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 9,
-                                  height: 0.9,
-                                  leading: 0.5,
-                                )
-                              ),
-                              Text(
-                                "${sumToString(total)} ",
-                                style: const TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 9,
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                ),
                                   strutStyle: const StrutStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 9,
                                     height: 0.9,
                                     leading: 0.5,
                                   )
-                              ),
-                            ],
-                          ),
-                        ],
+                                ),
+                                Text(
+                                  "${sumToString(total)} ",
+                                  style: const TextStyle(
+                                    color: Color(0xFFFFFFFF),
+                                    fontSize: 9,
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                    strutStyle: const StrutStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 9,
+                                      height: 0.9,
+                                      leading: 0.5,
+                                    )
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ]
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 1)
-        ],
+              ],
+            ),
+            const SizedBox(height: 1),
+          ],
+        ),
       ),
     );
   }

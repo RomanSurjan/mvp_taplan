@@ -1,14 +1,14 @@
 part of 'models.dart';
 
 class VideoPlayerItem extends StatefulWidget {
-  final String videoUrl;
+  final MvpVideoModel videoModel;
   final String label;
   final int pageIndex;
   final bool fromShowcase;
 
   const VideoPlayerItem({
     super.key,
-    required this.videoUrl,
+    required this.videoModel,
     required this.label,
     required this.pageIndex,
     required this.fromShowcase,
@@ -30,7 +30,10 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   }
 
   void _initPlayer() async {
-    videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    videoPlayerController = VideoPlayerController.networkUrl(
+      Uri.parse(widget.videoModel.videoUrl),
+      videoPlayerOptions: VideoPlayerOptions(),
+    );
 
     await videoPlayerController.initialize().then(
       (_) {
@@ -54,21 +57,17 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  videoPlayerController.value.isInitialized
-                      ? AspectRatio(
-                          aspectRatio: videoPlayerController.value.aspectRatio,
-                          child: VideoPlayer(
-                            videoPlayerController,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ],
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: videoPlayerController.value.size.width,
+                height: videoPlayerController.value.size.height,
+                child: videoPlayerController.value.isInitialized
+                    ? VideoPlayer(
+                        videoPlayerController,
+                      )
+                    : const SizedBox.shrink(),
               ),
             ),
           ),
@@ -89,7 +88,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                 Navigator.pop(context);
               },
               child: SizedBox(
-                height: getHeight(context, 285),
+                height: getHeight(context, 315),
                 width: getWidth(context, 45),
                 child: ColoredBox(
                   color: const Color.fromRGBO(63, 63, 63, 0.4),
@@ -114,7 +113,7 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                         ),
                       ),
                       RotatedBox(
-                        quarterTurns: 3,
+                        quarterTurns: 4,
                         child: Text(
                           widget.pageIndex >= 10 ? '${widget.pageIndex}' : '0${widget.pageIndex}',
                           style: TextLocalStyles.gputeks500.copyWith(
@@ -131,32 +130,88 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
               ),
             ),
           ),
-          Positioned(
-            right: getWidth(context, 10),
-            top: getHeight(context, 10),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                child: SizedBox(
-                  height: getHeight(context, 40),
-                  width: getHeight(context, 40),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white70,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      size: getHeight(context, 40),
-                      color: Colors.blue,
+          if (widget.videoModel.presentId != null)
+            Positioned(
+              right: getWidth(context, 10),
+              top: getHeight(context, 10),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: InkWell(
+                  onTap: () {
+                    context.read<JournalBloc>().add(
+                          GetPresentEvent(
+                            presentId: widget.videoModel.presentId!,
+                            context: context,
+                          ),
+                        );
+                  },
+                  child: SizedBox(
+                    height: getHeight(context, 40),
+                    width: getHeight(context, 40),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white70,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: Icon(
+                        Icons.arrow_back_outlined,
+                        size: getHeight(context, 40),
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          )
+          Positioned(
+            left: getWidth(context, 328),
+            top: getHeight(context, 500),
+            child: Column(
+              children: [
+                buildControlButton(
+                  context,
+                  'assets/svg/heart.svg',
+                  widget.videoModel.likes,
+                ),
+                SizedBox(height: getHeight(context, 10)),
+                buildControlButton(
+                  context,
+                  'assets/svg/comment.svg',
+                  widget.videoModel.comments,
+                ),
+                SizedBox(height: getHeight(context, 10)),
+                buildControlButton(
+                  context,
+                  'assets/svg/share-alt.svg',
+                  widget.videoModel.comments,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+}
+
+Widget buildControlButton(BuildContext context, String svgImage, int value) {
+  return Column(
+    children: [
+      SvgPicture.asset(
+        svgImage,
+        colorFilter: const ColorFilter.mode(
+          Colors.white,
+          BlendMode.srcIn,
+        ),
+      ),
+      Text(
+        value.toString(),
+        style: TextLocalStyles.roboto600.copyWith(
+          color: Colors.white,
+          fontSize: getHeight(context, 14),
+          height: 16.41 / 14,
+        ),
+      ),
+    ],
+  );
 }

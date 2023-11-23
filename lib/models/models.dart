@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
+import 'package:mvp_taplan/blocs/journal_bloc/journal_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_event.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';

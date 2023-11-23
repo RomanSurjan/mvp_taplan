@@ -1,15 +1,19 @@
-abstract class JournalEvent{
+import 'package:flutter/material.dart';
 
-}
+abstract class JournalEvent {}
 
-class GetJournalContentEvent extends JournalEvent{
+class GetJournalContentEvent extends JournalEvent {
   final int bloggerId;
-  GetJournalContentEvent({required this.bloggerId});
 
+  GetJournalContentEvent({required this.bloggerId});
 }
 
-class CheckHasProductEvent extends JournalEvent{
-  final int videoId;
+class GetPresentEvent extends JournalEvent {
+  final int presentId;
+  final BuildContext context;
 
-  CheckHasProductEvent({required this.videoId});
+  GetPresentEvent({
+    required this.presentId,
+    required this.context,
+  });
 }

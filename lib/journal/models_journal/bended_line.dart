@@ -22,7 +22,7 @@ class BendedLinePainter extends CustomPainter{
     final line = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = halfLineWidth * 2;
+      ..strokeWidth = halfLineWidth;
 
     canvas.drawLine(
         Offset(size.width, halfLineWidth),

@@ -17,6 +17,8 @@ class MvpPresentModel {
   String? gradePhotoSecond;
   String? gradePhotoThird;
   int? videoId;
+  int? likes;
+  int? comments;
 
 
   MvpPresentModel({
@@ -38,5 +40,7 @@ class MvpPresentModel {
     this.gradePhotoSecond,
     this.gradePhotoThird,
     this.videoId,
+    this.likes,
+    this.comments,
   });
 }

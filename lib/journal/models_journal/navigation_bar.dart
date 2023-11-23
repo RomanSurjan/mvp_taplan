@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mvp_taplan/journal/features/screen_38/screen_38.dart';
+import 'package:mvp_taplan/features/screen_38/screen_38.dart';
 import 'package:mvp_taplan/models/models.dart';
 
 class CustomNavigationBar extends StatelessWidget {

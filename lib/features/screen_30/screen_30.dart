@@ -56,7 +56,8 @@ class Screen30State extends State<Screen30> {
   void initState() {
     super.initState();
 
-    if(widget.bloggerId != context.read<CoverBloc>().state.bloggerId || context.read<CoverBloc>().state.myDreamDate.isEmpty) {
+    if (widget.bloggerId != context.read<CoverBloc>().state.bloggerId ||
+        context.read<CoverBloc>().state.myDreamDate.isEmpty) {
       //TODO вынести логику в COVERBLOC
       context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
       context.read<DateTimeBloc>().add(SetTimeToStreamEvent(bloggerId: widget.bloggerId));
@@ -65,33 +66,6 @@ class Screen30State extends State<Screen30> {
     context.read<WishListBloc>().add(GetWishListEvent(bloggerId: widget.bloggerId));
     context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(bloggerId: widget.bloggerId, cat: 5));
     context.read<JournalBloc>().add(GetJournalContentEvent(bloggerId: widget.bloggerId));
-    if (context.read<CoverBloc>().state.myDreamDate.isNotEmpty) {
-      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
-      DateTime dateOfBorn = DateTime(
-        int.parse(dateBorn.substring(0, 4)),
-        int.parse(dateBorn.substring(5, 7)),
-        int.parse(dateBorn.substring(8, 10)),
-        int.parse(dateBorn.substring(11, 13)),
-      );
-      update = Timer.periodic(
-        const Duration(seconds: 1),
-            (timer) {
-          DateTime nowDate = DateTime.now();
-          range = DateTime(
-            dateOfBorn.year - nowDate.year,
-            dateOfBorn.month - nowDate.month,
-            dateOfBorn.day - nowDate.day,
-            dateOfBorn.hour - nowDate.hour,
-            dateOfBorn.minute - nowDate.minute,
-            dateOfBorn.second - nowDate.second,
-          );
-          if(mounted) {
-            setState(() {});
-          }
-        },
-      );
-    }
-
   }
 
   @override
@@ -119,7 +93,32 @@ class Screen30State extends State<Screen30> {
 
                 return BlocBuilder<CoverBloc, CoverState>(
                   builder: (context, coverState) {
-
+                    if (coverState.myDreamDate.isNotEmpty) {
+                      String dateBorn = context.read<CoverBloc>().state.myDreamDate;
+                      DateTime dateOfBorn = DateTime(
+                        int.parse(dateBorn.substring(0, 4)),
+                        int.parse(dateBorn.substring(5, 7)),
+                        int.parse(dateBorn.substring(8, 10)),
+                        int.parse(dateBorn.substring(11, 13)),
+                      );
+                      update = Timer.periodic(
+                        const Duration(seconds: 1),
+                        (timer) {
+                          DateTime nowDate = DateTime.now();
+                          range = DateTime(
+                            dateOfBorn.year - nowDate.year,
+                            dateOfBorn.month - nowDate.month,
+                            dateOfBorn.day - nowDate.day,
+                            dateOfBorn.hour - nowDate.hour,
+                            dateOfBorn.minute - nowDate.minute,
+                            dateOfBorn.second - nowDate.second,
+                          );
+                          if (mounted) {
+                            setState(() {});
+                          }
+                        },
+                      );
+                    }
                     return Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
@@ -138,7 +137,10 @@ class Screen30State extends State<Screen30> {
                             alignment: Alignment.topCenter,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10),
-                              child: SvgPicture.asset('assets/svg/logo_cover.svg', width: getWidth(context, 340),),
+                              child: SvgPicture.asset(
+                                'assets/svg/logo_cover.svg',
+                                width: getWidth(context, 340),
+                              ),
                             ),
                           ),
                           Positioned.fill(
@@ -585,7 +587,8 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
             quarterTurns: 2,
             child: InkWell(
               onTap: () {
-                final flowerModel = state.wishList.where((element) => element.position == 3).toList()[0];
+                final flowerModel =
+                    state.wishList.where((element) => element.position == 3).toList()[0];
                 context
                     .read<PostcardBloc>()
                     .add(ChangeHolidayTypeEvent(currentHolidayType: HolidayType.stream));

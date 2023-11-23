@@ -45,6 +45,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
           'present_id': event.id,
         },
       );
+
       final currentPresentModel = MvpPresentModel(
         bigImage: response.data['present_info']['present_photo_2'],
         smallImage: response.data['present_info']['present_photo_1'],
@@ -64,6 +65,8 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
         gradePhotoSecond: response.data['small_grades']['grade_photo_2'],
         gradePhotoThird: response.data['small_grades']['grade_photo_3'],
         videoId: response.data['present_info']['present_video'],
+        likes: response.data['present_info']['likes'],
+        comments:  response.data['present_info']['comments'],
       );
 
       navigationToScreen215(event.context, currentPresentModel);

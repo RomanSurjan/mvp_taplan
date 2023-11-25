@@ -142,11 +142,11 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
 
               final bool isPortraitOrientation =
               ((MediaQuery.of(context).size.height / MediaQuery.of(context).size.width) >
-                  1.856);
+                  1.96);
 
               final double columnWidth = (isPortraitOrientation)
                   ? MediaQuery.of(context).size.width
-                  : (MediaQuery.of(context).size.height / 1.856);
+                  : (MediaQuery.of(context).size.height / 1.96);
               // final double investedSumPercentage = (investedSum / totalSum * 100);
               // final double cardWight = (columnWidth - 16) / 3;
               // final double cardHeight = cardWight / 114 * 161;
@@ -173,7 +173,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                               fit: BoxFit.cover,
                             ),
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(
                           title,
                           style: TextStyle(
@@ -182,7 +182,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                             fontWeight: FontWeight.w400
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 4),
                         SizeRow(
                           sizeList: sizeChart,
                           onTap: (){},
@@ -446,15 +446,15 @@ class SizeRowButton extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15,
                         color: textColor,
-                        fontWeight: FontWeight.w300
+                        fontWeight: FontWeight.w400
                       )
                     ),
                     Text(
                       secondCaption,
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 11,
                         color: textColor,
-                        fontWeight: FontWeight.w300
+                        fontWeight: FontWeight.w400
                       )
                     ),
                     const Expanded(child: SizedBox())

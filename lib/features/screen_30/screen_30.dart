@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
-import 'package:mvp_taplan/blocs/authorization_bloc/authorization_event.dart';
 import 'package:mvp_taplan/blocs/authorization_bloc/authorization_state.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_bloc.dart';
 import 'package:mvp_taplan/blocs/cover_bloc/cover_event.dart';

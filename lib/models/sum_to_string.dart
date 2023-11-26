@@ -1,3 +1,5 @@
+part of 'models.dart';
+
 String sumToString(int value){
   String stringValue = value.toString();
   if(value ~/ 1000 != 0){

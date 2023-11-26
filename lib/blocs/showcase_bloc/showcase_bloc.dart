@@ -14,12 +14,14 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
             name: '',
             presents: [],
           ),
+          showcaseButtons: [],
         )) {
     on<GetShowcaseCardsEvent>(_onGetShowcase);
     on<GetShowcasePresentInfoEvent>(_onGetPresentInfo);
   }
 
   _onGetShowcase(GetShowcaseCardsEvent event, Emitter<ShowcaseState> emitter) async {
+    List<ShowcaseButton> showcaseButtons = [];
     final response = await Dio().post(
       'https://qviz.fun/api/v1/get/wishlist/',
       data: {
@@ -30,9 +32,23 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
 
     final UserModel userModel = UserModel.fromJson(response.data);
 
+    for (int i = 0; i < response.data['cat'].length; i++) {
+      String cat = response.data['cat'][i]['cat'];
+
+      showcaseButtons.add(
+        ShowcaseButton(
+          id: response.data['cat'][i]['id'],
+          cat: cat.replaceAll(r'\n', '\n'),
+          icon: 'https://qviz.fun${response.data['cat'][i]['icon']}',
+          available: response.data['cat'][i]['available'] == 1,
+        ),
+      );
+    }
+
     emitter(
       state.copyWith(
         userModel: userModel,
+        showcaseButtons: showcaseButtons,
       ),
     );
   }
@@ -66,7 +82,7 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
         gradePhotoThird: response.data['small_grades']['grade_photo_3'],
         videoId: response.data['present_info']['present_video'],
         likes: response.data['present_info']['likes'],
-        comments:  response.data['present_info']['comments'],
+        comments: response.data['present_info']['comments'],
       );
 
       navigationToScreen215(event.context, currentPresentModel);

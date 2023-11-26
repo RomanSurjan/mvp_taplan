@@ -40,3 +40,5 @@ part 'text_field.dart';
 part 'button_green.dart';
 
 part 'video_player_item.dart';
+
+part 'sum_to_string.dart';

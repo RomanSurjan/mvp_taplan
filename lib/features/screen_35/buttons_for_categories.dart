@@ -57,7 +57,7 @@ class ButtonGroup extends StatelessWidget {
                 ),
               ],
             ),
-            child: Image.asset(
+            child: Image.network(
               picture,
               fit: BoxFit.fill,
             ),

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_state.dart';
+import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
@@ -13,7 +14,6 @@ import 'package:mvp_taplan/features/screen_214/screen_214.dart';
 import 'package:mvp_taplan/features/screen_39/screen_39.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
-import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -61,6 +61,7 @@ class _Screen215State extends State<Screen215> {
   ];
 
   bool isLiked = false;
+  bool isAuthorized = false;
   late int? likes = widget.currentModel.likes;
 
   void setLabelsAndPrices() {
@@ -176,13 +177,15 @@ class _Screen215State extends State<Screen215> {
                                     svgImage:'assets/svg/heart.svg',
                                     value: likes,
                                     callback: (){
-                                      isLiked = !isLiked;
-                                      if(isLiked){
-                                        likes = likes! + 1;
-                                      }else{
-                                        likes = likes! - 1;
+                                      if(context.read<AuthorizationBloc>().state.authToken != null) {
+                                        isLiked = !isLiked;
+                                        if (isLiked) {
+                                          likes = likes! + 1;
+                                        } else {
+                                          likes = likes! - 1;
+                                        }
+                                        setState(() {});
                                       }
-                                      setState(() {});
                                     },
                                     iconColor: isLiked? Colors.red : Colors.white,
                                   ),
@@ -401,7 +404,7 @@ class _Screen215State extends State<Screen215> {
             ),
           ),
           Text(
-            value.toString(),
+            value != null ? value.toString() : '0',
             style: TextLocalStyles.roboto600.copyWith(
               color: Colors.white,
               fontSize: getHeight(context, 14),

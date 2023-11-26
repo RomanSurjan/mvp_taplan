@@ -14,7 +14,6 @@ import 'package:mvp_taplan/blocs/wish_list_bloc/wish_list_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
 import 'package:mvp_taplan/models/models.dart';
-import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 

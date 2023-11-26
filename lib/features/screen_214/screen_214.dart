@@ -16,7 +16,6 @@ import 'package:mvp_taplan/features/screen_215/screen_215.dart';
 import 'package:mvp_taplan/features/screen_28/screen_28.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
-import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 

@@ -19,21 +19,6 @@ class Screen35 extends StatefulWidget {
 }
 
 class _Screen35State extends State<Screen35> {
-  static const List<String> iconsForButtons = [
-    'assets/images/button_flower.png',
-    'assets/images/button_jewelry.png',
-    'assets/images/button_fashion.png',
-    'assets/images/button_tour.png',
-    'assets/images/button_art.png',
-  ];
-
-  static const List<String> namesOfButtons = [
-    "Авторские\nбукеты",
-    'Ювелирные\nукрашение',
-    'Картины\nхудожников',
-    'Авторские\nфотографии',
-    'Скульптура\nи декор',
-  ];
 
   int catNumber = 5;
 
@@ -61,7 +46,7 @@ class _Screen35State extends State<Screen35> {
                   : (MediaQuery.of(context).size.height / 2.056);
               final double investedSumPercentage = (investedSum / totalSum * 100);
               final double cardWight = (columnWidth - 16) / 3;
-              final double cardHeight = cardWight / 114 * 161;
+              final double cardHeight = cardWight / 114 * 165;
               final buttonSize = columnWidth / 375 * 62;
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +89,7 @@ class _Screen35State extends State<Screen35> {
                                   'Ближайший праздник',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: themeState.birthdayLabelShowcase,//Color(0xFF7FA4EA),
+                                    color: themeState.birthdayLabelShowcase, //Color(0xFF7FA4EA),
                                     fontSize: 13.5,
                                     // decoration: TextDecoration.underline
                                   ),
@@ -118,10 +103,10 @@ class _Screen35State extends State<Screen35> {
                                 ),
                                 Text(
                                   '${state.userModel.celebrate.day}.'
-                                      '${state.userModel.celebrate.month} '
-                                      '(дней до события - '
-                                      '${state.userModel.celebrate.countDaysTo}'
-                                      ')',
+                                  '${state.userModel.celebrate.month} '
+                                  '(дней до события - '
+                                  '${state.userModel.celebrate.countDaysTo}'
+                                  ')',
                                   style: TextLocalStyles.roboto400.copyWith(
                                     color: themeState.secondaryTextColorShowcase,
                                     fontSize: 12,
@@ -131,11 +116,7 @@ class _Screen35State extends State<Screen35> {
                             ),
                             const Expanded(child: SizedBox()),
                             InkWell(
-                              onTap: () {
-                                //context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(2));
-                                //catNumber = 0;
-                                //setState(() {});
-                              },
+                              onTap: () {},
                               child: SizedBox(
                                 width: 62,
                                 height: 62,
@@ -168,7 +149,9 @@ class _Screen35State extends State<Screen35> {
                                         child: SvgPicture.asset(
                                           'assets/svg/share.svg',
                                           colorFilter: const ColorFilter.mode(
-                                              Color.fromRGBO(82, 182, 154, 1), BlendMode.srcIn),
+                                            Color.fromRGBO(82, 182, 154, 1),
+                                            BlendMode.srcIn,
+                                          ),
                                           fit: BoxFit.fitHeight,
                                         ),
                                       )
@@ -191,13 +174,12 @@ class _Screen35State extends State<Screen35> {
                                     ShowcasePresentWidget(
                                       callback: () {
                                         context.read<ShowcaseBloc>().add(
-                                          GetShowcasePresentInfoEvent(
-                                            id: int.tryParse(
-                                              state.userModel.presents[i * 3 + j].id
-                                            )!,
-                                            context: context,
-                                          ),
-                                        );
+                                              GetShowcasePresentInfoEvent(
+                                                id: int.tryParse(
+                                                    state.userModel.presents[i * 3 + j].id)!,
+                                                context: context,
+                                              ),
+                                            );
                                       },
                                       id: state.userModel.presents[i * 3 + j].id,
                                       photo: state.userModel.presents[i * 3 + j].photo,
@@ -238,21 +220,28 @@ class _Screen35State extends State<Screen35> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            for (int i = 0; i < iconsForButtons.length; i++)
+                            for (int i = 0; i < state.showcaseButtons.length; i++)
                               ButtonGroup(
-                                colorMain: (catNumber - 1 == i)
+                                colorMain: (!state.showcaseButtons[i].available || catNumber == state.showcaseButtons[i].id)
                                     ? const Color.fromRGBO(82, 182, 154, 1)
                                     : const Color.fromRGBO(110, 210, 182, 1),
-                                picture: iconsForButtons[i],
-                                text: namesOfButtons[i],
+                                picture: state.showcaseButtons[i].icon,
+                                text: state.showcaseButtons[i].cat,
                                 size: buttonSize,
-                                isPressed: catNumber - 1 == i,
-                                onTap: () {},
+                                isPressed: !state.showcaseButtons[i].available || catNumber == state.showcaseButtons[i].id,
+                                onTap: () {
+                                  if(state.showcaseButtons[i].available) {
+                                    context
+                                        .read<ShowcaseBloc>()
+                                        .add(GetShowcaseCardsEvent(cat: state.showcaseButtons[i].id, bloggerId: 1));
+                                    catNumber = state.showcaseButtons[i].id;
+                                    setState(() {});
+                                  }
+                                },
                               )
                           ],
                         ),
                         const SizedBox(height: 3),
-                        // const Expanded(child: SizedBox()),
                       ],
                     ),
                   )

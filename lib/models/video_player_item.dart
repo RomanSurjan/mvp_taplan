@@ -138,12 +138,16 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
                 alignment: Alignment.topRight,
                 child: InkWell(
                   onTap: () {
-                    context.read<JournalBloc>().add(
-                          GetPresentEvent(
-                            presentId: widget.videoModel.presentId!,
-                            context: context,
-                          ),
-                        );
+                    if (widget.fromShowcase) {
+                      Navigator.pop(context);
+                    } else {
+                      context.read<JournalBloc>().add(
+                            GetPresentEvent(
+                              presentId: widget.videoModel.presentId!,
+                              context: context,
+                            ),
+                          );
+                    }
                   },
                   child: SizedBox(
                     height: getHeight(context, 40),

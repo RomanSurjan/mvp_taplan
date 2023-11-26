@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mvp_taplan/models/sum_to_string.dart';
-
+import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 
 class ShowcasePresentWidget extends StatelessWidget {
   final VoidCallback? callback;
   final String id;
   final String photo;
-  final int video;
+  final int? video;
   final int invested;
   final int total;
   final bool boughtEarly;
@@ -47,22 +46,22 @@ class ShowcasePresentWidget extends StatelessWidget {
       onDoubleTap: () {
         callback?.call();
       },
-      child: ColoredBox(
-        color: const Color.fromRGBO(234, 216, 222, 1),
-        child: Column(
-          children: [
-            Stack(
+      child: Column(
+        children: [
+          ColoredBox(
+            color: const Color.fromRGBO(234, 216, 222, 1),
+            child: Stack(
               alignment: Alignment.topLeft,
               children: [
                 Image.network(
                   photo,
                   fit: BoxFit.cover,
                   width: width - getWidth(context, 24),
-                  height: height,
+                  height: height+ getHeight(context, 3),
                 ),
                 SizedBox(
                   width: width,
-                  height: height,
+                  height: height + getHeight(context, 3),
                   child: Column(
                     children: [
                       Row(
@@ -238,9 +237,9 @@ class ShowcasePresentWidget extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 1),
-          ],
-        ),
+          ),
+          const SizedBox(height: 1),
+        ],
       ),
     );
   }

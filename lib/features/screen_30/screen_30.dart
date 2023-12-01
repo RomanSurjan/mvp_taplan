@@ -56,7 +56,8 @@ class Screen30State extends State<Screen30> {
   void initState() {
     super.initState();
 
-    if(widget.bloggerId != context.read<CoverBloc>().state.bloggerId || context.read<CoverBloc>().state.myDreamDate.isEmpty) {
+    if (widget.bloggerId != context.read<CoverBloc>().state.bloggerId ||
+        context.read<CoverBloc>().state.myDreamDate.isEmpty) {
       //TODO вынести логику в COVERBLOC
       context.read<CoverBloc>().add(GetCoverEvent(bloggerId: widget.bloggerId));
       context.read<DateTimeBloc>().add(SetTimeToStreamEvent(bloggerId: widget.bloggerId));
@@ -596,6 +597,7 @@ Widget bouquetOfTheWeek(BuildContext context, DateTime range) {
                   MaterialPageRoute(
                     builder: (_) => Screen215(
                       currentModel: flowerModel,
+                      fromShowcase: false,
                     ),
                   ),
                 );

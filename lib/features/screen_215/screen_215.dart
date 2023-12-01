@@ -1,10 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_bloc.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_event.dart';
 import 'package:mvp_taplan/blocs/additional_sum_bloc/buy_together_state.dart';
-import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/blocs/journal_bloc/journal_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
@@ -16,6 +16,7 @@ import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'money_scale.dart';
 
@@ -25,10 +26,14 @@ part 'pick_your_money_container.dart';
 
 class Screen215 extends StatefulWidget {
   final MvpPresentModel currentModel;
+  final bool fromShowcase;
+  final VoidCallback? onBack;
 
   const Screen215({
     super.key,
     required this.currentModel,
+    required this.fromShowcase,
+    this.onBack,
   });
 
   @override
@@ -60,7 +65,7 @@ class _Screen215State extends State<Screen215> {
     true,
   ];
 
-  bool isLiked = false;
+  late bool isLiked = widget.currentModel.liked != 0 && widget.currentModel.liked != null;
   bool isAuthorized = false;
   late int? likes = widget.currentModel.likes;
 
@@ -93,6 +98,10 @@ class _Screen215State extends State<Screen215> {
   Widget build(BuildContext context) {
     if (labels == null || prices == null) return const SizedBox.shrink();
     return MvpScaffoldModel(
+      onBack: (){
+        widget.onBack?.call();
+        Navigator.pop(context);
+      },
       appBarLabel: 'Внести часть средств\nна подарок за компанию',
       child: BlocBuilder<BuyTogetherBloc, BuyTogetherState>(
         builder: (context, state) {
@@ -124,16 +133,16 @@ class _Screen215State extends State<Screen215> {
                                           ? widget.currentModel.gradePhotoSecond
                                           : widget.currentModel.gradePhotoFirst) ??
                                   widget.currentModel.smallImage,
-                              fit: widget.currentModel.videoId != null
+                              fit: widget.currentModel.videoId != null || widget.fromShowcase
                                   ? BoxFit.fitHeight
                                   : BoxFit.cover,
-                              width: widget.currentModel.videoId != null
+                              width: widget.currentModel.videoId != null || widget.fromShowcase
                                   ? getWidth(context, 193)
                                   : null,
                             ),
                           ),
                         ),
-                        if (widget.currentModel.videoId != null) ...[
+                        if (widget.fromShowcase) ...[
                           Positioned.fill(
                             top: getHeight(context, 17),
                             right: getWidth(context, 14),
@@ -142,52 +151,78 @@ class _Screen215State extends State<Screen215> {
                               alignment: Alignment.topRight,
                               child: Column(
                                 children: [
-                                  InkWell(
-                                    onTap: () {
-                                      final contentList =
-                                          context.read<JournalBloc>().state.contentList;
-                                      int currentVideoIndex = -1;
-                                      for (var el in contentList) {
-                                        if (el.videos.contains(widget.currentModel.videoId)) {
-                                          currentVideoIndex = contentList.indexOf(el);
+                                  if (widget.currentModel.videoId != null)
+                                    InkWell(
+                                      onTap: () {
+                                        final contentList =
+                                            context.read<JournalBloc>().state.contentList;
+                                        int currentVideoIndex = -1;
+                                        for (var el in contentList) {
+                                          if (el.videos.contains(widget.currentModel.videoId)) {
+                                            currentVideoIndex = contentList.indexOf(el);
+                                          }
                                         }
-                                      }
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => Screen39(
-                                            initialIndex: currentVideoIndex,
-                                            fromShowcase: true,
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => Screen39(
+                                              initialIndex: currentVideoIndex,
+                                              fromShowcase: true,
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    child: Image.asset(
-                                      'assets/images/video_button.png',
+                                        );
+                                      },
+                                      child: Image.asset(
+                                        'assets/images/video_button.png',
+                                      ),
                                     ),
-                                  ),
                                   buildControlButton(
                                     context,
-                                     svgImage: 'assets/svg/share-alt.svg',
-                                     value: null,
+                                    svgImage: 'assets/svg/share-alt.svg',
+                                    value: null,
                                   ),
                                   const Expanded(child: SizedBox()),
                                   buildControlButton(
                                     context,
-                                    svgImage:'assets/svg/heart.svg',
+                                    svgImage: 'assets/svg/heart.svg',
                                     value: likes,
-                                    callback: (){
-                                      if(context.read<AuthorizationBloc>().state.authToken != null) {
+                                    callback: () async {
+                                      final prefs = await SharedPreferences.getInstance();
+                                      final token = prefs.getString('auth_token');
+
+                                      if (token != null) {
                                         isLiked = !isLiked;
                                         if (isLiked) {
                                           likes = likes! + 1;
+                                          await Dio().post(
+                                            'https://qviz.fun/api/v1/like/present/',
+                                            data: {
+                                              'present': widget.currentModel.id,
+                                            },
+                                            options: Options(
+                                              headers: {
+                                                'Authorization': 'Token $token',
+                                              },
+                                            ),
+                                          );
                                         } else {
                                           likes = likes! - 1;
+                                          await Dio().post(
+                                            'https://qviz.fun/api/v1/like/present/',
+                                            data: {
+                                              'present': widget.currentModel.id,
+                                            },
+                                            options: Options(
+                                              headers: {
+                                                'Authorization': 'Token $token',
+                                              },
+                                            ),
+                                          );
                                         }
                                         setState(() {});
                                       }
                                     },
-                                    iconColor: isLiked? Colors.red : Colors.white,
+                                    iconColor: isLiked ? Colors.red : Colors.white,
                                   ),
                                   buildControlButton(
                                     context,
@@ -391,7 +426,7 @@ class _Screen215State extends State<Screen215> {
     Color? iconColor,
   }) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         callback?.call();
       },
       child: Column(

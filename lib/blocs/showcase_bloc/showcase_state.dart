@@ -4,22 +4,26 @@ class ShowcaseState {
   UserModel userModel;
   MvpPresentModel? currentPresentModel;
   List<ShowcaseButton> showcaseButtons;
+  int currentCat;
 
   ShowcaseState({
     required this.userModel,
     this.currentPresentModel,
     required this.showcaseButtons,
+    required this.currentCat,
   });
 
   ShowcaseState copyWith({
     UserModel? userModel,
     MvpPresentModel? currentPresentModel,
     List<ShowcaseButton>? showcaseButtons,
+    int? currentCat,
   }) {
     return ShowcaseState(
       userModel: userModel ?? this.userModel,
       currentPresentModel: currentPresentModel ?? this.currentPresentModel,
       showcaseButtons: showcaseButtons ?? this.showcaseButtons,
+      currentCat: currentCat ?? this.currentCat,
     );
   }
 }
@@ -93,18 +97,19 @@ class ShowcaseCard {
   final bool liked;
   final int comments;
 
-  ShowcaseCard(
-      {required this.id,
-      required this.photo,
-      this.video,
-      required this.invested,
-      required this.total,
-      required this.boughtEarly,
-      required this.groupPurchase,
-      required this.deliver,
-      required this.likes,
-      required this.liked,
-      required this.comments});
+  ShowcaseCard({
+    required this.id,
+    required this.photo,
+    this.video,
+    required this.invested,
+    required this.total,
+    required this.boughtEarly,
+    required this.groupPurchase,
+    required this.deliver,
+    required this.likes,
+    required this.liked,
+    required this.comments,
+  });
 
   factory ShowcaseCard.fromJson(Map<String, dynamic> json) {
     return ShowcaseCard(
@@ -117,7 +122,7 @@ class ShowcaseCard {
         groupPurchase: json['group_purchase'] as bool,
         deliver: json['deliver'] != 0,
         likes: json['likes'] as int,
-        liked: json['liked'] != 0,
+        liked: json['liked'] != 0 && json['liked'] != null,
         comments: json['comments'] as int);
   }
 }

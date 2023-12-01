@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mvp_taplan/blocs/authorization_bloc/authorization_bloc.dart';
 import 'package:mvp_taplan/features/screen_12/screen_12.dart';
 import 'package:mvp_taplan/features/screen_26/screen_26.dart';
 import 'package:mvp_taplan/features/screen_35/screen_35.dart';
@@ -11,8 +9,9 @@ import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomNavigationBar extends StatelessWidget {
+class CustomNavigationBar extends StatefulWidget {
   static const svgForBar = [
     'assets/svg/home.svg',
     'assets/svg/book_heart.svg',
@@ -32,6 +31,25 @@ class CustomNavigationBar extends StatelessWidget {
   });
 
   @override
+  State<CustomNavigationBar> createState() => _CustomNavigationBarState();
+}
+
+class _CustomNavigationBarState extends State<CustomNavigationBar> {
+  String? authToken;
+
+  void getAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    authToken = prefs.getString('auth_token');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getAuthToken();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
@@ -44,7 +62,7 @@ class CustomNavigationBar extends StatelessWidget {
           SizedBox(
             width: getWidth(context, 371),
             height: getHeight(context, 40),
-            child: isTelegram
+            child: widget.isTelegram
                 ? DecoratedBox(
                     decoration: BoxDecoration(
                       color: const Color.fromRGBO(255, 255, 250, 1),
@@ -57,7 +75,7 @@ class CustomNavigationBar extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: Text(
-                              context.read<AuthorizationBloc>().state.authToken == null
+                              authToken == null
                                   ? 'Для запроса на подписку на канал\nпредлагаем Вам зарегестироваться'
                                   : 'Запрос отправлен',
                               textAlign: TextAlign.center,
@@ -78,7 +96,9 @@ class CustomNavigationBar extends StatelessWidget {
                               child: SvgPicture.asset(
                                 'assets/svg/arrow_down_long.svg',
                                 colorFilter: const ColorFilter.mode(
-                                    Color.fromRGBO(57, 57, 57, 1), BlendMode.srcIn),
+                                  Color.fromRGBO(57, 57, 57, 1),
+                                  BlendMode.srcIn,
+                                ),
                               ),
                             ),
                           ),
@@ -96,8 +116,8 @@ class CustomNavigationBar extends StatelessWidget {
               children: [
                 rectangleMainBarItem(
                   context,
-                  svg: svgForBar[0],
-                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                  svg: CustomNavigationBar.svgForBar[0],
+                  onTap: authToken == null
                       ? () {
                           Navigator.push(
                             context,
@@ -109,15 +129,15 @@ class CustomNavigationBar extends StatelessWidget {
                           );
                         }
                       : () {},
-                  isActive: context.read<AuthorizationBloc>().state.authToken == null,
+                  isActive: authToken == null,
                 ),
                 const SizedBox(
                   width: 9,
                 ),
                 rectangleMainBarItem(
                   context,
-                  svg: svgForBar[1],
-                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                  svg: CustomNavigationBar.svgForBar[1],
+                  onTap: authToken == null
                       ? () {}
                       : () {
                           Navigator.push(
@@ -127,24 +147,22 @@ class CustomNavigationBar extends StatelessWidget {
                             ),
                           );
                         },
-                  isActive:
-                      context.read<AuthorizationBloc>().state.authToken == null ? false : true,
+                  isActive: authToken != null,
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                circleMainBarItem(context, svg: svgForBar[2]),
+                circleMainBarItem(context, svg: CustomNavigationBar.svgForBar[2]),
                 const SizedBox(
                   width: 10,
                 ),
                 rectangleMainBarItem(
                   context,
-                  svg: svgForBar[3],
-                  onTap: context.read<AuthorizationBloc>().state.authToken == null
+                  svg: CustomNavigationBar.svgForBar[3],
+                  onTap: authToken == null
                       ? () {
-                    //Share.share(Uri.base.toString(),subject: Uri.base.toString());
-                    Share.shareUri(Uri.base);
-                  }
+                          Share.shareUri(Uri.base);
+                        }
                       : () {
                           Navigator.push(
                             context,
@@ -158,14 +176,19 @@ class CustomNavigationBar extends StatelessWidget {
                 const SizedBox(
                   width: 9,
                 ),
-                rectangleMainBarItem(context, svg: svgForBar[4], onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const Screen35(),
-                    ),
-                  );
-                }, isActive: true),
+                rectangleMainBarItem(
+                  context,
+                  svg: CustomNavigationBar.svgForBar[4],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const Screen35(),
+                      ),
+                    );
+                  },
+                  isActive: true,
+                ),
               ],
             ),
           ),
@@ -174,8 +197,12 @@ class CustomNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget rectangleMainBarItem(BuildContext context,
-      {required String svg, required VoidCallback onTap, required bool isActive}) {
+  Widget rectangleMainBarItem(
+    BuildContext context, {
+    required String svg,
+    required VoidCallback onTap,
+    required bool isActive,
+  }) {
     return InkWell(
       onTap: onTap,
       child: SizedBox(
@@ -221,7 +248,7 @@ class CustomNavigationBar extends StatelessWidget {
     return InkWell(
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: onTapTelegram,
+      onTap: widget.onTapTelegram,
       child: SizedBox(
         height: getWidth(context, 65),
         width: getWidth(context, 65),
@@ -240,7 +267,7 @@ class CustomNavigationBar extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.topRight,
             ),
-            boxShadow: !isTelegram
+            boxShadow: !widget.isTelegram
                 ? [
                     const BoxShadow(
                       offset: Offset(-4, -4),

@@ -19,6 +19,7 @@ class MvpPresentModel {
   int? videoId;
   int? likes;
   int? comments;
+  int? liked;
 
 
   MvpPresentModel({
@@ -42,5 +43,6 @@ class MvpPresentModel {
     this.videoId,
     this.likes,
     this.comments,
+    this.liked,
   });
 }

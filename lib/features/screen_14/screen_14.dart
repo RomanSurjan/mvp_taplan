@@ -118,7 +118,7 @@ class _Screen14State extends State<Screen14> {
     //context.read<AuthorizationBloc>().add(GetCodeEvent());
     context.read<AuthorizationBloc>().add(GetDataEvent());
 
-    //TODO Разобраться с кодом
+    //TODO Разобраться с кодом  
     Timer.periodic(
       const Duration(milliseconds: 500),
       (timer) {

@@ -244,6 +244,7 @@ class _Screen214State extends State<Screen214> {
                                 MaterialPageRoute(
                                   builder: (_) => Screen215(
                                     currentModel: widget.currentModel,
+                                    fromShowcase: false,
                                   ),
                                 ),
                               );

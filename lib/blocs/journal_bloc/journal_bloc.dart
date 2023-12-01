@@ -110,11 +110,13 @@ class JournalBloc extends Bloc<JournalEvent, JournalState> {
       videoId: response.data['present_info']['present_video'],
     );
 
-
     Navigator.push(
       event.context,
       MaterialPageRoute(
-        builder: (_) => Screen215(currentModel: currentPresentModel),
+        builder: (_) => Screen215(
+          currentModel: currentPresentModel,
+          fromShowcase: false,
+        ),
       ),
     );
   }

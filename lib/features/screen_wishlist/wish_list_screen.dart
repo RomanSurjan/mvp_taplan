@@ -81,6 +81,7 @@ class WishListScreenState extends State<WishListScreen> {
                                 MaterialPageRoute(
                                   builder: (_) => Screen215(
                                     currentModel: state.currentModel!,
+                                    fromShowcase: false,
                                   ),
                                 ),
                               );

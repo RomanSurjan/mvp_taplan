@@ -12,7 +12,6 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
-import 'package:mvp_taplan/models/sum_to_string.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
 
@@ -31,7 +30,6 @@ class Screen214Clothes extends StatefulWidget {
 }
 
 class _Screen214ClothesState extends State<Screen214Clothes> {
-
   bool isFirstPicked = false;
   bool isSecondPicked = true;
   bool isThirdPicked = false;
@@ -64,7 +62,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '43,5',
       firstState: SizeState.opaque,
       secondState: SizeState.opaque,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'XS',
@@ -73,7 +71,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '44',
       firstState: SizeState.opaque,
       secondState: SizeState.opaque,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'S',
@@ -82,7 +80,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '45',
       firstState: SizeState.selected,
       secondState: SizeState.selected,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'M',
@@ -91,7 +89,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '46',
       firstState: SizeState.opaque,
       secondState: SizeState.opaque,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'L',
@@ -100,7 +98,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '46,5',
       firstState: SizeState.opaque,
       secondState: SizeState.opaque,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'XL',
@@ -109,7 +107,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '47',
       firstState: SizeState.opaque,
       secondState: SizeState.opaque,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
     SizeModel(
       firstCaption: 'XXL',
@@ -118,7 +116,7 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
       fourthCaption: '48',
       firstState: SizeState.transparent,
       secondState: SizeState.transparent,
-      thirdState: SizeState.transparent
+      thirdState: SizeState.transparent,
     ),
   ];
 
@@ -139,17 +137,12 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
         builder: (context, state) {
           return BlocBuilder<ThemeBloc, ThemeState>(
             builder: (context, themeState) {
-
               final bool isPortraitOrientation =
-              ((MediaQuery.of(context).size.height / MediaQuery.of(context).size.width) >
-                  1.96);
+                  ((MediaQuery.of(context).size.height / MediaQuery.of(context).size.width) > 1.96);
 
               final double columnWidth = (isPortraitOrientation)
                   ? MediaQuery.of(context).size.width
                   : (MediaQuery.of(context).size.height / 1.96);
-              // final double investedSumPercentage = (investedSum / totalSum * 100);
-              // final double cardWight = (columnWidth - 16) / 3;
-              // final double cardHeight = cardWight / 114 * 161;
               final buttonSize = columnWidth / 375 * 62;
 
               return Row(
@@ -161,17 +154,17 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                     child: Column(
                       children: [
                         SizedBox(
-                            height: columnWidth - 32,
-                            width: columnWidth - 32,
-                            child: Image.network(
-                              (isFirstPicked
-                                  ? widget.currentModel.gradePhotoThird
-                                  : isSecondPicked
-                                      ? widget.currentModel.gradePhotoSecond
-                                      : widget.currentModel.gradePhotoFirst) ??
-                                          widget.currentModel.smallImage,
-                              fit: BoxFit.cover,
-                            ),
+                          height: columnWidth - 32,
+                          width: columnWidth - 32,
+                          child: Image.network(
+                            (isFirstPicked
+                                    ? widget.currentModel.gradePhotoThird
+                                    : isSecondPicked
+                                        ? widget.currentModel.gradePhotoSecond
+                                        : widget.currentModel.gradePhotoFirst) ??
+                                widget.currentModel.smallImage,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -179,15 +172,15 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                           style: TextStyle(
                             fontSize: 16,
                             color: Color(themeState.isDark ? 0xFFFFFFFF : 0xFF161A1D),
-                            fontWeight: FontWeight.w400
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         const SizedBox(height: 4),
                         SizeRow(
                           sizeList: sizeChart,
-                          onTap: (){},
+                          onTap: () {},
                           width: columnWidth,
-                          themeState: themeState
+                          themeState: themeState,
                         ),
                         const SizedBox(height: 8),
                         Column(
@@ -199,9 +192,11 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                                 isFirstPicked = true;
                                 isSecondPicked = false;
                                 isThirdPicked = false;
-                                context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(
-                                  additionalSum: widget.currentModel.gradeValueThird
-                                ));
+                                context.read<BuyTogetherBloc>().add(
+                                      SetAdditionalSumEvent(
+                                        additionalSum: widget.currentModel.gradeValueThird,
+                                      ),
+                                    );
                                 setState(() {});
                               },
                               isPicked: isFirstPicked,
@@ -214,9 +209,11 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                                 isFirstPicked = false;
                                 isSecondPicked = true;
                                 isThirdPicked = false;
-                                context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(
-                                  additionalSum: widget.currentModel.gradeValueSecond)
-                                );
+                                context.read<BuyTogetherBloc>().add(
+                                      SetAdditionalSumEvent(
+                                        additionalSum: widget.currentModel.gradeValueSecond,
+                                      ),
+                                    );
                                 setState(() {});
                               },
                               isPicked: isSecondPicked,
@@ -229,9 +226,11 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                                 isFirstPicked = false;
                                 isSecondPicked = false;
                                 isThirdPicked = true;
-                                context.read<BuyTogetherBloc>().add(SetAdditionalSumEvent(
-                                  additionalSum: widget.currentModel.gradeValueFirst)
-                                );
+                                context.read<BuyTogetherBloc>().add(
+                                      SetAdditionalSumEvent(
+                                        additionalSum: widget.currentModel.gradeValueFirst,
+                                      ),
+                                    );
                                 setState(() {});
                               },
                               isPicked: isThirdPicked,
@@ -243,13 +242,13 @@ class _Screen214ClothesState extends State<Screen214Clothes> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             for (int i = 0; i < iconsForButtons.length; i++)
-                                SquareGradientButton(
-                              icon: iconsForButtons[i],
-                              text: namesOfButtons[i],
-                              size: buttonSize,
-                              isActive: buttonsActives[i],
-                              onTap: () {},
-                            )
+                              SquareGradientButton(
+                                icon: iconsForButtons[i],
+                                text: namesOfButtons[i],
+                                size: buttonSize,
+                                isActive: buttonsActives[i],
+                                onTap: () {},
+                              )
                           ],
                         ),
                         const SizedBox(height: 15)
@@ -272,18 +271,16 @@ class SizeRow extends StatelessWidget {
   final double width;
   final ThemeState themeState;
 
-  const SizeRow({
-    super.key,
-    required this.sizeList,
-    required this.onTap,
-    required this.width,
-    required this.themeState
-  });
+  const SizeRow(
+      {super.key,
+      required this.sizeList,
+      required this.onTap,
+      required this.width,
+      required this.themeState});
 
   @override
   Widget build(BuildContext context) {
-
-    final double buttonWidth1 = width / 375 * 43; // 43*44 40*44 40*21 8 2
+    final double buttonWidth1 = width / 375 * 43;
     final double buttonWidth2 = 280 / sizeList.length;
     final double buttonHeight1 = width / 375 * 44;
     final double buttonHeight2 = width / 375 * 22;
@@ -298,25 +295,24 @@ class SizeRow extends StatelessWidget {
               icon: 'assets/images/clothes.png',
               width: buttonWidth1,
               height: buttonHeight1,
-              onTap: (){},
+              onTap: () {},
               state: SizeState.opaque,
-              themeState: themeState
+              themeState: themeState,
             ),
-            for (int i = 0; i < sizeList.length; i++) SizeRowButton(
-              type: SizeButtonType.twoLined,
-              caption: sizeList[i].firstCaption,
-              secondCaption: sizeList[i].secondCaption,
-              width: buttonWidth2,
-              height: buttonHeight1,
-              onTap: (){},
-              state: sizeList[i].firstState,
-              themeState: themeState
-            )
-          ]
+            for (int i = 0; i < sizeList.length; i++)
+              SizeRowButton(
+                type: SizeButtonType.twoLined,
+                caption: sizeList[i].firstCaption,
+                secondCaption: sizeList[i].secondCaption,
+                width: buttonWidth2,
+                height: buttonHeight1,
+                onTap: () {},
+                state: sizeList[i].firstState,
+                themeState: themeState,
+              )
+          ],
         ),
-        SizedBox(
-          height: (width / 375 * 8)
-        ),
+        SizedBox(height: (width / 375 * 8)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -325,42 +321,42 @@ class SizeRow extends StatelessWidget {
               icon: 'assets/images/shoes.png',
               width: buttonWidth1,
               height: buttonHeight1,
-              onTap: (){},
+              onTap: () {},
               state: SizeState.opaque,
-              themeState: themeState
+              themeState: themeState,
             ),
-            for (int i = 0; i < sizeList.length; i++) Column(
-              children: [
-                SizeRowButton(
-                  type: SizeButtonType.oneLined,
-                  caption: sizeList[i].thirdCaption,
-                  width: buttonWidth2,
-                  height: buttonHeight2,
-                  onTap: (){},
-                  state: sizeList[i].secondState,
-                  themeState: themeState
-                ),
-                SizedBox(height: (width / 375 * 2)),
-                SizeRowButton(
-                  type: SizeButtonType.oneLined,
-                  caption: sizeList[i].fourthCaption,
-                  width: buttonWidth2,
-                  height: buttonHeight2,
-                  onTap: (){},
-                  state: sizeList[i].thirdState,
-                  themeState: themeState
-                )
-              ]
-            )
-          ]
+            for (int i = 0; i < sizeList.length; i++)
+              Column(
+                children: [
+                  SizeRowButton(
+                    type: SizeButtonType.oneLined,
+                    caption: sizeList[i].thirdCaption,
+                    width: buttonWidth2,
+                    height: buttonHeight2,
+                    onTap: () {},
+                    state: sizeList[i].secondState,
+                    themeState: themeState,
+                  ),
+                  SizedBox(height: (width / 375 * 2)),
+                  SizeRowButton(
+                    type: SizeButtonType.oneLined,
+                    caption: sizeList[i].fourthCaption,
+                    width: buttonWidth2,
+                    height: buttonHeight2,
+                    onTap: () {},
+                    state: sizeList[i].thirdState,
+                    themeState: themeState,
+                  )
+                ],
+              )
+          ],
         )
-      ]
+      ],
     );
   }
 }
 
 class SizeRowButton extends StatelessWidget {
-
   final String caption;
   final String secondCaption;
   final String icon;
@@ -381,28 +377,29 @@ class SizeRowButton extends StatelessWidget {
     required this.onTap,
     required this.state,
     required this.type,
-    required this.themeState
+    required this.themeState,
   });
 
   @override
   Widget build(BuildContext context) {
     double transparency = 0;
     Color textColor = Color(themeState.isDark ? 0xFFFFFFFF : 0xFF161A1D);
-    switch(state){
+    switch (state) {
       case SizeState.selected:
         transparency = 0.65;
-        break;
+
       case SizeState.opaque:
         transparency = 0.3;
         textColor = Color(themeState.isDark ? 0xFFFFFFFF : 0xFF161A1D).withOpacity(0.75);
-        break;
+
       case SizeState.transparent:
         transparency = 0.1;
         textColor = Color(themeState.isDark ? 0xFFFFFFFF : 0xFF161A1D).withOpacity(0.5);
-        break;
     }
     return InkWell(
-      onTap: () {onTap?.call();},
+      onTap: () {
+        onTap?.call();
+      },
       child: SizedBox(
         height: height,
         width: width,
@@ -411,76 +408,75 @@ class SizeRowButton extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 Color.fromRGBO(98, 198, 170, transparency),
-                Color.fromRGBO(68, 168, 140, transparency)
-              ]
+                Color.fromRGBO(68, 168, 140, transparency),
+              ],
             ),
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               color: const Color.fromRGBO(82, 182, 154, 1),
               width: 1,
-            )
+            ),
           ),
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
-              if (type == SizeButtonType.icon) Center(
-                child: SizedBox(
-                  width: width / 43 * 33,
-                  height: height / 44 * 40,
-                  child: Image.asset(
-                    icon,
-                    fit: BoxFit.fitWidth,
-                    // allowDrawingOutsideViewBox: true,
-                    color: const Color(0xFF000000),
-                    //   BlendMode.clear
-                    // ),
-                  )
-                )
-              ),
-              if (type == SizeButtonType.twoLined) Center(
-                child: Column(
-                  children: [
-                    const Expanded(child: SizedBox()),
-                    Text(
-                      caption,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: textColor,
-                        fontWeight: FontWeight.w400
-                      )
+              if (type == SizeButtonType.icon)
+                Center(
+                  child: SizedBox(
+                    width: width / 43 * 33,
+                    height: height / 44 * 40,
+                    child: Image.asset(
+                      icon,
+                      fit: BoxFit.fitWidth,
+                      color: const Color(0xFF000000),
                     ),
-                    Text(
-                      secondCaption,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: textColor,
-                        fontWeight: FontWeight.w400
-                      )
+                  ),
+                ),
+              if (type == SizeButtonType.twoLined)
+                Center(
+                  child: Column(
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      Text(
+                        caption,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: textColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        secondCaption,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: textColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const Expanded(child: SizedBox())
+                    ],
+                  ),
+                ),
+              if (type == SizeButtonType.oneLined)
+                Center(
+                  child: Text(
+                    caption,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: textColor,
+                      fontWeight: FontWeight.w400,
                     ),
-                    const Expanded(child: SizedBox())
-                  ]
-                )
-              ),
-              if (type == SizeButtonType.oneLined) Center(
-                child: Text(
-                  caption,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: textColor,
-                    fontWeight: FontWeight.w400
-                  )
-                )
-              )
-            ]
-          )
-        )
-      )
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-class SizeModel{
-
+class SizeModel {
   final String firstCaption;
   final String secondCaption;
   final String thirdCaption;
@@ -489,22 +485,19 @@ class SizeModel{
   final SizeState secondState;
   final SizeState thirdState;
 
-
-  SizeModel({
-    required this.firstCaption,
-    required this.secondCaption,
-    required this.thirdCaption,
-    required this.fourthCaption,
-    required this.firstState,
-    required this.secondState,
-    required this.thirdState
-  });
-
+  SizeModel(
+      {required this.firstCaption,
+      required this.secondCaption,
+      required this.thirdCaption,
+      required this.fourthCaption,
+      required this.firstState,
+      required this.secondState,
+      required this.thirdState});
 }
 
-enum SizeState {selected, opaque, transparent}
+enum SizeState { selected, opaque, transparent }
 
-enum SizeButtonType {icon, oneLined, twoLined}
+enum SizeButtonType { icon, oneLined, twoLined }
 
 class SquareGradientButton extends StatelessWidget {
   final String icon;
@@ -519,7 +512,7 @@ class SquareGradientButton extends StatelessWidget {
     required this.size,
     required this.onTap,
     required this.isActive,
-    required this.text
+    required this.text,
   });
 
   @override
@@ -527,59 +520,61 @@ class SquareGradientButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         Timer(
-            const Duration(milliseconds: 500),
-                () {onTap?.call();},
-          );
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: size,
-              width: size,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(98, 198, 170, isActive? 0.3 : 0.1),
-                      Color.fromRGBO(68, 168, 140, isActive? 0.3 : 0.1),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: const Color.fromRGBO(82, 182, 154, 1),
-                    width: 1,
-                  ),
+          const Duration(milliseconds: 500),
+          () {
+            onTap?.call();
+          },
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: size,
+            width: size,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromRGBO(98, 198, 170, isActive ? 0.3 : 0.1),
+                    Color.fromRGBO(68, 168, 140, isActive ? 0.3 : 0.1),
+                  ],
                 ),
-                child: Center(
-                    child: SizedBox(
-                      width: size / 31 * 20,
-                      height: size / 31 * 20,
-                      child: SvgPicture.asset(
-                        icon,
-                        colorFilter: ColorFilter.mode(
-                          Color.fromRGBO(82, 182, 154, isActive? 1 : 0.5),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    )
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: const Color.fromRGBO(82, 182, 154, 1),
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: SizedBox(
+                  width: size / 31 * 20,
+                  height: size / 31 * 20,
+                  child: SvgPicture.asset(
+                    icon,
+                    colorFilter: ColorFilter.mode(
+                      Color.fromRGBO(82, 182, 154, isActive ? 1 : 0.5),
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 4,
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Text(
+            text,
+            style: TextLocalStyles.roboto400.copyWith(
+              color: context.read<ThemeBloc>().state.appBarTextColor,
+              fontSize: 10,
+              height: 11.02 / 10,
             ),
-            Text(
-              text,
-              style: TextLocalStyles.roboto400.copyWith(
-                color: context.read<ThemeBloc>().state.appBarTextColor,
-                fontSize: 10,
-                height: 11.02 / 10,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        )
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

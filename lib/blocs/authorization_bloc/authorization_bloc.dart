@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'authorization_event.dart';
 import 'authorization_state.dart';
@@ -185,6 +186,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
   }
 
   _onLogin(LoginEvent event, Emitter<AuthState> emitter) async {
+    final prefs = await SharedPreferences.getInstance();
     try {
       String phone = event.phone;
       if(!event.phone.contains('+'))
@@ -204,6 +206,8 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
           },
         ),
       );
+
+      prefs.setString('auth_token', response.data['auth_token']);
 
       emitter(
         AuthorizationState().copyWith(

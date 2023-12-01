@@ -19,7 +19,6 @@ class Screen35 extends StatefulWidget {
 }
 
 class _Screen35State extends State<Screen35> {
-
   int catNumber = 5;
 
   @override
@@ -180,6 +179,7 @@ class _Screen35State extends State<Screen35> {
                                                 context: context,
                                               ),
                                             );
+
                                       },
                                       id: state.userModel.presents[i * 3 + j].id,
                                       photo: state.userModel.presents[i * 3 + j].photo,
@@ -222,18 +222,19 @@ class _Screen35State extends State<Screen35> {
                           children: [
                             for (int i = 0; i < state.showcaseButtons.length; i++)
                               ButtonGroup(
-                                colorMain: (!state.showcaseButtons[i].available || catNumber == state.showcaseButtons[i].id)
+                                colorMain: (!state.showcaseButtons[i].available ||
+                                        catNumber == state.showcaseButtons[i].id)
                                     ? const Color.fromRGBO(82, 182, 154, 1)
                                     : const Color.fromRGBO(110, 210, 182, 1),
                                 picture: state.showcaseButtons[i].icon,
                                 text: state.showcaseButtons[i].cat,
                                 size: buttonSize,
-                                isPressed: !state.showcaseButtons[i].available || catNumber == state.showcaseButtons[i].id,
+                                isPressed: !state.showcaseButtons[i].available ||
+                                    catNumber == state.showcaseButtons[i].id,
                                 onTap: () {
-                                  if(state.showcaseButtons[i].available) {
-                                    context
-                                        .read<ShowcaseBloc>()
-                                        .add(GetShowcaseCardsEvent(cat: state.showcaseButtons[i].id, bloggerId: 1));
+                                  if (state.showcaseButtons[i].available) {
+                                    context.read<ShowcaseBloc>().add(GetShowcaseCardsEvent(
+                                        cat: state.showcaseButtons[i].id, bloggerId: 1));
                                     catNumber = state.showcaseButtons[i].id;
                                     setState(() {});
                                   }

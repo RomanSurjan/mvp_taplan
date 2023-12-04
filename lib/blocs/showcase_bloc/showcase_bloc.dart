@@ -51,7 +51,6 @@ class ShowcaseBloc extends Bloc<ShowcaseEvent, ShowcaseState> {
     );
 
     final UserModel userModel = UserModel.fromJson(response.data);
-    print(response.data);
 
     for (int i = 0; i < response.data['cat'].length; i++) {
       String cat = response.data['cat'][i]['cat'];

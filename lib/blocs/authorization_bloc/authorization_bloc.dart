@@ -221,12 +221,14 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthState> {
   }
 
   _onGetData(GetDataEvent event, Emitter<AuthState> emitter) async {
+    final prefs = await SharedPreferences.getInstance();
+
     final dio = Dio();
     final response = await dio.post(
       'https://qviz.fun/api/v1/get/user/data/',
       options: Options(
         headers: {
-          'Authorization': "Token ${state.authToken}",
+          'Authorization': "Token ${prefs.getString('auth_token')}",
         },
       ),
     );

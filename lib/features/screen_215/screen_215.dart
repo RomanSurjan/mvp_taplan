@@ -10,7 +10,8 @@ import 'package:mvp_taplan/blocs/theme_bloc/theme_bloc.dart';
 import 'package:mvp_taplan/blocs/theme_bloc/theme_state.dart';
 import 'package:mvp_taplan/features/screen_15/screen_15.dart';
 import 'package:mvp_taplan/features/screen_213/screen_213.dart';
-import 'package:mvp_taplan/features/screen_214/screen_214.dart';
+import 'package:mvp_taplan/features/screen_214/screen_214.dart' hide PickUpPriceContainer;
+import 'package:mvp_taplan/features/screen_214_clothes/screen_214_clothes.dart';
 import 'package:mvp_taplan/features/screen_39/screen_39.dart';
 import 'package:mvp_taplan/features/screen_wishlist/present_model.dart';
 import 'package:mvp_taplan/models/models.dart';
@@ -98,7 +99,7 @@ class _Screen215State extends State<Screen215> {
   Widget build(BuildContext context) {
     if (labels == null || prices == null) return const SizedBox.shrink();
     return MvpScaffoldModel(
-      onBack: (){
+      onBack: () {
         widget.onBack?.call();
         Navigator.pop(context);
       },
@@ -461,19 +462,31 @@ class _Screen215State extends State<Screen215> {
   }
 
   Widget buyYourSelf(BuildContext context, String svgImage) {
-    return Column(
-      children: [
-        SvgPicture.asset('assets/svg/buy_yourself.svg'),
-        Text(
-          'Купить себе',
-          style: TextLocalStyles.roboto600.copyWith(
-            fontSize: getHeight(context, 10),
-            height: 11.72 / 10,
-            color: const Color.fromRGBO(236, 55, 77, 1),
-            fontWeight: FontWeight.w600,
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Screen214Clothes(
+              currentModel: widget.currentModel,
+            ),
           ),
-        )
-      ],
+        );
+      },
+      child: Column(
+        children: [
+          SvgPicture.asset('assets/svg/buy_yourself.svg'),
+          Text(
+            'Купить себе',
+            style: TextLocalStyles.roboto600.copyWith(
+              fontSize: getHeight(context, 10),
+              height: 11.72 / 10,
+              color: const Color.fromRGBO(236, 55, 77, 1),
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

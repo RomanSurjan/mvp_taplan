@@ -20,6 +20,7 @@ import 'package:mvp_taplan/features/screen_sendWishlist/screen_sendWishlist.dart
 import 'package:mvp_taplan/models/models.dart';
 import 'package:mvp_taplan/theme/colors.dart';
 import 'package:mvp_taplan/theme/text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/buttons.dart';
 
@@ -118,13 +119,14 @@ class Screen26State extends State<Screen26> {
 
   void getContacts() async {
     context.read<AuthorizationBloc>().add(GetDataEvent());
+    final prefs = await SharedPreferences.getInstance();
     String url = 'https://qviz.fun/api/v1/peoplelist/';
     final dio = Dio();
     final response = await dio.post(
       url,
       options: Options(
         headers: {
-          'Authorization': "Token ${context.read<AuthorizationBloc>().state.authToken}",
+          'Authorization': "Token ${prefs.getString('auth_token')}",
         },
       ),
     );
